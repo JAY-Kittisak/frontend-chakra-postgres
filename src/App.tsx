@@ -1,38 +1,74 @@
 import * as React from "react"
 import {
-  ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  theme,
+  ChakraProvider, theme,
 } from "@chakra-ui/react"
-import { ColorModeSwitcher } from "./ColorModeSwitcher"
-import { Logo } from "./Logo"
+import { BrowserRouter } from 'react-router-dom'
+import { Provider, createClient, fetchExchange, dedupExchange } from 'urql'
+import { cacheExchange, Cache, QueryInput } from '@urql/exchange-graphcache';
+
+import Routes from './routes/Routes'
+import { LoginMutation, MeDocument, MeQuery, RegisterMutation } from "./generated/graphql";
+
+function betterUpdateQuery<Result, Query>(
+  cache: Cache,
+  qi: QueryInput,
+  result: any,
+  fn: (r: Result, q: Query) => Query
+) {
+  return cache.updateQuery(qi, data => fn(result, data as any) as any)
+}
+
+const client = createClient({
+  url: "http://localhost:4000/graphql",
+  fetchOptions: {
+    credentials: "include"
+  },
+  exchanges: [dedupExchange, cacheExchange({
+    updates: {
+      Mutation: {
+        login: (_result, args, cache, info) => {
+          betterUpdateQuery<LoginMutation, MeQuery>(cache,
+            { query: MeDocument },
+            _result,
+            (result, query) => {
+              if (result.login.errors) {
+                return query
+              } else {
+                return {
+                  me: result.login.user,
+                }
+              }
+            }
+          )
+        },
+
+        register: (_result, args, cache, info) => {
+          betterUpdateQuery<RegisterMutation, MeQuery>(cache,
+            { query: MeDocument },
+            _result,
+            (result, query) => {
+              if (result.register.errors) {
+                return query
+              } else {
+                return {
+                  me: result.register.user,
+                }
+              }
+            }
+          )
+        }
+      }
+    }
+  }), fetchExchange],
+})
+
 
 export const App = () => (
+  <Provider value={client}>
   <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <VStack spacing={8}>
-          <Logo h="40vmin" pointerEvents="none" />
-          <Text>
-            Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
-          </Text>
-          <Link
-            color="teal.500"
-            href="https://chakra-ui.com"
-            fontSize="2xl"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn Chakra
-          </Link>
-        </VStack>
-      </Grid>
-    </Box>
+      <BrowserRouter>
+        <Routes />
+      </BrowserRouter>
   </ChakraProvider>
+  </Provider>
 )
