@@ -1,74 +1,84 @@
 import * as React from "react"
 import {
-  ChakraProvider, theme,
+    ChakraProvider, theme,
 } from "@chakra-ui/react"
 import { BrowserRouter } from 'react-router-dom'
 import { Provider, createClient, fetchExchange, dedupExchange } from 'urql'
 import { cacheExchange, Cache, QueryInput } from '@urql/exchange-graphcache';
 
 import Routes from './routes/Routes'
-import { LoginMutation, MeDocument, MeQuery, RegisterMutation } from "./generated/graphql";
+import { LoginMutation, LogoutMutation, MeDocument, MeQuery, RegisterMutation } from "./generated/graphql";
 
 function betterUpdateQuery<Result, Query>(
-  cache: Cache,
-  qi: QueryInput,
-  result: any,
-  fn: (r: Result, q: Query) => Query
+    cache: Cache,
+    qi: QueryInput,
+    result: any,
+    fn: (r: Result, q: Query) => Query
 ) {
-  return cache.updateQuery(qi, data => fn(result, data as any) as any)
+    return cache.updateQuery(qi, data => fn(result, data as any) as any)
 }
 
 const client = createClient({
-  url: "http://localhost:4000/graphql",
-  fetchOptions: {
-    credentials: "include"
-  },
-  exchanges: [dedupExchange, cacheExchange({
-    updates: {
-      Mutation: {
-        login: (_result, args, cache, info) => {
-          betterUpdateQuery<LoginMutation, MeQuery>(cache,
-            { query: MeDocument },
-            _result,
-            (result, query) => {
-              if (result.login.errors) {
-                return query
-              } else {
-                return {
-                  me: result.login.user,
-                }
-              }
-            }
-          )
-        },
+    url: "http://localhost:4000/graphql",
+    fetchOptions: {
+        credentials: "include"
+    },
+    exchanges: [
+        dedupExchange,
+        cacheExchange({
+            updates: {
+                Mutation: {
+                    logout: (_result, args, cache, info) => {
+                        betterUpdateQuery<LogoutMutation, MeQuery>(
+                            cache,
+                            { query: MeDocument },
+                            _result,
+                            () => ({ me: null })
+                        )
+                    },
+                    login: (_result, args, cache, info) => {
+                        betterUpdateQuery<LoginMutation, MeQuery>(cache,
+                            { query: MeDocument },
+                            _result,
+                            (result, query) => {
+                                if (result.login.errors) {
+                                    return query
+                                } else {
+                                    return {
+                                        me: result.login.user,
+                                    }
+                                }
+                            }
+                        )
+                    },
 
-        register: (_result, args, cache, info) => {
-          betterUpdateQuery<RegisterMutation, MeQuery>(cache,
-            { query: MeDocument },
-            _result,
-            (result, query) => {
-              if (result.register.errors) {
-                return query
-              } else {
-                return {
-                  me: result.register.user,
+                    register: (_result, args, cache, info) => {
+                        betterUpdateQuery<RegisterMutation, MeQuery>(cache,
+                            { query: MeDocument },
+                            _result,
+                            (result, query) => {
+                                if (result.register.errors) {
+                                    return query
+                                } else {
+                                    return {
+                                        me: result.register.user,
+                                    }
+                                }
+                            }
+                        )
+                    }
                 }
-              }
             }
-          )
-        }
-      }
-    }
-  }), fetchExchange],
+        }), fetchExchange],
 })
 
 
 export const App = () => (
-  <Provider value={client}>
-  <ChakraProvider theme={theme}>
-      <BrowserRouter>
-        <Routes />
-      </BrowserRouter>
-  </ChakraProvider>
-  </Provider>
+    <Provider value={client}>
+        <ChakraProvider theme={theme}>
+            <BrowserRouter>
+                <Routes />
+            </BrowserRouter>
+        </ChakraProvider>
+    </Provider>
 )
