@@ -4,6 +4,7 @@ import { Switch, Route } from 'react-router-dom'
 import Index from '../pages/Index'
 import Register from '../pages/Register'
 import Login from '../pages/Login'
+import PagePost from '../pages/PagePost'
 import PageNotFound from '../pages/PageNotFound'
 
 interface Props { }
@@ -11,6 +12,9 @@ interface Props { }
 const Routes: React.FC<Props> = () => {
     return (
         <Switch>
+            <Route exact path="/post">
+                <PagePost />
+            </Route>
             <Route exact path="/login">
                 <Login />
             </Route>

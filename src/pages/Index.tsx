@@ -1,16 +1,16 @@
 import React from 'react'
-import { ColorModeSwitcher } from "../ColorModeSwitcher"
 
 import NavBar from '../components/NavBar'
+import PagePost from './PagePost'
 
 interface Props { }
 
 const index: React.FC<Props> = () => {
+
     return (
         <>
             <NavBar />
-            <ColorModeSwitcher justifySelf="flex-end" />
-            <h1>Hello World!!!</h1>
+            <PagePost />
         </>
     )
 }
