@@ -5,6 +5,7 @@ import Index from '../pages/Index'
 import Register from '../pages/Register'
 import Login from '../pages/Login'
 import PagePost from '../pages/PagePost'
+import Dashboard from '../pages/Dashboard'
 import PageNotFound from '../pages/PageNotFound'
 
 interface Props { }
@@ -12,6 +13,9 @@ interface Props { }
 const Routes: React.FC<Props> = () => {
     return (
         <Switch>
+            <Route exact path="/dashboard">
+                <Dashboard />
+            </Route>
             <Route exact path="/post">
                 <PagePost />
             </Route>

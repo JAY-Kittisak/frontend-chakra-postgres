@@ -1,18 +1,17 @@
 import React from 'react'
-import { Flex } from '@chakra-ui/react'
 
-import Sidebar from '../components/Sidebar'
 import PagePost from './PagePost'
+import NavBar from '../components/NavBar'
 
 interface Props { }
 
 const index: React.FC<Props> = () => {
 
     return (
-        <Flex>
-            <Sidebar />
+        <>
+            <NavBar />
             <PagePost />
-        </Flex>
+        </>
     )
 }
 

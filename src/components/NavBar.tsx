@@ -8,6 +8,7 @@ import {
     MenuButton,
     MenuList,
     MenuItem,
+    Heading,
 } from '@chakra-ui/react'
 import { IconButton } from "@chakra-ui/react"
 import { useHistory } from 'react-router-dom'
@@ -29,17 +30,31 @@ const NavBar: React.FC<Props> = () => {
         // user not logged in
     } else if (!data?.me) {
         body = (
-            <>
-                <Link mr={2} onClick={() => history.push('/login')}>login</Link>
-                <Link onClick={() => history.push('/register')}>register</Link>
-            </>
+            <Box>
+                <Button
+                    colorScheme="teal"
+                    mr="4"
+                    onClick={() => history.push('/login')}
+                >
+                    login
+                </Button>
+                <Button
+                    colorScheme="teal"
+                    onClick={() => history.push('/register')}
+                >
+                    register
+                </Button>
+            </Box>
         )
 
         // user is logged in
     } else {
         body = (
             <Flex>
-                <Box mr={2}>{data.me.username}</Box>
+                <Box p="2">
+                    <Heading size="md">{data.me.username}</Heading>
+                </Box>
+
                 <Button
                     onClick={() => {
                         logout()
@@ -66,8 +81,8 @@ const NavBar: React.FC<Props> = () => {
                     <MenuItem icon={<AddIcon />} command="⌘T" onClick={() => { history.push('/post') }}>
                         POST
                     </MenuItem>
-                    <MenuItem icon={<ExternalLinkIcon />} command="⌘N">
-                        New Window
+                    <MenuItem icon={<ExternalLinkIcon />} command="⌘N" onClick={() => { history.push('/dashboard') }}>
+                        DASHBOARD
                     </MenuItem>
                     <MenuItem icon={<RepeatIcon />} command="⌘⇧N">
                         Open Closed Tab
@@ -77,11 +92,20 @@ const NavBar: React.FC<Props> = () => {
                     </MenuItem>
                 </MenuList>
             </Menu>
-            <Link mr={2} onClick={() => { history.push('/') }}>MK Management</Link>
+            <Link
+                mr={2}
+                onClick={() => { history.push('/') }}
+            >
+                <Box p="2">
+                    <Heading size="md">MK Management</Heading>
+                </Box>
+            </Link>
+
+            <ColorModeSwitcher justifySelf="flex-end" />
+
             <Box ml={'auto'} >
                 {body}
             </Box>
-            <ColorModeSwitcher justifySelf="flex-end" />
         </Flex>
     )
 }

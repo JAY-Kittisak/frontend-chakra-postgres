@@ -13,13 +13,18 @@ import {
 
 interface Props { icon: ComponentWithAs<"svg", IconProps>, title: string, description?: string, navSize: string }
 
-const NavItem: React.FC<Props> = ({ icon, title, description, navSize }) => {
+const NavItem: React.FC<Props> = ({
+    icon,
+    title,
+    // description, 
+    navSize
+}) => {
     return (
         <Flex
             mt={30}
             flexDir="column"
             w="100%"
-            alignItems={navSize == "small" ? "center" : "flex-start"}
+            alignItems={navSize === "small" ? "center" : "flex-start"}
         >
             <Menu placement="right">
                 <Link
@@ -32,7 +37,7 @@ const NavItem: React.FC<Props> = ({ icon, title, description, navSize }) => {
                     <MenuButton w="100%">
                         <Flex>
                             <Icon as={icon} fontSize="xl" color={"gray.500"} />
-                            <Text ml={5} display={navSize == "small" ? "none" : "flex"}>{title}</Text>
+                            <Text ml={5} display={navSize === "small" ? "none" : "flex"}>{title}</Text>
                         </Flex>
                     </MenuButton>
                 </Link>
