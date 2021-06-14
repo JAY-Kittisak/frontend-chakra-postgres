@@ -140,7 +140,7 @@ const Dashboard: React.FC<Props> = () => {
                         <Heading as="h2" size="lg" letterSpacing="tight">Transactions</Heading>
                         <Text fontSize="small" color="gray" ml={4}>Apr 2021</Text>
                     </Flex>
-                    <IconButton icon={<FiCalendar />} />
+                    <IconButton aria-label="" icon={<FiCalendar />} />
                 </Flex>
                 <Flex flexDir="column">
                     <Flex overflow="auto">
@@ -148,7 +148,7 @@ const Dashboard: React.FC<Props> = () => {
                     </Flex>
                     <Flex align="center">
                         <Divider />
-                        <IconButton
+                        <IconButton aria-label=""
                             icon={display === 'show' ? <FiChevronUp /> : <FiChevronDown />}
                             onClick={() => {
                                 if (display === 'show') {

@@ -1,6 +1,6 @@
 import React from "react";
-import { Line, Bar, Radar } from "react-chartjs-2";
-import { Badge, Box, Text, Stack, Icon, Button } from "@chakra-ui/react";
+import { Line, Bar } from "react-chartjs-2";
+import { Badge, Box, Text, Stack, Icon, Button, Flex, useColorModeValue, useColorMode } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
 
 const data = {
@@ -64,69 +64,144 @@ const options = {
     },
 };
 
-// const { colorMode } = useColorMode()
-const TestQuery = () => (
-    <Box w="50%" rounded="10px" boxShadow="sm" bg="twitter.900">
-        <Line type="line" data={data} options={options} />
-        <Box p={5}>
-            <Stack isInline align="baseline">
-                <Badge variant="solid" colorScheme="twitter" rounded="full" px={2}>
-                    NEW!
-                </Badge>
-                <Badge variant="solid" colorScheme="twitter" rounded="full" px={2}>
-                    ทดสอบ!
-                </Badge>
-                <Text
-                    textTransform="uppercase"
-                    fontSize="sm"
-                    colorScheme="gray.500"
-                    letterSpacing="wide"
-                >
-                    2 Hours &bull; 12 lectures
-                </Text>
-            </Stack>
-            <Text as="h2" fontWeight="semibold" fontSize="xl" my={2}>
-                Introduction
-            </Text>
-            <Text isTruncated fontWeight="light" fontSize="md">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Qui commodi,
-                <br />
-                numquam similique incidunt quam earum sit delectus. Repellat eum cumque,
-                harum quas beatae accusantium perspiciatis voluptas libero repudiandae,
-                veritatis alias.
-            </Text>
-            <Stack isInline justify="space-between">
-                <Text fontWeight="semibold" fontSize="lg">
-                    $20
-                </Text>
-                <Box d="flex">
-                    <Box as="span">
-                        {Array(4)
-                            .fill("")
-                            .map((_, i) => (
-                                <Icon as={StarIcon} color="yellow.500" key={i} />
-                            ))}
-                        <Icon as={StarIcon} mr="2" />
-                    </Box>
-                    <Text as="h3" fontWeight="light" fontSize="lg">
-                        34 Reviews
+
+
+interface Props { }
+
+const TestQuery: React.FC<Props> = () => {
+    const { toggleColorMode } = useColorMode()
+    const bg = useColorModeValue("gray.200", "gray.700")
+    const color = useColorModeValue("gray.500", "gray.100")
+    return (
+        <Flex>
+            <Box w="50%" rounded="10px" boxShadow="sm" bg={bg} mr="5">
+                <Line type="line" data={data} options={options} />
+                <Box p={5}>
+                    <Stack isInline align="baseline">
+                        <Badge variant="solid" colorScheme={color} rounded="full" px={2}>
+                            NEW!
+                        </Badge>
+                        <Badge variant="solid" colorScheme={color} rounded="full" px={2}>
+                            ทดสอบ!
+                        </Badge>
+                        <Text
+                            textTransform="uppercase"
+                            fontSize="sm"
+                            colorScheme={color}
+                            letterSpacing="wide"
+                        >
+                            2 Hours &bull; 12 lectures
+                        </Text>
+                    </Stack>
+                    <Text as="h2" fontWeight="semibold" fontSize="xl" my={2}>
+                        Introduction
                     </Text>
+                    <Text isTruncated fontWeight="light" fontSize="md">
+                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Qui commodi,
+                        <br />
+                        numquam similique incidunt quam earum sit delectus. Repellat eum cumque,
+                        harum quas beatae accusantium perspiciatis voluptas libero repudiandae,
+                        veritatis alias.
+                    </Text>
+                    <Stack isInline justify="space-between">
+                        <Text fontWeight="semibold" fontSize="lg">
+                            $20
+                        </Text>
+                        <Box d="flex">
+                            <Box as="span">
+                                {Array(4)
+                                    .fill("")
+                                    .map((_, i) => (
+                                        <Icon as={StarIcon} color="yellow.500" key={i} />
+                                    ))}
+                                <Icon as={StarIcon} mr="2" />
+                            </Box>
+                            <Text as="h3" fontWeight="light" fontSize="lg">
+                                34 Reviews
+                            </Text>
+                        </Box>
+                    </Stack>
+                    <Box textAlign="center">
+                        <Button
+                            colorScheme={color}
+                            size="lg"
+                            mt={3}
+                            boxShadow="sm"
+                            _hover={{ boxShadow: "md" }}
+                            _active={{ boxShadow: "lg" }}
+                            onClick={toggleColorMode}
+                        >
+                            Sign Up Now!
+                        </Button>
+                    </Box>
                 </Box>
-            </Stack>
-            <Box textAlign="center">
-                <Button
-                    colorScheme="teal"
-                    size="lg"
-                    mt={3}
-                    boxShadow="sm"
-                    _hover={{ boxShadow: "md" }}
-                    _active={{ boxShadow: "lg" }}
-                >
-                    Sign Up Now!
-                </Button>
             </Box>
-        </Box>
-    </Box>
+            <Box w="50%" rounded="10px" boxShadow="sm" bg={bg}>
+
+
+                <Bar type="bar" data={data} options={options} />
+                <Box p={5}>
+                    <Stack isInline align="baseline">
+                        <Badge variant="solid" colorScheme={color} rounded="full" px={2}>
+                            NEW!
+                        </Badge>
+                        <Badge variant="solid" colorScheme={color} rounded="full" px={2}>
+                            ทดสอบ!
+                        </Badge>
+                        <Text
+                            textTransform="uppercase"
+                            fontSize="sm"
+                            colorScheme={color}
+                            letterSpacing="wide"
+                        >
+                            2 Hours &bull; 12 lectures
+                        </Text>
+                    </Stack>
+                    <Text as="h2" fontWeight="semibold" fontSize="xl" my={2}>
+                        Introduction
+                    </Text>
+                    <Text isTruncated fontWeight="light" fontSize="md">
+                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Qui commodi,
+                        <br />
+                        numquam similique incidunt quam earum sit delectus. Repellat eum cumque,
+                        harum quas beatae accusantium perspiciatis voluptas libero repudiandae,
+                        veritatis alias.
+                    </Text>
+                    <Stack isInline justify="space-between">
+                        <Text fontWeight="semibold" fontSize="lg">
+                            $20
+                        </Text>
+                        <Box d="flex">
+                            <Box as="span">
+                                {Array(4)
+                                    .fill("")
+                                    .map((_, i) => (
+                                        <Icon as={StarIcon} color="yellow.500" key={i} />
+                                    ))}
+                                <Icon as={StarIcon} mr="2" />
+                            </Box>
+                            <Text as="h3" fontWeight="light" fontSize="lg">
+                                34 Reviews
+                            </Text>
+                        </Box>
+                    </Stack>
+                    <Box textAlign="center">
+                        <Button
+                            colorScheme={color}
+                            size="lg"
+                            mt={3}
+                            boxShadow="sm"
+                            _hover={{ boxShadow: "md" }}
+                            _active={{ boxShadow: "lg" }}
+                            onClick={toggleColorMode}
+                        >
+                            Sign Up Now!
+                        </Button>
+                    </Box>
+                </Box>
+            </Box>
+        </Flex>
 );
+}
 
 export default TestQuery;
