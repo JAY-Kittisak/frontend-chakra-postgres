@@ -71,14 +71,15 @@ interface Props { }
 const TestQuery: React.FC<Props> = () => {
     const { toggleColorMode } = useColorMode()
     const bg = useColorModeValue("gray.200", "gray.700")
-    const color = useColorModeValue("gray.500", "gray.100")
+    const color = useColorModeValue("blue", "black")
+    const colorW = useColorModeValue("white", "white")
     return (
         <Flex>
             <Box w="50%" rounded="10px" boxShadow="sm" bg={bg} mr="5">
                 <Line type="line" data={data} options={options} />
                 <Box p={5}>
                     <Stack isInline align="baseline">
-                        <Badge variant="solid" colorScheme={color} rounded="full" px={2}>
+                        <Badge variant="solid" colorScheme="pink" rounded="full" px={2}>
                             NEW!
                         </Badge>
                         <Badge variant="solid" colorScheme={color} rounded="full" px={2}>
@@ -131,18 +132,20 @@ const TestQuery: React.FC<Props> = () => {
                             _active={{ boxShadow: "lg" }}
                             onClick={toggleColorMode}
                         >
-                            Sign Up Now!
+                            <Text color={colorW}>
+                                Sign Up Now!
+                            </Text>
                         </Button>
                     </Box>
                 </Box>
             </Box>
+
+
             <Box w="50%" rounded="10px" boxShadow="sm" bg={bg}>
-
-
                 <Bar type="bar" data={data} options={options} />
                 <Box p={5}>
                     <Stack isInline align="baseline">
-                        <Badge variant="solid" colorScheme={color} rounded="full" px={2}>
+                        <Badge variant="solid" colorScheme="pink" rounded="full" px={2}>
                             NEW!
                         </Badge>
                         <Badge variant="solid" colorScheme={color} rounded="full" px={2}>
@@ -195,13 +198,15 @@ const TestQuery: React.FC<Props> = () => {
                             _active={{ boxShadow: "lg" }}
                             onClick={toggleColorMode}
                         >
-                            Sign Up Now!
+                            <Text color={colorW}>
+                                Sign Up Now!
+                            </Text>
                         </Button>
                     </Box>
                 </Box>
             </Box>
         </Flex>
-);
+    );
 }
 
 export default TestQuery;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Flex, Heading, Link, Icon, Text, Avatar, IconButton, Divider } from '@chakra-ui/react'
+import { Flex, Heading, Link, Icon, Text, Avatar, IconButton, useColorMode, Divider } from '@chakra-ui/react'
 import {
     FiHome,
     FiPieChart,
@@ -13,6 +13,7 @@ import {
     // FiSearch,
     // FiBell
 } from "react-icons/fi"
+import { ColorModeSwitcher } from "../ColorModeSwitcher"
 
 import TestQuery from '../components/chart/TestQuery'
 import PagePost from './PagePost'
@@ -25,7 +26,7 @@ type Display = "none" | "hide" | "show"
 
 const Dashboard: React.FC<Props> = () => {
     const [display, changeDisplay] = useState<Display>('hide')
-
+    const { colorMode } = useColorMode()
     return (
         <Flex
             h="100vh"
@@ -53,6 +54,7 @@ const Dashboard: React.FC<Props> = () => {
                         <Heading
                             mt={5}
                             alignSelf="center"
+                            color={colorMode === "light" ? "Teal" : "#db86b2"}
                         >
                             MK
                         </Heading>
@@ -62,6 +64,7 @@ const Dashboard: React.FC<Props> = () => {
                             fontSize={["4xl", "4xl", "2xl", "3xl", "4xl",]}
                             alignSelf="center"
                             letterSpacing="tight"
+                            color={colorMode === "light" ? "Teal" : "#db86b2"}
                         >
                             Management.
                         </Heading>
@@ -110,6 +113,7 @@ const Dashboard: React.FC<Props> = () => {
                         {/* FIXME: src="รูป" */}
                         <Avatar my={2} src="" />
                         <Text textAlign="center">Supper Admin</Text>
+                        <ColorModeSwitcher justifySelf="flex-end" />
                     </Flex>
 
                 </Flex>

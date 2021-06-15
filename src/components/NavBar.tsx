@@ -69,7 +69,7 @@ const NavBar: React.FC<Props> = () => {
     }
 
     return (
-        <Flex bg='skyblue' p={4}>
+        <Flex bg='#020202' p={4}>
             <Menu>
                 <MenuButton
                     as={IconButton}
@@ -78,13 +78,13 @@ const NavBar: React.FC<Props> = () => {
                     variant="outline"
                 />
                 <MenuList>
-                    <MenuItem icon={<AddIcon />} command="⌘T" onClick={() => { history.push('/post') }}>
-                        POST
-                    </MenuItem>
                     <MenuItem icon={<ExternalLinkIcon />} command="⌘N" onClick={() => { history.push('/dashboard') }}>
                         DASHBOARD
                     </MenuItem>
-                    <MenuItem icon={<RepeatIcon />} command="⌘⇧N">
+                    <MenuItem icon={<AddIcon />} command="⌘T" onClick={() => { history.push('/factories') }}>
+                        Factories
+                    </MenuItem>
+                    <MenuItem icon={<RepeatIcon />} command="⌘⇧N" onClick={() => { history.push('/') }}>
                         Open Closed Tab
                     </MenuItem>
                     <MenuItem icon={<EditIcon />} command="⌘O">
