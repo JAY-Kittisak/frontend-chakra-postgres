@@ -6,18 +6,21 @@ import Register from '../pages/Register'
 import Login from '../pages/Login'
 import Dashboard from '../pages/Dashboard'
 import PageNotFound from '../pages/PageNotFound'
+import CreatePost from '../pages/Create-post'
 import Factories from '../pages/Factories'
-import NavigationBar from '../components/NavigationBar'
-import { Box, Flex } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import NavBar from '../components/NavBar'
 
 interface Props { }
 
 const Routes: React.FC<Props> = () => {
     return (
-        <Flex w="100%">
-            <NavigationBar />
+        <Box w="100%">
+            <NavBar />
             <Switch>
+                <Route exact path="/create-post">
+                    <CreatePost />
+                </Route>
                 <Route exact path="/factories">
                     <Factories />
                 </Route>
@@ -37,7 +40,7 @@ const Routes: React.FC<Props> = () => {
                     <PageNotFound />
                 </Route>
             </Switch>
-        </Flex>
+        </Box>
     )
 }
 

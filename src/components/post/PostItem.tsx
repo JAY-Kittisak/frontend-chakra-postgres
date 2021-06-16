@@ -9,14 +9,15 @@ interface Props {
 const Testpost: React.FC<Props> = ({ post }) => {
     return (
         <Tr color="gr">
-
-            <Flex align="center">
+            <Td>
+                <Flex align="center" key={post.id}>
                 <Avatar size="sm" mr={2} src="amazon.jpeg" />
                 <Flex flexDir="column">
                     <Heading size="sm" letterSpacing="tight">{post.title}</Heading>
                     <Text fontSize="sm">Apr 24, 2021 at 1:40pm</Text>
                 </Flex>
             </Flex>
+            </Td>
             <Td><Text fontWeight="bold" display="inline-table">{post.id}</Text></Td>
             <Td>{post.createdAt}</Td>
             <Td isNumeric>{post.updatedAt}</Td>

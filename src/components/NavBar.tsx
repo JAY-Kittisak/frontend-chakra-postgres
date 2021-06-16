@@ -76,16 +76,17 @@ const NavBar: React.FC<Props> = () => {
                     aria-label="Options"
                     icon={<HamburgerIcon />}
                     variant="outline"
+                    color="white"
                 />
                 <MenuList>
                     <MenuItem icon={<ExternalLinkIcon />} command="⌘N" onClick={() => { history.push('/dashboard') }}>
-                        DASHBOARD
+                        Dashboard
                     </MenuItem>
                     <MenuItem icon={<AddIcon />} command="⌘T" onClick={() => { history.push('/factories') }}>
                         Factories
                     </MenuItem>
-                    <MenuItem icon={<RepeatIcon />} command="⌘⇧N" onClick={() => { history.push('/') }}>
-                        Open Closed Tab
+                    <MenuItem icon={<RepeatIcon />} command="⌘⇧N" onClick={() => { history.push('/create-post') }}>
+                        Create-post
                     </MenuItem>
                     <MenuItem icon={<EditIcon />} command="⌘O">
                         Open File...
@@ -96,9 +97,9 @@ const NavBar: React.FC<Props> = () => {
                 mr={2}
                 onClick={() => { history.push('/') }}
             >
-                <Box p="2">
+                {/* <Box p="2">
                     <Heading size="md">MK Management</Heading>
-                </Box>
+                </Box> */}
             </Link>
 
             <ColorModeSwitcher justifySelf="flex-end" />

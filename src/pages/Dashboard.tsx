@@ -29,10 +29,9 @@ const Dashboard: React.FC<Props> = () => {
     const { colorMode } = useColorMode()
     return (
         <Flex
-            h="100vh"
+            h="90vh"
             flexDir="row"
             overflow="hidden"
-            miaW="2000px"
         >
             {/* Column 1 */}
             <Flex
@@ -52,7 +51,7 @@ const Dashboard: React.FC<Props> = () => {
                         as="nav"
                     >
                         <Heading
-                            mt={5}
+                            mt={9}
                             alignSelf="center"
                             color={colorMode === "light" ? "Teal" : "#db86b2"}
                         >
@@ -66,7 +65,7 @@ const Dashboard: React.FC<Props> = () => {
                             letterSpacing="tight"
                             color={colorMode === "light" ? "Teal" : "#db86b2"}
                         >
-                            Management.
+                            Dashboard
                         </Heading>
                         <Flex
                             flexDir={["row", "row", "column", "column", "column"]}
@@ -121,13 +120,13 @@ const Dashboard: React.FC<Props> = () => {
 
             {/* Column 2 */}
             <Flex
-                w={"100%"}
+                w="100%"
                 p="3%"
                 flexDir="column"
                 overflow="auto"
-                minH="100vh"
             >
                 <Heading
+                    mt={0}
                     fontWeight="normal"
                     mb={4}
                     letterSpacing="tight"
