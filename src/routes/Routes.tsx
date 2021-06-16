@@ -8,15 +8,11 @@ import Dashboard from '../pages/Dashboard'
 import PageNotFound from '../pages/PageNotFound'
 import CreatePost from '../pages/Create-post'
 import Factories from '../pages/Factories'
-import { Box } from '@chakra-ui/react'
-import NavBar from '../components/NavBar'
 
 interface Props { }
 
 const Routes: React.FC<Props> = () => {
     return (
-        <Box w="100%">
-            <NavBar />
             <Switch>
                 <Route exact path="/create-post">
                     <CreatePost />
@@ -39,8 +35,7 @@ const Routes: React.FC<Props> = () => {
                 <Route path="*">
                     <PageNotFound />
                 </Route>
-            </Switch>
-        </Box>
+        </Switch>
     )
 }
 

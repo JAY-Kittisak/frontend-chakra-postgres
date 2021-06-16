@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 import { Formik, Form } from 'formik'
 import { Box, Button } from '@chakra-ui/react'
 
-import Wrapper from '../components/Wrapper'
+import Layout from '../components/Layout'
 // import {toErrorMap} from '../utils/toErrorMap'
 import InputField from '../components/InputField'
 import { useCreatePostMutation } from '../generated/graphql'
@@ -14,11 +14,14 @@ const CreatePost: React.FC<Props> = () => {
     const history = useHistory()
     const [, createPost] = useCreatePostMutation()
     return (
-        <Wrapper variant="small">
+        <Layout variant='small'>
             <Formik
                 initialValues={{ title: "", text: "" }}
                 onSubmit={async (values) => {
-                    await createPost({ input: values })
+                    const { error } = await createPost({ input: values })
+                    if (error) {
+                        history.push("/login")
+                    }
                     history.push('/')
                 }}
             >
@@ -48,7 +51,7 @@ const CreatePost: React.FC<Props> = () => {
                     </Form>
                 )}
             </Formik>
-        </Wrapper>
+        </Layout>
     )
 }
 

@@ -32,14 +32,14 @@ const NavBar: React.FC<Props> = () => {
         body = (
             <Box>
                 <Button
-                    colorScheme="teal"
+                    bg="blue.300"
                     mr="4"
                     onClick={() => history.push('/login')}
                 >
                     login
                 </Button>
                 <Button
-                    colorScheme="teal"
+                    bg="blue.300"
                     onClick={() => history.push('/register')}
                 >
                     register
@@ -69,7 +69,7 @@ const NavBar: React.FC<Props> = () => {
     }
 
     return (
-        <Flex bg='#020202' p={4}>
+        <Flex zIndex={1} position="sticky" top={0} bg='blue.500' p={4}>
             <Menu>
                 <MenuButton
                     as={IconButton}
@@ -97,9 +97,9 @@ const NavBar: React.FC<Props> = () => {
                 mr={2}
                 onClick={() => { history.push('/') }}
             >
-                {/* <Box p="2">
+                <Box p="2">
                     <Heading size="md">MK Management</Heading>
-                </Box> */}
+                </Box>
             </Link>
 
             <ColorModeSwitcher justifySelf="flex-end" />
