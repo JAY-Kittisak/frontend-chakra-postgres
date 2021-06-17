@@ -13,8 +13,8 @@ import {
     // FiSearch,
     // FiBell
 } from "react-icons/fi"
-import { ColorModeSwitcher } from "../ColorModeSwitcher"
 
+import { ColorModeSwitcher } from "../ColorModeSwitcher"
 import TestQuery from '../components/chart/TestQuery'
 import PagePost from './PagePost'
 

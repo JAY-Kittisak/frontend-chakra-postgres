@@ -4,7 +4,7 @@ import { Box, Button } from '@chakra-ui/react'
 import { Form, Formik } from 'formik'
 
 import InputField from '../components/InputField'
-import Wrapper from '../components/Wrapper'
+import Layout from '../components/Layout'
 import { useRegisterMutation } from '../generated/graphql'
 import { toErrorMap } from '../utils/toErrorMap'
 
@@ -14,7 +14,7 @@ const Register: React.FC<Props> = () => {
     const history = useHistory()
     const [, register] = useRegisterMutation()
     return (
-        <Wrapper variant="small">
+        <Layout variant="small">
             <Formik
                 initialValues={{ username: "", password: "" }}
                 onSubmit={async (values, { setErrors }) => {
@@ -53,7 +53,7 @@ const Register: React.FC<Props> = () => {
                     </Form>
                 )}
             </Formik>
-        </Wrapper>
+        </Layout>
     )
 }
 

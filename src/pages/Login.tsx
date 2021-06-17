@@ -4,7 +4,7 @@ import { Box, Button } from '@chakra-ui/react'
 import { Form, Formik } from 'formik'
 
 import InputField from '../components/InputField'
-import Wrapper from '../components/Wrapper'
+import Layout from '../components/Layout'
 import { toErrorMap } from '../utils/toErrorMap'
 import { useLoginMutation } from '../generated/graphql'
 
@@ -13,7 +13,7 @@ const Login: React.FC<{}> = () => {
     const history = useHistory()
     const [, login] = useLoginMutation()
     return (
-        <Wrapper variant="small">
+        <Layout variant="small">
             <Formik
                 initialValues={{ username: "", password: "" }}
                 onSubmit={async (values, { setErrors }) => {
@@ -52,7 +52,7 @@ const Login: React.FC<{}> = () => {
                     </Form>
                 )}
             </Formik>
-        </Wrapper>
+        </Layout>
     )
 }
 
