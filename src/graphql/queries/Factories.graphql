@@ -1,0 +1,13 @@
+query Factories{
+  factories {
+    id
+    industrialEstate
+    businessType
+    companyName
+    description
+    address
+    phoneNumber
+    FAX
+    Email
+  }
+}

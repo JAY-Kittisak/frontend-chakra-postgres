@@ -14,6 +14,30 @@ export type Scalars = {
   Float: number;
 };
 
+export type Factory = {
+  __typename?: 'Factory';
+  id: Scalars['Float'];
+  industrialEstate: Scalars['String'];
+  businessType: Scalars['String'];
+  companyName: Scalars['String'];
+  description: Scalars['String'];
+  address: Scalars['String'];
+  phoneNumber: Scalars['String'];
+  FAX: Scalars['String'];
+  Email: Scalars['String'];
+};
+
+export type FactoryInput = {
+  industrialEstate: Scalars['String'];
+  businessType: Scalars['String'];
+  companyName: Scalars['String'];
+  description: Scalars['String'];
+  address: Scalars['String'];
+  phoneNumber: Scalars['String'];
+  FAX: Scalars['String'];
+  Email: Scalars['String'];
+};
+
 export type FieldError = {
   __typename?: 'FieldError';
   field: Scalars['String'];
@@ -28,6 +52,7 @@ export type Mutation = {
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
+  createFactory: Factory;
 };
 
 
@@ -56,6 +81,11 @@ export type MutationLoginArgs = {
   options: UsernamePasswordInput;
 };
 
+
+export type MutationCreateFactoryArgs = {
+  input: FactoryInput;
+};
+
 export type Post = {
   __typename?: 'Post';
   id: Scalars['Float'];
@@ -78,11 +108,36 @@ export type Query = {
   posts: Array<Post>;
   post?: Maybe<Post>;
   me?: Maybe<User>;
+  factories: Array<Factory>;
+  factoryById?: Maybe<Factory>;
+  industrialEstate?: Maybe<Array<Factory>>;
+  businessType?: Maybe<Array<Factory>>;
+  companyName?: Maybe<Factory>;
 };
 
 
 export type QueryPostArgs = {
   id: Scalars['Float'];
+};
+
+
+export type QueryFactoryByIdArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type QueryIndustrialEstateArgs = {
+  industrialEstate: Scalars['String'];
+};
+
+
+export type QueryBusinessTypeArgs = {
+  businessType: Scalars['String'];
+};
+
+
+export type QueryCompanyNameArgs = {
+  companyName: Scalars['String'];
 };
 
 export type User = {
@@ -167,6 +222,17 @@ export type RegisterMutation = (
       & RegularUserFragment
     )> }
   ) }
+);
+
+export type FactoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FactoriesQuery = (
+  { __typename?: 'Query' }
+  & { factories: Array<(
+    { __typename?: 'Factory' }
+    & Pick<Factory, 'id' | 'industrialEstate' | 'businessType' | 'companyName' | 'description' | 'address' | 'phoneNumber' | 'FAX' | 'Email'>
+  )> }
 );
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
@@ -256,6 +322,25 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const FactoriesDocument = gql`
+    query Factories {
+  factories {
+    id
+    industrialEstate
+    businessType
+    companyName
+    description
+    address
+    phoneNumber
+    FAX
+    Email
+  }
+}
+    `;
+
+export function useFactoriesQuery(options: Omit<Urql.UseQueryArgs<FactoriesQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<FactoriesQuery>({ query: FactoriesDocument, ...options });
 };
 export const MeDocument = gql`
     query Me {
