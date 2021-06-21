@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Flex,
     Tbody,
@@ -21,18 +21,44 @@ import Layout from '../components/Layout'
 import FactoryItem from '../components/tier/FactoryItem'
 import FactoryChart from '../components/tier/FactoryChart'
 import { useFactoriesQuery } from '../generated/graphql';
+import { Factory } from '../generated/graphql'
+
+import {
+    FactoryTab,
+    // factoryTabs 
+} from '../utils/helpers';
 
 interface Props { }
 
 const Factories: React.FC<Props> = () => {
-    // const [dataKk, setDataKk] = useState()
+    const [industrialEstate, setIndustrialEstate] = useState<Factory[] | undefined>(undefined)
+    const [activeTab, setActiveTab] = useState<FactoryTab>("All")
     const [{ data: factoryAll }] = useFactoriesQuery()
 
-    console.log("factoryAll =>>>>>>>>>>", factoryAll)
+    // console.log("factoryAll =>>>>>>>>>>🚀", factoryAll)
 
-    // const filterIndustrialEstate = factoryAll?.factories.filter(data => {
-    //     return data.industrialEstate === "แก่งคอย"
-    // })
+    useEffect(() => {
+        // if (!factoryAll?.factories) {
+        //     console.log('test')
+        // }
+
+        if (activeTab === "แก่งคอย") {
+            const filterIndustrialEstate = factoryAll?.factories.filter(data => {
+                return data.industrialEstate === "แก่งคอย"
+            })
+            console.log("activeTab === แก่งคอย", filterIndustrialEstate)
+            return setIndustrialEstate(filterIndustrialEstate)
+        }
+
+        if (activeTab === "แหลมฉบัง") {
+            const filterIndustrialEstate = factoryAll?.factories.filter(data => {
+                return data.industrialEstate === "แหลมฉบัง"
+            })
+            console.log("activeTab === แหลมฉบัง", filterIndustrialEstate)
+            return setIndustrialEstate(filterIndustrialEstate)
+        }
+    }, [activeTab, setIndustrialEstate, factoryAll?.factories])
+
 
     return (
         <Layout variant='regular'>
@@ -40,11 +66,15 @@ const Factories: React.FC<Props> = () => {
 
             <Tabs variant="enclosed" marginBottom="7" marginTop="5">
                 <TabList>
-                    <Tab>ALL</Tab>
-                    <Tab
-                    // onClick={() => setDataKk(filterIndustrialEstate)}
-                    >แก่งคอย</Tab>
-                    <Tab>แหลมฉบัง</Tab>
+                    {/* {factoryTabs.map((tab) => (
+                    <Tab key={tab}>{tab}</Tab>
+                ))} */}
+                    <Tab onClick={() => setActiveTab('All')}>ALL</Tab>
+                    <Tab onClick={() => setActiveTab('แก่งคอย')}>แก่งคอย</Tab>
+                    <Tab onClick={() => setActiveTab('แหลมฉบัง')}>แหลมฉบัง</Tab>
+                    {/* <Tab>ALL</Tab>
+                    <Tab>แก่งคอย</Tab>
+                    <Tab>แหลมฉบัง</Tab> */}
                 </TabList>
                 <TabPanels>
                     <TabPanel>
@@ -88,6 +118,7 @@ const Factories: React.FC<Props> = () => {
                         )}
                     </TabPanel>
 
+                    {/* "แก่งคอย"*/}
                     <TabPanel>
                         {!factoryAll ? (
                             <Flex align="center">
@@ -98,8 +129,8 @@ const Factories: React.FC<Props> = () => {
                         ) : (
                             <Table variant="striped" colorScheme="teal">
                                 <TableCaption placement="top">
-                                    <Heading>จำนวนโรงงานภายในประเทศทั้งหมด</Heading>
-                                    <Heading color="orange">{factoryAll?.factories.length}</Heading>
+                                        <Heading>จำนวนโรงงาน"แก่งคอย"ทั้งหมด</Heading>
+                                        <Heading color="orange">{industrialEstate?.length}</Heading>
                                 </TableCaption>
                                 <Thead>
                                     <Tr>
@@ -110,10 +141,51 @@ const Factories: React.FC<Props> = () => {
                                     </Tr>
                                 </Thead>
                                 <Tbody>
-                                    {!factoryAll ? (
+                                    {!industrialEstate ? (
                                         <div>Loading...</div>
                                     ) : (
-                                        factoryAll?.factories.map((factory) => <FactoryItem key={factory.id} factory={factory} />)
+                                        industrialEstate.map((factory) => <FactoryItem key={factory.id} factory={factory} />)
+                                    )}
+                                </Tbody>
+                                <Tfoot>
+                                    <Tr>
+                                        <Th>companyName</Th>
+                                        <Th>industrialEstate</Th>
+                                        <Th>businessType</Th>
+                                        <Th isNumeric>description</Th>
+                                    </Tr>
+                                </Tfoot>
+                            </Table>
+                        )}
+                    </TabPanel>
+
+                    {/* ""แหลมฉบัง""*/}
+                    <TabPanel>
+                        {!factoryAll ? (
+                            <Flex align="center">
+                                <Divider />
+                                <Heading>Loading...</Heading>
+                                <Divider />
+                            </Flex>
+                        ) : (
+                            <Table variant="striped" colorScheme="teal">
+                                <TableCaption placement="top">
+                                    <Heading>จำนวนโรงงาน"แหลมฉบัง"ทั้งหมด</Heading>
+                                    <Heading color="orange">{industrialEstate?.length}</Heading>
+                                </TableCaption>
+                                <Thead>
+                                    <Tr>
+                                        <Th>companyName</Th>
+                                        <Th>industrialEstate</Th>
+                                        <Th>companyName</Th>
+                                        <Th>description</Th>
+                                    </Tr>
+                                </Thead>
+                                <Tbody>
+                                    {!industrialEstate ? (
+                                        <div>Loading...</div>
+                                    ) : (
+                                                industrialEstate.map((factory) => <FactoryItem key={factory.id} factory={factory} />)
                                     )}
                                 </Tbody>
                                 <Tfoot>

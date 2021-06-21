@@ -5,3 +5,9 @@ export const factoryTab: FactoryTab[] = [
     "แก่งคอย",
     "แหลมฉบัง"
 ]
+
+export const factoryTabs: FactoryTab[] = [
+    "All",
+    "แก่งคอย",
+    "แหลมฉบัง"
+]
