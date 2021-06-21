@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Formik, Form } from 'formik'
 import { Box, Button } from '@chakra-ui/react'
@@ -6,13 +6,20 @@ import { Box, Button } from '@chakra-ui/react'
 import Layout from '../components/Layout'
 // import {toErrorMap} from '../utils/toErrorMap'
 import InputField from '../components/InputField'
-import { useCreatePostMutation } from '../generated/graphql'
+import { useCreatePostMutation, useMeQuery } from '../generated/graphql'
 
 interface Props { }
 
 const CreatePost: React.FC<Props> = () => {
+    const [{ data, fetching }] = useMeQuery()
     const history = useHistory()
     const [, createPost] = useCreatePostMutation()
+
+    useEffect(() => {
+        if (!fetching && !data?.me) {
+            history.replace("/login")
+        }
+    }, [fetching, data, history])
     return (
         <Layout variant='small'>
             <Formik
@@ -21,8 +28,9 @@ const CreatePost: React.FC<Props> = () => {
                     const { error } = await createPost({ input: values })
                     if (error) {
                         history.push("/login")
+                    } else {
+                        history.push('/')
                     }
-                    history.push('/')
                 }}
             >
                 {({ isSubmitting }) => (

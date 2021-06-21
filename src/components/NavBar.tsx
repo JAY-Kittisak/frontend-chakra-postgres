@@ -77,7 +77,7 @@ const NavBar: React.FC<Props> = () => {
             position="sticky"
             top={0}
             bg={colorMode === "light" ? "#2BA3C2" : "#2A5EA4"}
-            color="white"
+            color={colorMode === "light" ? "back" : "white"}
             p={4}
         >
             <Menu>
@@ -86,13 +86,13 @@ const NavBar: React.FC<Props> = () => {
                     aria-label="Options"
                     icon={<HamburgerIcon />}
                     variant="outline"
-                    color="white"
+                    color={colorMode === "light" ? "back" : "white"}
                 />
                 <MenuList>
                     <MenuItem icon={<ExternalLinkIcon />} command="⌘N" onClick={() => { history.push('/dashboard') }}>
                         Dashboard
                     </MenuItem>
-                    <MenuItem icon={<AddIcon />} command="⌘T" onClick={() => { history.push('/factories') }}>
+                    <MenuItem icon={<AddIcon />} command="⌘T" onClick={() => { history.push('/tiers/factories') }}>
                         Factories
                     </MenuItem>
                     <MenuItem icon={<RepeatIcon />} command="⌘⇧N" onClick={() => { history.push('/create-post') }}>
