@@ -68,25 +68,19 @@ const options = {
 
 
 interface Props {
-    dataFactory: Factory[] | undefined
+    industrialEstate: Factory[] | undefined
 }
 
-const FactoryChart: React.FC<Props> = ({ dataFactory }) => {
+const FactoryChart: React.FC<Props> = ({ industrialEstate }) => {
     const { toggleColorMode } = useColorMode()
     const bg = useColorModeValue("gray.200", "gray.700")
     const color = useColorModeValue("blue", "gray")
     const colorW = useColorModeValue("white", "white")
 
-    console.log("ก่อน filter ===>>> ", dataFactory)
-
-    const filterIndustrialEstate = dataFactory?.filter(data => {
-        return data.industrialEstate === "แก่งคอย"
-    })
-
-
-    console.log("หลัง filterIndustrialEstate ===>>> ", filterIndustrialEstate)
+    console.log(" industrialEstate ===>>> ", industrialEstate)
+    console.log(" จำนวน ===>>> ", industrialEstate?.length)
     return (
-        <Flex>
+        <Flex ml="3">
             <Box w="32%" rounded="10px" boxShadow="sm" bg={bg} mr="5">
                 <Line type="line" data={data} options={options} />
                 <Box p={5}>

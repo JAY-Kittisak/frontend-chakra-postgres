@@ -14,18 +14,21 @@ import {
     TabList,
     TabPanels,
     Tab,
-    TabPanel
+    TabPanel,
+    Select,
+    Text,
+    Box
 } from "@chakra-ui/react";
 
 import Layout from '../components/Layout'
 import FactoryItem from '../components/tier/FactoryItem'
 import FactoryChart from '../components/tier/FactoryChart'
-import { useFactoriesQuery } from '../generated/graphql';
 import { Factory } from '../generated/graphql'
+import { factories } from '../data/DataFactory'
 
 import {
     FactoryTab,
-    // factoryTabs 
+    factoryTab
 } from '../utils/helpers';
 
 interface Props { }
@@ -33,53 +36,58 @@ interface Props { }
 const Factories: React.FC<Props> = () => {
     const [industrialEstate, setIndustrialEstate] = useState<Factory[] | undefined>(undefined)
     const [activeTab, setActiveTab] = useState<FactoryTab>("All")
-    const [{ data: factoryAll }] = useFactoriesQuery()
 
-    // console.log("factoryAll =>>>>>>>>>>🚀", factoryAll)
+    // console.log("factoryAll =>>>>>>>>>>🚀", factories)
 
     useEffect(() => {
-        // if (!factoryAll?.factories) {
-        //     console.log('test')
-        // }
-
         if (activeTab === "แก่งคอย") {
-            const filterIndustrialEstate = factoryAll?.factories.filter(data => {
+            const filterIndustrialEstate = factories.filter(data => {
                 return data.industrialEstate === "แก่งคอย"
             })
-            console.log("activeTab === แก่งคอย", filterIndustrialEstate)
+            // console.log("activeTab === แก่งคอย🚀", filterIndustrialEstate)
             return setIndustrialEstate(filterIndustrialEstate)
         }
 
         if (activeTab === "แหลมฉบัง") {
-            const filterIndustrialEstate = factoryAll?.factories.filter(data => {
+            const filterIndustrialEstate = factories.filter(data => {
                 return data.industrialEstate === "แหลมฉบัง"
             })
-            console.log("activeTab === แหลมฉบัง", filterIndustrialEstate)
+            // console.log("activeTab === แหลมฉบัง🚀", filterIndustrialEstate)
             return setIndustrialEstate(filterIndustrialEstate)
         }
-    }, [activeTab, setIndustrialEstate, factoryAll?.factories])
+    }, [activeTab, setIndustrialEstate])
 
 
     return (
         <Layout variant='regular'>
-            <FactoryChart dataFactory={factoryAll?.factories} />
+
+            <Text as="h2" fontWeight="semibold" fontSize="xl" my={2}>
+                นิคมอุตสาหกรรม
+            </Text>
+            <Box mb="5">
+                <Select
+                    defaultValue={activeTab ? activeTab : undefined}
+                >
+                    <option style={{ display: 'none' }}></option>
+                    {factoryTab.map((tab) => (
+                        <option key={tab} value={tab}>
+                            {tab}
+                        </option>
+                    ))}
+                </Select>
+            </Box>
+
+            <FactoryChart industrialEstate={industrialEstate} />
 
             <Tabs variant="enclosed" marginBottom="7" marginTop="5">
                 <TabList>
-                    {/* {factoryTabs.map((tab) => (
-                    <Tab key={tab}>{tab}</Tab>
-                ))} */}
                     <Tab onClick={() => setActiveTab('All')}>ALL</Tab>
                     <Tab onClick={() => setActiveTab('แก่งคอย')}>แก่งคอย</Tab>
                     <Tab onClick={() => setActiveTab('แหลมฉบัง')}>แหลมฉบัง</Tab>
-                    {/* <Tab>ALL</Tab>
-                    <Tab>แก่งคอย</Tab>
-                    <Tab>แหลมฉบัง</Tab> */}
                 </TabList>
                 <TabPanels>
                     <TabPanel>
-
-                        {!factoryAll ? (
+                        {!factories ? (
                             <Flex align="center">
                                 <Divider />
                                 <Heading>Loading...</Heading>
@@ -89,7 +97,7 @@ const Factories: React.FC<Props> = () => {
                             <Table variant="striped" colorScheme="teal">
                                 <TableCaption placement="top">
                                     <Heading>จำนวนโรงงานภายในประเทศทั้งหมด</Heading>
-                                    <Heading color="orange">{factoryAll?.factories.length}</Heading>
+                                        <Heading color="orange">{factories.length}</Heading>
                                 </TableCaption>
                                 <Thead>
                                     <Tr>
@@ -100,10 +108,10 @@ const Factories: React.FC<Props> = () => {
                                     </Tr>
                                 </Thead>
                                 <Tbody>
-                                    {!factoryAll ? (
+                                        {!factories ? (
                                         <div>Loading...</div>
                                     ) : (
-                                        factoryAll?.factories.map((factory) => <FactoryItem key={factory.id} factory={factory} />)
+                                                factories.map((factory) => <FactoryItem key={factory.id} factory={factory} />)
                                     )}
                                 </Tbody>
                                 <Tfoot>
@@ -120,7 +128,7 @@ const Factories: React.FC<Props> = () => {
 
                     {/* "แก่งคอย"*/}
                     <TabPanel>
-                        {!factoryAll ? (
+                        {!industrialEstate ? (
                             <Flex align="center">
                                 <Divider />
                                 <Heading>Loading...</Heading>
@@ -161,7 +169,7 @@ const Factories: React.FC<Props> = () => {
 
                     {/* ""แหลมฉบัง""*/}
                     <TabPanel>
-                        {!factoryAll ? (
+                        {!industrialEstate ? (
                             <Flex align="center">
                                 <Divider />
                                 <Heading>Loading...</Heading>

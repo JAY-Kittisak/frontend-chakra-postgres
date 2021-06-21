@@ -9,6 +9,7 @@ import {
     MenuList,
     MenuItem,
     Heading,
+    useColorMode,
 } from '@chakra-ui/react'
 import { IconButton } from "@chakra-ui/react"
 import { useHistory } from 'react-router-dom'
@@ -23,6 +24,8 @@ const NavBar: React.FC<Props> = () => {
     const history = useHistory()
     const [{ fetching: logoutFetching }, logout] = useLogoutMutation()
     const [{ data, fetching }] = useMeQuery()
+    const { colorMode } = useColorMode()
+
     let body = null
 
     // data is loading
@@ -69,7 +72,14 @@ const NavBar: React.FC<Props> = () => {
     }
 
     return (
-        <Flex zIndex={1} position="sticky" top={0} bg='blue.500' p={4}>
+        <Flex
+            zIndex={1}
+            position="sticky"
+            top={0}
+            bg={colorMode === "light" ? "#2BA3C2" : "#2A5EA4"}
+            color="white"
+            p={4}
+        >
             <Menu>
                 <MenuButton
                     as={IconButton}

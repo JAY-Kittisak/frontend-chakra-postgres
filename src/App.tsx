@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { Provider, createClient, fetchExchange, dedupExchange } from 'urql'
 import { cacheExchange, Cache, QueryInput } from '@urql/exchange-graphcache';
 
+import './App.css'
 import Routes from './routes/Routes'
 import { LoginMutation, LogoutMutation, MeDocument, MeQuery, RegisterMutation } from "./generated/graphql";
 
@@ -18,8 +19,9 @@ function betterUpdateQuery<Result, Query>(
     return cache.updateQuery(qi, data => fn(result, data as any) as any)
 }
 
+
 const client = createClient({
-    url: "http://localhost:4000/graphql",
+    url: "http://200.1.1.99:4000/graphql",
     fetchOptions: {
         credentials: "include"
     },

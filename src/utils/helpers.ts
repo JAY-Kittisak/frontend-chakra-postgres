@@ -6,8 +6,7 @@ export const factoryTab: FactoryTab[] = [
     "แหลมฉบัง"
 ]
 
-export const factoryTabs: FactoryTab[] = [
-    "All",
-    "แก่งคอย",
-    "แหลมฉบัง"
-]
+
+// ไว้ใช้เวลา Create | add 
+export type IndustrialEstateCategory = 'แก่งคอย' | 'แหลมฉบัง'
+export const categories: IndustrialEstateCategory[] = ['แก่งคอย', 'แหลมฉบัง']
