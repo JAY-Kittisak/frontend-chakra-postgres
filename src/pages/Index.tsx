@@ -3,12 +3,12 @@ import Layout from '../components/Layout'
 
 interface Props { }
 
-const index: React.FC<Props> = () => {
+const Index: React.FC<Props> = () => {
     return (
         <Layout variant='small'>
-        <h1>HOME PAGE</h1>
+            <div>Home Page</div>
         </Layout>
     )
 }
 
-export default index
+export default Index

@@ -2,14 +2,8 @@ import React from "react";
 import { Line, Bar } from "react-chartjs-2";
 import { Badge, Box, Text, Stack, Icon, Button, Flex, useColorModeValue, useColorMode } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
-import { Factory } from '../../generated/graphql'
-import { factories } from '../../data/DataFactory'
+// import { Factory } from '../../generated/graphql'
 
-
-// const dataIndustrialEstate = factories.filter(data => {
-//     return data.industrialEstate
-// })
-// console.log("dataTest", dataIndustrialEstate)
 const data = {
     labels: ["แก่งคอย", "แหลม"],
     datasets: [
@@ -61,17 +55,14 @@ const options = {
 
 
 interface Props {
-    industrialEstate: Factory[] | undefined
 }
 
-const FactoryChart: React.FC<Props> = ({ industrialEstate }) => {
+const FactoryChart: React.FC<Props> = () => {
     const { toggleColorMode } = useColorMode()
     const bg = useColorModeValue("gray.200", "gray.700")
     const color = useColorModeValue("blue", "gray")
     const colorW = useColorModeValue("white", "white")
 
-    console.log(" industrialEstate ===>>> ", industrialEstate)
-    console.log(" จำนวน ===>>> ", industrialEstate?.length)
     return (
         <Flex>
             <Box w="50%" rounded="10px" boxShadow="sm" bg={bg} mr="5">
@@ -160,7 +151,7 @@ const FactoryChart: React.FC<Props> = ({ industrialEstate }) => {
                         </Text>
                     </Stack>
                     <Text as="h2" fontWeight="semibold" fontSize="xl" my={2} color="pink.500">
-                        ประเภทกิจการ
+                        ประเภทธุรกิจ
                     </Text>
                     <Text isTruncated fontWeight="light" fontSize="md">
                         Lorem ipsum, dolor sit amet consectetur adipisicing elit. Qui commodi,
@@ -187,42 +178,24 @@ const FactoryChart: React.FC<Props> = ({ industrialEstate }) => {
                             </Text>
                         </Box>
                     </Stack>
-                    <Flex isInline justify="space-between">
-
-
-                        <Box>
-                            <Button
-                                colorScheme={color}
-                                size="lg"
-                                mt={3}
-                                boxShadow="sm"
-                                _hover={{ boxShadow: "md" }}
-                                _active={{ boxShadow: "lg" }}
-                                onClick={toggleColorMode}
-                            >
-                                <Text color={colorW}>
-                                    ข้อมูลการผลิต
-                                </Text>
-                            </Button>
-                        </Box>
-                        <Box>
-                            <Button
-                                colorScheme={color}
-                                size="lg"
-                                mt={3}
-                                boxShadow="sm"
-                                _hover={{ boxShadow: "md" }}
-                                _active={{ boxShadow: "lg" }}
-                                onClick={toggleColorMode}
-                            >
-                                <Text color={colorW}>
-                                    สินค้าที่ผลิต
-                                </Text>
-                            </Button>
-                        </Box>
-                    </Flex>
+                    <Box textAlign="center">
+                        <Button
+                            colorScheme={color}
+                            size="lg"
+                            mt={3}
+                            boxShadow="sm"
+                            _hover={{ boxShadow: "md" }}
+                            _active={{ boxShadow: "lg" }}
+                            onClick={toggleColorMode}
+                        >
+                            <Text color={colorW}>
+                                เพิ่มโรงงานใหม่
+                            </Text>
+                        </Button>
+                    </Box>
                 </Box>
             </Box>
+
         </Flex>
     );
 }
