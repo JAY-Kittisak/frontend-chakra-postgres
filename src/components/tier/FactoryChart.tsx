@@ -1,72 +1,167 @@
-import React from "react";
-import { Line, Bar } from "react-chartjs-2";
-import { Badge, Box, Text, Stack, Icon, Button, Flex, useColorModeValue, useColorMode } from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
+import { Doughnut, Bar } from "react-chartjs-2";
+import { Badge, Box, Text, Stack, Icon, Button, useColorModeValue, useColorMode } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
-// import { Factory } from '../../generated/graphql'
 
-const data = {
-    labels: ["แก่งคอย", "แหลม"],
-    datasets: [
-        {
-            label: "My Balance",
-            fill: false,
-            lineTension: 0.5,
-            backgroundColor: "#db86b2",
-            borderColor: "#B57295",
-            borderCapStyle: "butt",
-            borderDashOffset: 0.0,
-            borderJoinStyle: "#B57295",
-            pointBorderColor: "#B57295",
-            pointBackgroundColor: "#fff",
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: "#B57295",
-            pointHoverBorderColor: "#B57295",
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
-            data: [500, 300, 400, 500, 800, 650, 700, 690, 1000, 1200, 1050, 1300],
-        },
-    ],
-};
-
-const options = {
-    maintainAspectRatio: true,
-    scales: {
-        x: {
-            grid: {
-                display: false,
-            },
-        },
-        y: {
-            grid: {
-                borderDash: [3, 3],
-            },
-            // beginAtZero: true, // this works
-        },
-    },
-    plugins: {
-        legend: {
-            display: false,
-        },
-    },
-};
-
-
+import { Factory } from "../../generated/graphql";
 
 interface Props {
+    industrialEstate: Factory[] | undefined
+    industrialEstateSelect: string
 }
 
-const FactoryChart: React.FC<Props> = () => {
+const FactoryChart: React.FC<Props> = ({ industrialEstate, industrialEstateSelect }) => {
     const { toggleColorMode } = useColorMode()
     const bg = useColorModeValue("gray.200", "gray.700")
     const color = useColorModeValue("blue", "gray")
     const colorW = useColorModeValue("white", "white")
 
+    const [switchX, setSwitchX] = useState<(number | undefined)[]>([])
+
+    useEffect(() => {
+        if (industrialEstateSelect === "All") {
+            let arraySwitchX = []
+            const resultK = industrialEstate?.filter((estate) => {
+                return estate.industrialEstate === "แก่งคอย"
+            }).length
+            const resultH = industrialEstate?.filter((estate) => {
+                return estate.industrialEstate === "แหลมฉบัง"
+            }).length
+            const resultHr = industrialEstate?.filter((estate) => {
+                return estate.industrialEstate === "เหมราชอีสเทิร์นซีบอร์ด"
+            }).length
+            const resultAss = industrialEstate?.filter((estate) => {
+                return estate.industrialEstate === "เอเซีย (สุวรรณภูมิ)"
+            }).length
+            const resultAs = industrialEstate?.filter((estate) => {
+                return estate.industrialEstate === "เอเซีย"
+            }).length
+            const resultHr4 = industrialEstate?.filter((estate) => {
+                return estate.industrialEstate === "เหมราชอีสเทิร์นซีบอร์ด แห่งที่ 4"
+            }).length
+            arraySwitchX = [resultK, resultH, resultHr, resultAss, resultAs, resultHr4]
+            setSwitchX(arraySwitchX)
+        }
+
+        if (!(industrialEstateSelect === "All")) {
+            let arraySwitchX = []
+            const result = industrialEstate?.filter((estate) => {
+                return estate.industrialEstate === industrialEstateSelect
+            }).length
+            arraySwitchX = [result]
+            setSwitchX(arraySwitchX)
+        }
+
+        // if (industrialEstateSelect === "แหลมฉบัง") {
+        //     let arraySwitchX = []
+        //     const result = industrialEstate?.filter((estate) => {
+        //         return estate.industrialEstate === industrialEstateSelect
+        //     }).length
+        //     arraySwitchX = [result]
+        //     setSwitchX(arraySwitchX)
+        // }
+        // if (industrialEstateSelect === "เหมราชอีสเทิร์นซีบอร์ด") {
+        //     let arraySwitchX = []
+        //     const result = industrialEstate?.filter((estate) => {
+        //         return estate.industrialEstate === industrialEstateSelect
+        //     }).length
+        //     arraySwitchX = [result]
+        //     setSwitchX(arraySwitchX)
+        // }
+        // if (industrialEstateSelect === "เอเซีย (สุวรรณภูมิ)") {
+        //     let arraySwitchX = []
+        //     const result = industrialEstate?.filter((estate) => {
+        //         return estate.industrialEstate === industrialEstateSelect
+        //     }).length
+        //     arraySwitchX = [result]
+        //     setSwitchX(arraySwitchX)
+        // }
+        // if (industrialEstateSelect === "เอเซีย") {
+        //     let arraySwitchX = []
+        //     const result = industrialEstate?.filter((estate) => {
+        //         return estate.industrialEstate === industrialEstateSelect
+        //     }).length
+        //     arraySwitchX = [result]
+        //     setSwitchX(arraySwitchX)
+        // }
+        // if (industrialEstateSelect === "เหมราชอีสเทิร์นซีบอร์ด แห่งที่ 4") {
+        //     let arraySwitchX = []
+        //     const result = industrialEstate?.filter((estate) => {
+        //         return estate.industrialEstate === industrialEstateSelect
+        //     }).length
+        //     arraySwitchX = [result]
+        //     setSwitchX(arraySwitchX)
+        // }
+
+    }, [industrialEstateSelect, industrialEstate])
+
+    const xAxis = industrialEstate?.map((estate) => {
+        return estate;
+    })
+        .filter(
+            (item, pos, self) =>
+                self.findIndex((v) => v.industrialEstate === item.industrialEstate) ===
+                pos
+        )
+        .map((estate) => {
+            return estate.industrialEstate
+        })
+
+
+    const data = {
+        labels: xAxis,
+        datasets: [
+            {
+                label: "My Balance",
+                fill: false,
+                lineTension: 0.5,
+                backgroundColor: ["#db86b2", "#FFCD56", "#36A2EB", "#26c96f", "#8577d4"],
+                borderColor: "#ffffff",
+                borderCapStyle: "butt",
+                borderDashOffset: 0.0,
+                borderJoinStyle: "#B57295",
+                pointBorderColor: "#B57295",
+                pointBackgroundColor: "#fff",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "#24111b",
+                pointHoverBorderColor: "#B57295",
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: switchX
+            },
+        ],
+    };
+
+    const options = {
+        maintainAspectRatio: true,
+        scales: {
+            x: {
+                grid: {
+                    display: false,
+                },
+            },
+            y: {
+                grid: {
+                    borderDash: [3, 3],
+                },
+                // beginAtZero: true, // this works
+            },
+        },
+        plugins: {
+            legend: {
+                display: false,
+            },
+        },
+    };
+
     return (
-        <Flex>
-            <Box w="50%" rounded="10px" boxShadow="sm" bg={bg} mr="5">
-                <Line type="line" data={data} options={options} />
+        <>
+            <Box w="50%" rounded="10px" boxShadow="sm" bg={bg} mr="2">
+                <Box w="300px" ml="150">
+                    <Doughnut type="doughnut" data={data} options={options} />
+                </Box>
                 <Box p={5}>
                     <Stack isInline align="baseline">
                         <Badge variant="solid" colorScheme="pink" rounded="full" px={2}>
@@ -195,8 +290,7 @@ const FactoryChart: React.FC<Props> = () => {
                     </Box>
                 </Box>
             </Box>
-
-        </Flex>
+        </>
     );
 }
 

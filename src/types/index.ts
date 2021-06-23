@@ -6,7 +6,5 @@ export const factoryTab: FactoryTab[] = [
     "แหลมฉบัง"
 ]
 
-
 // ไว้ใช้เวลา Create | add 
-export type IndustrialEstateCategory = 'แก่งคอย' | 'แหลมฉบัง'
-export const categories: IndustrialEstateCategory[] = ['แก่งคอย', 'แหลมฉบัง']
+export const categories: FactoryIndustrialEstate[] = ['แก่งคอย', 'แหลมฉบัง']
