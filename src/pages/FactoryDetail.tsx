@@ -1,9 +1,9 @@
-import React from 'react'
-// import { useParams } from 'react-router-dom'
-import { Badge, Box, Text, Stack, Icon, Button, Flex, useColorModeValue, useColorMode } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
+// import { useParams } from 'react-router-dom'
+import { Badge, Box, Button, Flex, Icon, Stack, Text, useColorMode, useColorModeValue } from "@chakra-ui/react";
+import React from 'react';
+import Layout from '../components/Layout';
 
-import Layout from '../components/Layout'
 
 interface Props { }
 

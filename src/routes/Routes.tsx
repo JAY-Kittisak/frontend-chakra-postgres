@@ -4,8 +4,8 @@ import { Switch, Route } from 'react-router-dom'
 import Index from '../pages/Index'
 import Register from '../pages/Register'
 import Login from '../pages/Login'
-import Dashboard from '../pages/Dashboard'
 import PageNotFound from '../pages/PageNotFound'
+import PagePost from '../pages/PagePost'
 import CreatePost from '../pages/Create-post'
 import TierRoute from './TierRoute'
 
@@ -17,11 +17,11 @@ const Routes: React.FC<Props> = () => {
             <Route path="/tiers">
                 <TierRoute />
             </Route>
+            <Route path="/post">
+                <PagePost />
+            </Route>
             <Route path="/create-post">
                 <CreatePost />
-            </Route>
-            <Route path="/dashboard">
-                <Dashboard />
             </Route>
             <Route path="/login">
                 <Login />

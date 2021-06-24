@@ -1,28 +1,18 @@
-import React from 'react'
-import { Tr, Td, Text, Flex, Avatar, Heading } from '@chakra-ui/react'
-import { Post } from '../../generated/graphql'
+import React from "react";
+import { Box, Text, Heading } from "@chakra-ui/react";
+import { Post } from "../../generated/graphql";
 
 interface Props {
-    post: Post
+    post: Pick<Post, "id" | "createdAt" | "updatedAt" | "title" | "textSnippet">;
 }
 
-const Testpost: React.FC<Props> = ({ post }) => {
+const PostItem: React.FC<Props> = ({ post }) => {
     return (
-        <Tr color="gr">
-            <Td>
-                <Flex align="center" key={post.id}>
-                <Avatar size="sm" mr={2} src="amazon.jpeg" />
-                <Flex flexDir="column">
-                    <Heading size="sm" letterSpacing="tight">{post.title}</Heading>
-                    <Text fontSize="sm">Apr 24, 2021 at 1:40pm</Text>
-                </Flex>
-            </Flex>
-            </Td>
-            <Td><Text fontWeight="bold" display="inline-table">{post.id}</Text></Td>
-            <Td>{post.createdAt}</Td>
-            <Td isNumeric>{post.updatedAt}</Td>
-        </Tr>
-    )
-}
+        <Box key={post.id} p={5} shadow="md" borderWidth="1px">
+            <Heading fontSize="xl">{post.title}</Heading>
+            <Text mt={4}>{post.textSnippet}</Text>
+        </Box>
+    );
+};
 
-export default Testpost
+export default PostItem;

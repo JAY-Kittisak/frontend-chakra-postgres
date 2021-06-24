@@ -1,12 +1,12 @@
+import { Box, Button, Heading } from '@chakra-ui/react'
+import { Form, Formik } from 'formik'
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import { Box, Button } from '@chakra-ui/react'
-import { Form, Formik } from 'formik'
-
 import InputField from '../components/InputField'
 import Layout from '../components/Layout'
-import { toErrorMap } from '../utils/toErrorMap'
 import { useLoginMutation } from '../generated/graphql'
+import { toErrorMap } from '../utils/toErrorMap'
+
 
 
 const Login: React.FC<{}> = () => {
@@ -14,6 +14,7 @@ const Login: React.FC<{}> = () => {
     const [, login] = useLoginMutation()
     return (
         <Layout variant="small">
+            <Heading as="h3" size="xl" mb="7">Login</Heading>
             <Formik
                 initialValues={{ username: "", password: "" }}
                 onSubmit={async (values, { setErrors }) => {
@@ -21,8 +22,12 @@ const Login: React.FC<{}> = () => {
                     if (response.data?.login.errors) {
                         setErrors(toErrorMap(response.data.login.errors))
                     } else if (response.data?.login.user) {
-                        //worked
-                        history.push('/')
+                        if (typeof history.location.state === "string") {
+                            history.push(history.location.state)
+                        } else {
+                            //worked
+                            history.push('/')
+                        }
                     }
                 }}
             >

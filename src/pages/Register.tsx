@@ -1,12 +1,12 @@
-import React from 'react'
-import { useHistory } from 'react-router-dom'
 import { Box, Button } from '@chakra-ui/react'
 import { Form, Formik } from 'formik'
-
+import React from 'react'
+import { useHistory } from 'react-router-dom'
 import InputField from '../components/InputField'
 import Layout from '../components/Layout'
 import { useRegisterMutation } from '../generated/graphql'
 import { toErrorMap } from '../utils/toErrorMap'
+
 
 interface Props { }
 

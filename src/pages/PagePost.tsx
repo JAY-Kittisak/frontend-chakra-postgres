@@ -1,75 +1,35 @@
+import { Flex, Heading, Stack, Link } from "@chakra-ui/react";
 import React from "react";
-import {
-    Flex,
-    Tbody,
-    Table,
-    TableCaption,
-    Thead,
-    Tr,
-    Th,
-    Tfoot,
-    Heading,
-    Divider,
-} from "@chakra-ui/react";
-
+import { useHistory } from "react-router-dom";
+import Layout from "../components/Layout";
 import PostItem from "../components/post/PostItem";
 import { usePostsQuery } from "../generated/graphql";
 
-interface Props {
-    display: "none" | "hide" | "show";
-}
 
-const Post: React.FC<Props> = ({ display }) => {
-    const [{ data }] = usePostsQuery();
+interface Props { }
+
+const Post: React.FC<Props> = () => {
+    const history = useHistory()
+    const [{ data }] = usePostsQuery({
+        variables: {
+            limit: 10,
+        }
+    });
     return (
-        <>
+        <Layout variant="small">
+            <Flex align="center">
+                <Heading>Post</Heading>
+                <Link ml="auto" onClick={() => { history.push('/create-post') }}>Create Post</Link>
+            </Flex>
+            <br />
             {!data ? (
-                <Flex align="center">
-                    <Divider />
-                    <Heading>Loading...</Heading>
-                    <Divider />
-                </Flex>
+                <Heading>Loading...</Heading>
             ) : (
-        <Table variant="unstyled" mt={4}>
-                        <TableCaption placement="top">
-                            ทดสอบการ Query จำนวนทั้งหมด
-                            <Heading>{data?.posts.length}</Heading>
-                        </TableCaption>
-                        <Thead>
-                            <Tr>
-                                <Th>title</Th>
-                                <Th>id</Th>
-                                <Th>createdAt</Th>
-                                <Th isNumeric>updatedAt</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            {!data ? (
-                                <div>Loading...</div>
-                            ) : (
-                                data?.posts.map((post) => <PostItem key={post.id} post={post} />)
-                            )}
-                            {display === "show" && (
-                                <>
-                                    {!data
-                                        ? null
-                                        : data?.posts.map((post) => (
-                                            <PostItem key={post.id} post={post} />
-                                        ))}
-                                </>
-                            )}
-                        </Tbody>
-                        <Tfoot>
-                            <Tr>
-                                <Th>id</Th>
-                                <Th>title</Th>
-                                <Th>createdAt</Th>
-                                <Th isNumeric>updatedAt</Th>
-                            </Tr>
-                        </Tfoot>
-        </Table>
+                    <Stack spacing={8}>
+                        {data?.posts.map((post) => <PostItem key={post.id} post={post} />)}
+                    </Stack>
             )}
-        </>
+        </Layout >
     );
 };
 

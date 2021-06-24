@@ -14,8 +14,8 @@ import {
 import { IconButton } from "@chakra-ui/react"
 import { useHistory } from 'react-router-dom'
 import { ExternalLinkIcon, AddIcon, RepeatIcon, EditIcon, HamburgerIcon } from '@chakra-ui/icons'
-import { ColorModeSwitcher } from "../ColorModeSwitcher"
 
+import { ColorModeSwitcher } from "../ColorModeSwitcher"
 import { useLogoutMutation, useMeQuery } from '../generated/graphql'
 
 interface Props { }
@@ -89,11 +89,11 @@ const NavBar: React.FC<Props> = () => {
                     color={colorMode === "light" ? "back" : "white"}
                 />
                 <MenuList>
-                    <MenuItem icon={<ExternalLinkIcon />} command="⌘N" onClick={() => { history.push('/dashboard') }}>
-                        Dashboard
-                    </MenuItem>
                     <MenuItem icon={<AddIcon />} command="⌘T" onClick={() => { history.push('/tiers/factories') }}>
                         Factories
+                    </MenuItem>
+                    <MenuItem icon={<ExternalLinkIcon />} command="⌘N" onClick={() => { history.push('/post') }}>
+                        Post
                     </MenuItem>
                     <MenuItem icon={<RepeatIcon />} command="⌘⇧N" onClick={() => { history.push('/create-post') }}>
                         Create-post

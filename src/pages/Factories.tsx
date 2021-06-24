@@ -1,35 +1,23 @@
-import React, { useState, useEffect } from "react";
 import {
-    Flex,
-    Tbody,
-    Table,
-    Thead,
-    Tr,
-    Th,
-    Tfoot,
-    Heading,
-    Divider,
-    Text,
-    Box,
-    Select,
-    IconButton,
-    Stack,
-    useColorModeValue,
+    Box, Divider, Flex, Heading, IconButton, Select, Stack, Table, Tbody, Text, Tfoot, Th, Thead,
+    Tr, useColorModeValue
 } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
-
 import Layout from "../components/Layout";
-import FactoryItem from "../components/tier/FactoryItem";
 import FactoryChart from "../components/tier/FactoryChart";
-import { useFactoriesQuery } from "../generated/graphql";
-import { Factory } from "../generated/graphql";
+import FactoryItem from "../components/tier/FactoryItem";
+import { Factory, useFactoriesQuery } from "../generated/graphql";
 import { factoryTab } from "../utils/helpers";
+import { useIsAuth } from "../utils/uselsAuth";
+
 
 interface Props { }
 
 type Display = "none" | "hide" | "show";
 
 const Factories: React.FC<Props> = () => {
+    useIsAuth()
     const bg = useColorModeValue("gray.200", "gray.700")
     const [display, changeDisplay] = useState<Display>("hide");
     const [{ data: factoryAll }] = useFactoriesQuery();
@@ -128,6 +116,7 @@ const Factories: React.FC<Props> = () => {
                     )}
                     <Heading color="orange" textAlign="right" mt="2" >
                         {industrialEstate?.length}
+                        <Text color="gray" fontSize="sm">โรงงาน</Text>
                     </Heading>
                 </Box>
             </Stack>
