@@ -14,6 +14,19 @@ export type Scalars = {
   Float: number;
 };
 
+export type Author = {
+  __typename?: 'Author';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+};
+
+export type Book = {
+  __typename?: 'Book';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  authors: Array<Author>;
+};
+
 export type Factory = {
   __typename?: 'Factory';
   id: Scalars['Float'];
@@ -25,6 +38,8 @@ export type Factory = {
   phoneNumber: Scalars['String'];
   FAX: Scalars['String'];
   Email: Scalars['String'];
+  products: Array<ProductByTier>;
+  productReceives?: Maybe<Array<ProductByTier>>;
 };
 
 export type FactoryInput = {
@@ -44,6 +59,23 @@ export type FieldError = {
   message: Scalars['String'];
 };
 
+export type Manufacturer = {
+  __typename?: 'Manufacturer';
+  id: Scalars['Float'];
+  creatorFactory: Scalars['String'];
+  productName: Scalars['String'];
+  userCreateId: Scalars['Float'];
+  creatorId: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type ManufacturerInput = {
+  creatorFactory: Scalars['String'];
+  productName: Scalars['String'];
+  creatorId: Scalars['Float'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createPost: Post;
@@ -53,6 +85,14 @@ export type Mutation = {
   login: UserResponse;
   logout: Scalars['Boolean'];
   createFactory: Factory;
+  createManufacturer: Manufacturer;
+  createBook: Book;
+  createAuthor: Author;
+  addAuthorBook: Scalars['Boolean'];
+  deleteBook: Scalars['Boolean'];
+  createProductByTier: ProductByTier;
+  addFactoryProduct: Scalars['Boolean'];
+  deleteProduct: Scalars['Boolean'];
 };
 
 
@@ -86,6 +126,48 @@ export type MutationCreateFactoryArgs = {
   input: FactoryInput;
 };
 
+
+export type MutationCreateManufacturerArgs = {
+  input: ManufacturerInput;
+};
+
+
+export type MutationCreateBookArgs = {
+  name: Scalars['String'];
+};
+
+
+export type MutationCreateAuthorArgs = {
+  name: Scalars['String'];
+};
+
+
+export type MutationAddAuthorBookArgs = {
+  bookId: Scalars['Int'];
+  authorId: Scalars['Int'];
+};
+
+
+export type MutationDeleteBookArgs = {
+  bookId: Scalars['Int'];
+};
+
+
+export type MutationCreateProductByTierArgs = {
+  input: ProductByTierInput;
+};
+
+
+export type MutationAddFactoryProductArgs = {
+  productId: Scalars['Int'];
+  factoryId: Scalars['Int'];
+};
+
+
+export type MutationDeleteProductArgs = {
+  productId: Scalars['Int'];
+};
+
 export type Post = {
   __typename?: 'Post';
   id: Scalars['Float'];
@@ -104,6 +186,28 @@ export type PostInput = {
   text: Scalars['String'];
 };
 
+export type ProductByTier = {
+  __typename?: 'ProductByTier';
+  id: Scalars['Float'];
+  productName: Scalars['String'];
+  description: Scalars['String'];
+  category: Scalars['String'];
+  creatorName: Scalars['String'];
+  creatorId: Scalars['Float'];
+  creator: Factory;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  factorys: Array<Factory>;
+};
+
+export type ProductByTierInput = {
+  productName: Scalars['String'];
+  category: Scalars['String'];
+  description: Scalars['String'];
+  creatorName: Scalars['String'];
+  creatorId: Scalars['Float'];
+};
+
 export type Query = {
   __typename?: 'Query';
   hello: Scalars['String'];
@@ -115,6 +219,9 @@ export type Query = {
   industrialEstate?: Maybe<Array<Factory>>;
   businessType?: Maybe<Array<Factory>>;
   companyName?: Maybe<Factory>;
+  Manufacturers: Array<Manufacturer>;
+  books: Array<Book>;
+  ProductByTiers: Array<ProductByTier>;
 };
 
 
@@ -130,7 +237,7 @@ export type QueryPostArgs = {
 
 
 export type QueryFactoryByIdArgs = {
-  id: Scalars['Float'];
+  id: Scalars['Int'];
 };
 
 
@@ -244,6 +351,34 @@ export type FactoriesQuery = (
   )> }
 );
 
+export type FactoryByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type FactoryByIdQuery = (
+  { __typename?: 'Query' }
+  & { factoryById?: Maybe<(
+    { __typename?: 'Factory' }
+    & Pick<Factory, 'id' | 'industrialEstate' | 'businessType' | 'companyName' | 'description' | 'address' | 'phoneNumber' | 'FAX' | 'Email'>
+    & { products: Array<(
+      { __typename?: 'ProductByTier' }
+      & Pick<ProductByTier, 'id' | 'productName' | 'description' | 'category' | 'creatorId' | 'creatorName' | 'createdAt' | 'updatedAt'>
+      & { factorys: Array<(
+        { __typename?: 'Factory' }
+        & Pick<Factory, 'id' | 'industrialEstate' | 'businessType' | 'companyName' | 'description' | 'address' | 'phoneNumber' | 'FAX' | 'Email'>
+      )> }
+    )>, productReceives?: Maybe<Array<(
+      { __typename?: 'ProductByTier' }
+      & Pick<ProductByTier, 'id' | 'productName' | 'description' | 'category' | 'creatorName' | 'creatorId' | 'createdAt' | 'updatedAt'>
+      & { factorys: Array<(
+        { __typename?: 'Factory' }
+        & Pick<Factory, 'id' | 'industrialEstate' | 'businessType' | 'companyName' | 'description' | 'address' | 'phoneNumber' | 'FAX' | 'Email'>
+      )> }
+    )>> }
+  )> }
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -353,6 +488,67 @@ export const FactoriesDocument = gql`
 
 export function useFactoriesQuery(options: Omit<Urql.UseQueryArgs<FactoriesQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<FactoriesQuery>({ query: FactoriesDocument, ...options });
+};
+export const FactoryByIdDocument = gql`
+    query FactoryById($id: Int!) {
+  factoryById(id: $id) {
+    id
+    industrialEstate
+    businessType
+    companyName
+    description
+    address
+    phoneNumber
+    FAX
+    Email
+    products {
+      id
+      productName
+      description
+      category
+      creatorId
+      creatorName
+      createdAt
+      updatedAt
+      factorys {
+        id
+        industrialEstate
+        businessType
+        companyName
+        description
+        address
+        phoneNumber
+        FAX
+        Email
+      }
+    }
+    productReceives {
+      id
+      productName
+      description
+      category
+      creatorName
+      creatorId
+      createdAt
+      updatedAt
+      factorys {
+        id
+        industrialEstate
+        businessType
+        companyName
+        description
+        address
+        phoneNumber
+        FAX
+        Email
+      }
+    }
+  }
+}
+    `;
+
+export function useFactoryByIdQuery(options: Omit<Urql.UseQueryArgs<FactoryByIdQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<FactoryByIdQuery>({ query: FactoryByIdDocument, ...options });
 };
 export const MeDocument = gql`
     query Me {

@@ -1,0 +1,55 @@
+query FactoryById($id: Int!){
+  factoryById(id: $id) {
+    id
+    industrialEstate
+    businessType
+    companyName
+    description
+    address
+    phoneNumber
+    FAX
+    Email
+    products {
+      id
+      productName
+      description
+      category
+      creatorId
+      creatorName
+      createdAt
+      updatedAt
+      factorys {
+        id
+    industrialEstate
+    businessType
+    companyName
+    description
+    address
+    phoneNumber
+    FAX
+    Email
+      }
+    }
+    productReceives{
+      id
+      productName
+      description
+      category
+      creatorName
+      creatorId
+      createdAt
+      updatedAt
+      factorys{
+       id
+    industrialEstate
+    businessType
+    companyName
+    description
+    address
+    phoneNumber
+    FAX
+    Email
+      }
+    }
+  }
+}
