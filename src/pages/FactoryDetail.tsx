@@ -1,154 +1,238 @@
-import { useParams } from 'react-router-dom'
-import { Badge, Box, Button, Flex, Stack, Text, useColorMode, useColorModeValue } from "@chakra-ui/react";
-import React from 'react';
-import Layout from '../components/Layout';
+import { useParams } from "react-router-dom";
+import {
+    Badge,
+    Box,
+    Button,
+    Flex,
+    Stack,
+    Text,
+    useColorModeValue,
+    Heading,
+} from "@chakra-ui/react";
+import React, { useState } from "react";
+import Layout from "../components/Layout";
+import AddAndEditProductTier from '../components/tier/AddAndEditProductTier'
 import { useFactoryByIdQuery } from "../generated/graphql";
-
 
 interface Props { }
 
 const FactoryDetail: React.FC<Props> = () => {
-    const params = useParams<{ id: string }>()
-    const { toggleColorMode } = useColorMode()
-    const bg = useColorModeValue("gray.200", "gray.700")
-    const color = useColorModeValue("blue", "gray")
-    const colorW = useColorModeValue("white", "white")
+    const params = useParams<{ id: string }>();
+    const bg = useColorModeValue("gray.200", "gray.700");
+    const color = useColorModeValue("blue", "gray");
+    const colorW = useColorModeValue("white", "white");
 
-    const paramsId = params.id
+    const [openProductForm, setOpenProductForm] = useState(false)
+    const [factoryId, setFactoryId] = useState<number | undefined>(undefined)
+    const [factoryName, setFactoryName] = useState<string | undefined>(undefined)
+
+    const paramsId = params.id;
     const [{ data, fetching }] = useFactoryByIdQuery({
         variables: {
-            id: +paramsId
-        }
+            id: +paramsId,
+        },
     });
 
     if (!fetching && !data) {
-        return <div>you got query failed for some reason</div>
+        return <div>you got query failed for some reason</div>;
     }
 
-    let body = null
-
-    if (fetching) {
-        // user not logged in
-    } else if (!data?.factoryById.products) {
-        body = (
-            <div>
-                ยังไม่มีข้อมูล
-            </div>
-        )
-    } else {
-        body = (
-            <Flex ml="100">
-                <Box w="70%" p={5} rounded="10px" boxShadow="sm" bg={bg} mr="5">
-                    <Stack isInline align="baseline">
-                        <Text fontSize="xl" fontWeight="bold">
-                            {data.factoryById.companyName}
-                            <Badge ml="1" fontSize="0.8em" variant="solid" colorScheme="green" rounded="full" px={2}>
-                                {data.factoryById.industrialEstate}
-                            </Badge>
-                        </Text>
-                    </Stack>
-                    <Box textAlign="center">
-                        <Button
-                            colorScheme={color}
-                            size="lg"
-                            mt={3}
-                            boxShadow="sm"
-                            _hover={{ boxShadow: "md" }}
-                            _active={{ boxShadow: "lg" }}
-                            onClick={toggleColorMode}
-                        >
-                            <Text color={colorW}>
-                                ดูข้อมูลโรงงาน
-                            </Text>
-                        </Button>
-                    </Box>
-
-                </Box>
-            </Flex>
-        )
-    }
-
-
-
-    // const { description, companyName } = data.factoryById
     return (
-        <Layout variant='regular'>
+        <Layout variant="regular">
             {!data && fetching ? (
                 <div>Loading...</div>
             ) : (
-            <Flex ml="100">
+                <Box>
+                    <Flex>
                         <Box w="100%" p={5} rounded="10px" boxShadow="sm" bg={bg} mr="5">
+                            <Heading mb={4} color="orange">
+                                {data?.factoryById?.companyName}
+                            </Heading>
                             <Stack isInline align="baseline">
                                 <Text fontSize="xl" fontWeight="bold">
-                                    {data.factoryById.companyName}
-                                    <Badge ml="1" fontSize="0.8em" variant="solid" colorScheme="green" rounded="full" px={2}>
-                                        {data.factoryById.industrialEstate}
-                                    </Badge>
-                                    <Badge ml="1" fontSize="0.8em" variant="solid" colorScheme="pink" rounded="full" px={2}>
-                                        {data.factoryById.businessType}
-                                    </Badge>
+                                        <Badge
+                                            ml="1"
+                                            fontSize="0.8em"
+                                            variant="solid"
+                                            colorScheme="green"
+                                            rounded="full"
+                                            px={2}
+                                        >
+                                            {data?.factoryById?.industrialEstate}
+                                        </Badge>
+                                        <Badge
+                                            ml="1"
+                                            fontSize="0.8em"
+                                            variant="solid"
+                                            colorScheme="pink"
+                                            rounded="full"
+                                            px={2}
+                                        >
+                                            {data?.factoryById?.businessType}
+                                        </Badge>
+                                    </Text>
+                                    <Text
+                                        textTransform="uppercase"
+                                        fontSize="sm"
+                                        colorScheme={color}
+                                        letterSpacing="wide"
+                                    >
+                                        {data?.factoryById?.phoneNumber}&bull;{" "}
+                                        {data?.factoryById?.FAX}
+                                    </Text>
+                                </Stack>
+                                <Text fontWeight="light" fontSize="md" my={3}>
+                                    {data?.factoryById?.description}
                                 </Text>
-                        <Text
-                            textTransform="uppercase"
-                            fontSize="sm"
-                            colorScheme={color}
-                            letterSpacing="wide"
-                        >
-                                    {data.factoryById.phoneNumber}&bull; {data.factoryById.FAX}
-                        </Text>
-                            </Stack>
-                            <Text fontWeight="light" fontSize="md" my={3}>
-                                {data.factoryById.description}
-                            </Text>
-                            <Text as="h2" fontWeight="semibold" fontSize="xl" my={2}>
-                                {data.factoryById.address}
-                            </Text>
-                            {/* <Stack isInline justify="space-between">
-                        <Text fontWeight="semibold" fontSize="lg">
-                                    ผลิตสินค้า {data.factoryById.products &&
-                                        data.factoryById.products.map((product) => (
-                                            <Badge key={product.id} variant="solid" colorScheme="blue" rounded="full" px={2}>
-                                                {product.productName}
-                                            </Badge>
-                                        ))
-                                    }
-                        </Text>
-                        <Box d="flex">
-                            <Box as="span">
-                                {Array(4)
-                                    .fill("")
-                                    .map((_, i) => (
-                                        <Icon as={StarIcon} color="yellow.500" key={i} />
-                                    ))}
-                                <Icon as={StarIcon} mr="2" />
-                            </Box>
-                            <Text as="h3" fontWeight="light" fontSize="lg">
-                                34 Reviews
-                            </Text>
-                        </Box>
-                    </Stack> */}
-                    <Box textAlign="center">
-                        <Button
-                            colorScheme={color}
-                            size="lg"
-                            mt={3}
-                            boxShadow="sm"
-                            _hover={{ boxShadow: "md" }}
-                            _active={{ boxShadow: "lg" }}
-                            onClick={toggleColorMode}
-                        >
-                            <Text color={colorW}>
-                                เพิ่มโรงงานใหม่
-                            </Text>
-                        </Button>
+                                <Text as="h2" fontWeight="semibold" fontSize="xl" my={2}>
+                                    {data?.factoryById?.address}
+                                </Text>
+                                <Box textAlign="center">
+                                    <Button
+                                        colorScheme={color}
+                                        size="lg"
+                                        mt={3}
+                                        mr="7"
+                                        boxShadow="sm"
+                                        _hover={{ boxShadow: "md" }}
+                                        _active={{ boxShadow: "lg" }}
+                                        onClick={() => {
+                                            setFactoryId(data?.factoryById?.id)
+                                            setFactoryName(data?.factoryById?.companyName)
+                                            setOpenProductForm(true)
+                                        }
+                                        }
+                                    >
+                                        <Text color={colorW}>Add Product</Text>
+                                    </Button>
+                                    {openProductForm && factoryId && (
+                                        <AddAndEditProductTier
+                                            factoryId={factoryId}
+                                            factoryName={factoryName}
+                                            setOpenProductForm={setOpenProductForm}
+                                        />
+                                    )}
 
+
+                                </Box>
                             </Box>
-                            {body}
-                </Box>
+                        </Flex>
+
+                        <Flex>
+                            <Box w="50%" p={8}>
+                                <Heading mb={4}>ผลิต</Heading>
+                                {!data?.factoryById?.products.length ? (
+                                    <Text p={1} color="red" fontSize="xl">
+                                        NO DATA
+                                    </Text>
+                                ) : (
+                                        data?.factoryById?.products.map((product) => (
+                                            <Box
+                                                key={product.id}
+                                                w="600px"
+                                                rounded="20px"
+                                                overflow="hidden"
+                                                boxShadow="sm"
+                                                bg={bg}
+                                                mb="8"
+                                                mr="7"
+                                                mt="5"
+                                            >
+                                                <Box p={5}>
+                                                    <Badge
+                                                        ml="1"
+                                                        fontSize="0.8em"
+                                                        variant="solid"
+                                                        colorScheme="blue"
+                                                        rounded="full"
+                                                    >
+                                                        {product.category}
+                                                    </Badge>
+                                                    <Stack isInline justify="space-between">
+                                                        <Text
+                                                            as="h2"
+                                                            fontWeight="semibold"
+                                                            fontSize="xl"
+                                                            my={2}
+                                                        >
+                                                            {product.productName}
+                                                        </Text>
+                                                        <Text>ID: {product.id}</Text>
+                                                    </Stack>
+                                                    <Text isTruncated>{product.description}</Text>
+                                                    <Text fontSize="xl" mt="5">
+                                                        ให้กับ
+                                                    </Text>
+                                                    {product.factorys.map((factory) => (
+                                                        <Text key={factory.id} p={1} color="orange">
+                                                            {factory.companyName}
+                                                        </Text>
+                                                    ))}
+                                                </Box>
+                                            </Box>
+                                        ))
+                                )}
+                            </Box>
+
+                            <Box w="50%" p={8}>
+                                <Heading mb={4}>รับสินค้า</Heading>
+                                {!data?.factoryById?.productReceives ? (
+                                    <Text p={1} color="red" fontSize="xl">
+                                        NO DATA
+                                    </Text>
+                                ) : (
+                                    data?.factoryById?.productReceives?.map((productR) => (
+                                        <Box
+                                            key={productR.id}
+                                            w="600px"
+                                            rounded="20px"
+                                            overflow="hidden"
+                                            boxShadow="sm"
+                                            bg={bg}
+                                            mb="8"
+                                            mr="7"
+                                            mt="5"
+                                        >
+                                            <Box p={5}>
+                                                <Badge
+                                                    ml="1"
+                                                    fontSize="0.8em"
+                                                    variant="solid"
+                                                    colorScheme="blue"
+                                                    rounded="full"
+                                                >
+                                                    {productR.category}
+                                                </Badge>
+                                                <Stack isInline justify="space-between">
+                                                    <Text
+                                                        as="h2"
+                                                        fontWeight="semibold"
+                                                        fontSize="xl"
+                                                        my={2}
+                                                    >
+                                                        {productR.productName}
+                                                    </Text>
+                                                    <Text>ID: {productR.id}</Text>
+                                                </Stack>
+                                                <Text isTruncated>{productR.description}</Text>
+                                                <Text fontSize="xl" mt="5">
+                                                    มาจาก
+                                                </Text>
+                                                {productR.factorys.map((factory) => (
+                                                    <Text key={factory.id} p={1} color="orange">
+                                                        {factory.companyName}
+                                                    </Text>
+                                                ))}
+                                            </Box>
+                                        </Box>
+                                    ))
+                                )}
+                            </Box>
                     </Flex>
+                    </Box>
             )}
         </Layout>
-    )
-}
+    );
+};
 
-export default FactoryDetail
+export default FactoryDetail;

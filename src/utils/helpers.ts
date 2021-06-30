@@ -1,4 +1,4 @@
-import { FactoryTab, FactoryIndustrialEstate } from "../types"
+import { FactoryTab, FactoryIndustrialEstate, CatProduct } from "../types"
 
 export const factoryTab: FactoryTab[] = [
     "All",
@@ -8,6 +8,11 @@ export const factoryTab: FactoryTab[] = [
     "เอเซีย (สุวรรณภูมิ)",
     "เอเซีย",
     "เหมราชอีสเทิร์นซีบอร์ด แห่งที่ 4",
+]
+export const catProduct: CatProduct[] = [
+    "อะไหล่รถยนต์",
+    "อาหาร",
+    "อิเล็กทรอนิกส์"
 ]
 
 // ไว้ใช้เวลา Create | add 

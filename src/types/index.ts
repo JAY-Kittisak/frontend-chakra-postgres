@@ -3,3 +3,5 @@ export type FactoryIndustrialEstate = "แก่งคอย" | "แหลมฉ
 
 // ไว้ใช้เวลา Create | add 
 export const categories: FactoryIndustrialEstate[] = ['แก่งคอย', 'แหลมฉบัง']
+
+export type CatProduct = "อะไหล่รถยนต์" | "อาหาร" | "อิเล็กทรอนิกส์"
