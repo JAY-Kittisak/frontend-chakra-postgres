@@ -1,0 +1,12 @@
+mutation createProductByTier($input: ProductByTierInput!) {
+  createProductByTier(input: $input) {
+    id
+    productName
+    description
+    category
+    creatorId
+    creatorName
+    createdAt
+    updatedAt
+  }
+}

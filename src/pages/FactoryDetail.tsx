@@ -9,7 +9,7 @@ import {
     useColorModeValue,
     Heading,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
 import AddAndEditProductTier from '../components/tier/AddAndEditProductTier'
 import { useFactoryByIdQuery } from "../generated/graphql";
@@ -23,8 +23,8 @@ const FactoryDetail: React.FC<Props> = () => {
     const colorW = useColorModeValue("white", "white");
 
     const [openProductForm, setOpenProductForm] = useState(false)
-    const [factoryId, setFactoryId] = useState<number | undefined>(undefined)
-    const [factoryName, setFactoryName] = useState<string | undefined>(undefined)
+    const [creatorId, setCreatorId] = useState<number>(Number)
+    const [creatorName, setCreatorName] = useState<string>("")
 
     const paramsId = params.id;
     const [{ data, fetching }] = useFactoryByIdQuery({
@@ -33,9 +33,19 @@ const FactoryDetail: React.FC<Props> = () => {
         },
     });
 
+    useEffect(() => {
+        if (data?.factoryById) {
+            setCreatorId(data.factoryById.id)
+            setCreatorName(data.factoryById.companyName)
+        }
+    }, [data])
+
     if (!fetching && !data) {
         return <div>you got query failed for some reason</div>;
     }
+
+
+    console.log(creatorId, creatorName)
 
     return (
         <Layout variant="regular">
@@ -96,19 +106,14 @@ const FactoryDetail: React.FC<Props> = () => {
                                         boxShadow="sm"
                                         _hover={{ boxShadow: "md" }}
                                         _active={{ boxShadow: "lg" }}
-                                        onClick={() => {
-                                            setFactoryId(data?.factoryById?.id)
-                                            setFactoryName(data?.factoryById?.companyName)
-                                            setOpenProductForm(true)
-                                        }
-                                        }
+                                        onClick={() => setOpenProductForm(true)}
                                     >
                                         <Text color={colorW}>Add Product</Text>
                                     </Button>
-                                    {openProductForm && factoryId && (
+                                    {openProductForm && creatorId && (
                                         <AddAndEditProductTier
-                                            factoryId={factoryId}
-                                            factoryName={factoryName}
+                                            creatorId={creatorId}
+                                            creatorName={creatorName}
                                             setOpenProductForm={setOpenProductForm}
                                         />
                                     )}

@@ -1,16 +1,25 @@
-import { Box, Button, Heading, Select, Stack, Text } from '@chakra-ui/react'
-import { Form, Formik } from 'formik'
+import { Box, Button, Heading, Stack, Text } from '@chakra-ui/react'
+import { Form, Formik, Field } from 'formik'
 import React from 'react'
+// import { useState } from 'react'
 import InputField from '../../components/InputField'
+// import { useCreateProductByTierMutation } from '../../generated/graphql'
 import { catProduct } from '../../utils/helpers'
 
 interface Props {
-    factoryId: number
-    factoryName: string | undefined
+    creatorId: number
+    creatorName: string
     setOpenProductForm: (open: boolean) => void
 }
 
-const AddAndEditProductTier: React.FC<Props> = ({ factoryId, factoryName, setOpenProductForm }) => {
+const AddAndEditProductTier: React.FC<Props> = ({ creatorId, creatorName, setOpenProductForm }) => {
+    // const [, createProductByTier] = useCreateProductByTierMutation()
+    // const [category, setCategory] = useState("");
+
+    // useEffect(() => {
+
+    // })
+
     return (
         <>
             <div
@@ -31,56 +40,42 @@ const AddAndEditProductTier: React.FC<Props> = ({ factoryId, factoryName, setOpe
                 </div>
                 <Heading as="h3" size="lg" color="blue.400">Add a new product</Heading>
                 <Formik
-                    initialValues={{ factoryId, factoryName, title: "", text: "" }}
+                    initialValues={{ creatorId, creatorName, productName: "", description: "", category: "" }}
                     onSubmit={async (values) => {
+                        // const { error } = await createProductByTier({ input: values })
+
                         console.log(values)
                     }}
                 >
                     {({ isSubmitting }) => (
                         <Form>
-                            {/* <InputField
-                                name="factoryId"
-                                placeholder="factoryId"
-                                label="ID บริษัทผู้ผลิต"
-                                value={factoryId}
-                            />
-                            <Box mt="2" mb="2">
-                                <InputField
-                                    name="factoryName"
-                                    placeholder="factoryName"
-                                    label="ชื่อบริษัทที่ผลิต"
-                                    value={factoryName}
-                                />
-                            </Box> */}
                             <InputField
-                                name="title"
-                                placeholder="title"
-                                label="Title"
+                                name="productName"
+                                placeholder="productName"
+                                label="Product Name"
                             />
 
                             <Box mt={4}>
                                 <InputField
                                     textarea
-                                    name="text"
-                                    placeholder="text..."
-                                    label="Body"
+                                    name="description"
+                                    placeholder="description..."
+                                    label="Description"
                                 />
                             </Box>
 
-                            <Stack isInline justify="space-between" mt="7">
-                                <Text fontWeight="semibold" fontSize="md" my={2} mr="7">
+                            <Stack isInline justify="space-between" mt="5">
+                                <Text fontWeight="semibold" fontSize="md" p={2}>
                                     Category
                                 </Text>
-                                <Select
-                                    defaultValue="อิเล็กทรอนิกส์"
-                                >
-                                    <option style={{ display: "none" }}></option>
+                                <Field name="category" as="select" className="input">
+                                    select
                                     {catProduct.map((cat) => (
                                         <option key={cat} value={cat}>
                                             {cat}
                                         </option>
                                     ))}
-                                </Select>
+                                </Field>
                             </Stack>
 
                             <Button

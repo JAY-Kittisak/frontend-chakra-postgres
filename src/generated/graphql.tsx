@@ -202,8 +202,8 @@ export type ProductByTier = {
 
 export type ProductByTierInput = {
   productName: Scalars['String'];
-  category: Scalars['String'];
   description: Scalars['String'];
+  category: Scalars['String'];
   creatorName: Scalars['String'];
   creatorId: Scalars['Float'];
 };
@@ -290,6 +290,19 @@ export type CreatePostMutation = (
   & { createPost: (
     { __typename?: 'Post' }
     & Pick<Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'text' | 'points' | 'creatorId'>
+  ) }
+);
+
+export type CreateProductByTierMutationVariables = Exact<{
+  input: ProductByTierInput;
+}>;
+
+
+export type CreateProductByTierMutation = (
+  { __typename?: 'Mutation' }
+  & { createProductByTier: (
+    { __typename?: 'ProductByTier' }
+    & Pick<ProductByTier, 'id' | 'productName' | 'description' | 'category' | 'creatorId' | 'creatorName' | 'createdAt' | 'updatedAt'>
   ) }
 );
 
@@ -426,6 +439,24 @@ export const CreatePostDocument = gql`
 
 export function useCreatePostMutation() {
   return Urql.useMutation<CreatePostMutation, CreatePostMutationVariables>(CreatePostDocument);
+};
+export const CreateProductByTierDocument = gql`
+    mutation createProductByTier($input: ProductByTierInput!) {
+  createProductByTier(input: $input) {
+    id
+    productName
+    description
+    category
+    creatorId
+    creatorName
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+export function useCreateProductByTierMutation() {
+  return Urql.useMutation<CreateProductByTierMutation, CreateProductByTierMutationVariables>(CreateProductByTierDocument);
 };
 export const LoginDocument = gql`
     mutation Login($options: UsernamePasswordInput!) {
