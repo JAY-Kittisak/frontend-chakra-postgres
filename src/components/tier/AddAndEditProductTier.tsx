@@ -1,10 +1,11 @@
 import { Box, Button, Heading, Stack, Text } from '@chakra-ui/react'
-import { Form, Formik, Field } from 'formik'
-import React from 'react'
-// import { useState } from 'react'
+import { Form, Formik } from 'formik'
+import React, { useState } from 'react'
 import InputField from '../../components/InputField'
-// import { useCreateProductByTierMutation } from '../../generated/graphql'
+import { SelectControl } from '../../components/Selectfield'
+import { useCreateProductByTierMutation } from '../../generated/graphql'
 import { catProduct } from '../../utils/helpers'
+import JoinFactory from './JoinFactory'
 
 interface Props {
     creatorId: number
@@ -13,12 +14,8 @@ interface Props {
 }
 
 const AddAndEditProductTier: React.FC<Props> = ({ creatorId, creatorName, setOpenProductForm }) => {
-    // const [, createProductByTier] = useCreateProductByTierMutation()
-    // const [category, setCategory] = useState("");
-
-    // useEffect(() => {
-
-    // })
+    const [{ data }, createProductByTier] = useCreateProductByTierMutation()
+    const [showJoin, setShowJoin] = useState(false)
 
     return (
         <>
@@ -38,13 +35,16 @@ const AddAndEditProductTier: React.FC<Props> = ({ creatorId, creatorName, setOpe
                     }}>
                     &times;
                 </div>
-                <Heading as="h3" size="lg" color="blue.400">Add a new product</Heading>
+                <Heading as="h3" size="lg" color="blue.400" mb="3">Add a new product</Heading>
                 <Formik
                     initialValues={{ creatorId, creatorName, productName: "", description: "", category: "" }}
                     onSubmit={async (values) => {
-                        // const { error } = await createProductByTier({ input: values })
-
-                        console.log(values)
+                        const { error } = await createProductByTier({ input: values })
+                        if (error) {
+                            alert("แจ้ง IT support")
+                        } else {
+                            setShowJoin(true)
+                        }
                     }}
                 >
                     {({ isSubmitting }) => (
@@ -68,14 +68,16 @@ const AddAndEditProductTier: React.FC<Props> = ({ creatorId, creatorName, setOpe
                                 <Text fontWeight="semibold" fontSize="md" p={2}>
                                     Category
                                 </Text>
-                                <Field name="category" as="select" className="input">
-                                    select
+                                <SelectControl
+                                    name="category"
+                                    defaultValue=""
+                                >
                                     {catProduct.map((cat) => (
                                         <option key={cat} value={cat}>
                                             {cat}
                                         </option>
                                     ))}
-                                </Field>
+                                </SelectControl>
                             </Stack>
 
                             <Button
@@ -89,6 +91,9 @@ const AddAndEditProductTier: React.FC<Props> = ({ creatorId, creatorName, setOpe
                         </Form>
                     )}
                 </Formik>
+                {data?.createProductByTier.id && showJoin &&
+                    <JoinFactory productId={data?.createProductByTier.id} setOpenProductForm={setOpenProductForm} />
+                }
             </div>
         </>
     )

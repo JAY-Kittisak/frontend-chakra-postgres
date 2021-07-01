@@ -1,0 +1,3 @@
+mutation JoinFactory($input: JoinTierInput!){
+  joinFactory(input: $input)
+}

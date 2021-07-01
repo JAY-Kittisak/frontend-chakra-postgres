@@ -1,5 +1,5 @@
-import { FactoryTab, FactoryIndustrialEstate, CatProduct } from "../types"
-
+import { FactoryTab, FactoryIndustrialEstate } from "../types"
+type CatProductV1 = "อะไหล่รถยนต์" | "อาหาร" | "อิเล็กทรอนิกส์" | "*โปรดเลือก"
 export const factoryTab: FactoryTab[] = [
     "All",
     "แก่งคอย",
@@ -9,7 +9,8 @@ export const factoryTab: FactoryTab[] = [
     "เอเซีย",
     "เหมราชอีสเทิร์นซีบอร์ด แห่งที่ 4",
 ]
-export const catProduct: CatProduct[] = [
+export const catProduct: CatProductV1[] = [
+    "*โปรดเลือก",
     "อะไหล่รถยนต์",
     "อาหาร",
     "อิเล็กทรอนิกส์"

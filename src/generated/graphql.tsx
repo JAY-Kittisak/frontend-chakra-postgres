@@ -59,6 +59,11 @@ export type FieldError = {
   message: Scalars['String'];
 };
 
+export type JoinTierInput = {
+  productId: Scalars['Float'];
+  factoryId: Scalars['Float'];
+};
+
 export type Manufacturer = {
   __typename?: 'Manufacturer';
   id: Scalars['Float'];
@@ -91,7 +96,7 @@ export type Mutation = {
   addAuthorBook: Scalars['Boolean'];
   deleteBook: Scalars['Boolean'];
   createProductByTier: ProductByTier;
-  addFactoryProduct: Scalars['Boolean'];
+  joinFactory: Scalars['Boolean'];
   deleteProduct: Scalars['Boolean'];
 };
 
@@ -158,9 +163,8 @@ export type MutationCreateProductByTierArgs = {
 };
 
 
-export type MutationAddFactoryProductArgs = {
-  productId: Scalars['Int'];
-  factoryId: Scalars['Int'];
+export type MutationJoinFactoryArgs = {
+  input: JoinTierInput;
 };
 
 
@@ -304,6 +308,16 @@ export type CreateProductByTierMutation = (
     { __typename?: 'ProductByTier' }
     & Pick<ProductByTier, 'id' | 'productName' | 'description' | 'category' | 'creatorId' | 'creatorName' | 'createdAt' | 'updatedAt'>
   ) }
+);
+
+export type JoinFactoryMutationVariables = Exact<{
+  input: JoinTierInput;
+}>;
+
+
+export type JoinFactoryMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'joinFactory'>
 );
 
 export type LoginMutationVariables = Exact<{
@@ -457,6 +471,15 @@ export const CreateProductByTierDocument = gql`
 
 export function useCreateProductByTierMutation() {
   return Urql.useMutation<CreateProductByTierMutation, CreateProductByTierMutationVariables>(CreateProductByTierDocument);
+};
+export const JoinFactoryDocument = gql`
+    mutation JoinFactory($input: JoinTierInput!) {
+  joinFactory(input: $input)
+}
+    `;
+
+export function useJoinFactoryMutation() {
+  return Urql.useMutation<JoinFactoryMutation, JoinFactoryMutationVariables>(JoinFactoryDocument);
 };
 export const LoginDocument = gql`
     mutation Login($options: UsernamePasswordInput!) {
