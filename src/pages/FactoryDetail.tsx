@@ -8,22 +8,31 @@ import {
     Text,
     useColorModeValue,
     Heading,
+    Grid,
+    Divider,
+    IconButton
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
 import AddAndEditProductTier from "../components/tier/AddAndEditProductTier";
+import AddAndEditJoinTier from "../components/tier/AddAndEditJoinTier";
 import { useFactoryByIdQuery } from "../generated/graphql";
 import { Link } from "react-router-dom";
+import { AddIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 
 interface Props { }
+
+type Display = "none" | "hide" | "show";
 
 const FactoryDetail: React.FC<Props> = () => {
     const params = useParams<{ id: string }>();
     const bg = useColorModeValue("gray.200", "gray.700");
-    const color = useColorModeValue("blue", "gray");
-    const colorW = useColorModeValue("white", "white");
+    const color = useColorModeValue("blue", "blue");
+    const colorW = useColorModeValue("orange", "black.100");
 
+    const [display, changeDisplay] = useState<Display>("hide");
     const [openProductForm, setOpenProductForm] = useState(false);
+    const [openJoinForm, setOpenJoinForm] = useState(false);
     const [creatorId, setCreatorId] = useState<number>(Number);
     const [creatorName, setCreatorName] = useState<string>("");
 
@@ -51,7 +60,7 @@ const FactoryDetail: React.FC<Props> = () => {
             ) : (
                 <Box>
                     <Flex>
-                        <Box w="100%" p={5} rounded="10px" boxShadow="sm" bg={bg} mr="5">
+                            <Box w="100%" p={5} rounded="10px" boxShadow="sm" bg={bg}>
                                 <Stack isInline align="baseline" justify="space-between" mb={4}>
                                     <Heading color="orange">
                                         {data?.factoryById?.companyName}
@@ -60,7 +69,7 @@ const FactoryDetail: React.FC<Props> = () => {
                                         เลขจดทะเบียน : {data?.factoryById?.id}
                                     </Text>
                                 </Stack>
-                                <Stack isInline align="baseline">
+                                <Stack isInline align="baseline" justify="space-between">
                                     <Text fontSize="xl" fontWeight="bold">
                                         <Badge
                                             ml="1"
@@ -83,32 +92,79 @@ const FactoryDetail: React.FC<Props> = () => {
                                             {data?.factoryById?.businessType}
                                         </Badge>
                                     </Text>
+
+                                    <Box d="flex">
+                                        <Text
+                                            textTransform="uppercase"
+                                            fontSize="md"
+                                            color="tomato"
+                                            fontWeight="semibold"
+                                            mr="1"
+                                        >
+                                            Phone &bull;
+                                        </Text>
+                                        <Text
+                                            textTransform="uppercase"
+                                            fontSize="md"
+                                            mr="2"
+                                        >
+                                            {data?.factoryById?.phoneNumber}{" "}
+                                        </Text>
+                                        <Text
+                                            textTransform="uppercase"
+                                            fontSize="md"
+                                            color="tomato"
+                                            fontWeight="semibold"
+                                            mr="1"
+                                        >
+                                            FAX &bull;
+                                        </Text>
+                                        <Text
+                                            textTransform="uppercase"
+                                            fontSize="md"
+                                        >
+                                            {data?.factoryById?.FAX}
+                                    </Text>
+                                    </Box>
+                                </Stack>
+
+                                <Stack isInline align="baseline" mt="2">
                                     <Text
                                         textTransform="uppercase"
-                                        fontSize="sm"
-                                        colorScheme={color}
-                                        letterSpacing="wide"
+                                        fontSize="md"
+                                        color="tomato"
+                                        fontWeight="semibold"
                                     >
-                                        {data?.factoryById?.phoneNumber}&bull;{" "}
-                                        {data?.factoryById?.FAX}
+                                        description&bull;
+                                    </Text>
+                                    <Text fontWeight="light" fontSize="md">
+                                    {data?.factoryById?.description}
                                     </Text>
                                 </Stack>
-                                <Text fontWeight="light" fontSize="md" my={3}>
-                                    {data?.factoryById?.description}
-                                </Text>
-                                <Text as="h2" fontWeight="semibold" fontSize="xl" my={2}>
+
+                                <Stack isInline align="baseline" mt="3">
+                                    <Text
+                                        textTransform="uppercase"
+                                        fontSize="md"
+                                        color="tomato"
+                                        fontWeight="semibold"
+                                    >
+                                        Address &bull;
+                                    </Text>
+                                    <Text fontSize="md" my={2}>
                                     {data?.factoryById?.address}
                                 </Text>
+                                </Stack>
+
                                 <Box textAlign="center">
                                     <Button
-                                        colorScheme={color}
                                         size="lg"
                                         mt={3}
                                         mr="7"
                                         boxShadow="sm"
-                                        _hover={{ boxShadow: "md" }}
-                                        _active={{ boxShadow: "lg" }}
-                                        onClick={() => setOpenProductForm(true)}
+                                        rightIcon={<AddIcon />}
+                                        colorScheme={color}
+                                        onClick={() => { setOpenProductForm(true) }}
                                     >
                                         <Text color={colorW}>Add Product</Text>
                                     </Button>
@@ -125,27 +181,26 @@ const FactoryDetail: React.FC<Props> = () => {
 
                         {/* ---------------------------------ผลิต------------------------------------*/}
                         <Flex>
-                            <Box w="50%" p={8}>
+                            <Box w="100%" p={8}>
                                 <Heading mb={4}>Product ที่ผลิต</Heading>
                                 {!data?.factoryById?.products.length ? (
                                     <Text p={1} color="red" fontSize="xl">
-                                        NO DATA
+                                        ไม่ประวัติการบันทึกข้อมูล
                                     </Text>
                                 ) : (
                                     data?.factoryById?.products.map((product) => (
                                         <Box
                                             key={product.id}
-                                            w="600px"
+                                            w="100%"
                                             rounded="20px"
                                             overflow="hidden"
                                             boxShadow="sm"
                                             bg={bg}
                                             mb="8"
-                                            mr="7"
                                             mt="5"
                                         >
                                             <Box p={5}>
-                                              <Stack isInline justify="space-between" my={2}>
+                                                <Stack isInline justify="space-between" my={2}>
                                                   <Text as="h2" fontWeight="semibold" fontSize="xl">
                                                       {product.productName}
                                                   </Text>
@@ -157,6 +212,7 @@ const FactoryDetail: React.FC<Props> = () => {
 
                                               <Text fontSize="xl">
                                                   Category :
+                                                    <Link to={`/tiers/product-tier`}>
                                                   <Badge
                                                       ml="5"
                                                       fontSize="0.8em"
@@ -166,13 +222,14 @@ const FactoryDetail: React.FC<Props> = () => {
                                                   >
                                                       {product.category}
                                                   </Badge>
+                                                    </Link>
                                               </Text>
-                                              <Box>
-                                                  <Flex>
-                                                      <Box>
+                                                <Box mt="2">
+                                                    <Grid templateColumns="repeat(3, 1fr)" gap={1}>
+                                                        <Box w="150px">
                                                           <Text fontSize="xl">ผลิตให้กับบริษัท :</Text>
                                                       </Box>
-                                                      <Box>
+                                                        <Box mt="1" w="320px" ml="-6">
                                                           {product.factorys.map((factory) => (
                                                               <Text
                                                 key={factory.id}
@@ -180,14 +237,28 @@ const FactoryDetail: React.FC<Props> = () => {
                                                 as="u"
                                                 ml="7"
                                             >
-                                                <Link to={`/tiers/factories/${factory.id}`}>
+                                                                  <Link to={`/tiers/factories/${factory.id}`} onClick={() => changeDisplay("show")}>
                                                     {factory.companyName}
                                                     <br />
                                                 </Link>
                                             </Text>
                                         ))}
                                                       </Box>
-                                                  </Flex>
+                                                        <Box ml="5">
+                                                            <Button
+                                                                rightIcon={<AddIcon />}
+                                                                colorScheme="orange"
+                                                                variant="outline"
+                                                                size="md"
+                                                                onClick={() => setOpenJoinForm(true)}
+                                                            >
+                                                                เพิ่มบริษัท
+                                                            </Button>
+                                                            {openJoinForm && (
+                                                                <AddAndEditJoinTier productId={product.id} setOpenJoinForm={setOpenJoinForm} />
+                                                            )}
+                                                        </Box>
+                                                    </Grid>
                                               </Box>
                                           </Box>
                                       </Box>
@@ -195,24 +266,40 @@ const FactoryDetail: React.FC<Props> = () => {
                                 )}
                             </Box>
 
+                            {/* ---------------------------------Display------------------------------------*/}
+                            <Box mt="10">
+                                <IconButton
+                                    aria-label=""
+                                    icon={display === "show" ? <ViewOffIcon /> : <Box mb="1"><Text mt="2" p={1}>Received</Text><ViewIcon mb="2" /></Box>}
+                                    onClick={() => {
+                                        if (display === "show") {
+                                            changeDisplay("none");
+                                        } else {
+                                            changeDisplay("show");
+                                        }
+                                    }}
+                                />
+                                <Divider orientation="vertical" ml={display === "show" ? 5 : 9} />
+                            </Box>
+
                             {/* ---------------------------------รับสินค้า------------------------------------*/}
-                            <Box w="50%" p={8}>
-                                <Heading mb={4}>Product ที่รับมา</Heading>
+                            {display === "show" ? (
+                                <Box w="100%" p={8}>
+                                    <Heading mb={4}>Product ที่ไปสั่งบริษัทอื่นผลิต</Heading>
                                 {!data?.factoryById?.productReceives ? (
                                     <Text p={1} color="red" fontSize="xl">
-                                        NO DATA
+                                            ไม่ประวัติการบันทึกข้อมูล
                                     </Text>
                                 ) : (
                                     data?.factoryById?.productReceives?.map((productR) => (
                                         <Box
                                             key={productR.id}
-                                            w="600px"
+                                            w="100%"
                                             rounded="20px"
                                             overflow="hidden"
                                             boxShadow="sm"
                                             bg={bg}
                                             mb="8"
-                                            mr="7"
                                             mt="5"
                                         >
                                             <Box p={5}>
@@ -238,23 +325,24 @@ const FactoryDetail: React.FC<Props> = () => {
                                                       {productR.category}
                                                   </Badge>
                                               </Text>
-                                              <Flex>
-                                                  <Box>
+                                                <Grid templateColumns="repeat(3, 1fr)" gap={1}>
+                                                    <Box w="150px">
                                                       <Text fontSize="xl">ผลิตโดย :</Text>
                                                   </Box>
-                                                  <Box>
+                                                    <Box mt="1" w="320px" ml="-130">
                                                       <Text p={1} color="orange" as="u" ml="7">
                                                           <Link to={`/tiers/factories/${productR.creatorId}`}>
                                                               {productR.creatorName} <br />
                                                           </Link>
                                                       </Text>
                                                   </Box>
-                                              </Flex>
+                                                </Grid>
                                           </Box>
                                       </Box>
                                   ))
                             )}
                         </Box>
+                            ) : null}
                     </Flex>
                 </Box>
             )}

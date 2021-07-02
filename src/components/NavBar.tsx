@@ -89,8 +89,11 @@ const NavBar: React.FC<Props> = () => {
                     color={colorMode === "light" ? "back" : "white"}
                 />
                 <MenuList>
-                    <MenuItem icon={<AddIcon />} command="⌘T" onClick={() => { history.push('/tiers/factories') }}>
+                    <MenuItem icon={<AddIcon />} onClick={() => { history.push('/tiers/factories') }}>
                         Factories
+                    </MenuItem>
+                    <MenuItem icon={<AddIcon />} onClick={() => { history.push('/tiers/product-tier') }}>
+                        Product
                     </MenuItem>
                     <MenuItem icon={<ExternalLinkIcon />} command="⌘N" onClick={() => { history.push('/post') }}>
                         Post

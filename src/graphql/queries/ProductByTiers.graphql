@@ -1,0 +1,22 @@
+query ProductByTiers {
+  ProductByTiers {
+    id
+    productName
+    description
+    category
+    creatorName
+    creatorId
+    factorys {
+      id
+      companyName
+      products {
+        id
+        productName
+        description
+        category
+        creatorName
+        creatorId
+      }
+    }
+  }
+}

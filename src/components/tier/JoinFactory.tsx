@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button } from '@chakra-ui/react'
+import { Box, Button, Heading } from '@chakra-ui/react'
 import { Form, Formik } from 'formik'
 import InputField from '../../components/InputField'
 import { useJoinFactoryMutation } from '../../generated/graphql'
@@ -12,7 +12,8 @@ interface Props {
 const JoinFactory: React.FC<Props> = ({ productId, setOpenProductForm }) => {
     const [, createJoinFactory] = useJoinFactoryMutation()
     return (
-        <Box>
+        <Box mt="3">
+            <Heading as="h3" size="lg" color="blue.400" mb="3" mt="3">เพิ่มบริษัท</Heading>
             <Formik
                 initialValues={{ productId, factoryId: 0 }}
                 onSubmit={async (values) => {
@@ -33,12 +34,14 @@ const JoinFactory: React.FC<Props> = ({ productId, setOpenProductForm }) => {
                             value={productId}
                             label="Product ID ที่คุณสร้าง"
                         />
-                        <InputField
-                            type="number"
-                            name="factoryId"
-                            placeholder="เลขจดทะเบียนโรงงาน"
-                            label="*เลขจดทะเบียนโรงงาน ที่เราผลิดให้"
-                        />
+                        <Box mt={4}>
+                            <InputField
+                                type="number"
+                                name="factoryId"
+                                placeholder="เลขจดทะเบียนโรงงาน"
+                                label="*เลขจดทะเบียนโรงงาน ที่เราผลิดให้"
+                            />
+                        </Box>
                         <Button
                             mt={10}
                             type="submit"

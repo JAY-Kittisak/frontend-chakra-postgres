@@ -378,6 +378,25 @@ export type FactoriesQuery = (
   )> }
 );
 
+export type ProductByTiersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ProductByTiersQuery = (
+  { __typename?: 'Query' }
+  & { ProductByTiers: Array<(
+    { __typename?: 'ProductByTier' }
+    & Pick<ProductByTier, 'id' | 'productName' | 'description' | 'category' | 'creatorName' | 'creatorId'>
+    & { factorys: Array<(
+      { __typename?: 'Factory' }
+      & Pick<Factory, 'id' | 'companyName'>
+      & { products: Array<(
+        { __typename?: 'ProductByTier' }
+        & Pick<ProductByTier, 'id' | 'productName' | 'description' | 'category' | 'creatorName' | 'creatorId'>
+      )> }
+    )> }
+  )> }
+);
+
 export type FactoryByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -542,6 +561,34 @@ export const FactoriesDocument = gql`
 
 export function useFactoriesQuery(options: Omit<Urql.UseQueryArgs<FactoriesQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<FactoriesQuery>({ query: FactoriesDocument, ...options });
+};
+export const ProductByTiersDocument = gql`
+    query ProductByTiers {
+  ProductByTiers {
+    id
+    productName
+    description
+    category
+    creatorName
+    creatorId
+    factorys {
+      id
+      companyName
+      products {
+        id
+        productName
+        description
+        category
+        creatorName
+        creatorId
+      }
+    }
+  }
+}
+    `;
+
+export function useProductByTiersQuery(options: Omit<Urql.UseQueryArgs<ProductByTiersQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<ProductByTiersQuery>({ query: ProductByTiersDocument, ...options });
 };
 export const FactoryByIdDocument = gql`
     query FactoryById($id: Int!) {

@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 
 import Factories from '../pages/Factories'
 import FactoryDetail from '../pages/FactoryDetail'
-import ManageTierProduct from '../pages/ManageTierProduct'
+import ProductTier from '../pages/ProductTier'
 import PageNotFound from '../pages/PageNotFound'
 
 interface Props { }
@@ -11,8 +11,8 @@ interface Props { }
 const TierRoute: React.FC<Props> = () => {
     return (
         <Switch>
-            <Route path="/tiers/manage-tier-product">
-                <ManageTierProduct />
+            <Route path="/tiers/product-tier">
+                <ProductTier />
             </Route>
             {/* FIXME: Dynamic page ต้องอยู่ข้างบนเพจหลัก */}
             <Route path="/tiers/factories/:id">

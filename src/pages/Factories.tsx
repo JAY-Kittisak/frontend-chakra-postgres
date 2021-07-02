@@ -161,9 +161,10 @@ const Factories: React.FC<Props> = () => {
                     <Table variant="striped" colorScheme="teal">
                         <Thead>
                             <Tr>
+                                    <Th fontSize="md" w="13%">เลขจดทะเบียน</Th>
                                 <Th>companyName</Th>
                                 <Th>industrialEstate</Th>
-                                <Th>companyName</Th>
+                                    <Th>businessType</Th>
                                 <Th>description</Th>
                                     <Th>ดูรายละเอียด</Th>
                             </Tr>
@@ -179,6 +180,7 @@ const Factories: React.FC<Props> = () => {
                             </Tbody>
                             <Tfoot>
                                 <Tr>
+                                    <Th fontSize="xl">เลขจดทะเบียน</Th>
                                     <Th>companyName</Th>
                                     <Th>industrialEstate</Th>
                                 <Th>businessType</Th>

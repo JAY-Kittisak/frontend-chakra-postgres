@@ -14,27 +14,17 @@ interface Props {
 }
 
 const AddAndEditProductTier: React.FC<Props> = ({ creatorId, creatorName, setOpenProductForm }) => {
-    const [{ data }, createProductByTier] = useCreateProductByTierMutation()
+    const [{ data, fetching }, createProductByTier] = useCreateProductByTierMutation()
     const [showJoin, setShowJoin] = useState(false)
 
-    return (
-        <>
-            <div
-                className="backdrop"
-                onClick={() => {
-                    setOpenProductForm(false)
-                }}
-            >
-                {' '}
-            </div>
-            <div className="modal--tier modal--add-product">
-                <div
-                    className="modal-close"
-                    onClick={() => {
-                        setOpenProductForm(false)
-                    }}>
-                    &times;
-                </div>
+    let body = null
+
+    // data is loading
+    if (fetching) {
+        // user not logged in
+    } else if (!showJoin) {
+        body = (
+            <Box>
                 <Heading as="h3" size="lg" color="blue.400" mb="3">Add a new product</Heading>
                 <Formik
                     initialValues={{ creatorId, creatorName, productName: "", description: "", category: "" }}
@@ -91,9 +81,37 @@ const AddAndEditProductTier: React.FC<Props> = ({ creatorId, creatorName, setOpe
                         </Form>
                     )}
                 </Formik>
-                {data?.createProductByTier.id && showJoin &&
-                    <JoinFactory productId={data?.createProductByTier.id} setOpenProductForm={setOpenProductForm} />
-                }
+            </Box>
+        )
+
+        // user is logged in
+    } else {
+        data?.createProductByTier.id && (
+            body = (
+                <JoinFactory productId={data?.createProductByTier.id} setOpenProductForm={setOpenProductForm} />
+            )
+        )
+    }
+
+    return (
+        <>
+            <div
+                className="backdrop"
+                onClick={() => {
+                    setOpenProductForm(false)
+                }}
+            >
+                {' '}
+            </div>
+            <div className="modal--tier modal--add-product">
+                <div
+                    className="modal-close"
+                    onClick={() => {
+                        setOpenProductForm(false)
+                    }}>
+                    &times;
+                </div>
+                {body}
             </div>
         </>
     )
