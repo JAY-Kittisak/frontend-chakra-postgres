@@ -147,10 +147,7 @@ const Factories: React.FC<Props> = () => {
                 </Flex>
             </Flex>
 
-            {/* <FactoryChart /> */}
             <Box w="100%" rounded="20px" bg={bg} p={10} mt="3">
-
-
             {!industrialEstate ? (
                     <Flex align="center">
                         <Divider />
@@ -158,37 +155,39 @@ const Factories: React.FC<Props> = () => {
                         <Divider />
                     </Flex>
                 ) : (
-                    <Table variant="striped" colorScheme="teal">
-                        <Thead>
-                            <Tr>
-                                    <Th fontSize="md" w="13%">เลขจดทะเบียน</Th>
-                                <Th>companyName</Th>
-                                <Th>industrialEstate</Th>
-                                    <Th>businessType</Th>
-                                <Th>description</Th>
-                                    <Th>ดูรายละเอียด</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            {!industrialEstate ? (
-                                <div>Loading...</div>
-                            ) : (
-                                    industrialEstate.map((factory) => (
-                                        <FactoryItem key={factory.id} factory={factory} />
-                                    ))
-                                )}
-                            </Tbody>
-                            <Tfoot>
-                                <Tr>
-                                    <Th fontSize="xl">เลขจดทะเบียน</Th>
-                                    <Th>companyName</Th>
-                                    <Th>industrialEstate</Th>
-                                <Th>businessType</Th>
-                                <Th>description</Th>
-                                <Th>ดูรายละเอียด</Th>
-                                </Tr>
-                            </Tfoot>
-                        </Table>
+                        <Flex w="100%">
+                            <Table variant="striped" colorScheme="teal">
+                                <Thead>
+                                    <Tr>
+                                        <Th fontSize="md" w="13%">เลขจดทะเบียน</Th>
+                                        <Th>companyName</Th>
+                                        <Th>industrialEstate</Th>
+                                        <Th>businessType</Th>
+                                        <Th>description</Th>
+                                        <Th>ดูรายละเอียด</Th>
+                                    </Tr>
+                                </Thead>
+                                <Tbody>
+                                    {!industrialEstate ? (
+                                        <div>Loading...</div>
+                                    ) : (
+                                        industrialEstate.map((factory) => (
+                                            <FactoryItem key={factory.id} factory={factory} />
+                                        ))
+                                    )}
+                                </Tbody>
+                                <Tfoot>
+                                    <Tr>
+                                        <Th fontSize="xl">เลขจดทะเบียน</Th>
+                                        <Th>companyName</Th>
+                                        <Th>industrialEstate</Th>
+                                        <Th>businessType</Th>
+                                        <Th>description</Th>
+                                        <Th>ดูรายละเอียด</Th>
+                                    </Tr>
+                                </Tfoot>
+                            </Table>
+                        </Flex>
             )}
             </Box>
         </Layout>

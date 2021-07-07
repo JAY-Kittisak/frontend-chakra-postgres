@@ -11,14 +11,14 @@ interface Props {
 const FactoryItem: React.FC<Props> = ({ factory: { id, companyName, industrialEstate, businessType, description } }) => {
     return (
         <Tr>
-            <Td>{id}</Td>
+            <Td fontSize={["xs", "xs", "sm", "md"]}>{id}</Td>
             <Td>
-                <Text fontWeight="bold" display="inline-table" color="orange">{companyName}</Text>
+                <Text fontWeight="bold" display="inline-table" color="orange" fontSize={["xs", "xs", "sm", "md"]}>{companyName}</Text>
             </Td>
-            <Td><Text fontWeight="bold" display="inline-table">{industrialEstate}</Text></Td>
-            <Td>{businessType}</Td>
-            <Td>{description}</Td>
-            <Td>
+            <Td><Text fontWeight="bold" display="inline-table" fontSize={["xs", "xs", "sm", "md"]}>{industrialEstate}</Text></Td>
+            <Td fontSize={["xs", "xs", "sm", "md"]}>{businessType}</Td>
+            <Td fontSize={["xs", "xs", "sm", "md"]}>{description}</Td>
+            <Td fontSize={["xs", "xs", "sm", "md"]}>
                 <Link to={`/tiers/factories/${id}`}>
                     <Box textAlign="center">
                         <Button

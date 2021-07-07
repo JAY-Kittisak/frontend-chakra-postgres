@@ -1,24 +1,17 @@
-import { useParams } from "react-router-dom";
+import { AddIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import {
     Badge,
     Box,
-    Button,
-    Flex,
-    Stack,
+    Button, Divider, Flex, Heading, IconButton, Stack,
     Text,
-    useColorModeValue,
-    Heading,
-    Grid,
-    Divider,
-    IconButton
+    useColorModeValue
 } from "@chakra-ui/react";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import Layout from "../components/Layout";
-import AddAndEditProductTier from "../components/tier/AddAndEditProductTier";
 import AddAndEditJoinTier from "../components/tier/AddAndEditJoinTier";
+import AddAndEditProductTier from "../components/tier/AddAndEditProductTier";
 import { useFactoryByIdQuery } from "../generated/graphql";
-import { Link } from "react-router-dom";
-import { AddIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 
 interface Props { }
 
@@ -32,9 +25,9 @@ const FactoryDetail: React.FC<Props> = () => {
 
     const [display, changeDisplay] = useState<Display>("hide");
     const [openProductForm, setOpenProductForm] = useState(false);
-    const [openJoinForm, setOpenJoinForm] = useState(false);
     const [creatorId, setCreatorId] = useState<number>(Number);
     const [creatorName, setCreatorName] = useState<string>("");
+    const [openJoinForm, setOpenJoinForm] = useState(false);
 
     const paramsId = params.id;
     const [{ data, fetching }] = useFactoryByIdQuery({
@@ -62,41 +55,45 @@ const FactoryDetail: React.FC<Props> = () => {
                     <Flex>
                             <Box w="100%" p={5} rounded="10px" boxShadow="sm" bg={bg}>
                                 <Stack isInline align="baseline" justify="space-between" mb={4}>
-                                    <Heading color="orange">
+                                    <Heading color="orange" fontSize={["xl", "2xl", "3xl", "4xl"]}>
                                         {data?.factoryById?.companyName}
                                     </Heading>
-                                    <Text fontWeight="semibold" fontSize="xl">
+                                    <Text fontWeight="semibold" fontSize={["sm", "md", "lg", "xl"]}>
                                         เลขจดทะเบียน : {data?.factoryById?.id}
                                     </Text>
                                 </Stack>
-                                <Stack isInline align="baseline" justify="space-between">
-                                    <Text fontSize="xl" fontWeight="bold">
-                                        <Badge
-                                            ml="1"
-                                            fontSize="0.8em"
-                                            variant="solid"
-                                            colorScheme="green"
-                                            rounded="full"
-                                            px={2}
-                                        >
-                                            {data?.factoryById?.industrialEstate}
-                                        </Badge>
-                                        <Badge
-                                            ml="1"
-                                            fontSize="0.8em"
-                                            variant="solid"
-                                            colorScheme="pink"
-                                            rounded="full"
-                                            px={2}
-                                        >
-                                            {data?.factoryById?.businessType}
-                                        </Badge>
-                                    </Text>
-
-                                    <Box d="flex">
+                                <Flex
+                                    direction={["column", "column", "row", "row"]}
+                                    justify="space-between"
+                                >
+                                    <Flex>
+                                        <Text fontSize={["sm", "md", "lg", "xl"]} fontWeight="bold">
+                                            <Badge
+                                                ml="1"
+                                                fontSize="0.8em"
+                                                variant="solid"
+                                                colorScheme="green"
+                                                rounded="full"
+                                                px={2}
+                                            >
+                                                {data?.factoryById?.industrialEstate}
+                                            </Badge>
+                                            <Badge
+                                                ml="1"
+                                                fontSize="0.8em"
+                                                variant="solid"
+                                                colorScheme="pink"
+                                                rounded="full"
+                                                px={2}
+                                            >
+                                                {data?.factoryById?.businessType}
+                                            </Badge>
+                                        </Text>
+                                    </Flex>
+                                    <Flex mt="3">
                                         <Text
                                             textTransform="uppercase"
-                                            fontSize="md"
+                                            fontSize={["xs", "md", "md", "md"]}
                                             color="tomato"
                                             fontWeight="semibold"
                                             mr="1"
@@ -105,14 +102,14 @@ const FactoryDetail: React.FC<Props> = () => {
                                         </Text>
                                         <Text
                                             textTransform="uppercase"
-                                            fontSize="md"
+                                            fontSize={["xs", "sm", "md", "md"]}
                                             mr="2"
                                         >
                                             {data?.factoryById?.phoneNumber}{" "}
                                         </Text>
                                         <Text
                                             textTransform="uppercase"
-                                            fontSize="md"
+                                            fontSize={["xs", "sm", "md", "md"]}
                                             color="tomato"
                                             fontWeight="semibold"
                                             mr="1"
@@ -121,40 +118,50 @@ const FactoryDetail: React.FC<Props> = () => {
                                         </Text>
                                         <Text
                                             textTransform="uppercase"
-                                            fontSize="md"
+                                            fontSize={["xs", "sm", "md", "md"]}
                                         >
                                             {data?.factoryById?.FAX}
-                                    </Text>
-                                    </Box>
-                                </Stack>
+                                        </Text>
+                                    </Flex>
+                                </Flex>
 
-                                <Stack isInline align="baseline" mt="2">
+                                <Flex
+                                    direction={["column", "column", "row", "row"]}
+                                    justify="space-between"
+                                >
                                     <Text
                                         textTransform="uppercase"
-                                        fontSize="md"
+                                        fontSize={["xs", "sm", "md", "md"]}
                                         color="tomato"
                                         fontWeight="semibold"
                                     >
                                         description&bull;
                                     </Text>
-                                    <Text fontWeight="light" fontSize="md">
-                                    {data?.factoryById?.description}
+                                    <Text
+                                        fontWeight="light"
+                                        fontSize={["xs", "sm", "md", "md"]}
+                                        ml={["8", "8", "2", "2"]}
+                                    >
+                                        {data?.factoryById?.description}
                                     </Text>
-                                </Stack>
+                                </Flex>
 
-                                <Stack isInline align="baseline" mt="3">
+                                <Flex direction={["column", "column", "row", "row"]}>
                                     <Text
                                         textTransform="uppercase"
-                                        fontSize="md"
+                                        fontSize={["xs", "sm", "md", "md"]}
                                         color="tomato"
                                         fontWeight="semibold"
                                     >
-                                        Address &bull;
+                                        Address&bull;
                                     </Text>
-                                    <Text fontSize="md" my={2}>
-                                    {data?.factoryById?.address}
-                                </Text>
-                                </Stack>
+                                    <Text
+                                        fontSize={["xs", "sm", "md", "md"]}
+                                        ml={["8", "8", "2", "2"]}
+                                    >
+                                        {data?.factoryById?.address}
+                                    </Text>
+                                </Flex>
 
                                 <Box textAlign="center">
                                     <Button
@@ -164,7 +171,9 @@ const FactoryDetail: React.FC<Props> = () => {
                                         boxShadow="sm"
                                         rightIcon={<AddIcon />}
                                         colorScheme={color}
-                                        onClick={() => { setOpenProductForm(true) }}
+                                        onClick={() => {
+                                            setOpenProductForm(true);
+                                        }}
                                     >
                                         <Text color={colorW}>Add Product</Text>
                                     </Button>
@@ -179,9 +188,14 @@ const FactoryDetail: React.FC<Props> = () => {
                             </Box>
                         </Flex>
 
-                        {/* ---------------------------------ผลิต------------------------------------*/}
-                        <Flex>
-                            <Box w="100%" p={8}>
+                        <Flex direction={["column", "column", "column", "row"]}>
+                            {/* ---------------------------------ผลิต------------------------------------*/}
+                            <Box
+                                w={display === "show" ? ["95vw", "95vw", "95vw", "50%"] : "100%"}
+                                flexDir="column"
+                                alignContent="center"
+                                p={8}
+                            >
                                 <Heading mb={4}>Product ที่ผลิต</Heading>
                                 {!data?.factoryById?.products.length ? (
                                     <Text p={1} color="red" fontSize="xl">
@@ -200,21 +214,16 @@ const FactoryDetail: React.FC<Props> = () => {
                                             mt="5"
                                         >
                                             <Box p={5}>
-                                                <Stack isInline justify="space-between" my={2}>
+                                                <Stack isInline justify="space-between" mt={2}>
                                                   <Text as="h2" fontWeight="semibold" fontSize="xl">
                                                       {product.productName}
                                                   </Text>
                                                   <Text fontWeight="semibold" fontSize="xl">
                                                       Product ID : {product.id}
                                                   </Text>
-                                              </Stack>
-                                              <Text ml="7">{product.description}</Text>
-
-                                              <Text fontSize="xl">
-                                                  Category :
-                                                    <Link to={`/tiers/product-tier`}>
-                                                  <Badge
-                                                      ml="5"
+                                                </Stack>
+                                                <Link to={`/tiers/product-tier`}>
+                                                    <Badge
                                                       fontSize="0.8em"
                                                       variant="solid"
                                                       colorScheme="blue"
@@ -222,29 +231,48 @@ const FactoryDetail: React.FC<Props> = () => {
                                                   >
                                                       {product.category}
                                                   </Badge>
-                                                    </Link>
+                                                </Link>
+                                                <Text ml="7" fontSize={["sm", "sm", "lg", "xl"]}>
+                                                    {product.description}
                                               </Text>
-                                                <Box mt="2">
-                                                    <Grid templateColumns="repeat(3, 1fr)" gap={1}>
-                                                        <Box w="150px">
-                                                          <Text fontSize="xl">ผลิตให้กับบริษัท :</Text>
-                                                      </Box>
-                                                        <Box mt="1" w="320px" ml="-6">
+
+                                                <Divider borderColor="gray.300" my="2" />
+
+                                                <Flex
+                                                    direction={["column", "column", "column", "row"]}
+                                                    justify="space-between"
+                                                >
+                                                    <Flex align="center">
+                                                        <Box>
+                                                            <Text
+                                                                fontSize={["sm", "md", "lg", "xl"]}
+                                                                fontWeight="bold"
+                                                                mb="2"
+                                                            >
+                                                                ผลิตให้กับบริษัท
+                                                            </Text>
                                                           {product.factorys.map((factory) => (
                                                               <Text
-                                                key={factory.id}
-                                                color="orange"
+                                                                  key={factory.id}
                                                 as="u"
+                                                                  fontSize={["sm", "sm", "sm", "lg"]}
+                                                                  fontWeight="light"
                                                 ml="7"
+                                                                  color="orange"
                                             >
-                                                                  <Link to={`/tiers/factories/${factory.id}`} onClick={() => changeDisplay("show")}>
+                                                                  <Link
+                                                                      to={`/tiers/factories/${factory.id}`}
+                                                                      onClick={() => changeDisplay("show")}
+                                                                  >
                                                     {factory.companyName}
                                                     <br />
                                                 </Link>
                                             </Text>
                                         ))}
                                                       </Box>
-                                                        <Box ml="5">
+                                                    </Flex>
+                                                    <Flex align="center">
+                                                        <Box mt="4">
                                                             <Button
                                                                 rightIcon={<AddIcon />}
                                                                 colorScheme="orange"
@@ -255,11 +283,14 @@ const FactoryDetail: React.FC<Props> = () => {
                                                                 เพิ่มบริษัท
                                                             </Button>
                                                             {openJoinForm && (
-                                                                <AddAndEditJoinTier productId={product.id} setOpenJoinForm={setOpenJoinForm} />
+                                                                <AddAndEditJoinTier
+                                                                    productId={product.id}
+                                                                    setOpenJoinForm={setOpenJoinForm}
+                                                                />
                                                             )}
                                                         </Box>
-                                                    </Grid>
-                                              </Box>
+                                                    </Flex>
+                                                </Flex>
                                           </Box>
                                       </Box>
                                   ))
@@ -270,7 +301,18 @@ const FactoryDetail: React.FC<Props> = () => {
                             <Box mt="10">
                                 <IconButton
                                     aria-label=""
-                                    icon={display === "show" ? <ViewOffIcon /> : <Box mb="1"><Text mt="2" p={1}>Received</Text><ViewIcon mb="2" /></Box>}
+                                    icon={
+                                        display === "show" ? (
+                                            <ViewOffIcon />
+                                        ) : (
+                                            <Box mb="1">
+                                                <Text mt="2" p={1}>
+                                                    Received
+                                                </Text>
+                                                <ViewIcon mb="2" />
+                                            </Box>
+                                        )
+                                    }
                                     onClick={() => {
                                         if (display === "show") {
                                             changeDisplay("none");
@@ -284,64 +326,91 @@ const FactoryDetail: React.FC<Props> = () => {
 
                             {/* ---------------------------------รับสินค้า------------------------------------*/}
                             {display === "show" ? (
-                                <Box w="100%" p={8}>
+                                <Box
+                                    // w={["100%", "45%"]}
+                                    w={["95vw", "95vw", "50%", "50%"]}
+                                    flexDir="column"
+                                    alignContent="center"
+                                    p={8}
+                                >
                                     <Heading mb={4}>Product ที่ไปสั่งบริษัทอื่นผลิต</Heading>
-                                {!data?.factoryById?.productReceives ? (
-                                    <Text p={1} color="red" fontSize="xl">
+                                    {!data?.factoryById?.productReceives ? (
+                                        <Text p={1} color="red" fontSize="xl">
                                             ไม่ประวัติการบันทึกข้อมูล
-                                    </Text>
-                                ) : (
-                                    data?.factoryById?.productReceives?.map((productR) => (
-                                        <Box
-                                            key={productR.id}
-                                            w="100%"
-                                            rounded="20px"
-                                            overflow="hidden"
-                                            boxShadow="sm"
-                                            bg={bg}
-                                            mb="8"
-                                            mt="5"
-                                        >
-                                            <Box p={5}>
-                                              <Stack isInline justify="space-between" my={2}>
-                                                  <Text as="h2" fontWeight="semibold" fontSize="xl">
-                                                      {productR.productName}
-                                                  </Text>
-                                                  <Text fontWeight="semibold" fontSize="xl">
-                                                      Product ID : {productR.id}
-                                                  </Text>
-                                              </Stack>
-                                              <Text ml="7">{productR.description}</Text>
+                                        </Text>
+                                    ) : (
+                                        data?.factoryById?.productReceives?.map((productR) => (
+                                            <Box
+                                                key={productR.id}
+                                                w="100%"
+                                                rounded="20px"
+                                                overflow="hidden"
+                                                boxShadow="sm"
+                                                bg={bg}
+                                                mb="8"
+                                                mt="5"
+                                            >
+                                                <Box p={5}>
+                                                    <Stack isInline justify="space-between" mt={2}>
+                                                        <Text as="h2" fontWeight="semibold" fontSize="xl">
+                                                            {productR.productName}
+                                                        </Text>
+                                                        <Text fontWeight="semibold" fontSize="xl">
+                                                            Product ID : {productR.id}
+                                                        </Text>
+                                                    </Stack>
+                                                    <Link to={`/tiers/product-tier`}>
+                                                        <Badge
+                                                            fontSize="0.8em"
+                                                            variant="solid"
+                                                            colorScheme="blue"
+                                                            rounded="full"
+                                                        >
+                                                            {productR.category}
+                                                        </Badge>
+                                                    </Link>
+                                                    <Text ml="7" fontSize={["sm", "sm", "lg", "xl"]}>
+                                                        {productR.description}
+                                                    </Text>
 
-                                              <Text fontSize="xl">
-                                                  Category :
-                                                  <Badge
-                                                      ml="5"
-                                                      fontSize="0.8em"
-                                                      variant="solid"
-                                                      colorScheme="blue"
-                                                      rounded="full"
-                                                  >
-                                                      {productR.category}
-                                                  </Badge>
-                                              </Text>
-                                                <Grid templateColumns="repeat(3, 1fr)" gap={1}>
-                                                    <Box w="150px">
-                                                      <Text fontSize="xl">ผลิตโดย :</Text>
-                                                  </Box>
-                                                    <Box mt="1" w="320px" ml="-130">
-                                                      <Text p={1} color="orange" as="u" ml="7">
-                                                          <Link to={`/tiers/factories/${productR.creatorId}`}>
-                                                              {productR.creatorName} <br />
-                                                          </Link>
-                                                      </Text>
-                                                  </Box>
-                                                </Grid>
-                                          </Box>
-                                      </Box>
-                                  ))
-                            )}
-                        </Box>
+                                                    <Divider borderColor="gray.300" my="2" />
+
+                                                    <Flex
+                                                        direction={["column", "column", "column", "row"]}
+                                                        justify="space-between"
+                                                    >
+                                                        <Flex align="center">
+                                                            <Box>
+                                                                <Text
+                                                                    fontSize={["sm", "md", "lg", "xl"]}
+                                                                    fontWeight="bold"
+                                                                    mb="2"
+                                                                >
+                                                                    ผลิตโดย
+                                                                </Text>
+                                                                <Text
+                                                                    as="u"
+                                                                    fontSize={["sm", "sm", "sm", "lg"]}
+                                                                    fontWeight="light"
+                                                                    ml="7"
+                                                                    color="orange"
+                                                                >
+                                                                    <Link
+                                                                        to={`/tiers/factories/${productR.creatorId}`}
+                                                                        onClick={() => changeDisplay("show")}
+                                                                    >
+                                                                        {productR.creatorName}
+                                                                        <br />
+                                                                    </Link>
+                                                                </Text>
+                                                            </Box>
+                                                        </Flex>
+                                                    </Flex>
+                                                </Box>
+                                            </Box>
+                                        ))
+                                    )}
+                                </Box>
                             ) : null}
                     </Flex>
                 </Box>

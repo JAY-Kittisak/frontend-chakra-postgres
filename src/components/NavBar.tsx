@@ -10,6 +10,8 @@ import {
     MenuItem,
     Heading,
     useColorMode,
+    Text,
+    MenuDivider
 } from '@chakra-ui/react'
 import { IconButton } from "@chakra-ui/react"
 import { useHistory } from 'react-router-dom'
@@ -33,21 +35,23 @@ const NavBar: React.FC<Props> = () => {
         // user not logged in
     } else if (!data?.me) {
         body = (
-            <Box>
+            <Flex align="center" mt="1">
                 <Button
+                    size="sm"
                     bg="blue.300"
-                    mr="4"
+                    mr="2"
                     onClick={() => history.push('/login')}
                 >
                     login
                 </Button>
                 <Button
+                    size="sm"
                     bg="blue.300"
                     onClick={() => history.push('/register')}
                 >
                     register
                 </Button>
-            </Box>
+            </Flex>
         )
 
         // user is logged in
@@ -64,8 +68,9 @@ const NavBar: React.FC<Props> = () => {
                     }}
                     isLoading={logoutFetching}
                     variant='link'
+                    as="u"
                 >
-                    ออกจากระบบ
+                    Logout
                 </Button>
             </Flex>
         )
@@ -88,20 +93,36 @@ const NavBar: React.FC<Props> = () => {
                     variant="outline"
                     color={colorMode === "light" ? "back" : "white"}
                 />
-                <MenuList>
+                <MenuList minWidth="240px">
+
+                    <Text fontSize={["sm", "md", "lg", "xl"]} fontWeight="bold" ml="2">Tier</Text>
                     <MenuItem icon={<AddIcon />} onClick={() => { history.push('/tiers/factories') }}>
                         Factories
                     </MenuItem>
                     <MenuItem icon={<AddIcon />} onClick={() => { history.push('/tiers/product-tier') }}>
                         Product
                     </MenuItem>
-                    <MenuItem icon={<ExternalLinkIcon />} command="⌘N" onClick={() => { history.push('/post') }}>
+                    <MenuDivider />
+
+                    <Text fontSize={["sm", "md", "lg", "xl"]} fontWeight="bold" ml="2">ของแจกพี่มายด์</Text>
+                    <MenuItem icon={<AddIcon />} onClick={() => { history.push('/tiers/factories') }}>
+                        เบิกของ
+                    </MenuItem>
+                    <MenuItem icon={<AddIcon />} onClick={() => { history.push('/tiers/product-tier') }}>
+                        เพิ่มของใน Stock
+                    </MenuItem>
+                    <MenuDivider />
+
+                    <Text fontSize={["sm", "md", "lg", "xl"]} fontWeight="bold" ml="2">Post</Text>
+                    <MenuItem icon={<ExternalLinkIcon />} onClick={() => { history.push('/post') }}>
                         Post
                     </MenuItem>
-                    <MenuItem icon={<RepeatIcon />} command="⌘⇧N" onClick={() => { history.push('/create-post') }}>
+                    <MenuItem icon={<RepeatIcon />} onClick={() => { history.push('/create-post') }}>
                         Create-post
                     </MenuItem>
-                    <MenuItem icon={<EditIcon />} command="⌘O">
+                    <MenuDivider />
+
+                    <MenuItem icon={<EditIcon />}>
                         Open File...
                     </MenuItem>
                 </MenuList>
@@ -110,8 +131,8 @@ const NavBar: React.FC<Props> = () => {
                 mr={2}
                 onClick={() => { history.push('/') }}
             >
-                <Box p="2">
-                    <Heading size="md">MK Management</Heading>
+                <Box p="2" align="center">
+                    <Heading fontSize={["sm", "md", "lg", "xl"]}>MK Management</Heading>
                 </Box>
             </Link>
 
