@@ -158,7 +158,7 @@ const FactoryChart: React.FC<Props> = ({ industrialEstate, industrialEstateSelec
 
     return (
         <>
-            <Box w="50%" rounded="10px" boxShadow="sm" bg={bg} mr="2">
+            <Box w="50%" rounded="10px" boxShadow="md" bg={bg} mr="2" justify="center" p="4">
                 <Box w="300px" ml="150">
                     <Doughnut type="doughnut" data={data} options={options} />
                 </Box>
@@ -226,7 +226,7 @@ const FactoryChart: React.FC<Props> = ({ industrialEstate, industrialEstateSelec
             </Box>
 
 
-            <Box w="50%" rounded="10px" boxShadow="sm" bg={bg} mr="5">
+            <Box w="50%" rounded="10px" boxShadow="md" bg={bg} mr="5" justify="center" p="4">
                 <Bar type="bar" data={data} options={options} />
                 <Box p={5}>
                     <Stack isInline align="baseline">

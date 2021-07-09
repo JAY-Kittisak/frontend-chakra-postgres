@@ -32,16 +32,16 @@ const ProductTier: React.FC<Props> = () => {
                     ) : (
                         data.ProductByTiers.map((product) => (
                             <Tr>
-                                <Td>{product.id}</Td>
-                                <Td>{product.creatorName}</Td>
+                                <Td>{product?.id}</Td>
+                                <Td>{product?.creatorName}</Td>
                                 <Td>
-                                    <Text fontWeight="bold" display="inline-table" color="orange">{product.productName}</Text>
+                                    <Text fontWeight="bold" display="inline-table" color="orange">{product?.productName}</Text>
                                 </Td>
-                                <Td><Text display="inline-table">{product.description}</Text></Td>
-                                <Td>{product.category}</Td>
+                                <Td><Text display="inline-table">{product?.description}</Text></Td>
+                                <Td>{product?.category}</Td>
                                 <Td>
                                     <Box textAlign="center">
-                                        {product.factorys.map((data) => (
+                                        {product?.factorys && product.factorys.map((data) => (
 
                                             <Text display="inline-table" key={data.id}><br />{data.companyName}</Text>)
                                         )}

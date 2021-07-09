@@ -114,10 +114,10 @@ const NavBar: React.FC<Props> = () => {
                     <MenuDivider />
 
                     <Text fontSize={["sm", "md", "lg", "xl"]} fontWeight="bold" ml="2">Post</Text>
-                    <MenuItem icon={<ExternalLinkIcon />} onClick={() => { history.push('/post') }}>
+                    <MenuItem icon={<ExternalLinkIcon />} onClick={() => { history.push('/') }}>
                         Post
                     </MenuItem>
-                    <MenuItem icon={<RepeatIcon />} onClick={() => { history.push('/create-post') }}>
+                    <MenuItem icon={<RepeatIcon />} onClick={() => { history.push('/') }}>
                         Create-post
                     </MenuItem>
                     <MenuDivider />

@@ -3,7 +3,7 @@ import {
     Tr, useColorModeValue
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { FiChevronDown, FiChevronUp } from "react-icons/fi";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import Layout from "../components/Layout";
 import FactoryChart from "../components/tier/FactoryChart";
 import FactoryItem from "../components/tier/FactoryItem";
@@ -134,7 +134,7 @@ const Factories: React.FC<Props> = () => {
                     <Divider />
                     <IconButton
                         aria-label=""
-                        icon={display === "show" ? <FiChevronUp /> : <FiChevronDown />}
+                        icon={display === "show" ? <ViewOffIcon /> : <ViewIcon />}
                         onClick={() => {
                             if (display === "show") {
                                 changeDisplay("none");

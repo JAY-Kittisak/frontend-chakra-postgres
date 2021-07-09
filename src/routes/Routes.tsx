@@ -5,8 +5,6 @@ import Index from '../pages/Index'
 import Register from '../pages/Register'
 import Login from '../pages/Login'
 import PageNotFound from '../pages/PageNotFound'
-import PagePost from '../pages/PagePost'
-import CreatePost from '../pages/Create-post'
 import TierRoute from './TierRoute'
 
 interface Props { }
@@ -16,12 +14,6 @@ const Routes: React.FC<Props> = () => {
         <Switch>
             <Route path="/tiers">
                 <TierRoute />
-            </Route>
-            <Route path="/post">
-                <PagePost />
-            </Route>
-            <Route path="/create-post">
-                <CreatePost />
             </Route>
             <Route path="/login">
                 <Login />

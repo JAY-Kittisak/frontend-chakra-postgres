@@ -2,9 +2,14 @@ import { AddIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import {
     Badge,
     Box,
-    Button, Divider, Flex, Heading, IconButton, Stack,
+    Button,
+    Divider,
+    Flex,
+    Heading,
+    IconButton,
+    Stack,
     Text,
-    useColorModeValue
+    useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -18,16 +23,18 @@ interface Props { }
 type Display = "none" | "hide" | "show";
 
 const FactoryDetail: React.FC<Props> = () => {
-    const params = useParams<{ id: string }>();
-    const bg = useColorModeValue("gray.200", "gray.700");
-    const color = useColorModeValue("blue", "blue");
-    const colorW = useColorModeValue("orange", "black.100");
-
     const [display, changeDisplay] = useState<Display>("hide");
     const [openProductForm, setOpenProductForm] = useState(false);
     const [creatorId, setCreatorId] = useState<number>(Number);
     const [creatorName, setCreatorName] = useState<string>("");
     const [openJoinForm, setOpenJoinForm] = useState(false);
+
+    const params = useParams<{ id: string }>();
+
+    const bg = useColorModeValue("gray.200", "gray.700");
+    const color = useColorModeValue("blue", "blue");
+    const colorW = useColorModeValue("orange", "black.100");
+
 
     const paramsId = params.id;
     const [{ data, fetching }] = useFactoryByIdQuery({
@@ -53,7 +60,7 @@ const FactoryDetail: React.FC<Props> = () => {
             ) : (
                 <Box>
                     <Flex>
-                            <Box w="100%" p={5} rounded="10px" boxShadow="sm" bg={bg}>
+                            <Box w="100%" p={5} rounded="7px" boxShadow="md" bg={bg}>
                                 <Stack isInline align="baseline" justify="space-between" mb={4}>
                                     <Heading color="orange" fontSize={["xl", "2xl", "3xl", "4xl"]}>
                                         {data?.factoryById?.companyName}
@@ -208,17 +215,24 @@ const FactoryDetail: React.FC<Props> = () => {
                                             w="100%"
                                             rounded="20px"
                                             overflow="hidden"
-                                            boxShadow="sm"
+                                            boxShadow="md"
                                             bg={bg}
                                             mb="8"
                                             mt="5"
                                         >
                                             <Box p={5}>
                                                 <Stack isInline justify="space-between" mt={2}>
-                                                  <Text as="h2" fontWeight="semibold" fontSize="xl">
+                                                    <Text
+                                                        as="h2"
+                                                        fontWeight="semibold"
+                                                        fontSize={["lg", "lg", "xl", "2xl"]}
+                                                    >
                                                       {product.productName}
                                                   </Text>
-                                                  <Text fontWeight="semibold" fontSize="xl">
+                                                    <Text
+                                                        fontWeight="semibold"
+                                                        fontSize={["lg", "lg", "xl", "2xl"]}
+                                                    >
                                                       Product ID : {product.id}
                                                   </Text>
                                                 </Stack>
@@ -251,24 +265,25 @@ const FactoryDetail: React.FC<Props> = () => {
                                                             >
                                                                 ผลิตให้กับบริษัท
                                                             </Text>
-                                                          {product.factorys.map((factory) => (
-                                                              <Text
-                                                                  key={factory.id}
-                                                as="u"
-                                                                  fontSize={["sm", "sm", "sm", "lg"]}
-                                                                  fontWeight="light"
-                                                ml="7"
-                                                                  color="orange"
-                                            >
-                                                                  <Link
-                                                                      to={`/tiers/factories/${factory.id}`}
-                                                                      onClick={() => changeDisplay("show")}
-                                                                  >
-                                                    {factory.companyName}
-                                                    <br />
-                                                </Link>
-                                            </Text>
-                                        ))}
+                                                            {product.factorys &&
+                                                                product.factorys.map((factory) => (
+                                                                    <Text
+                                                                        key={factory.id}
+                                                                        as="u"
+                                                                        fontSize={["sm", "sm", "sm", "lg"]}
+                                                                        fontWeight="light"
+                                                                        ml="7"
+                                                                        color="orange"
+                                                                    >
+                                                                        <Link
+                                                                            to={`/tiers/factories/${factory.id}`}
+                                                                            onClick={() => changeDisplay("show")}
+                                                                        >
+                                                                            {factory.companyName}
+                                                                            <br />
+                                                                        </Link>
+                                                                    </Text>
+                                                                ))}
                                                       </Box>
                                                     </Flex>
                                                     <Flex align="center">
@@ -323,7 +338,6 @@ const FactoryDetail: React.FC<Props> = () => {
                                 />
                                 <Divider orientation="vertical" ml={display === "show" ? 5 : 9} />
                             </Box>
-
                             {/* ---------------------------------รับสินค้า------------------------------------*/}
                             {display === "show" ? (
                                 <Box
@@ -345,17 +359,24 @@ const FactoryDetail: React.FC<Props> = () => {
                                                 w="100%"
                                                 rounded="20px"
                                                 overflow="hidden"
-                                                boxShadow="sm"
+                                                boxShadow="md"
                                                 bg={bg}
                                                 mb="8"
                                                 mt="5"
                                             >
                                                 <Box p={5}>
                                                     <Stack isInline justify="space-between" mt={2}>
-                                                        <Text as="h2" fontWeight="semibold" fontSize="xl">
+                                                        <Text
+                                                            as="h2"
+                                                            fontWeight="semibold"
+                                                            fontSize={["lg", "lg", "xl", "2xl"]}
+                                                        >
                                                             {productR.productName}
                                                         </Text>
-                                                        <Text fontWeight="semibold" fontSize="xl">
+                                                        <Text
+                                                            fontWeight="semibold"
+                                                            fontSize={["lg", "lg", "xl", "2xl"]}
+                                                        >
                                                             Product ID : {productR.id}
                                                         </Text>
                                                     </Stack>

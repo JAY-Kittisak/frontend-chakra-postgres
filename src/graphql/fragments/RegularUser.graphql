@@ -1,4 +1,12 @@
 fragment RegularUser on User {
     id
     username
+    email
+    roles
+    fullNameTH
+    fullNameEN
+    nickName
+    departments
+    createdAt
+    updatedAt
 }
