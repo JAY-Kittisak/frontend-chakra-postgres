@@ -10,10 +10,11 @@ const createImageRef = (imageName: string) => {
 
 export const useAddUserImage = () => {
     const [uploadProgression, setUploadProgression] = useState(0);
+    const [addProductFinished, setAddProductFinished] = useState(false)
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    const uploadImageToStorage = (image: File, cd: (imageUrl: string, imagePath: string) => void) => {
+    const uploadImageToStorage = (image: File, cd: (imageUrl: string) => void) => {
         setLoading(true);
 
         // 1. Upload รูปไปที่ firebase storage, get back an image url
@@ -43,7 +44,7 @@ export const useAddUserImage = () => {
                     .getDownloadURL()
                     .then((imageUrl) => {
                         // 2.
-                        cd(imageUrl, imageRef.fullPath)
+                        cd(imageUrl)
                     })
                     .catch((err) => {
                         const { message } = err as { message: string }
@@ -55,13 +56,15 @@ export const useAddUserImage = () => {
         );
 
     };
-    const updateImageUser = (id: number) => (imageUrl: string, imagePath: string) => {
+    const updateImageUser = (data: { id: number }) => (imageUrl: string) => {
+        const { id } = data
+        setLoading(true)
+        setAddProductFinished(false)
         const newImageUser = {
-            imageUrl,
-            imagePath
+            imageUrl
         }
         return newImageUser
     }
 
-    return { uploadImageToStorage, updateImageUser, uploadProgression, loading, error }
+    return { uploadImageToStorage, updateImageUser, uploadProgression, addProductFinished, loading, error }
 };

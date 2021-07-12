@@ -4,6 +4,7 @@ import { Switch, Route } from 'react-router-dom'
 import Index from '../pages/Index'
 import Register from '../pages/Register'
 import Login from '../pages/Login'
+import Profile from '../pages/Profile'
 import PageNotFound from '../pages/PageNotFound'
 import TierRoute from './TierRoute'
 
@@ -12,6 +13,9 @@ interface Props { }
 const Routes: React.FC<Props> = () => {
     return (
         <Switch>
+            <Route path="/profile">
+                <Profile />
+            </Route>
             <Route path="/tiers">
                 <TierRoute />
             </Route>

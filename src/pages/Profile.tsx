@@ -5,7 +5,7 @@ interface Props {
 
 const Profile: React.FC<Props> = () => {
     return (
-        <div>Profiles</div>
+        <div>Profile</div>
     )
 }
 
