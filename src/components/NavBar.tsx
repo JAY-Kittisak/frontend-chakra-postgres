@@ -11,7 +11,7 @@ import {
     Heading,
     useColorMode,
     Text,
-    MenuDivider
+    MenuDivider,
 } from '@chakra-ui/react'
 import { IconButton } from "@chakra-ui/react"
 import { useHistory } from 'react-router-dom'
@@ -19,6 +19,7 @@ import { ExternalLinkIcon, AddIcon, RepeatIcon, EditIcon, HamburgerIcon } from '
 
 import { ColorModeSwitcher } from "../ColorModeSwitcher"
 import { useLogoutMutation, useMeQuery } from '../generated/graphql'
+import AddAndEditProfile from "./manage-users/AddAndEditProfile"
 
 interface Props { }
 
@@ -94,6 +95,12 @@ const NavBar: React.FC<Props> = () => {
                     color={colorMode === "light" ? "back" : "white"}
                 />
                 <MenuList minWidth="240px">
+                    {data?.me ? (
+                        <AddAndEditProfile me={data.me} />
+                    ) : (
+                        null
+                    )}
+
 
                     <Text fontSize={["sm", "md", "lg", "xl"]} fontWeight="bold" ml="2">Tier</Text>
                     <MenuItem icon={<AddIcon />} onClick={() => { history.push('/tiers/factories') }}>

@@ -12,6 +12,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: any;
 };
 
 export type Factory = {
@@ -61,11 +63,15 @@ export type Mutation = {
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
+  uploadImageMe?: Maybe<UserResponse>;
+  updateRoles?: Maybe<User>;
   deleteUser: Scalars['Boolean'];
   createFactory: Factory;
   createProductByTier: ProductByTier;
   joinFactory: Scalars['Boolean'];
   deleteProduct: Scalars['Boolean'];
+  addProfilePicture: Scalars['Boolean'];
+  imageUploader?: Maybe<Scalars['String']>;
 };
 
 
@@ -76,6 +82,17 @@ export type MutationRegisterArgs = {
 
 export type MutationLoginArgs = {
   options: LoginInput;
+};
+
+
+export type MutationUploadImageMeArgs = {
+  file: Scalars['Upload'];
+};
+
+
+export type MutationUpdateRolesArgs = {
+  id: Scalars['Float'];
+  newRoles: Scalars['String'];
 };
 
 
@@ -101,6 +118,16 @@ export type MutationJoinFactoryArgs = {
 
 export type MutationDeleteProductArgs = {
   productId: Scalars['Int'];
+};
+
+
+export type MutationAddProfilePictureArgs = {
+  picture: Scalars['Upload'];
+};
+
+
+export type MutationImageUploaderArgs = {
+  imageMe: Scalars['Upload'];
 };
 
 export type ProductByTier = {
@@ -168,6 +195,7 @@ export type RegisterInput = {
   departments?: Maybe<Scalars['String']>;
 };
 
+
 export type User = {
   __typename?: 'User';
   id: Scalars['Float'];
@@ -191,7 +219,7 @@ export type UserResponse = {
 
 export type RegularUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'username' | 'email' | 'roles' | 'fullNameTH' | 'fullNameEN' | 'nickName' | 'departments' | 'createdAt' | 'updatedAt'>
+  & Pick<User, 'id' | 'username' | 'email' | 'roles' | 'fullNameTH' | 'fullNameEN' | 'nickName' | 'departments' | 'imageUrl' | 'createdAt' | 'updatedAt'>
 );
 
 export type CreateProductByTierMutationVariables = Exact<{
@@ -342,6 +370,7 @@ export const RegularUserFragmentDoc = gql`
   fullNameEN
   nickName
   departments
+  imageUrl
   createdAt
   updatedAt
 }
