@@ -3,12 +3,11 @@ fragment RegularUser on User {
     username
     email
     roles
+    departments
     fullNameTH
     fullNameEN
     nickName
-    departments
     imageUrl
     createdAt
     updatedAt
-
 }

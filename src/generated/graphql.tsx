@@ -86,7 +86,7 @@ export type MutationLoginArgs = {
 
 
 export type MutationUploadImageMeArgs = {
-  file: Scalars['Upload'];
+  options: Scalars['Upload'];
 };
 
 
@@ -189,10 +189,7 @@ export type RegisterInput = {
   password: Scalars['String'];
   email: Scalars['String'];
   roles: Scalars['String'];
-  fullNameTH?: Maybe<Scalars['String']>;
-  fullNameEN?: Maybe<Scalars['String']>;
-  nickName?: Maybe<Scalars['String']>;
-  departments?: Maybe<Scalars['String']>;
+  departments: Scalars['String'];
 };
 
 
@@ -219,7 +216,7 @@ export type UserResponse = {
 
 export type RegularUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'username' | 'email' | 'roles' | 'fullNameTH' | 'fullNameEN' | 'nickName' | 'departments' | 'imageUrl' | 'createdAt' | 'updatedAt'>
+  & Pick<User, 'id' | 'username' | 'email' | 'roles' | 'departments' | 'fullNameTH' | 'fullNameEN' | 'nickName' | 'imageUrl' | 'createdAt' | 'updatedAt'>
 );
 
 export type CreateProductByTierMutationVariables = Exact<{
@@ -289,6 +286,29 @@ export type RegisterMutation = (
       & RegularUserFragment
     )> }
   ) }
+);
+
+export type UploadImageMeMutationVariables = Exact<{
+  options: Scalars['Upload'];
+}>;
+
+
+export type UploadImageMeMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    uploadImageMe?: Maybe<(
+      { __typename?: 'UserResponse' }
+      & {
+        errors?: Maybe<Array<(
+          { __typename?: 'FieldError' }
+          & Pick<FieldError, 'field' | 'message'>
+        )>>, user?: Maybe<(
+          { __typename?: 'User' }
+          & Pick<User, 'imageUrl'>
+        )>
+      }
+    )>
+  }
 );
 
 export type FactoriesQueryVariables = Exact<{ [key: string]: never; }>;
@@ -366,10 +386,10 @@ export const RegularUserFragmentDoc = gql`
   username
   email
   roles
+  departments
   fullNameTH
   fullNameEN
   nickName
-  departments
   imageUrl
   createdAt
   updatedAt
@@ -444,6 +464,23 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const UploadImageMeDocument = gql`
+    mutation UploadImageMe($options: Upload!) {
+  uploadImageMe(options: $options) {
+    errors {
+      field
+      message
+    }
+    user {
+      imageUrl
+    }
+  }
+}
+    `;
+
+export function useUploadImageMeMutation() {
+  return Urql.useMutation<UploadImageMeMutation, UploadImageMeMutationVariables>(UploadImageMeDocument);
 };
 export const FactoriesDocument = gql`
     query Factories {

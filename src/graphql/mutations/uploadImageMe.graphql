@@ -1,0 +1,11 @@
+mutation UploadImageMe($options: Upload!) {
+  uploadImageMe(options: $options) {
+    errors {
+      field
+      message
+    }
+    user {
+      imageUrl
+    }
+  }
+}

@@ -25,3 +25,37 @@ export const categories: FactoryIndustrialEstate[] = [
     "เอเซีย",
     "เหมราชอีสเทิร์นซีบอร์ด แห่งที่ 4",
 ]
+
+type CatUserRole = "ลาดกระบัง" | "ชลบุรี" | "*โปรดเลือกสาขา"
+export const catUserRole: CatUserRole[] = [
+    "*โปรดเลือกสาขา",
+    "ลาดกระบัง",
+    "ชลบุรี",
+]
+
+type CatDepartments = "client" |
+    "account" |
+    "adminSale" |
+    "delivery" |
+    "engineer" |
+    "inventory" |
+    "Marketing" |
+    "Purchasing" |
+    "Quality" |
+    "SaleCo" |
+    "Sales" |
+    "*โปรดเลือกแผนก"
+export const catDepartments: CatDepartments[] = [
+    "*โปรดเลือกแผนก",
+    "client",
+    "account",
+    "adminSale",
+    "delivery",
+    "engineer",
+    "inventory",
+    "Marketing",
+    "Purchasing",
+    "Quality",
+    "SaleCo",
+    "Sales"
+]
