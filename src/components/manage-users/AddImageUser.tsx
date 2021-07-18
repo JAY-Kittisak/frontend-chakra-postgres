@@ -28,15 +28,12 @@ const AddImageUser: React.FC<Props> = ({ imagesUrl }) => {
     const cancelRef = useRef()
 
     const [, uploadImageMe] = useUploadImageMeMutation()
-    console.log("imagesUrl =", imagesUrl)
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files
-        console.log("files =", files)
         if (!files || !files[0]) return
 
         const file = files[0]
-        console.log("file =", file)
 
         if (!fileType.includes(file.type)) {
             alert('Wrong file format, allow only "png" or "jpeg" or "jpg"')
