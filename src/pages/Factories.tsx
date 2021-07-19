@@ -10,6 +10,7 @@ import FactoryItem from "../components/tier/FactoryItem";
 import { Factory, useFactoriesQuery } from "../generated/graphql";
 import { factoryTab } from "../utils/helpers";
 import { useIsAuth } from "../utils/uselsAuth";
+import Spinner from "../components/Spinner";
 
 
 interface Props { }
@@ -25,6 +26,8 @@ const Factories: React.FC<Props> = () => {
     const [industrialEstate, setIndustrialEstate] = useState<
         Factory[] | undefined
     >(undefined);
+
+
 
     useEffect(() => {
         if (industrialEstateSelect === "All") {
@@ -151,7 +154,7 @@ const Factories: React.FC<Props> = () => {
             {!industrialEstate ? (
                     <Flex align="center">
                         <Divider />
-                        <Heading>Loading...</Heading>
+                        <Spinner color="grey" height={30} width={30} /><Heading>Loading...</Heading>
                         <Divider />
                     </Flex>
                 ) : (

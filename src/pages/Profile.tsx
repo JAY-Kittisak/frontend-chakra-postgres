@@ -1,39 +1,37 @@
-import React from "react";
-import {
-    Text,
-    Flex,
-    Box,
-    Heading,
-    Button,
-    Center,
-    Stack,
-    Badge,
-} from "@chakra-ui/react";
+import React, { useState } from "react";
+import { Text, Flex, Box, Heading, Button, Center } from "@chakra-ui/react";
 import { useMeQuery } from "../generated/graphql";
 import Layout from "../components/Layout";
 import { Form, Formik } from "formik";
 import InputField from "../components/InputField";
 import AddImageUser from "../components/manage-users/AddImageUser";
+import Card from "../components/chakra-ui/Card";
+import Spinner from "../components/Spinner";
+import { Redirect } from 'react-router-dom'
+import AddAndEditProfile from "../components/manage-users/AddAndEditProfile";
+
 
 interface Props { }
 
 const Profile: React.FC<Props> = () => {
-    const [{ data }] = useMeQuery()
+    const [{ data, fetching }] = useMeQuery();
+    const [isOpen, setIsOpen] = useState(false)
+
+    if (fetching) return <Spinner color="grey" height={50} width={50} />
+
+    if (data?.me?.username === undefined)
+        return <Redirect to='/' />
 
     return (
-        <Layout variant="small">
+        <Layout variant="regular">
             <Box p="2" align="center">
                 <Heading fontSize="4xl">Profile</Heading>
             </Box>
 
-            <Flex
-                flexDir={["column", "column", "row"]}
-                overflow="hidden"
-            >
-
-
+            <Flex flexDir={["column", "column", "column", "row"]} overflow="hidden">
                 {/* ---------------------------------------Column 1--------------------------------------- */}
                 <Flex
+                    w={["100%", "100%", "100%", "50%"]}
                     direction={["column", "column", "column", "column"]}
                     justify="center"
                     mt="5"
@@ -42,11 +40,10 @@ const Profile: React.FC<Props> = () => {
                     rounded="10px"
                     boxShadow="md"
                 >
-                    {data?.me ? (
+                    {data.me &&
                         <AddImageUser imagesUrl={data.me.imageUrl as string} />
-                    ) : (
-                        <div>No Data.</div>
-                    )}
+                    }
+
                     <Box w="100%" p="5" bg="gray.600" rounded="10px" boxShadow="md">
                         <Formik
                             initialValues={{
@@ -55,40 +52,31 @@ const Profile: React.FC<Props> = () => {
                                 nickName: "",
                                 email: "",
                             }}
-                            onSubmit={async (
-                                values
-                                //  { setErrors }
-                            ) => {
-                                console.log(values);
-                                // const response = await register({ options: values });
-                                // if (response.data?.register.errors) {
-                                //     setErrors(toErrorMap(response.data.register.errors));
-                                // } else if (response.data?.register.user) {
-                                //     history.push("/profile");
-                                // }
+                            onSubmit={async (values) => {
+                                console.log(values)
                             }}
                         >
                             {({ isSubmitting }) => (
                                 <Form>
                                     <InputField
                                         name="fullNameTH"
-                                        value={data?.me?.fullNameTH ? data?.me?.fullNameTH : ""}
                                         label="ชื่อภาษาไทย"
+                                        value={data.me?.fullNameTH ? data.me.fullNameTH : ""}
                                     />
                                     <InputField
                                         name="fullNameEN"
-                                        value={data?.me?.fullNameEN ? data?.me?.fullNameEN : ""}
                                         label="ชื่อภาษาอังกฤษ"
+                                        value={data.me?.fullNameEN ? data.me.fullNameEN : ""}
                                     />
                                     <InputField
                                         name="nickName"
-                                        value={data?.me?.nickName ? data?.me?.nickName : ""}
                                         label="ชื่อเล่น"
+                                        value={data.me?.nickName ? data.me.nickName : ""}
                                     />
                                     <InputField
                                         name="email"
-                                        value={data?.me?.email ? data?.me?.email : ""}
                                         label="Email"
+                                        value={data.me?.email ? data.me.email : ""}
                                     />
                                     <Flex
                                         direction={["column", "column", "row", "row"]}
@@ -138,9 +126,11 @@ const Profile: React.FC<Props> = () => {
                                             type="submit"
                                             isLoading={isSubmitting}
                                             colorScheme="teal"
+                                            onClick={() => setIsOpen(true)}
                                         >
                                             แก้ไขข้อมูล
                                         </Button>
+                                        {isOpen && <AddAndEditProfile />}
                                     </Center>
                                 </Form>
                             )}
@@ -150,7 +140,7 @@ const Profile: React.FC<Props> = () => {
 
                 {/* ---------------------------------------Column 2--------------------------------------- */}
                 <Flex
-                    w="100%"
+                    w={["100%", "100%", "100%", "25%"]}
                     p="5"
                     flexDir="column"
                     alignItems="center"
@@ -158,40 +148,37 @@ const Profile: React.FC<Props> = () => {
                     rounded="10px"
                     boxShadow="md"
                     mt="5"
-                    mx="5"
+                    mx={[null, null, null, "5"]}
                 >
-                    <Box
-                        w="100%"
-                        h="100%"
-                        bg="gray.600"
-                        rounded="10px"
-                        boxShadow="md"
-                    >
-                        <Stack isInline align="baseline">
-                            <Badge variant="solid" colorScheme="pink" rounded="full" px={2}>
-                                NEW!
-                            </Badge>
-                            <Badge variant="solid" rounded="full" px={2}>
-                                ทดสอบ!
-                            </Badge>
-                            <Text
-                                textTransform="uppercase"
-                                fontSize="sm"
-                                letterSpacing="wide"
-                            >
-                                2 Hours &bull; 12 lectures
-                            </Text>
-                        </Stack>
-                        <Text as="h2" fontWeight="semibold" fontSize="xl" my={2} color="pink.500">
-                            ประเภทธุรกิจ
-                        </Text>
-
-
-                    </Box>
-
+                    <Text fontWeight="semibold" fontSize={["sm", "md", "xl"]} p={3}>
+                        ประวัติการแจ้ง JOB และเบิกอุปกรณืต่างๆ
+                    </Text>
+                    <Card label="สถานะงาน IT" content="20" />
+                    <Card label="สถานะงาน Altas" content="10" />
+                    <Card label="สถานะงาน เบิก/ยืม" content="3" />
+                    <Card label="สถานะงาน สั่งซื้อ" content="4" />
                 </Flex>
 
+                {/* ---------------------------------------Column 2--------------------------------------- */}
+                <Flex
+                    w={["100%", "100%", "100%", "25%"]}
+                    p="5"
+                    flexDir="column"
+                    alignItems="center"
+                    bg="gray.700"
+                    rounded="10px"
+                    boxShadow="md"
+                    mt="5"
+                >
+                    <Text fontWeight="semibold" fontSize={["sm", "md", "xl"]} p={3}>
+                        ประวัติการ ลา/หยุดงาน
+                    </Text>
 
+                    <Card label="วันลาที่เหลือ" content="10" />
+                    <Card label="ลาป่วย" content="4" />
+                    <Card label="ลากิจ" content="8" />
+                    <Card label="หยุดงาน" content="1" />
+                </Flex>
             </Flex>
         </Layout>
     );

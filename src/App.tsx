@@ -8,7 +8,7 @@ import { cacheExchange, Cache, QueryInput } from '@urql/exchange-graphcache';
 
 import './App.css'
 import Routes from './routes/Routes'
-import { LoginMutation, LogoutMutation, MeDocument, MeQuery, RegisterMutation } from "./generated/graphql";
+import { LoginMutation, LogoutMutation, MeDocument, MeQuery, RegisterMutation, UploadImageMeMutation } from "./generated/graphql";
 import { multipartFetchExchange } from '@urql/exchange-multipart-fetch';
 
 function betterUpdateQuery<Result, Query>(
@@ -22,7 +22,7 @@ function betterUpdateQuery<Result, Query>(
 
 
 const client = createClient({
-    url: "http://localhost:4000/graphql",
+    url: "http://200.1.1.99:4000/graphql",
     fetchOptions: {
         credentials: "include"
     },
@@ -65,6 +65,22 @@ const client = createClient({
                                 } else {
                                     return {
                                         me: result.register.user,
+                                    }
+                                }
+                            }
+                        )
+                    },
+
+                    uploadImageMe: (_result, args, cache, info) => {
+                        betterUpdateQuery<UploadImageMeMutation, MeQuery>(cache,
+                            { query: MeDocument },
+                            _result,
+                            (result, query) => {
+                                if (result.uploadImageMe?.errors) {
+                                    return query
+                                } else {
+                                    return {
+                                        me: result.uploadImageMe?.user,
                                     }
                                 }
                             }

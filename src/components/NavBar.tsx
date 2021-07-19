@@ -12,6 +12,7 @@ import {
     useColorMode,
     Text,
     MenuDivider,
+    Avatar,
 } from '@chakra-ui/react'
 import { IconButton } from "@chakra-ui/react"
 import { useHistory } from 'react-router-dom'
@@ -19,7 +20,6 @@ import { ExternalLinkIcon, AddIcon, RepeatIcon, EditIcon, HamburgerIcon } from '
 
 import { ColorModeSwitcher } from "../ColorModeSwitcher"
 import { useLogoutMutation, useMeQuery } from '../generated/graphql'
-import AddAndEditProfile from "./manage-users/AddAndEditProfile"
 
 interface Props { }
 
@@ -96,7 +96,17 @@ const NavBar: React.FC<Props> = () => {
                 />
                 <MenuList minWidth="240px">
                     {data?.me ? (
-                        <AddAndEditProfile me={data.me} />
+                        <Flex flexDir="column" alignItems="center" mt={5}>
+                            <Avatar size="2xl" my={2} src={data.me.imageUrl as string} />
+                            <Text textAlign="center">{data.me.fullNameTH}</Text>
+                            <Link onClick={() => {
+                                history.push('/profile')
+                            }}>
+                                <Box mt="1" align="center">
+                                    <Text fontSize={["sm", "md", "lg", "xl"]}>Profile</Text>
+                                </Box>
+                            </Link>
+                        </Flex>
                     ) : (
                         null
                     )}

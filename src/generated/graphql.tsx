@@ -63,8 +63,9 @@ export type Mutation = {
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
-  uploadImageMe?: Maybe<UserResponse>;
-  updateRoles?: Maybe<User>;
+  uploadImageMe: UserResponse;
+  updateRoles: UserResponse;
+  updateUser: UserResponse;
   deleteUser: Scalars['Boolean'];
   createFactory: Factory;
   createProductByTier: ProductByTier;
@@ -93,6 +94,11 @@ export type MutationUploadImageMeArgs = {
 export type MutationUpdateRolesArgs = {
   id: Scalars['Float'];
   newRoles: Scalars['String'];
+};
+
+
+export type MutationUpdateUserArgs = {
+  options: UpdateUserInput;
 };
 
 
@@ -214,6 +220,13 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
+export type UpdateUserInput = {
+  fullNameTH: Scalars['String'];
+  fullNameEN: Scalars['String'];
+  nickName: Scalars['String'];
+  email: Scalars['String'];
+};
+
 export type RegularUserFragment = (
   { __typename?: 'User' }
   & Pick<User, 'id' | 'username' | 'email' | 'roles' | 'departments' | 'fullNameTH' | 'fullNameEN' | 'nickName' | 'imageUrl' | 'createdAt' | 'updatedAt'>
@@ -288,6 +301,25 @@ export type RegisterMutation = (
   ) }
 );
 
+export type UpdateUserMutationVariables = Exact<{
+  options: UpdateUserInput;
+}>;
+
+
+export type UpdateUserMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUser: (
+    { __typename?: 'UserResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'field' | 'message'>
+    )>>, user?: Maybe<(
+      { __typename?: 'User' }
+      & RegularUserFragment
+    )> }
+  ) }
+);
+
 export type UploadImageMeMutationVariables = Exact<{
   options: Scalars['Upload'];
 }>;
@@ -295,20 +327,16 @@ export type UploadImageMeMutationVariables = Exact<{
 
 export type UploadImageMeMutation = (
   { __typename?: 'Mutation' }
-  & {
-    uploadImageMe?: Maybe<(
-      { __typename?: 'UserResponse' }
-      & {
-        errors?: Maybe<Array<(
-          { __typename?: 'FieldError' }
-          & Pick<FieldError, 'field' | 'message'>
-        )>>, user?: Maybe<(
-          { __typename?: 'User' }
-          & Pick<User, 'imageUrl'>
-        )>
-      }
-    )>
-  }
+  & { uploadImageMe: (
+    { __typename?: 'UserResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'field' | 'message'>
+    )>>, user?: Maybe<(
+      { __typename?: 'User' }
+      & RegularUserFragment
+    )> }
+  ) }
 );
 
 export type FactoriesQueryVariables = Exact<{ [key: string]: never; }>;
@@ -465,6 +493,23 @@ export const RegisterDocument = gql`
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
 };
+export const UpdateUserDocument = gql`
+    mutation UpdateUser($options: updateUserInput!) {
+  updateUser(options: $options) {
+    errors {
+      field
+      message
+    }
+    user {
+      ...RegularUser
+    }
+  }
+}
+    ${RegularUserFragmentDoc}`;
+
+export function useUpdateUserMutation() {
+  return Urql.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument);
+};
 export const UploadImageMeDocument = gql`
     mutation UploadImageMe($options: Upload!) {
   uploadImageMe(options: $options) {
@@ -473,11 +518,11 @@ export const UploadImageMeDocument = gql`
       message
     }
     user {
-      imageUrl
+      ...RegularUser
     }
   }
 }
-    `;
+    ${RegularUserFragmentDoc}`;
 
 export function useUploadImageMeMutation() {
   return Urql.useMutation<UploadImageMeMutation, UploadImageMeMutationVariables>(UploadImageMeDocument);

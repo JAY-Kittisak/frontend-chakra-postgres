@@ -5,7 +5,7 @@ mutation UploadImageMe($options: Upload!) {
       message
     }
     user {
-      imageUrl
+      ...RegularUser
     }
   }
 }

@@ -5,12 +5,14 @@ import { useField } from 'formik'
 type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
     label: string;
     name: string;
+    defaultValue?: string
     textarea?: boolean
 }
 
 const InputField: React.FC<InputFieldProps> = ({
     label,
     textarea,
+    defaultValue,
     size: _,
     ...props
 }) => {
