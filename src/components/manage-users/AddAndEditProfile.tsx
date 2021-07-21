@@ -1,12 +1,13 @@
-import React, { useState, useRef } from 'react'
-import { useHistory } from 'react-router-dom'
+import React, { useRef } from 'react'
 import {
-    Box, Center, Button, AlertDialog,
+    Button,
+    AlertDialog,
     AlertDialogBody,
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogContent,
     AlertDialogOverlay,
+    ModalCloseButton,
 } from '@chakra-ui/react'
 import { Form, Formik } from "formik";
 import { toErrorMap } from "../../utils/toErrorMap";
@@ -14,23 +15,19 @@ import { useUpdateUserMutation } from "../../generated/graphql";
 import InputField from "../InputField";
 
 interface Props {
-
+    setOpen: () => void
+    Open: boolean
 }
 
-const AddAndEditProfile: React.FC<Props> = () => {
-    const history = useHistory()
-
-    const [isOpen, setIsOpen] = useState(false)
-    const onClose = () => setIsOpen(false)
+const AddAndEditProfile: React.FC<Props> = ({ Open, setOpen }) => {
     const cancelRef = useRef()
-
     const [, updateUser] = useUpdateUserMutation()
 
     return (
         <AlertDialog
-            isOpen={isOpen}
+            isOpen={Open}
             leastDestructiveRef={cancelRef.current}
-            onClose={onClose}
+            onClose={setOpen}
         >
             <Formik
                 initialValues={{
@@ -44,20 +41,20 @@ const AddAndEditProfile: React.FC<Props> = () => {
                     if (response.data?.updateUser.errors) {
                         setErrors(toErrorMap(response.data.updateUser.errors));
                     } else if (response.data?.updateUser.user) {
-
+                        setOpen()
                     }
                 }}
             >
                 {({ isSubmitting }) => (
-
                     <AlertDialogOverlay>
                         <AlertDialogContent>
                             <AlertDialogHeader fontSize="lg" fontWeight="bold">
                                 อัพโหลดรูปภาพของผู้ใช้
                             </AlertDialogHeader>
+                            <ModalCloseButton />
 
-                            <AlertDialogBody>
-                                <Form>
+                            <Form>
+                                <AlertDialogBody>
                                     <InputField
                                         name="fullNameTH"
                                         label="ชื่อภาษาไทย"
@@ -74,27 +71,18 @@ const AddAndEditProfile: React.FC<Props> = () => {
                                         name="email"
                                         label="Email"
                                     />
-                                    <Center>
-                                        <Button
-                                            mt={4}
-                                            type="submit"
-                                            isLoading={isSubmitting}
-                                            colorScheme="teal"
-                                        >
-                                            บันทึก
-                                        </Button>
-                                    </Center>
-                                </Form>
                             </AlertDialogBody>
 
                             <AlertDialogFooter>
-                                <Button ref={cancelRef.current} onClick={onClose}>
+                                    <Button ref={cancelRef.current} onClick={setOpen}>
                                     Cancel
                                 </Button>
-                                <Button colorScheme="red" isLoading={isSubmitting} ml={3}>
-                                    Submit
+                                    <Button colorScheme="blue" isLoading={isSubmitting} type="submit" ml={3}>
+                                        Save
                                 </Button>
                             </AlertDialogFooter>
+                            </Form>
+
                         </AlertDialogContent>
                     </AlertDialogOverlay>
                 )}

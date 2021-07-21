@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Text, Flex, Box, Heading, Button, Center } from "@chakra-ui/react";
 import { useMeQuery } from "../generated/graphql";
 import Layout from "../components/Layout";
@@ -9,13 +9,14 @@ import Card from "../components/chakra-ui/Card";
 import Spinner from "../components/Spinner";
 import { Redirect } from 'react-router-dom'
 import AddAndEditProfile from "../components/manage-users/AddAndEditProfile";
+import { useDialog } from "../components/useDialog";
 
 
 interface Props { }
 
 const Profile: React.FC<Props> = () => {
     const [{ data, fetching }] = useMeQuery();
-    const [isOpen, setIsOpen] = useState(false)
+    const { isOpen, setIsOpen } = useDialog()
 
     if (fetching) return <Spinner color="grey" height={50} width={50} />
 
@@ -130,7 +131,12 @@ const Profile: React.FC<Props> = () => {
                                         >
                                             แก้ไขข้อมูล
                                         </Button>
-                                        {isOpen && <AddAndEditProfile />}
+                                        {isOpen &&
+                                            <AddAndEditProfile
+                                                Open={true}
+                                                setOpen={() => setIsOpen(false)}
+                                            />
+                                        }
                                     </Center>
                                 </Form>
                             )}

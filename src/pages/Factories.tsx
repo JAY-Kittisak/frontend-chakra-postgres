@@ -96,10 +96,11 @@ const Factories: React.FC<Props> = () => {
         <Layout variant="regular">
             <Stack isInline justify="space-between">
                 <Box mb="5" w="20%">
-                    <Text as="h2" fontWeight="semibold" fontSize="xl" my={2}>
+                    <Text as="h2" fontWeight="semibold" fontSize={["sm", "sm", "lg", "xl"]} my={2}>
                         นิคมอุตสาหกรรม
                     </Text>
                     <Select
+                        fontSize={["sm", "sm", "lg", "xl"]}
                         defaultValue="All"
                         onChange={(e) => setIndustrialEstateSelect(e.target.value)}
                     >
@@ -113,13 +114,13 @@ const Factories: React.FC<Props> = () => {
                 </Box>
                 <Box>
                     {industrialEstateSelect === "All" ? (
-                        <Heading as="h4" size="lg">จำนวนโรงงานภายในประเทศทั้งหมด</Heading>
+                        <Heading as="h4" fontSize={["md", "md", "md", "lg"]}>จำนวนโรงงานภายในประเทศทั้งหมด</Heading>
                     ) : (
-                        <Heading as="h4" size="lg">จำนวนโรงงานในนิคมอุตสาหกรรม "{estate}"</Heading>
+                            <Heading as="h4" fontSize={["xs", "sm", "md", "lg"]}>จำนวนโรงงานในนิคมอุตสาหกรรม "{estate}"</Heading>
                     )}
                     <Heading color="orange" textAlign="right" mt="2" >
                         {industrialEstate?.length}
-                        <Text color="gray" fontSize="sm">โรงงาน</Text>
+                        <Text color="gray" fontSize={["xs", "sm", "sm", "sm"]}>โรงงาน</Text>
                     </Heading>
                 </Box>
             </Stack>
@@ -158,16 +159,16 @@ const Factories: React.FC<Props> = () => {
                         <Divider />
                     </Flex>
                 ) : (
-                        <Flex w="100%">
+                        <Flex w="100%" overflowX="auto">
                             <Table variant="striped" colorScheme="teal">
                                 <Thead>
                                     <Tr>
-                                        <Th fontSize="md" w="13%">เลขจดทะเบียน</Th>
-                                        <Th>companyName</Th>
-                                        <Th>industrialEstate</Th>
-                                        <Th>businessType</Th>
-                                        <Th>description</Th>
-                                        <Th>ดูรายละเอียด</Th>
+                                        <Th textAlign="center" fontSize="md" w="15%">เลขจดทะเบียน</Th>
+                                        <Th textAlign="center" fontSize="md" w="15%">companyName</Th>
+                                        <Th textAlign="center" fontSize="md" w="15%">industrialEstate</Th>
+                                        <Th textAlign="center" fontSize="md" w="15%">businessType</Th>
+                                        <Th textAlign="center" fontSize="md" w="30%">description</Th>
+                                        <Th textAlign="center" fontSize="md" w="10%">ดูรายละเอียด</Th>
                                     </Tr>
                                 </Thead>
                                 <Tbody>
@@ -181,12 +182,12 @@ const Factories: React.FC<Props> = () => {
                                 </Tbody>
                                 <Tfoot>
                                     <Tr>
-                                        <Th fontSize="xl">เลขจดทะเบียน</Th>
-                                        <Th>companyName</Th>
-                                        <Th>industrialEstate</Th>
-                                        <Th>businessType</Th>
-                                        <Th>description</Th>
-                                        <Th>ดูรายละเอียด</Th>
+                                        <Th textAlign="center" fontSize="md" w="15%">เลขจดทะเบียน</Th>
+                                        <Th textAlign="center" fontSize="md" w="15%">companyName</Th>
+                                        <Th textAlign="center" fontSize="md" w="15%">industrialEstate</Th>
+                                        <Th textAlign="center" fontSize="md" w="15%">businessType</Th>
+                                        <Th textAlign="center" fontSize="md" w="30%">description</Th>
+                                        <Th textAlign="center" fontSize="md" w="10%">ดูรายละเอียด</Th>
                                     </Tr>
                                 </Tfoot>
                             </Table>

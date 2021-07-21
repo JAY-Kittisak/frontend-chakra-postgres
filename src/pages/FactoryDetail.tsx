@@ -146,7 +146,7 @@ const FactoryDetail: React.FC<Props> = () => {
                                     </Text>
                                     <Text
                                         fontWeight="light"
-                                        fontSize={["xs", "sm", "md", "md"]}
+                                        fontSize={["sm", "sm", "lg", "xl"]}
                                         ml={["8", "8", "2", "2"]}
                                     >
                                         {data?.factoryById?.description}

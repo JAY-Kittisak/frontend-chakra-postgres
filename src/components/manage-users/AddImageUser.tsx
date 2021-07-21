@@ -11,6 +11,7 @@ import {
     AlertDialogContent,
     AlertDialogOverlay,
     Input,
+    ModalCloseButton,
 } from "@chakra-ui/react";
 import { useUploadImageMeMutation } from '../../generated/graphql';
 
@@ -69,20 +70,24 @@ const AddImageUser: React.FC<Props> = ({ imagesUrl }) => {
                     <AlertDialogOverlay>
                         <AlertDialogContent>
                             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                                อัพโหลดรูปภาพของผู้ใช้
+                                อัพโหลดรูปภาพของคุณ
                             </AlertDialogHeader>
+                            <ModalCloseButton />
 
                             <AlertDialogBody>
                                 <Input type="file" p="1" onChange={handleFileChange} />
                             </AlertDialogBody>
 
                             <AlertDialogFooter>
-                                <Button ref={cancelRef.current} onClick={onClose}>
-                                    Cancel
+                                <Button ref={cancelRef.current} onClick={onClose} colorScheme="green">
+                                    Save
                                 </Button>
 
                                 {selectedFile && (
-                                    <Button colorScheme="red" onClick={() => uploadImageMe({ options: selectedFile })} ml={3}>
+                                    <Button colorScheme="red" onClick={() => {
+                                        uploadImageMe({ options: selectedFile })
+                                        setIsOpen(false)
+                                    }} ml={3}>
                                         Submit
                                     </Button>
                                 )}
