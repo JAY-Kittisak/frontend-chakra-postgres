@@ -12,8 +12,10 @@ import {
     AlertDialogOverlay,
     Input,
     ModalCloseButton,
+    Text
 } from "@chakra-ui/react";
 import { useUploadImageMeMutation } from '../../generated/graphql';
+import { FieldError } from '../../generated/graphql'
 
 const fileType = ['image/png', 'image/jpeg', 'image/ipg']
 
@@ -23,6 +25,8 @@ interface Props {
 
 const AddImageUser: React.FC<Props> = ({ imagesUrl }) => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
+    const [errors, setErrors] = useState(false)
+    const [errMessage, setErrMessage] = useState<FieldError[]>()
 
     const [isOpen, setIsOpen] = useState(false)
     const onClose = () => setIsOpen(false)
@@ -76,19 +80,39 @@ const AddImageUser: React.FC<Props> = ({ imagesUrl }) => {
 
                             <AlertDialogBody>
                                 <Input type="file" p="1" onChange={handleFileChange} />
+                                {errors &&
+                                    <>
+                                        <Text color="yellow.400" p="3">
+                                            Warning:!! ขนาดไฟล์ของคุณคือ {selectedFile?.size}
+                                            KB. ซึ่งใหญ่เกิน 100000 KB.
+                                        </Text>
+                                        <Text color="red.400">
+                                            {errMessage}
+                                        </Text>
+                                    </>
+                                }
                             </AlertDialogBody>
 
                             <AlertDialogFooter>
-                                <Button ref={cancelRef.current} onClick={onClose} colorScheme="green">
-                                    Save
-                                </Button>
-
                                 {selectedFile && (
-                                    <Button colorScheme="red" onClick={() => {
-                                        uploadImageMe({ options: selectedFile })
-                                        setIsOpen(false)
-                                    }} ml={3}>
-                                        Submit
+                                    <Button
+                                        colorScheme="teal"
+                                        onClick={async () => {
+                                            if (selectedFile.size >= 100000) {
+                                                setErrors(true)
+                                            }
+
+                                            const response = await uploadImageMe({ options: selectedFile })
+                                            if (response.data?.uploadImageMe.errors) {
+                                                setErrMessage(response.data?.uploadImageMe.errors)
+                                                setErrors(true)
+                                            } else if (response.data?.uploadImageMe.user) {
+                                                setErrors(false)
+                                                setIsOpen(false)
+                                            }
+
+                                        }} ml={3}>
+                                        Save
                                     </Button>
                                 )}
                             </AlertDialogFooter>

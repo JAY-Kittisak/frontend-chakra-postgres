@@ -3,7 +3,7 @@ import {
     ChakraProvider, theme,
 } from "@chakra-ui/react"
 import { BrowserRouter } from 'react-router-dom'
-import { Provider, createClient, fetchExchange, dedupExchange } from 'urql'
+import { Provider, createClient, dedupExchange } from 'urql'
 import { cacheExchange, Cache, QueryInput } from '@urql/exchange-graphcache';
 
 import './App.css'
@@ -90,7 +90,6 @@ const client = createClient({
             }
         }),
         multipartFetchExchange,
-        fetchExchange
     ],
 })
 
