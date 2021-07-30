@@ -48,6 +48,54 @@ export type FieldError = {
   message: Scalars['String'];
 };
 
+export type FieldErrorGive = {
+  __typename?: 'FieldErrorGive';
+  field?: Maybe<Scalars['String']>;
+  message: Scalars['String'];
+};
+
+export type Give = {
+  __typename?: 'Give';
+  id: Scalars['Float'];
+  giveName: Scalars['String'];
+  details?: Maybe<Scalars['String']>;
+  price?: Maybe<Scalars['Float']>;
+  inventory?: Maybe<Scalars['Float']>;
+  category?: Maybe<Scalars['String']>;
+  imageUrl?: Maybe<Scalars['String']>;
+  orders: Array<GiveOrder>;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type GiveInput = {
+  giveName: Scalars['String'];
+  details?: Maybe<Scalars['String']>;
+  price?: Maybe<Scalars['Float']>;
+  inventory?: Maybe<Scalars['Float']>;
+  category?: Maybe<Scalars['String']>;
+};
+
+export type GiveOrder = {
+  __typename?: 'GiveOrder';
+  id: Scalars['Float'];
+  creatorId: Scalars['Float'];
+  giveId: Scalars['Float'];
+  amount?: Maybe<Scalars['Float']>;
+  price?: Maybe<Scalars['Float']>;
+  status: Scalars['String'];
+  creator: User;
+  give: Give;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type GiveOrderResponse = {
+  __typename?: 'GiveOrderResponse';
+  errors?: Maybe<Array<FieldErrorGive>>;
+  giveOrder?: Maybe<GiveOrder>;
+};
+
 export type JoinTierInput = {
   productId: Scalars['Float'];
   factoryId: Scalars['Float'];
@@ -71,8 +119,8 @@ export type Mutation = {
   createProductByTier: ProductByTier;
   joinFactory: Scalars['Boolean'];
   deleteProduct: Scalars['Boolean'];
-  addProfilePicture: Scalars['Boolean'];
-  imageUploader?: Maybe<Scalars['String']>;
+  createGive: Give;
+  createGiveOrder: GiveOrderResponse;
 };
 
 
@@ -127,13 +175,14 @@ export type MutationDeleteProductArgs = {
 };
 
 
-export type MutationAddProfilePictureArgs = {
-  picture: Scalars['Upload'];
+export type MutationCreateGiveArgs = {
+  input: GiveInput;
 };
 
 
-export type MutationImageUploaderArgs = {
-  imageMe: Scalars['Upload'];
+export type MutationCreateGiveOrderArgs = {
+  amount: Scalars['Int'];
+  giveId: Scalars['Int'];
 };
 
 export type ProductByTier = {
@@ -168,6 +217,7 @@ export type Query = {
   businessType?: Maybe<Array<Factory>>;
   companyName?: Maybe<Factory>;
   ProductByTiers: Array<Maybe<ProductByTier>>;
+  gives?: Maybe<Array<Give>>;
 };
 
 
@@ -210,6 +260,7 @@ export type User = {
   nickName?: Maybe<Scalars['String']>;
   imageUrl?: Maybe<Scalars['String']>;
   departments: Scalars['String'];
+  giveOrders: Array<GiveOrder>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -230,6 +281,10 @@ export type UpdateUserInput = {
 export type RegularUserFragment = (
   { __typename?: 'User' }
   & Pick<User, 'id' | 'username' | 'email' | 'roles' | 'departments' | 'fullNameTH' | 'fullNameEN' | 'nickName' | 'imageUrl' | 'createdAt' | 'updatedAt'>
+  & { giveOrders: Array<(
+    { __typename?: 'GiveOrder' }
+    & Pick<GiveOrder, 'id'>
+  )> }
 );
 
 export type CreateProductByTierMutationVariables = Exact<{
@@ -419,6 +474,9 @@ export const RegularUserFragmentDoc = gql`
   fullNameEN
   nickName
   imageUrl
+  giveOrders {
+    id
+  }
   createdAt
   updatedAt
 }
