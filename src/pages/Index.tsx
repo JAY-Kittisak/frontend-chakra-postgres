@@ -6,7 +6,7 @@ interface Props { }
 
 const Index: React.FC<Props> = () => {
     const { colorMode } = useColorMode();
-    const bgColor = { light: "gray.100", dark: "gray.700" };
+    const bgColor = { light: "#0AB68B", dark: "#4F80E2" };
     return (
         <Layout variant="regular">
             <Flex

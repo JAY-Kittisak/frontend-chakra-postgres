@@ -1,10 +1,8 @@
 import {
-    Box,
     Button,
     Center,
     Flex,
     Text,
-    useColorModeValue,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import React from "react";
@@ -19,22 +17,14 @@ import { catUserRole, catDepartments } from "../utils/helpers";
 interface Props { }
 
 const Register: React.FC<Props> = () => {
-    const bg = useColorModeValue("gray.200", "gray.700");
     const history = useHistory();
     const [, register] = useRegisterMutation();
     return (
         <Layout variant="small">
-            <Text as="h2" fontWeight="semibold" fontSize="2xl" mb="2">
-                Register
-            </Text>
-            <Box
-                justify="center"
-                w="100%"
-                rounded="10px"
-                boxShadow="sm"
-                bg={bg}
-                p="5"
-            >
+            <Flex direction="column" align="center">
+                <Text as="h2" fontWeight="semibold" fontSize="2xl" mb="2">
+                    Register
+                </Text>
                 <Formik
                     initialValues={{
                         username: "",
@@ -52,11 +42,7 @@ const Register: React.FC<Props> = () => {
                         }
                         if (values.departments === "" || values.roles === "*โปรดเลือกแผนก") return alert("*โปรดเลือกแผนก ของคุณ");
                         if (values.roles === "" || values.roles === "*โปรดเลือกสาขา") return alert("*โปรดเลือกสาขา ของคุณ");
-
                         const response = await register({ options: values });
-
-
-
                         if (response.data?.register.errors) {
                             setErrors(toErrorMap(response.data.register.errors));
                         } else if (response.data?.register.user) {
@@ -78,7 +64,6 @@ const Register: React.FC<Props> = () => {
                                 type="password"
                             />
                             <InputField name="email" placeholder="email" label="Email" />
-
                             <Flex
                                 direction={["column", "column", "row", "row"]}
                                 justify="space-between"
@@ -105,7 +90,6 @@ const Register: React.FC<Props> = () => {
                                     ))}
                                 </SelectControl>
                             </Flex>
-
                             <Center>
                                 <Button
                                     mt={4}
@@ -119,7 +103,7 @@ const Register: React.FC<Props> = () => {
                         </Form>
                     )}
                 </Formik>
-            </Box>
+            </Flex>
         </Layout>
     );
 };

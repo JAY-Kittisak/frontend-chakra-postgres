@@ -12,7 +12,7 @@ import {
     useColorMode,
     Text,
     MenuDivider,
-    Avatar,
+    Avatar
 } from '@chakra-ui/react'
 import { IconButton } from "@chakra-ui/react"
 import { useHistory } from 'react-router-dom'
@@ -39,15 +39,17 @@ const NavBar: React.FC<Props> = () => {
             <Flex align="center" mt="1">
                 <Button
                     size="sm"
-                    bg="blue.300"
+                    bg={colorMode === "light" ? "#0AB68B" : "#4F80E2"}
                     mr="2"
+                    color="white"
                     onClick={() => history.push('/login')}
                 >
                     login
                 </Button>
                 <Button
                     size="sm"
-                    bg="blue.300"
+                    bg={colorMode === "light" ? "#0AB68B" : "#4F80E2"}
+                    color="white"
                     onClick={() => history.push('/register')}
                 >
                     register
@@ -58,7 +60,7 @@ const NavBar: React.FC<Props> = () => {
         // user is logged in
     } else {
         body = (
-            <Flex>
+            <Flex color="white">
                 <Box p="2">
                     <Heading size="md">{data.me.username}</Heading>
                 </Box>
@@ -70,6 +72,7 @@ const NavBar: React.FC<Props> = () => {
                     isLoading={logoutFetching}
                     variant='link'
                     as="u"
+                    color="white"
                 >
                     Logout
                 </Button>
@@ -82,9 +85,8 @@ const NavBar: React.FC<Props> = () => {
             zIndex={1}
             position="sticky"
             top={0}
-            bg={colorMode === "light" ? "#2BA3C2" : "#2A5EA4"}
-            color={colorMode === "light" ? "back" : "white"}
-            p={4}
+            bg={colorMode === "light" ? "#028174" : "#3E54D3"}
+            p={3}
         >
             <Menu>
                 <MenuButton
@@ -92,7 +94,7 @@ const NavBar: React.FC<Props> = () => {
                     aria-label="Options"
                     icon={<HamburgerIcon />}
                     variant="outline"
-                    color={colorMode === "light" ? "back" : "white"}
+                    color="white"
                 />
                 <MenuList minWidth="240px">
                     {data?.me ? (
@@ -149,11 +151,11 @@ const NavBar: React.FC<Props> = () => {
                 onClick={() => { history.push('/') }}
             >
                 <Box p="2" align="center">
-                    <Heading fontSize={["sm", "md", "lg", "xl"]}>MK Management</Heading>
+                    <Heading fontSize={["sm", "md", "lg", "xl"]} color="white">MK Management</Heading>
                 </Box>
             </Link>
 
-            <ColorModeSwitcher justifySelf="flex-end" />
+            <ColorModeSwitcher justifySelf="flex-end" color="white" />
 
             <Box ml={'auto'} >
                 {body}
