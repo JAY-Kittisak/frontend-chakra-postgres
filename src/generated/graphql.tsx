@@ -83,6 +83,8 @@ export type GiveOrder = {
   giveId: Scalars['Float'];
   amount?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
+  customerId?: Maybe<Scalars['Float']>;
+  customerDetail?: Maybe<Scalars['String']>;
   status: Scalars['String'];
   creator: User;
   give: Give;
@@ -94,6 +96,12 @@ export type GiveOrderResponse = {
   __typename?: 'GiveOrderResponse';
   errors?: Maybe<Array<FieldErrorGive>>;
   giveOrder?: Maybe<GiveOrder>;
+};
+
+export type GiveResponse = {
+  __typename?: 'GiveResponse';
+  errors?: Maybe<Array<FieldErrorGive>>;
+  give?: Maybe<Give>;
 };
 
 export type JoinTierInput = {
@@ -119,8 +127,10 @@ export type Mutation = {
   createProductByTier: ProductByTier;
   joinFactory: Scalars['Boolean'];
   deleteProduct: Scalars['Boolean'];
-  createGive: Give;
+  createGive: GiveResponse;
   createGiveOrder: GiveOrderResponse;
+  deleteGive: Scalars['Boolean'];
+  deleteGiveOrder: Scalars['Boolean'];
 };
 
 
@@ -181,8 +191,17 @@ export type MutationCreateGiveArgs = {
 
 
 export type MutationCreateGiveOrderArgs = {
-  amount: Scalars['Int'];
+  input: GiveOrderInput;
+};
+
+
+export type MutationDeleteGiveArgs = {
   giveId: Scalars['Int'];
+};
+
+
+export type MutationDeleteGiveOrderArgs = {
+  orderId: Scalars['Int'];
 };
 
 export type ProductByTier = {
@@ -218,6 +237,9 @@ export type Query = {
   companyName?: Maybe<Factory>;
   ProductByTiers: Array<Maybe<ProductByTier>>;
   gives?: Maybe<Array<Give>>;
+  giveById: Give;
+  giveOrders?: Maybe<Array<GiveOrder>>;
+  giveOrderById: GiveOrder;
 };
 
 
@@ -238,6 +260,16 @@ export type QueryBusinessTypeArgs = {
 
 export type QueryCompanyNameArgs = {
   companyName: Scalars['String'];
+};
+
+
+export type QueryGiveByIdArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryGiveOrderByIdArgs = {
+  id: Scalars['Int'];
 };
 
 export type RegisterInput = {
@@ -271,6 +303,13 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
+export type GiveOrderInput = {
+  giveId: Scalars['Float'];
+  amount: Scalars['Float'];
+  customerId?: Maybe<Scalars['Float']>;
+  customerDetail?: Maybe<Scalars['String']>;
+};
+
 export type UpdateUserInput = {
   fullNameTH: Scalars['String'];
   fullNameEN: Scalars['String'];
@@ -278,13 +317,14 @@ export type UpdateUserInput = {
   email: Scalars['String'];
 };
 
+export type RegularGiveFragment = (
+  { __typename?: 'Give' }
+  & Pick<Give, 'id' | 'giveName' | 'details' | 'price' | 'inventory' | 'category' | 'imageUrl' | 'createdAt' | 'updatedAt'>
+);
+
 export type RegularUserFragment = (
   { __typename?: 'User' }
   & Pick<User, 'id' | 'username' | 'email' | 'roles' | 'departments' | 'fullNameTH' | 'fullNameEN' | 'nickName' | 'imageUrl' | 'createdAt' | 'updatedAt'>
-  & { giveOrders: Array<(
-    { __typename?: 'GiveOrder' }
-    & Pick<GiveOrder, 'id'>
-  )> }
 );
 
 export type CreateProductByTierMutationVariables = Exact<{
@@ -405,6 +445,30 @@ export type FactoriesQuery = (
   )> }
 );
 
+export type GiveByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GiveByIdQuery = (
+  { __typename?: 'Query' }
+  & { giveById: (
+    { __typename?: 'Give' }
+    & RegularGiveFragment
+  ) }
+);
+
+export type GivesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GivesQuery = (
+  { __typename?: 'Query' }
+  & { gives?: Maybe<Array<(
+    { __typename?: 'Give' }
+    & RegularGiveFragment
+  )>> }
+);
+
 export type ProductByTiersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -463,6 +527,19 @@ export type MeQuery = (
   )> }
 );
 
+export const RegularGiveFragmentDoc = gql`
+    fragment RegularGive on Give {
+  id
+  giveName
+  details
+  price
+  inventory
+  category
+  imageUrl
+  createdAt
+  updatedAt
+}
+    `;
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
   id
@@ -474,9 +551,6 @@ export const RegularUserFragmentDoc = gql`
   fullNameEN
   nickName
   imageUrl
-  giveOrders {
-    id
-  }
   createdAt
   updatedAt
 }
@@ -603,6 +677,28 @@ export const FactoriesDocument = gql`
 
 export function useFactoriesQuery(options: Omit<Urql.UseQueryArgs<FactoriesQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<FactoriesQuery>({ query: FactoriesDocument, ...options });
+};
+export const GiveByIdDocument = gql`
+    query GiveById($id: Int!) {
+  giveById(id: $id) {
+    ...RegularGive
+  }
+}
+    ${RegularGiveFragmentDoc}`;
+
+export function useGiveByIdQuery(options: Omit<Urql.UseQueryArgs<GiveByIdQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GiveByIdQuery>({ query: GiveByIdDocument, ...options });
+};
+export const GivesDocument = gql`
+    query Gives {
+  gives {
+    ...RegularGive
+  }
+}
+    ${RegularGiveFragmentDoc}`;
+
+export function useGivesQuery(options: Omit<Urql.UseQueryArgs<GivesQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GivesQuery>({ query: GivesDocument, ...options });
 };
 export const ProductByTiersDocument = gql`
     query ProductByTiers {

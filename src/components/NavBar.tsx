@@ -124,7 +124,7 @@ const NavBar: React.FC<Props> = () => {
                     <MenuDivider />
 
                     <Text fontSize={["sm", "md", "lg", "xl"]} fontWeight="bold" ml="2">ของแจกพี่มายด์</Text>
-                    <MenuItem icon={<AddIcon />} onClick={() => { history.push('/tiers/factories') }}>
+                    <MenuItem icon={<AddIcon />} onClick={() => { history.push('/gives/gives-all') }}>
                         เบิกของ
                     </MenuItem>
                     <MenuItem icon={<AddIcon />} onClick={() => { history.push('/tiers/product-tier') }}>
