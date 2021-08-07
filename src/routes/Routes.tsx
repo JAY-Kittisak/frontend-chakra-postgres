@@ -8,6 +8,7 @@ import Profile from '../pages/Profile'
 import PageNotFound from '../pages/PageNotFound'
 import TierRoute from './TierRoute'
 import GiveRoute from './GiveRoute'
+import OrderGiveRoute from './OrderGiveRoute'
 
 interface Props { }
 
@@ -22,6 +23,9 @@ const Routes: React.FC<Props> = () => {
             </Route>
             <Route path="/gives">
                 <GiveRoute />
+            </Route>
+            <Route path="/order-give">
+                <OrderGiveRoute />
             </Route>
             <Route path="/login">
                 <Login />

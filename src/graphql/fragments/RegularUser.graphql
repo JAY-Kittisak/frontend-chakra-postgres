@@ -10,4 +10,7 @@ fragment RegularUser on User {
     imageUrl
     createdAt
     updatedAt
+    giveOrders{
+        ...RegularGiveOrders
+    }
 }

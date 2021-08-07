@@ -322,9 +322,22 @@ export type RegularGiveFragment = (
   & Pick<Give, 'id' | 'giveName' | 'details' | 'price' | 'inventory' | 'category' | 'imageUrl' | 'createdAt' | 'updatedAt'>
 );
 
+export type RegularGiveOrdersFragment = (
+  { __typename?: 'GiveOrder' }
+  & Pick<GiveOrder, 'id' | 'creatorId' | 'giveId' | 'amount' | 'price' | 'customerId' | 'customerDetail' | 'status' | 'createdAt' | 'updatedAt'>
+  & { give: (
+    { __typename?: 'Give' }
+    & RegularGiveFragment
+  ) }
+);
+
 export type RegularUserFragment = (
   { __typename?: 'User' }
   & Pick<User, 'id' | 'username' | 'email' | 'roles' | 'departments' | 'fullNameTH' | 'fullNameEN' | 'nickName' | 'imageUrl' | 'createdAt' | 'updatedAt'>
+  & { giveOrders: Array<(
+    { __typename?: 'GiveOrder' }
+    & RegularGiveOrdersFragment
+  )> }
 );
 
 export type CreateProductByTierMutationVariables = Exact<{
@@ -540,6 +553,23 @@ export const RegularGiveFragmentDoc = gql`
   updatedAt
 }
     `;
+export const RegularGiveOrdersFragmentDoc = gql`
+    fragment RegularGiveOrders on GiveOrder {
+  id
+  creatorId
+  giveId
+  amount
+  price
+  customerId
+  customerDetail
+  status
+  give {
+    ...RegularGive
+  }
+  createdAt
+  updatedAt
+}
+    ${RegularGiveFragmentDoc}`;
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
   id
@@ -553,8 +583,11 @@ export const RegularUserFragmentDoc = gql`
   imageUrl
   createdAt
   updatedAt
+  giveOrders {
+    ...RegularGiveOrders
+  }
 }
-    `;
+    ${RegularGiveOrdersFragmentDoc}`;
 export const CreateProductByTierDocument = gql`
     mutation createProductByTier($input: ProductByTierInput!) {
   createProductByTier(input: $input) {

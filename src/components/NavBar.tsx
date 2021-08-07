@@ -127,8 +127,8 @@ const NavBar: React.FC<Props> = () => {
                     <MenuItem icon={<AddIcon />} onClick={() => { history.push('/gives/gives-all') }}>
                         เบิกของ
                     </MenuItem>
-                    <MenuItem icon={<AddIcon />} onClick={() => { history.push('/tiers/product-tier') }}>
-                        เพิ่มของใน Stock
+                    <MenuItem icon={<AddIcon />} onClick={() => { history.push('/order-give/my-orders') }}>
+                        ประวัติการเบิกของคุณ
                     </MenuItem>
                     <MenuDivider />
 

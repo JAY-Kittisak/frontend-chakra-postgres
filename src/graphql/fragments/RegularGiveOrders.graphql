@@ -1,0 +1,15 @@
+fragment RegularGiveOrders on GiveOrder {
+      id
+      creatorId
+      giveId
+      amount
+      price
+      customerId
+      customerDetail
+      status
+      give{
+          ...RegularGive
+      }
+      createdAt
+      updatedAt
+}
