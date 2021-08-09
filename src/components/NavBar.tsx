@@ -115,15 +115,40 @@ const NavBar: React.FC<Props> = () => {
 
 
                     <Text fontSize={["sm", "md", "lg", "xl"]} fontWeight="bold" ml="2">Tier</Text>
-                    <MenuItem icon={<AddIcon />} onClick={() => { history.push('/tiers/factories') }}>
+                    <MenuItem icon={<ExternalLinkIcon />} onClick={() => { history.push('/tiers/factories') }}>
                         Factories
                     </MenuItem>
-                    <MenuItem icon={<AddIcon />} onClick={() => { history.push('/tiers/product-tier') }}>
+                    <MenuItem icon={<ExternalLinkIcon />} onClick={() => { history.push('/tiers/product-tier') }}>
                         Product
                     </MenuItem>
                     <MenuDivider />
 
-                    <Text fontSize={["sm", "md", "lg", "xl"]} fontWeight="bold" ml="2">ของแจกพี่มายด์</Text>
+                    <Text fontSize={["sm", "md", "lg", "xl"]} fontWeight="bold" ml="2">เบิกของแจกลูกค้า</Text>
+
+                    {/* ต้องเป็น superAdmin ถ้าจะมีตัวเลือกนี้ */}
+                    {data?.me?.roles === "superAdmin" &&
+                        (
+                            <>
+                                <MenuItem
+                                    icon={<EditIcon />}
+                                    onClick={() => { history.push('/admin/manage-gives') }}
+                                    color="orange"
+                                    fontWeight="bold"
+                                >
+                                    จัดการของแจก
+                                </MenuItem>
+                                <MenuItem
+                                    icon={<EditIcon />}
+                                    onClick={() => { history.push('/admin/manage-give-orders') }}
+                                    color="orange"
+                                    fontWeight="bold"
+                                >
+                                    จัดการ Orders
+                                </MenuItem>
+                            </>
+                        )
+                    }
+
                     <MenuItem icon={<AddIcon />} onClick={() => { history.push('/gives/gives-all') }}>
                         เบิกของ
                     </MenuItem>
