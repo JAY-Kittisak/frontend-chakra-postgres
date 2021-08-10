@@ -22,7 +22,7 @@ function betterUpdateQuery<Result, Query>(
 
 
 const client = createClient({
-    url: "http://localhost:4000/graphql",
+    url: "http://200.1.1.99:4000/graphql",
     fetchOptions: {
         credentials: "include"
     },

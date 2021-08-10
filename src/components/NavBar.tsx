@@ -126,7 +126,7 @@ const NavBar: React.FC<Props> = () => {
                     <Text fontSize={["sm", "md", "lg", "xl"]} fontWeight="bold" ml="2">เบิกของแจกลูกค้า</Text>
 
                     {/* ต้องเป็น superAdmin ถ้าจะมีตัวเลือกนี้ */}
-                    {data?.me?.roles === "superAdmin" &&
+                    {!fetching && (data?.me?.roles === "superAdmin" || data?.me?.roles === "admin") &&
                         (
                             <>
                                 <MenuItem
