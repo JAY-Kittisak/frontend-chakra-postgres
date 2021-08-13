@@ -10,16 +10,19 @@ import {
     ModalCloseButton,
 } from '@chakra-ui/react'
 import { Form, Formik } from "formik";
-// import { toErrorMap } from "../../utils/toErrorMap";
 import InputField from "../InputField";
+import { RegularGiveFragment, useCreateGiveMutation } from "../../generated/graphql";
 
 interface Props {
     setOpen: () => void
     Open: boolean
+    giveToEdit: RegularGiveFragment | null
 }
 
-const AddAndEditGive: React.FC<Props> = ({ Open, setOpen }) => {
+const AddAndEditGive: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
     const cancelRef = useRef()
+    const [, createGive] = useCreateGiveMutation()
+
     return (
         <AlertDialog
             isOpen={Open}
@@ -28,14 +31,47 @@ const AddAndEditGive: React.FC<Props> = ({ Open, setOpen }) => {
         >
             <Formik
                 initialValues={{
-                    fullNameTH: "",
-                    fullNameEN: "",
-                    nickName: "",
-                    email: "",
+                    giveName: giveToEdit ? giveToEdit.giveName : "",
+                    details: giveToEdit ? giveToEdit.details : "",
+                    price: giveToEdit ? giveToEdit.price : 0,
+                    inventory: giveToEdit ? giveToEdit.inventory : 0,
+                    category: giveToEdit ? giveToEdit.category : "",
                 }}
-                onSubmit={async (values, { setErrors }) => {
+                onSubmit={async (values,
+                ) => {
+                    if (!giveToEdit) {
+
+                        const response = await createGive({ input: values });
+                        if (response.data?.createGive.errors) {
+                            console.log(response.data.createGive.errors)
+                        } else if (response.data?.createGive.give) {
+                            setOpen()
+                        }
+
+                    } else if (giveToEdit) {
+
+                        const { giveName, details, price, inventory, category } = giveToEdit
+
+                        const isNotEdited =
+                            giveName === values.giveName &&
+                            details === values.details &&
+                            price === values.price &&
+                            inventory === values.inventory &&
+                            category === values.category
+
+                        if (isNotEdited) return
+
+                        console.log(values.giveName)
+                        console.log(values.details)
+                        console.log(values.price)
+                        console.log(values.inventory)
+                        console.log(values.category)
+
+                    }
+
                     // const response = await updateUser({ options: values });
-                    console.log(values)
+                    // const teten = values.price
+                    // console.log(typeof (+teten), +teten)
                     // if (response.data?.updateUser.errors) {
                     //     setErrors(toErrorMap(response.data.updateUser.errors));
                     // } else if (response.data?.updateUser.user) {
@@ -47,32 +83,38 @@ const AddAndEditGive: React.FC<Props> = ({ Open, setOpen }) => {
                     <AlertDialogOverlay>
                         <AlertDialogContent>
                             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                                อัพโหลดรูปภาพของผู้ใช้
+                                เพิ่มของแจกลูกค้า
                             </AlertDialogHeader>
                             <ModalCloseButton />
 
                             <Form>
                                 <AlertDialogBody>
                                     <InputField
-                                        name="fullNameTH"
-                                        label="ชื่อภาษาไทย"
+                                        name="giveName"
+                                        label="Name"
                                     />
                                     <InputField
-                                        name="fullNameEN"
-                                        label="ชื่อภาษาอังกฤษ"
+                                        name="details"
+                                        label="Details"
                                     />
                                     <InputField
-                                        name="nickName"
-                                        label="ชื่อเล่น"
+                                        type="number"
+                                        name="price"
+                                        label="Price"
                                     />
                                     <InputField
-                                        name="email"
-                                        label="Email"
+                                        type="number"
+                                        name="inventory"
+                                        label="Inventory"
+                                    />
+                                    <InputField
+                                        name="category"
+                                        label="Category"
                                     />
                                 </AlertDialogBody>
 
                                 <AlertDialogFooter>
-                                    <Button ref={cancelRef.current} onClick={setOpen}>
+                                    <Button ref={cancelRef.current} onClick={setOpen} >
                                         Cancel
                                     </Button>
                                     <Button colorScheme="blue" isLoading={isSubmitting} type="submit" ml={3}>

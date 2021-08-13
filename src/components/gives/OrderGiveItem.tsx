@@ -31,7 +31,7 @@ const OrderGiveItem: React.FC<Props> = ({
     return (
         <Tr>
             <Td fontSize={["xs", "xs", "sm", "md"]}>
-                <Center>{createdAt}</Center>
+                <Center>{new Date(+createdAt).toDateString()}</Center>
             </Td>
             <Td>
                 <Center>{giveName}</Center>

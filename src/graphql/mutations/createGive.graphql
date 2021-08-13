@@ -1,0 +1,11 @@
+mutation CreateGive($input: GiveInput!) {
+  createGive(input: $input) {
+    errors {
+      field
+      message
+    }
+    give {
+        ...RegularGive
+    }
+  }
+}

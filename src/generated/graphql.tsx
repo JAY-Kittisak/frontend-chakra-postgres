@@ -50,7 +50,7 @@ export type FieldError = {
 
 export type FieldErrorGive = {
   __typename?: 'FieldErrorGive';
-  field?: Maybe<Scalars['String']>;
+  field: Scalars['String'];
   message: Scalars['String'];
 };
 
@@ -70,10 +70,10 @@ export type Give = {
 
 export type GiveInput = {
   giveName: Scalars['String'];
-  details?: Maybe<Scalars['String']>;
-  price?: Maybe<Scalars['Float']>;
-  inventory?: Maybe<Scalars['Float']>;
-  category?: Maybe<Scalars['String']>;
+  details: Scalars['String'];
+  price: Scalars['Float'];
+  inventory: Scalars['Float'];
+  category: Scalars['String'];
 };
 
 export type GiveOrder = {
@@ -340,6 +340,25 @@ export type RegularUserFragment = (
   )> }
 );
 
+export type CreateGiveMutationVariables = Exact<{
+  input: GiveInput;
+}>;
+
+
+export type CreateGiveMutation = (
+  { __typename?: 'Mutation' }
+  & { createGive: (
+    { __typename?: 'GiveResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorGive' }
+      & Pick<FieldErrorGive, 'field' | 'message'>
+    )>>, give?: Maybe<(
+      { __typename?: 'Give' }
+      & RegularGiveFragment
+    )> }
+  ) }
+);
+
 export type CreateProductByTierMutationVariables = Exact<{
   input: ProductByTierInput;
 }>;
@@ -588,6 +607,23 @@ export const RegularUserFragmentDoc = gql`
   }
 }
     ${RegularGiveOrdersFragmentDoc}`;
+export const CreateGiveDocument = gql`
+    mutation CreateGive($input: GiveInput!) {
+  createGive(input: $input) {
+    errors {
+      field
+      message
+    }
+    give {
+      ...RegularGive
+    }
+  }
+}
+    ${RegularGiveFragmentDoc}`;
+
+export function useCreateGiveMutation() {
+  return Urql.useMutation<CreateGiveMutation, CreateGiveMutationVariables>(CreateGiveDocument);
+};
 export const CreateProductByTierDocument = gql`
     mutation createProductByTier($input: ProductByTierInput!) {
   createProductByTier(input: $input) {

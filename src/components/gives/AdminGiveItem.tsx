@@ -1,54 +1,67 @@
-import React from 'react'
-import {
-    Tr,
-    Td,
-    Center,
-    useColorMode,
-    IconButton,
-} from "@chakra-ui/react";
-import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
+import React from "react";
+import { Tr, Td, Center, useColorMode, IconButton } from "@chakra-ui/react";
+import { EditIcon, DeleteIcon, AddIcon } from "@chakra-ui/icons";
 import { RegularGiveFragment } from "../../generated/graphql";
-import { formatAmount } from '../../utils/helpers'
+import { formatAmount } from "../../utils/helpers";
 
 interface Props {
-    give: RegularGiveFragment
+    give: RegularGiveFragment;
+    setOpen: (open: boolean) => void
+    setGiveToEdit: (give: RegularGiveFragment | null) => void
 }
 
-const AdminGiveItem: React.FC<Props> = ({ give: { giveName, details, price, inventory, category, imageUrl, updatedAt } }) => {
+const AdminGiveItem: React.FC<Props> = ({
+    give,
+    setOpen,
+    setGiveToEdit
+}) => {
     const { colorMode } = useColorMode();
-
-    let testD = new Date(+updatedAt)
 
     return (
         <Tr>
             <Td fontSize={["xs", "xs", "sm", "md"]}>
-                <Center>{imageUrl}</Center>
+                {give.imageUrl ? (
+                    <Center>{give.imageUrl}</Center>
+                ) : (
+                    <Center>
+                        <IconButton
+                            aria-label=""
+                            icon={<AddIcon />}
+                            mr="3"
+                            colorScheme={colorMode === "light" ? "green" : "blue"}
+                        />
+                    </Center>
+                )}
             </Td>
             <Td>
-                <Center>{giveName}</Center>
+                <Center>{give.giveName}</Center>
             </Td>
             <Td>
-                <Center isTruncated>{details}</Center>
+                <Center isTruncated>{give.details}</Center>
             </Td>
             <Td>
-                <Center>{price && formatAmount(price)}</Center>
+                <Center>{give.price && formatAmount(give.price)} บาท</Center>
             </Td>
             <Td>
-                <Center>{inventory && formatAmount(inventory)}</Center>
+                <Center>{give.inventory && formatAmount(give.inventory)} ชิ้น</Center>
             </Td>
             <Td>
-                <Center>{category}</Center>
+                <Center>{give.category}</Center>
             </Td>
             <Td>
-                <Center>{testD.toDateString()}</Center>
+                <Center>{new Date(+give.updatedAt).toDateString()}</Center>
             </Td>
             <Td>
                 <Center>
                     <IconButton
                         aria-label=""
                         icon={<EditIcon />}
-                        mr="1"
+                        mr="3"
                         colorScheme={colorMode === "light" ? "green" : "blue"}
+                        onClick={() => {
+                            setOpen(true)
+                            setGiveToEdit(give)
+                        }}
                     />
                     <IconButton
                         aria-label=""
@@ -58,8 +71,8 @@ const AdminGiveItem: React.FC<Props> = ({ give: { giveName, details, price, inve
                     />
                 </Center>
             </Td>
-        </Tr >
+        </Tr>
     );
-}
+};
 
-export default AdminGiveItem
+export default AdminGiveItem;

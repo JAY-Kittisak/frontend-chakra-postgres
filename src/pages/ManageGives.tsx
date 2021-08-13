@@ -1,14 +1,19 @@
-import React from 'react'
-import { Flex, Table, Tbody, Text, Th, Thead, Tr, useColorMode, Button } from "@chakra-ui/react";
+import React, { useState } from 'react'
+import { Flex, Table, Tbody, Text, Th, Thead, Tr, useColorMode, Button, Center } from "@chakra-ui/react";
 
 import Spinner from '../components/Spinner'
 import AdminGiveItem from '../components/gives/AdminGiveItem'
+import AddAndEditGive from '../components/gives/AddAndEditGive'
+import { useDialog } from "../components/useDialog";
 import { useGivesQuery } from '../generated/graphql'
+import { RegularGiveFragment } from '../generated/graphql'
 
 interface Props { }
 
 const ManageGives: React.FC<Props> = () => {
     const [{ data, fetching }] = useGivesQuery()
+    const { isOpen, setIsOpen } = useDialog();
+    const [giveToEdit, setGiveToEdit] = useState<RegularGiveFragment | null>(null)
 
     const { colorMode } = useColorMode();
 
@@ -24,16 +29,26 @@ const ManageGives: React.FC<Props> = () => {
             >
                 Admin Manage
             </Text>
-            <Flex align="center">
+            <Center mb="5">
                 <Button
                     colorScheme={colorMode === "light" ? "green" : "blue"}
                     boxShadow="sm"
-                    _hover={{ boxShadow: "md" }}
-                    _active={{ boxShadow: "lg" }}
+                    onClick={() => {
+                        setGiveToEdit(null)
+                        setIsOpen(true);
+                    }}
                 >
-                    <Text color="white">รายละเอียด</Text>
+
+                    <Text color="white" as="u" ml="1">เพิ่มของแจก</Text>
                 </Button>
-            </Flex>
+                {isOpen && (
+                    <AddAndEditGive
+                        Open={true}
+                        setOpen={() => setIsOpen(false)}
+                        giveToEdit={giveToEdit}
+                    />
+                )}
+            </Center>
 
             {/* // <Text key={order.id}>{order.give.giveName}</Text> */}
             <Flex w="100%" overflowX="auto" rounded="7px" boxShadow="xl" >
@@ -53,7 +68,12 @@ const ManageGives: React.FC<Props> = () => {
                     <Tbody>
                         {data?.gives &&
                             data.gives.map((give) => (
-                                <AdminGiveItem key={give.id} give={give} />
+                                <AdminGiveItem
+                                    key={give.id}
+                                    give={give}
+                                    setOpen={() => setIsOpen(true)}
+                                    setGiveToEdit={setGiveToEdit}
+                                />
                             ))
                         }
                         {/* {!industrialEstate ? (
