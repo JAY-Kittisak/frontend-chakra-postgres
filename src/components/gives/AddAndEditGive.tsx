@@ -11,11 +11,12 @@ import {
 } from '@chakra-ui/react'
 import { Form, Formik } from "formik";
 import InputField from "../InputField";
-import { RegularGiveFragment, useCreateGiveMutation } from "../../generated/graphql";
+import { toErrorMap } from '../../utils/toErrorMap'
+import { RegularGiveFragment, useCreateGiveMutation, FieldError } from "../../generated/graphql";
 
 interface Props {
-    setOpen: () => void
     Open: boolean
+    setOpen: () => void
     giveToEdit: RegularGiveFragment | null
 }
 
@@ -32,20 +33,20 @@ const AddAndEditGive: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
             <Formik
                 initialValues={{
                     giveName: giveToEdit ? giveToEdit.giveName : "",
-                    details: giveToEdit ? giveToEdit.details : "",
-                    price: giveToEdit ? giveToEdit.price : 0,
-                    inventory: giveToEdit ? giveToEdit.inventory : 0,
-                    category: giveToEdit ? giveToEdit.category : "",
+                    details: giveToEdit?.details ? giveToEdit.details : "",
+                    price: giveToEdit?.price ? giveToEdit.price : 0,
+                    inventory: giveToEdit?.inventory ? giveToEdit.inventory : 0,
+                    category: giveToEdit?.category ? giveToEdit.category : "",
                 }}
-                onSubmit={async (values,
-                ) => {
+                onSubmit={async (values, { setErrors }) => {
                     if (!giveToEdit) {
 
                         const response = await createGive({ input: values });
                         if (response.data?.createGive.errors) {
-                            console.log(response.data.createGive.errors)
+                            setErrors(toErrorMap(response.data.createGive.errors as FieldError[]))
                         } else if (response.data?.createGive.give) {
                             setOpen()
+                            alert("AlertDialogs TEST.")
                         }
 
                     } else if (giveToEdit) {
@@ -61,11 +62,13 @@ const AddAndEditGive: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
 
                         if (isNotEdited) return
 
-                        console.log(values.giveName)
-                        console.log(values.details)
-                        console.log(values.price)
-                        console.log(values.inventory)
-                        console.log(values.category)
+                        const response = await createGive({ input: values });
+                        if (response.data?.createGive.errors) {
+                            console.log(response.data.createGive.errors)
+                        } else if (response.data?.createGive.give) {
+                            setOpen()
+                            alert("AlertDialogs1 TEST.")
+                        }
 
                     }
 

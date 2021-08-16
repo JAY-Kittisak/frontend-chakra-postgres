@@ -4,7 +4,7 @@ import { Flex, Table, Tbody, Text, Th, Thead, Tr, useColorMode, Button, Center }
 import Spinner from '../components/Spinner'
 import AdminGiveItem from '../components/gives/AdminGiveItem'
 import AddAndEditGive from '../components/gives/AddAndEditGive'
-import { useDialog } from "../components/useDialog";
+import { useDialog } from "../components/dialogs/useDialog";
 import { useGivesQuery } from '../generated/graphql'
 import { RegularGiveFragment } from '../generated/graphql'
 
@@ -17,8 +17,6 @@ const ManageGives: React.FC<Props> = () => {
 
     const { colorMode } = useColorMode();
 
-    if (fetching) return <Spinner color="grey" height={50} width={50} />
-
     return (
         <Flex flexDir="column">
             <Text
@@ -29,6 +27,19 @@ const ManageGives: React.FC<Props> = () => {
             >
                 Admin Manage
             </Text>
+            {fetching ? (
+                <Center>
+                    <Spinner color="grey" height={50} width={50} />
+                    <Text
+                        as="i"
+                        fontWeight="semibold"
+                        fontSize={["md", "md", "xl", "3xl"]}
+                        my={2}
+                    > &nbsp; Loading...
+                    </Text>
+                </Center>
+            ) : (
+                <>
             <Center mb="5">
                 <Button
                     colorScheme={colorMode === "light" ? "green" : "blue"}
@@ -86,6 +97,8 @@ const ManageGives: React.FC<Props> = () => {
                     </Tbody>
                 </Table>
             </Flex>
+                </>
+            )}
         </Flex>
     )
 }

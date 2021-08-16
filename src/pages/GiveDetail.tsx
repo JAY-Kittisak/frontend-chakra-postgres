@@ -16,7 +16,7 @@ import { SmallAddIcon, MinusIcon } from "@chakra-ui/icons";
 import { useIsAuth } from "../utils/uselsAuth";
 import { useGiveByIdQuery } from "../generated/graphql";
 import Spinner from "../components/Spinner";
-import { useDialog } from "../components/useDialog";
+import { useDialog } from "../components/dialogs/useDialog";
 import CreateGiveOrder from "../components/gives/CreateGiveOrder";
 
 interface Props { }

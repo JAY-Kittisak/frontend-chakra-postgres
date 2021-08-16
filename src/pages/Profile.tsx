@@ -9,7 +9,7 @@ import Card from "../components/chakra-ui/Card";
 import Spinner from "../components/Spinner";
 import { Redirect } from 'react-router-dom'
 import AddAndEditProfile from "../components/manage-users/AddAndEditProfile";
-import { useDialog } from "../components/useDialog";
+import { useDialog } from "../components/dialogs/useDialog";
 
 
 interface Props { }

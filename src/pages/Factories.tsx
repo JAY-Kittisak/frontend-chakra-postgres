@@ -155,7 +155,7 @@ const Factories: React.FC<Props> = () => {
             {!industrialEstate ? (
                     <Flex align="center">
                         <Divider />
-                        <Spinner color="grey" height={30} width={30} /><Heading>Loading...</Heading>
+                        <Spinner color="grey" height={30} width={30} /><Heading>&nbsp;Loading...</Heading>
                         <Divider />
                     </Flex>
                 ) : (

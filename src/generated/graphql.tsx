@@ -196,7 +196,7 @@ export type MutationCreateGiveOrderArgs = {
 
 
 export type MutationDeleteGiveArgs = {
-  giveId: Scalars['Int'];
+  id: Scalars['Int'];
 };
 
 
@@ -370,6 +370,16 @@ export type CreateProductByTierMutation = (
     { __typename?: 'ProductByTier' }
     & Pick<ProductByTier, 'id' | 'productName' | 'description' | 'category' | 'creatorId' | 'creatorName' | 'createdAt' | 'updatedAt'>
   ) }
+);
+
+export type DeleteGiveMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteGiveMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteGive'>
 );
 
 export type JoinFactoryMutationVariables = Exact<{
@@ -641,6 +651,15 @@ export const CreateProductByTierDocument = gql`
 
 export function useCreateProductByTierMutation() {
   return Urql.useMutation<CreateProductByTierMutation, CreateProductByTierMutationVariables>(CreateProductByTierDocument);
+};
+export const DeleteGiveDocument = gql`
+    mutation DeleteGive($id: Int!) {
+  deleteGive(id: $id)
+}
+    `;
+
+export function useDeleteGiveMutation() {
+  return Urql.useMutation<DeleteGiveMutation, DeleteGiveMutationVariables>(DeleteGiveDocument);
 };
 export const JoinFactoryDocument = gql`
     mutation JoinFactory($input: JoinTierInput!) {

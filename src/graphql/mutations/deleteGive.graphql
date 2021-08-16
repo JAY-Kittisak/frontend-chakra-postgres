@@ -1,0 +1,3 @@
+mutation DeleteGive($id: Int!){
+  deleteGive(id: $id)
+}
