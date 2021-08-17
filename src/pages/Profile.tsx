@@ -161,7 +161,7 @@ const Profile: React.FC<Props> = () => {
                     </Text>
                     <Card label="สถานะงาน IT" content="20" />
                     <Card label="สถานะงาน Altas" content="10" />
-                    <Card label="สถานะงาน เบิก/ยืม" content="3" />
+                    <Card label="สถานะงาน เบิกของแจกลูกค้า" content={String(data.me.giveOrders.length)} />
                     <Card label="สถานะงาน สั่งซื้อ" content="4" />
                 </Flex>
 

@@ -1,0 +1,11 @@
+mutation UpdateGive($id: Int!,$input: GiveInput!){
+  updateGive(id: $id,input: $input){
+    errors{
+      field
+      message
+    }
+    give{
+      ...RegularGive
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import React, { useRef } from 'react'
 import {
+    Text,
     Button,
     AlertDialog,
     AlertDialogBody,
@@ -11,8 +12,10 @@ import {
 } from '@chakra-ui/react'
 import { Form, Formik } from "formik";
 import InputField from "../InputField";
+import { SelectControl } from "../Selectfield"
+import { catGive } from "../../utils/helpers"
 import { toErrorMap } from '../../utils/toErrorMap'
-import { RegularGiveFragment, useCreateGiveMutation, FieldError } from "../../generated/graphql";
+import { RegularGiveFragment, useCreateGiveMutation, useUpdateGiveMutation, FieldError } from "../../generated/graphql";
 
 interface Props {
     Open: boolean
@@ -23,6 +26,7 @@ interface Props {
 const AddAndEditGive: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
     const cancelRef = useRef()
     const [, createGive] = useCreateGiveMutation()
+    const [, updateGive] = useUpdateGiveMutation()
 
     return (
         <AlertDialog
@@ -39,6 +43,8 @@ const AddAndEditGive: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
                     category: giveToEdit?.category ? giveToEdit.category : "",
                 }}
                 onSubmit={async (values, { setErrors }) => {
+                    if (values.category === "เลือกกลุ่มสินค้า") return alert("เลือก Category")
+
                     if (!giveToEdit) {
 
                         const response = await createGive({ input: values });
@@ -46,13 +52,10 @@ const AddAndEditGive: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
                             setErrors(toErrorMap(response.data.createGive.errors as FieldError[]))
                         } else if (response.data?.createGive.give) {
                             setOpen()
-                            alert("AlertDialogs TEST.")
                         }
 
                     } else if (giveToEdit) {
-
-                        const { giveName, details, price, inventory, category } = giveToEdit
-
+                        const { id, giveName, details, price, inventory, category } = giveToEdit
                         const isNotEdited =
                             giveName === values.giveName &&
                             details === values.details &&
@@ -60,26 +63,15 @@ const AddAndEditGive: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
                             inventory === values.inventory &&
                             category === values.category
 
-                        if (isNotEdited) return
+                        if (isNotEdited) return setOpen()
 
-                        const response = await createGive({ input: values });
-                        if (response.data?.createGive.errors) {
-                            console.log(response.data.createGive.errors)
-                        } else if (response.data?.createGive.give) {
+                        const response = await updateGive({ id, input: values });
+                        if (response.data?.updateGive.errors) {
+                            setErrors(toErrorMap(response.data.updateGive.errors as FieldError[]))
+                        } else if (response.data?.updateGive.give) {
                             setOpen()
-                            alert("AlertDialogs1 TEST.")
                         }
-
                     }
-
-                    // const response = await updateUser({ options: values });
-                    // const teten = values.price
-                    // console.log(typeof (+teten), +teten)
-                    // if (response.data?.updateUser.errors) {
-                    //     setErrors(toErrorMap(response.data.updateUser.errors));
-                    // } else if (response.data?.updateUser.user) {
-                    //     setOpen()
-                    // }
                 }}
             >
                 {({ isSubmitting }) => (
@@ -94,10 +86,13 @@ const AddAndEditGive: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
                                 <AlertDialogBody>
                                     <InputField
                                         name="giveName"
+                                        placeholder="name"
                                         label="Name"
                                     />
                                     <InputField
+                                        textarea
                                         name="details"
+                                        placeholder="details..."
                                         label="Details"
                                     />
                                     <InputField
@@ -110,10 +105,16 @@ const AddAndEditGive: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
                                         name="inventory"
                                         label="Inventory"
                                     />
-                                    <InputField
-                                        name="category"
-                                        label="Category"
-                                    />
+                                    <Text fontWeight="semibold" fontSize={["sm", "md"]} mb="2">
+                                        Category
+                                    </Text>
+                                    <SelectControl name="category">
+                                        {catGive.map((cat) => (
+                                            <option key={cat} value={cat}>
+                                                {cat}
+                                            </option>
+                                        ))}
+                                    </SelectControl>
                                 </AlertDialogBody>
 
                                 <AlertDialogFooter>

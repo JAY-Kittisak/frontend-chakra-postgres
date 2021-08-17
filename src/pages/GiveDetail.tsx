@@ -50,12 +50,7 @@ const GiveDetail: React.FC<Props> = () => {
                           src="https://aumento.officemate.co.th/media/catalog/product/O/F/OFM5232010.jpg?imwidth=640"
                       />
                       <Flex flexDir="column" justifyContent="space-between">
-                          <Flex
-                              p={5}
-                              flexDir="column"
-                              justifyContent="space-between"
-                              h="35vh"
-                          >
+                            <Flex p={5} flexDir="column" justifyContent="space-between">
                               <Center>
                                   <Text fontSize="3xl">{data.giveById.giveName}</Text>
                               </Center>
@@ -82,7 +77,7 @@ const GiveDetail: React.FC<Props> = () => {
                                   </Text>
                               </Flex>
                               <Flex ml={4}>
-                                  <Text>{data.giveById.details}</Text>
+                                    <Flex overflow="inherit">{data.giveById.details}</Flex>
                               </Flex>
                               <Divider orientation="horizontal" />
                           </Flex>

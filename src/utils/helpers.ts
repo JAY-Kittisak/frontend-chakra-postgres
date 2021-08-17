@@ -63,3 +63,12 @@ export const catDepartments: CatDepartments[] = [
     "SaleCo",
     "Sales"
 ]
+
+// ---------------------- Give ----------------------
+export type categoryGive = "USB" | "สมุด" | "ปากกา" | "เลือกกลุ่มสินค้า"
+export const catGive: categoryGive[] = [
+    "เลือกกลุ่มสินค้า",
+    "USB",
+    "ปากกา",
+    "สมุด"
+]

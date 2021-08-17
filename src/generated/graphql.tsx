@@ -101,7 +101,7 @@ export type GiveOrderResponse = {
 export type GiveResponse = {
   __typename?: 'GiveResponse';
   errors?: Maybe<Array<FieldErrorGive>>;
-  give?: Maybe<Give>;
+  give?: Maybe<Array<Give>>;
 };
 
 export type JoinTierInput = {
@@ -128,6 +128,7 @@ export type Mutation = {
   joinFactory: Scalars['Boolean'];
   deleteProduct: Scalars['Boolean'];
   createGive: GiveResponse;
+  updateGive: UpdateGiveResponse;
   createGiveOrder: GiveOrderResponse;
   deleteGive: Scalars['Boolean'];
   deleteGiveOrder: Scalars['Boolean'];
@@ -190,6 +191,12 @@ export type MutationCreateGiveArgs = {
 };
 
 
+export type MutationUpdateGiveArgs = {
+  input: GiveInput;
+  id: Scalars['Int'];
+};
+
+
 export type MutationCreateGiveOrderArgs = {
   input: GiveOrderInput;
 };
@@ -201,7 +208,7 @@ export type MutationDeleteGiveArgs = {
 
 
 export type MutationDeleteGiveOrderArgs = {
-  orderId: Scalars['Int'];
+  id: Scalars['Int'];
 };
 
 export type ProductByTier = {
@@ -280,6 +287,12 @@ export type RegisterInput = {
   departments: Scalars['String'];
 };
 
+export type UpdateGiveResponse = {
+  __typename?: 'UpdateGiveResponse';
+  errors?: Maybe<Array<FieldErrorGive>>;
+  give?: Maybe<Give>;
+};
+
 
 export type User = {
   __typename?: 'User';
@@ -352,10 +365,10 @@ export type CreateGiveMutation = (
     & { errors?: Maybe<Array<(
       { __typename?: 'FieldErrorGive' }
       & Pick<FieldErrorGive, 'field' | 'message'>
-    )>>, give?: Maybe<(
+    )>>, give?: Maybe<Array<(
       { __typename?: 'Give' }
       & RegularGiveFragment
-    )> }
+    )>> }
   ) }
 );
 
@@ -434,6 +447,26 @@ export type RegisterMutation = (
     )>>, user?: Maybe<(
       { __typename?: 'User' }
       & RegularUserFragment
+    )> }
+  ) }
+);
+
+export type UpdateGiveMutationVariables = Exact<{
+  id: Scalars['Int'];
+  input: GiveInput;
+}>;
+
+
+export type UpdateGiveMutation = (
+  { __typename?: 'Mutation' }
+  & { updateGive: (
+    { __typename?: 'UpdateGiveResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorGive' }
+      & Pick<FieldErrorGive, 'field' | 'message'>
+    )>>, give?: Maybe<(
+      { __typename?: 'Give' }
+      & RegularGiveFragment
     )> }
   ) }
 );
@@ -712,6 +745,23 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const UpdateGiveDocument = gql`
+    mutation UpdateGive($id: Int!, $input: GiveInput!) {
+  updateGive(id: $id, input: $input) {
+    errors {
+      field
+      message
+    }
+    give {
+      ...RegularGive
+    }
+  }
+}
+    ${RegularGiveFragmentDoc}`;
+
+export function useUpdateGiveMutation() {
+  return Urql.useMutation<UpdateGiveMutation, UpdateGiveMutationVariables>(UpdateGiveDocument);
 };
 export const UpdateUserDocument = gql`
     mutation UpdateUser($options: updateUserInput!) {
