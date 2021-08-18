@@ -1,3 +1,11 @@
 mutation DeleteGive($id: Int!){
-  deleteGive(id: $id)
+  deleteGive(id: $id){
+    errors {
+      field
+      message
+    }
+    give {
+        ...RegularGive
+    }
+  }
 }

@@ -4,13 +4,11 @@ import { Switch, Route } from 'react-router-dom'
 import OrderGive from '../pages/OrderGive'
 import OrderGiveDetail from '../pages/OrderGiveDetail'
 import PageNotFound from '../pages/PageNotFound'
-import Layout from "../components/Layout";
 
 interface Props { }
 
 const OrderGiveRoute: React.FC<Props> = () => {
     return (
-        <Layout variant="regular">
             <Switch>
                 <Route path="/order-give/my-orders/:orderId">
                     <OrderGiveDetail />
@@ -21,8 +19,7 @@ const OrderGiveRoute: React.FC<Props> = () => {
                 <Route path="*">
                     <PageNotFound />
                 </Route>
-            </Switch>
-        </Layout>
+        </Switch>
     )
 }
 

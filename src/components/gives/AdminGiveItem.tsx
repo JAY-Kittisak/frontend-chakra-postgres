@@ -1,14 +1,10 @@
 import React, { useState, useRef } from "react";
 import {
     Tr, Td, Center, useColorMode, IconButton, Text, Button, Stack, Flex,
-    AlertDialog,
-    AlertDialogBody,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogContent,
-    AlertDialogOverlay,
+    Image, Heading, AlertDialog, AlertDialogBody, AlertDialogFooter,
+    AlertDialogHeader, AlertDialogContent, AlertDialogOverlay,
 } from "@chakra-ui/react";
-import { EditIcon, DeleteIcon, AddIcon } from "@chakra-ui/icons";
+import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
 import { RegularGiveFragment, useDeleteGiveMutation } from "../../generated/graphql";
 import { formatAmount } from "../../utils/helpers";
 
@@ -32,34 +28,32 @@ const AdminGiveItem: React.FC<Props> = ({
     return (
         <Tr>
             <Td fontSize={["xs", "xs", "sm", "md"]}>
-                {give.imageUrl ? (
-                    <Center>{give.imageUrl}</Center>
-                ) : (
-                    <Center>
-                        <IconButton
-                            aria-label=""
-                            icon={<AddIcon />}
-                            mr="3"
-                            colorScheme={colorMode === "light" ? "green" : "blue"}
+                <Flex align="center">
+                    {give.imageUrl &&
+                        <Image
+                            mr={2}
+                            borderRadius="2xl"
+                            boxSize="60px"
+                            objectFit="cover"
+                            src={give.imageUrl}
                         />
-                    </Center>
-                )}
-            </Td>
-            <Td>
-                <Center>{give.giveName}</Center>
-            </Td>
-            <Td >
-                <Center>
-                    <Text isTruncated w="300px">
-                        {give.details}
-                    </Text>
-                </Center>
+                    }
+                    <Flex flexDir="column">
+                        <Heading size="sm" letterSpacing="tight">{give.giveName}</Heading>
+                        <Text fontSize="sm" color="gray" isTruncated w="xs">{give.details}</Text>
+                    </Flex>
+                </Flex>
             </Td>
             <Td>
                 <Center>{give.price && formatAmount(give.price)} บาท</Center>
             </Td>
             <Td>
-                <Center>{give.inventory && formatAmount(give.inventory)} ชิ้น</Center>
+                <Center
+                    color={give.inventory === 0 ? "red" : undefined}
+                    fontWeight={give.inventory === 0 ? "bold" : undefined}
+                >
+                    {give.inventory && formatAmount(give.inventory)}
+                </Center>
             </Td>
             <Td>
                 <Center>{give.category}</Center>
@@ -118,9 +112,9 @@ const AdminGiveItem: React.FC<Props> = ({
                                         ml={3}
                                         onClick={async () => {
                                             const response = await deleteGive({ id: give.id })
-                                            if (response.data?.deleteGive === false) {
+                                            if (response.data?.deleteGive.errors) {
                                                 alert("Delete Error! โปรดติดต่อผู้ดูแล")
-                                            } else if (response.data?.deleteGive === true) {
+                                            } else if (response.data?.deleteGive.give) {
                                                 setDeleteDialog(false)
                                             }
                                         }}

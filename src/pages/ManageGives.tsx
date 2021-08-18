@@ -12,6 +12,7 @@ import {
     Center,
 } from "@chakra-ui/react";
 
+import Layout from "../components/Layout";
 import Spinner from "../components/Spinner";
 import AdminGiveItem from "../components/gives/AdminGiveItem";
 import AddAndEditGive from "../components/gives/AddAndEditGive";
@@ -30,35 +31,35 @@ const ManageGives: React.FC<Props> = () => {
     const { colorMode } = useColorMode();
 
     return (
-        <Flex flexDir="column">
-            <Text
-                as="i"
-                fontWeight="semibold"
-                fontSize={["md", "md", "xl", "3xl"]}
-                my={2}
-            >
-                Admin Manage
-            </Text>
-            {fetching ? (
-                <Center>
-                    <Spinner color="grey" height={50} width={50} />
-                    <Text
-                        as="i"
-                        fontWeight="semibold"
-                        fontSize={["md", "md", "xl", "3xl"]}
-                        my={2}
-                    >
-                        {" "}
-                        &nbsp; Loading...
-                    </Text>
-                </Center>
-            ) : (
-                <>
-                    <Center mb="5">
-                        <Button
-                            colorScheme={colorMode === "light" ? "green" : "blue"}
-                            boxShadow="sm"
-                            onClick={() => {
+        <Layout variant="regular">
+            <Flex flexDir="column">
+                <Text
+                    as="i"
+                    fontWeight="semibold"
+                    fontSize={["md", "md", "xl", "3xl"]}
+                >
+                    Admin Manages
+                </Text>
+                {fetching ? (
+                    <Center>
+                        <Spinner color="grey" height={50} width={50} />
+                        <Text
+                            as="i"
+                            fontWeight="semibold"
+                            fontSize={["md", "md", "xl", "3xl"]}
+                            my={2}
+                        >
+                            {" "}
+                            &nbsp; Loading...
+                        </Text>
+                    </Center>
+                ) : (
+                    <>
+                        <Center mb="5">
+                            <Button
+                                colorScheme={colorMode === "light" ? "green" : "blue"}
+                                boxShadow="sm"
+                                onClick={() => {
                                     setGiveToEdit(null);
                                     setIsOpen(true);
                                 }}
@@ -84,28 +85,22 @@ const ManageGives: React.FC<Props> = () => {
                             >
                                 <Thead>
                                     <Tr bg={colorMode === "light" ? "#028174" : "#3E54D3"}>
-                                        <Th textAlign="center" fontSize="md" color="white">
+                                            <Th textAlign="center" fontSize="md" color="white" w="15%">
                                             Image
                                         </Th>
-                                        <Th textAlign="center" fontSize="md" color="white">
-                                            ชื่อของแจก
-                                        </Th>
-                                        <Th textAlign="center" fontSize="md" color="white">
-                                            รายละเอียด
-                                        </Th>
-                                        <Th textAlign="center" fontSize="md" color="white">
+                                            <Th textAlign="center" fontSize="md" color="white" w="15%">
                                             ราคาต่อหน่วย
                                         </Th>
-                                        <Th textAlign="center" fontSize="md" color="white">
+                                            <Th textAlign="center" fontSize="md" color="white" w="15%">
                                             จำนวนใน Stock
                                         </Th>
-                                        <Th textAlign="center" fontSize="md" color="white">
+                                            <Th textAlign="center" fontSize="md" color="white" w="15%">
                                             ประเภท
                                         </Th>
-                                        <Th textAlign="center" fontSize="md" color="white">
+                                            <Th textAlign="center" fontSize="md" color="white" w="20%">
                                             วันที่ Update
                                         </Th>
-                                        <Th textAlign="center" fontSize="md" color="white">
+                                            <Th textAlign="center" fontSize="md" color="white" w="20%">
                                             Manage
                                         </Th>
                                     </Tr>
@@ -119,13 +114,14 @@ const ManageGives: React.FC<Props> = () => {
                                                 setOpen={() => setIsOpen(true)}
                                                 setGiveToEdit={setGiveToEdit}
                                             />
-                                      ))}
-                            </Tbody>
-                        </Table>
-                    </Flex>
-                </>
-            )}
-        </Flex>
+                                        ))}
+                                </Tbody>
+                            </Table>
+                        </Flex>
+                    </>
+                )}
+            </Flex>
+        </Layout>
     );
 };
 

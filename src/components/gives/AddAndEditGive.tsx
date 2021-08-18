@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useState, useRef, ChangeEvent } from 'react'
 import {
     Text,
     Button,
@@ -9,11 +9,12 @@ import {
     AlertDialogContent,
     AlertDialogOverlay,
     ModalCloseButton,
+    Input,
 } from '@chakra-ui/react'
 import { Form, Formik } from "formik";
 import InputField from "../InputField";
 import { SelectControl } from "../Selectfield"
-import { catGive } from "../../utils/helpers"
+import { catGive, fileType } from "../../utils/helpers"
 import { toErrorMap } from '../../utils/toErrorMap'
 import { RegularGiveFragment, useCreateGiveMutation, useUpdateGiveMutation, FieldError } from "../../generated/graphql";
 
@@ -24,9 +25,28 @@ interface Props {
 }
 
 const AddAndEditGive: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
+    const [selectedFile, setSelectedFile] = useState<File | null>(null)
+    const [errorImage, setErrorImage] = useState(false)
+    const [errMessage, setErrMessage] = useState<FieldError[]>()
+
     const cancelRef = useRef()
+
     const [, createGive] = useCreateGiveMutation()
     const [, updateGive] = useUpdateGiveMutation()
+
+
+    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files
+        if (!files || !files[0]) return
+
+        const file = files[0]
+
+        if (!fileType.includes(file.type)) {
+            alert('Wrong file format, allow only "png" or "jpeg" or "jpg"')
+            return
+        }
+        setSelectedFile(file)
+    }
 
     return (
         <AlertDialog
@@ -45,12 +65,21 @@ const AddAndEditGive: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
                 onSubmit={async (values, { setErrors }) => {
                     if (values.category === "เลือกกลุ่มสินค้า") return alert("เลือก Category")
 
+                    // if (selectedFile) {
+                    //     const sizeImage = await selectedFile.size >= 100000
+                    //     if (sizeImage) setErrorImage(true)
+                    // }
+
+
                     if (!giveToEdit) {
 
-                        const response = await createGive({ input: values });
+                        const response = await createGive({ input: values, options: selectedFile });
                         if (response.data?.createGive.errors) {
                             setErrors(toErrorMap(response.data.createGive.errors as FieldError[]))
+                            setErrMessage(response.data.createGive.errors as FieldError[])
+                            setErrorImage(true)
                         } else if (response.data?.createGive.give) {
+                            setErrorImage(false)
                             setOpen()
                         }
 
@@ -115,6 +144,34 @@ const AddAndEditGive: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
                                             </option>
                                         ))}
                                     </SelectControl>
+
+                                    <Text fontWeight="semibold" fontSize={["sm", "md"]} mb="2">
+                                        Add Image
+                                    </Text>
+                                    <Input type="file" p="1" onChange={handleFileChange} />
+                                    {errorImage &&
+                                        <>
+                                            <Text color="yellow.400" p="3">
+                                                Warning:!! ขนาดไฟล์ของคุณคือ {selectedFile?.size}
+                                                KB. ซึ่งใหญ่เกิน 100000 KB.
+                                            </Text>
+                                            <Text color="red.400">
+                                                {errMessage}
+                                            </Text>
+                                        </>
+                                    }
+                                    {selectedFile && (
+                                        <Button
+                                            colorScheme="teal"
+                                            onClick={async () => {
+                                                if (selectedFile.size >= 100000) {
+                                                    setErrorImage(true)
+                                                }
+
+                                            }} ml={3}>
+                                            Save
+                                        </Button>
+                                    )}
                                 </AlertDialogBody>
 
                                 <AlertDialogFooter>
@@ -136,3 +193,5 @@ const AddAndEditGive: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
 }
 
 export default AddAndEditGive
+
+

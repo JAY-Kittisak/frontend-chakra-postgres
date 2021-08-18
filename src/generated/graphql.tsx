@@ -130,7 +130,7 @@ export type Mutation = {
   createGive: GiveResponse;
   updateGive: UpdateGiveResponse;
   createGiveOrder: GiveOrderResponse;
-  deleteGive: Scalars['Boolean'];
+  deleteGive: GiveResponse;
   deleteGiveOrder: Scalars['Boolean'];
 };
 
@@ -187,6 +187,7 @@ export type MutationDeleteProductArgs = {
 
 
 export type MutationCreateGiveArgs = {
+  options: Scalars['Upload'];
   input: GiveInput;
 };
 
@@ -355,6 +356,7 @@ export type RegularUserFragment = (
 
 export type CreateGiveMutationVariables = Exact<{
   input: GiveInput;
+  options: Scalars['Upload'];
 }>;
 
 
@@ -392,7 +394,16 @@ export type DeleteGiveMutationVariables = Exact<{
 
 export type DeleteGiveMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'deleteGive'>
+  & { deleteGive: (
+    { __typename?: 'GiveResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorGive' }
+      & Pick<FieldErrorGive, 'field' | 'message'>
+    )>>, give?: Maybe<Array<(
+      { __typename?: 'Give' }
+      & RegularGiveFragment
+    )>> }
+  ) }
 );
 
 export type JoinFactoryMutationVariables = Exact<{
@@ -651,8 +662,8 @@ export const RegularUserFragmentDoc = gql`
 }
     ${RegularGiveOrdersFragmentDoc}`;
 export const CreateGiveDocument = gql`
-    mutation CreateGive($input: GiveInput!) {
-  createGive(input: $input) {
+    mutation CreateGive($input: GiveInput!, $options: Upload!) {
+  createGive(input: $input, options: $options) {
     errors {
       field
       message
@@ -687,9 +698,17 @@ export function useCreateProductByTierMutation() {
 };
 export const DeleteGiveDocument = gql`
     mutation DeleteGive($id: Int!) {
-  deleteGive(id: $id)
+  deleteGive(id: $id) {
+    errors {
+      field
+      message
+    }
+    give {
+      ...RegularGive
+    }
+  }
 }
-    `;
+    ${RegularGiveFragmentDoc}`;
 
 export function useDeleteGiveMutation() {
   return Urql.useMutation<DeleteGiveMutation, DeleteGiveMutationVariables>(DeleteGiveDocument);

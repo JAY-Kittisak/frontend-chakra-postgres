@@ -12,6 +12,7 @@ import {
     CreateGiveMutation,
     GivesQuery,
     GivesDocument,
+    DeleteGiveMutation
 } from "../generated/graphql";
 
 function betterUpdateQuery<Result, Query>(
@@ -99,6 +100,22 @@ export const client = createClient({
                                 } else {
                                     return {
                                         gives: result.createGive.give
+                                    }
+                                }
+                            }
+                        )
+                    },
+
+                    deleteGive: (_result, args, cache, info) => {
+                        betterUpdateQuery<DeleteGiveMutation, GivesQuery>(cache,
+                            { query: GivesDocument },
+                            _result,
+                            (result, query) => {
+                                if (result.deleteGive.errors) {
+                                    return query
+                                } else {
+                                    return {
+                                        gives: result.deleteGive.give
                                     }
                                 }
                             }

@@ -1,5 +1,5 @@
-mutation CreateGive($input: GiveInput!) {
-  createGive(input: $input) {
+mutation CreateGive($input: GiveInput!,$options: Upload!) {
+  createGive(input: $input,options: $options) {
     errors {
       field
       message

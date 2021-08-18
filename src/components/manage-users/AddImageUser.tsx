@@ -16,8 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { useUploadImageMeMutation } from '../../generated/graphql';
 import { FieldError } from '../../generated/graphql'
-
-const fileType = ['image/png', 'image/jpeg', 'image/ipg']
+import { fileType } from "../../utils/helpers"
 
 interface Props {
     imagesUrl: string

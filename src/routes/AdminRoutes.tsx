@@ -2,7 +2,6 @@ import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 
 import { useIsAuth } from '../utils/uselsAuth'
-import Layout from "../components/Layout";
 import ManageGives from '../pages/ManageGives'
 import ManageGiveOrders from '../pages/ManageGiveOrders'
 import PageNotFound from '../pages/PageNotFound'
@@ -13,7 +12,6 @@ const AdminRoutes: React.FC<Props> = () => {
     useIsAuth()
 
     return (
-        <Layout variant="regular">
             <Switch>
                 <Route path="/admin/manage-gives">
                     <ManageGives />
@@ -27,8 +25,7 @@ const AdminRoutes: React.FC<Props> = () => {
                 <Route path="*">
                     <PageNotFound />
                 </Route>
-            </Switch>
-        </Layout>
+        </Switch>
     )
 }
 
