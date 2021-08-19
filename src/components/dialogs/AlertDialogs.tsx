@@ -45,11 +45,12 @@ const AlertDialogs: React.FC<Props> = ({
             <AlertDialogOverlay>
                 <AlertDialogContent>
                     <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                        AlertDialog
+                        {header}
                     </AlertDialogHeader>
                     <ModalCloseButton />
 
                     <AlertDialogBody>
+                        {message}
                     </AlertDialogBody>
 
                     <AlertDialogFooter>

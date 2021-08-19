@@ -49,6 +49,9 @@ const OrderGive: React.FC<Props> = () => {
                                 <Th textAlign="center" fontSize="md" w="20%" color="white">
                                     ชื่อของที่เบิก
                                 </Th>
+                                <Th textAlign="center" fontSize="md" w="10%" color="white">
+                                    รายละเอียด
+                                </Th>
                                 <Th textAlign="center" fontSize="md" w="15%" color="white">
                                     จำนวนร้องขอ
                                 </Th>
@@ -58,8 +61,8 @@ const OrderGive: React.FC<Props> = () => {
                                 <Th textAlign="center" fontSize="md" w="10%" color="white">
                                     สถานะ
                                 </Th>
-                                <Th textAlign="center" fontSize="md" w="20%" color="white">
-                                    ดูรายละเอียด
+                                <Th textAlign="center" fontSize="md" w="20%" color="red">
+                                    ลบออกไม่ใช้แล้ว
                                 </Th>
                             </Tr>
                         </Thead>

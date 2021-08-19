@@ -10,6 +10,12 @@ fragment RegularGiveOrders on GiveOrder {
       give{
           ...RegularGive
       }
+      creator{
+            id
+            roles
+            departments
+            fullNameTH
+      }
       createdAt
       updatedAt
 }

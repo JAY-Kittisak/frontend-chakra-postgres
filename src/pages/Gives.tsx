@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 
 import { useIsAuth } from "../utils/uselsAuth";
 import Layout from "../components/Layout";
@@ -17,17 +17,17 @@ const Gives: React.FC<Props> = () => {
 
     return (
         <Layout variant="regular">
-            <Text as="h2" fontWeight="semibold" fontSize={["sm", "sm", "lg", "xl"]} my={2}>
+            <Text as="i" fontWeight="semibold" fontSize={["md", "md", "xl", "3xl"]} mb="5">
                 ของแจกลูกค้า
             </Text>
             {!data?.gives ? (
                 <Text>No data.</Text>
             ) : (
-                <>
+                    <Flex flexDir="row">
                     {data.gives.map((give) => (
                         <GiveItem key={give.id} give={give} />
                     ))}
-                </>
+                    </Flex>
             )}
         </Layout>
     )

@@ -11,6 +11,7 @@ import {
 import { Link } from "react-router-dom";
 
 import { RegularGiveOrdersFragment } from "../../generated/graphql";
+import { formatAmount } from "../../utils/helpers"
 
 interface Props {
     order: RegularGiveOrdersFragment;
@@ -23,7 +24,8 @@ const OrderGiveItem: React.FC<Props> = ({
         amount,
         price,
         status,
-        give: { giveName, price: p },
+        customerDetail,
+        give: { giveName, price: p, imageUrl },
     },
 }) => {
     const { colorMode } = useColorMode();
@@ -34,13 +36,16 @@ const OrderGiveItem: React.FC<Props> = ({
                 <Center>{new Date(+createdAt).toDateString()}</Center>
             </Td>
             <Td>
-                <Center>{giveName}</Center>
+                <Center>{imageUrl}{giveName}</Center>
             </Td>
             <Td>
-                <Center>{amount} x {p} บาท</Center>
+                <Center>{customerDetail}</Center>
             </Td>
             <Td>
-                <Center>{price}</Center>
+                <Center>{amount} ชิ้น x {p && formatAmount(p)} บาท</Center>
+            </Td>
+            <Td>
+                <Center>{price && formatAmount(price)}</Center>
             </Td>
             <Td
                 fontWeight="semibold"

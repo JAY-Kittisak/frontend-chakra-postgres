@@ -342,6 +342,9 @@ export type RegularGiveOrdersFragment = (
   & { give: (
     { __typename?: 'Give' }
     & RegularGiveFragment
+  ), creator: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'roles' | 'departments' | 'fullNameTH'>
   ) }
 );
 
@@ -638,6 +641,12 @@ export const RegularGiveOrdersFragmentDoc = gql`
   status
   give {
     ...RegularGive
+  }
+  creator {
+    id
+    roles
+    departments
+    fullNameTH
   }
   createdAt
   updatedAt
