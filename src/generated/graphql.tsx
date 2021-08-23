@@ -248,6 +248,7 @@ export type Query = {
   giveById: Give;
   giveOrders?: Maybe<Array<GiveOrder>>;
   giveOrderById: GiveOrder;
+  giveOrderByCreatorId: Array<GiveOrder>;
 };
 
 
@@ -374,6 +375,25 @@ export type CreateGiveMutation = (
       { __typename?: 'Give' }
       & RegularGiveFragment
     )>> }
+  ) }
+);
+
+export type CreateGiveOrderMutationVariables = Exact<{
+  input: GiveOrderInput;
+}>;
+
+
+export type CreateGiveOrderMutation = (
+  { __typename?: 'Mutation' }
+  & { createGiveOrder: (
+    { __typename?: 'GiveOrderResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorGive' }
+      & Pick<FieldErrorGive, 'field' | 'message'>
+    )>>, giveOrder?: Maybe<(
+      { __typename?: 'GiveOrder' }
+      & RegularGiveOrdersFragment
+    )> }
   ) }
 );
 
@@ -547,6 +567,30 @@ export type GiveByIdQuery = (
   ) }
 );
 
+export type GiveOrderByCreatorIdQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GiveOrderByCreatorIdQuery = (
+  { __typename?: 'Query' }
+  & { giveOrderByCreatorId: Array<(
+    { __typename?: 'GiveOrder' }
+    & RegularGiveOrdersFragment
+  )> }
+);
+
+export type GiveOrderByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GiveOrderByIdQuery = (
+  { __typename?: 'Query' }
+  & { giveOrderById: (
+    { __typename?: 'GiveOrder' }
+    & RegularGiveOrdersFragment
+  ) }
+);
+
 export type GivesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -686,6 +730,23 @@ export const CreateGiveDocument = gql`
 
 export function useCreateGiveMutation() {
   return Urql.useMutation<CreateGiveMutation, CreateGiveMutationVariables>(CreateGiveDocument);
+};
+export const CreateGiveOrderDocument = gql`
+    mutation CreateGiveOrder($input: giveOrderInput!) {
+  createGiveOrder(input: $input) {
+    errors {
+      field
+      message
+    }
+    giveOrder {
+      ...RegularGiveOrders
+    }
+  }
+}
+    ${RegularGiveOrdersFragmentDoc}`;
+
+export function useCreateGiveOrderMutation() {
+  return Urql.useMutation<CreateGiveOrderMutation, CreateGiveOrderMutationVariables>(CreateGiveOrderDocument);
 };
 export const CreateProductByTierDocument = gql`
     mutation createProductByTier($input: ProductByTierInput!) {
@@ -854,6 +915,28 @@ export const GiveByIdDocument = gql`
 
 export function useGiveByIdQuery(options: Omit<Urql.UseQueryArgs<GiveByIdQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<GiveByIdQuery>({ query: GiveByIdDocument, ...options });
+};
+export const GiveOrderByCreatorIdDocument = gql`
+    query GiveOrderByCreatorId {
+  giveOrderByCreatorId {
+    ...RegularGiveOrders
+  }
+}
+    ${RegularGiveOrdersFragmentDoc}`;
+
+export function useGiveOrderByCreatorIdQuery(options: Omit<Urql.UseQueryArgs<GiveOrderByCreatorIdQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GiveOrderByCreatorIdQuery>({ query: GiveOrderByCreatorIdDocument, ...options });
+};
+export const GiveOrderByIdDocument = gql`
+    query GiveOrderById($id: Int!) {
+  giveOrderById(id: $id) {
+    ...RegularGiveOrders
+  }
+}
+    ${RegularGiveOrdersFragmentDoc}`;
+
+export function useGiveOrderByIdQuery(options: Omit<Urql.UseQueryArgs<GiveOrderByIdQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GiveOrderByIdQuery>({ query: GiveOrderByIdDocument, ...options });
 };
 export const GivesDocument = gql`
     query Gives {

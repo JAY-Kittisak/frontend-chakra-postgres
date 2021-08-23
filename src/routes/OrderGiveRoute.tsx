@@ -4,10 +4,12 @@ import { Switch, Route } from 'react-router-dom'
 import OrderGive from '../pages/OrderGive'
 import OrderGiveDetail from '../pages/OrderGiveDetail'
 import PageNotFound from '../pages/PageNotFound'
+import { useIsAuth } from '../utils/uselsAuth'
 
 interface Props { }
 
 const OrderGiveRoute: React.FC<Props> = () => {
+    useIsAuth()
     return (
             <Switch>
                 <Route path="/order-give/my-orders/:orderId">

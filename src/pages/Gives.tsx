@@ -1,7 +1,6 @@
 import React from 'react'
-import { Flex, Text } from "@chakra-ui/react";
+import { Grid, Text } from "@chakra-ui/react";
 
-import { useIsAuth } from "../utils/uselsAuth";
 import Layout from "../components/Layout";
 import Spinner from "../components/Spinner";
 import GiveItem from "../components/gives/GiveItem"
@@ -10,7 +9,6 @@ import { useGivesQuery } from '../generated/graphql'
 interface Props { }
 
 const Gives: React.FC<Props> = () => {
-    useIsAuth()
     const [{ data, fetching }] = useGivesQuery()
 
     if (fetching) return <Spinner color="grey" height={50} width={50} />
@@ -23,11 +21,11 @@ const Gives: React.FC<Props> = () => {
             {!data?.gives ? (
                 <Text>No data.</Text>
             ) : (
-                    <Flex flexDir="row">
-                    {data.gives.map((give) => (
-                        <GiveItem key={give.id} give={give} />
-                    ))}
-                    </Flex>
+                    <Grid templateColumns={["repeat(5, 1fr)"]} gap={6}>
+                        {data.gives.map((give) => (
+                            <GiveItem key={give.id} give={give} />
+                        ))}
+                    </Grid>
             )}
         </Layout>
     )

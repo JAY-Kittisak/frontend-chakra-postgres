@@ -1,12 +1,9 @@
 import React from "react";
 import {
-    Tr,
-    Td,
     Text,
     Box,
-    Button,
-    Center,
     useColorMode,
+    Divider,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
@@ -24,59 +21,44 @@ const OrderGiveItem: React.FC<Props> = ({
         amount,
         price,
         status,
-        customerDetail,
-        give: { giveName, price: p, imageUrl },
     },
 }) => {
     const { colorMode } = useColorMode();
 
     return (
-        <Tr>
-            <Td fontSize={["xs", "xs", "sm", "md"]}>
-                <Center>{new Date(+createdAt).toDateString()}</Center>
-            </Td>
-            <Td>
-                <Center>{imageUrl}{giveName}</Center>
-            </Td>
-            <Td>
-                <Center>{customerDetail}</Center>
-            </Td>
-            <Td>
-                <Center>{amount} ชิ้น x {p && formatAmount(p)} บาท</Center>
-            </Td>
-            <Td>
-                <Center>{price && formatAmount(price)}</Center>
-            </Td>
-            <Td
-                fontWeight="semibold"
-                fontSize={["md", "md", "md", "xl"]}
-                color={
-                    status === "New"
-                        ? colorMode === "light" ? "cyan.600" : "cyan"
-                        : status === "Preparing"
-                            ? "orange"
-                            : status === "Success"
-                                ? "green"
-                                : undefined
-                }
-            >
-                <Center>{status}</Center>
-            </Td>
-            <Td fontSize={["xs", "xs", "sm", "md"]}>
-                <Link to={`/tiers/factories/${id}`}>
-                    <Box textAlign="center">
-                        <Button
-                            colorScheme={colorMode === "light" ? "green" : "blue"}
-                            boxShadow="sm"
-                            _hover={{ boxShadow: "md" }}
-                            _active={{ boxShadow: "lg" }}
-                        >
-                            <Text color="white">รายละเอียด</Text>
-                        </Button>
+        <Link to={`/order-give/my-orders/${id}`}>
+            <div className='orders-content orders-content--content'>
+                <Box w="25%">
+                    <Text fontSize={["xs", "xs", "sm", "md"]} align="center">{new Date(+createdAt).toDateString()}</Text>
+                </Box>
+                <Box w="25%">
+                    <Text fontSize="md" align="center">{amount}</Text>
+                </Box>
+                <Box w="25%">
+                    <Text fontSize="md" align="center" ml="10">{price && formatAmount(price)}</Text>
+                </Box>
+                <Box w="25%">
+                    <Text
+                        ml="4"
+                        align="center"
+                        fontWeight="semibold"
+                        fontSize={["md", "md", "md", "md"]}
+                        color={
+                            status === "New"
+                                ? colorMode === "light" ? "cyan.600" : "cyan"
+                                : status === "Preparing"
+                                    ? "orange"
+                                    : status === "Success"
+                                        ? "green"
+                                        : undefined
+                        }
+                    >
+                        {status}
+                    </Text>
                     </Box>
-                </Link>
-            </Td>
-        </Tr>
+            </div>
+            <Divider orientation="horizontal" />
+        </Link>
     );
 };
 

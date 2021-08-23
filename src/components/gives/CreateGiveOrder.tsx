@@ -10,18 +10,24 @@ import {
     ModalCloseButton,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-// import {useHistory} from "react-router-dom";
-// import { toErrorMap } from "../../utils/toErrorMap";
+import { useHistory } from "react-router-dom";
+import { toErrorMap } from "../../utils/toErrorMap";
 import InputField from "../InputField";
+import { useCreateGiveOrderMutation, FieldError } from "../../generated/graphql";
 
 interface Props {
-    setOpen: () => void;
+    giveId: number
+    amount: number
     Open: boolean;
+    setOpen: () => void;
 }
 
-const CreateGiveOrder: React.FC<Props> = ({ Open, setOpen }) => {
-    //   const history = useHistory();
+const CreateGiveOrder: React.FC<Props> = ({ Open, setOpen, giveId, amount }) => {
+    const history = useHistory();
     const cancelRef = useRef();
+
+    const [, createGiveOrder] = useCreateGiveOrderMutation()
+
     return (
         <AlertDialog
             isOpen={Open}
@@ -30,39 +36,33 @@ const CreateGiveOrder: React.FC<Props> = ({ Open, setOpen }) => {
         >
             <Formik
                 initialValues={{
-                    fullNameTH: "",
-                    fullNameEN: "",
-                    nickName: "",
-                    email: "",
+                    giveId,
+                    amount,
+                    customerId: 0,
+                    customerDetail: "",
                 }}
-                onSubmit={async (
-                    values,
-                    //  { setErrors }
-                ) => {
-                    // const response = await updateUser({ options: values });
-                    console.log(values);
-                    // if (response.data?.updateUser.errors) {
-                    //     setErrors(toErrorMap(response.data.updateUser.errors));
-                    // } else if (response.data?.updateUser.user) {
-                    //     setOpen()
-                    //  history.push("/order-give/my-orders")
-                    // }
+                onSubmit={async (values, { setErrors }) => {
+                    const response = await createGiveOrder({ input: values });
+                    if (response.data?.createGiveOrder.errors) {
+                        setErrors(toErrorMap(response.data.createGiveOrder.errors as FieldError[]));
+                    } else if (response.data?.createGiveOrder.giveOrder) {
+                        setOpen()
+                        history.push("/order-give/my-orders")
+                    }
                 }}
             >
                 {({ isSubmitting }) => (
                     <AlertDialogOverlay>
                         <AlertDialogContent>
                             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                                อัพโหลดรูปภาพของผู้ใช้
+                                Create Order
                             </AlertDialogHeader>
                             <ModalCloseButton />
 
                             <Form>
                                 <AlertDialogBody>
-                                    <InputField name="fullNameTH" label="ชื่อภาษาไทย" />
-                                    <InputField name="fullNameEN" label="ชื่อภาษาอังกฤษ" />
-                                    <InputField name="nickName" label="ชื่อเล่น" />
-                                    <InputField name="email" label="Email" />
+                                    <InputField type="number" name="customerId" label="เลขจดทะเบียนโรงงาน (ไม่จำเป็น)" />
+                                    <InputField textarea name="customerDetail" label="รายละเอียดการเบิกของ" />
                                 </AlertDialogBody>
 
                                 <AlertDialogFooter>

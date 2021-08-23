@@ -13,7 +13,6 @@ import {
 } from "@chakra-ui/react";
 import { SmallAddIcon, MinusIcon } from "@chakra-ui/icons";
 
-import { useIsAuth } from "../utils/uselsAuth";
 import { useGiveByIdQuery } from "../generated/graphql";
 import Layout from "../components/Layout";
 import Spinner from "../components/Spinner";
@@ -24,8 +23,7 @@ import { formatAmount } from "../utils/helpers"
 interface Props { }
 
 const GiveDetail: React.FC<Props> = () => {
-    useIsAuth();
-    const [quantity, setQuantity] = useState(1);
+    const [amount, setAmount] = useState(1);
     const { isOpen, setIsOpen } = useDialog();
 
     const bg = useColorModeValue("white", "gray.700");
@@ -124,10 +122,10 @@ const GiveDetail: React.FC<Props> = () => {
                                                     aria-label=""
                                                     icon={<MinusIcon />}
                                                     style={{
-                                                        cursor: quantity === 1 ? "not-allowed" : undefined,
+                                                        cursor: amount === 1 ? "not-allowed" : undefined,
                                                     }}
                                                     onClick={() =>
-                                                        setQuantity((prev) => {
+                                                        setAmount((prev) => {
                                                             if (prev < 2) return prev;
                                                             return prev - 1;
                                                         })
@@ -136,7 +134,7 @@ const GiveDetail: React.FC<Props> = () => {
                                                 <Center>
                                                     <Flex ml={3} mr={3} mt="-1">
                                                         <Text fontWeight="semibold" fontSize="2xl">
-                                                            {quantity}
+                                                            {amount}
                                                         </Text>
                                                     </Flex>
                                                 </Center>
@@ -145,12 +143,12 @@ const GiveDetail: React.FC<Props> = () => {
                                                     icon={<SmallAddIcon />}
                                                     style={{
                                                         cursor:
-                                                            quantity === data.giveById.inventory
+                                                            amount === data.giveById.inventory
                                                                 ? "not-allowed"
                                                                 : undefined,
                                                     }}
                                                     onClick={() =>
-                                                        setQuantity((prev) => {
+                                                        setAmount((prev) => {
                                                             if (prev === data.giveById.inventory) return prev;
                                                             return prev + 1;
                                                         })
@@ -173,6 +171,8 @@ const GiveDetail: React.FC<Props> = () => {
                                                 </Button>
                                                 {isOpen && (
                                                     <CreateGiveOrder
+                                                        giveId={+gid}
+                                                        amount={amount}
                                                         Open={true}
                                                         setOpen={() => setIsOpen(false)}
                                                     />

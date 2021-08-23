@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import {
+    Flex,
     Text,
     Button,
     AlertDialog,
@@ -135,26 +136,28 @@ const AddAndEditGive: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
                                             </option>
                                         ))}
                                     </SelectControl>
-
-                                    <InputField
-                                        name="imageUrl"
-                                        label="Image"
-                                        type="file"
-                                        onChange={(e) => {
-                                            const files = e.target.files;
-                                            if (!files || !files[0]) return;
-
-                                            const file = files[0];
-
-                                            if (!fileType.includes(file.type)) {
-                                                alert(
-                                                    'Wrong file format, allow only "png" or "jpeg" or "jpg"'
-                                                );
-                                                return;
-                                            }
-                                            setSelectedFile(file);
-                                        }}
-                                    />
+                                    {!giveToEdit &&
+                                        <Flex flexDir="column">
+                                            <Text fontWeight="semibold" fontSize={["sm", "md"]} mb="2">
+                                                Image
+                                            </Text>
+                                            <input
+                                                name="imageUrl"
+                                            type="file"
+                                            onChange={(e) => {
+                                                const files = e.target.files;
+                                                if (!files || !files[0]) return;
+                                                const file = files[0];
+                                                if (!fileType.includes(file.type)) {
+                                                    alert(
+                                                        'Wrong file format, allow only "png" or "jpeg" or "jpg"'
+                                                    );
+                                                    return;
+                                                }
+                                                setSelectedFile(file);
+                                            }}
+                                        />
+                                        </Flex>}
                                     {errorImage && (
                                         <>
                                             <Text color="yellow.400" p="3">
@@ -170,7 +173,7 @@ const AddAndEditGive: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
                                         Cancel
                                     </Button>
                                     <Button
-                                        colorScheme="blue"
+                                        colorScheme="green"
                                         isLoading={isSubmitting}
                                         type="submit"
                                         ml={3}

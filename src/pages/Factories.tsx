@@ -9,7 +9,6 @@ import FactoryChart from "../components/tier/FactoryChart";
 import FactoryItem from "../components/tier/FactoryItem";
 import { Factory, useFactoriesQuery } from "../generated/graphql";
 import { factoryTab } from "../utils/helpers";
-import { useIsAuth } from "../utils/uselsAuth";
 import Spinner from "../components/Spinner";
 
 
@@ -18,7 +17,6 @@ interface Props { }
 type Display = "none" | "hide" | "show";
 
 const Factories: React.FC<Props> = () => {
-    useIsAuth()
     const bg = useColorModeValue("gray.200", "gray.700")
     const [display, changeDisplay] = useState<Display>("hide");
     const [{ data: factoryAll }] = useFactoriesQuery();
