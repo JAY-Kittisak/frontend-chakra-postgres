@@ -4,6 +4,7 @@ import { Switch, Route } from 'react-router-dom'
 import { useIsAuth } from '../utils/uselsAuth'
 import ManageGives from '../pages/ManageGives'
 import ManageGiveOrders from '../pages/ManageGiveOrders'
+import ManageGiveOrderDetail from '../pages/ManageGiveOrderDetail'
 import PageNotFound from '../pages/PageNotFound'
 
 interface Props { }
@@ -16,9 +17,9 @@ const AdminRoutes: React.FC<Props> = () => {
                 <Route path="/admin/manage-gives">
                     <ManageGives />
                 </Route>
-                {/* <Route path="/admin/manage-give-orders/:id">
-            
-        </Route> */}
+            <Route path="/admin/manage-give-orders/:id">
+                <ManageGiveOrderDetail />
+            </Route>
                 <Route path="/admin/manage-give-orders">
                     <ManageGiveOrders />
                 </Route>

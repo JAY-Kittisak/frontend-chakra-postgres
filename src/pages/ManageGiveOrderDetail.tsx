@@ -1,10 +1,14 @@
 import React from 'react'
 
+import Layout from "../components/Layout";
+
 interface Props { }
 
 const ManageGiveOrderDetail: React.FC<Props> = () => {
     return (
-        <div>ManageGiveOrderDetail</div>
+        <Layout variant="regular">
+            <div>ManageGiveOrderDetail</div>
+        </Layout>
     )
 }
 

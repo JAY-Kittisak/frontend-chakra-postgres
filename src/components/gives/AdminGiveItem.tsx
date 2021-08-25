@@ -112,9 +112,9 @@ const AdminGiveItem: React.FC<Props> = ({
                                         ml={3}
                                         onClick={async () => {
                                             const response = await deleteGive({ id: give.id })
-                                            if (response.data?.deleteGive.errors) {
+                                            if (!response) {
                                                 alert("Delete Error! โปรดติดต่อผู้ดูแล")
-                                            } else if (response.data?.deleteGive.give) {
+                                            } else if (response) {
                                                 setDeleteDialog(false)
                                             }
                                         }}

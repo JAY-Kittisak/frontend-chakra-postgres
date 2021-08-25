@@ -13,8 +13,6 @@ const OrderGive: React.FC<Props> = () => {
     const bg = useColorModeValue("white", "gray.700");
     const bgColumn = useColorModeValue("#028174", "#3E54D3");
 
-    if (fetching) return <Spinner color="grey" height={50} width={50} />;
-
     return (
         <Layout variant="regular">
             <Text
@@ -27,7 +25,14 @@ const OrderGive: React.FC<Props> = () => {
             </Text>
             <Flex flexDir="column" p={9} rounded="7px" boxShadow="md" bg={bg}>
                 <Flex flexDir="column">
-                    <Flex justify="space-around" bg={bgColumn} rounded="7px" color="white" h="35px" align="center">
+                    <Flex
+                        justify="space-around"
+                        bg={bgColumn}
+                        rounded="7px"
+                        color="white"
+                        h="35px"
+                        align="center"
+                    >
                         <Text fontSize={["md", "md", "xl", "xl"]} fontWeight="bold">
                             วันที่สั่ง
                         </Text>
@@ -43,10 +48,18 @@ const OrderGive: React.FC<Props> = () => {
                     </Flex>
 
                     <Flex flexDir="column">
-                        {data?.giveOrderByCreatorId &&
+                        {fetching || !data?.giveOrderByCreatorId ? (
+                            <Flex justify="center" mt="5">
+                                <Spinner color="grey" height={50} width={50} />
+                                <Text fontWeight="bold" fontSize="2xl">
+                                    &nbsp; Loading...
+                                </Text>
+                            </Flex>
+                        ) : (
                             data.giveOrderByCreatorId.map((order) => (
                                 <OrderGiveItem key={order.id} order={order} />
-                            ))}
+                            ))
+                        )}
                     </Flex>
                 </Flex>
             </Flex>

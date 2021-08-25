@@ -1,0 +1,5 @@
+query GiveOrders {
+  giveOrders {
+    ...RegularGiveOrders
+  }
+}

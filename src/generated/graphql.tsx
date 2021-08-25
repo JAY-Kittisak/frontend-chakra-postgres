@@ -129,8 +129,8 @@ export type Mutation = {
   deleteProduct: Scalars['Boolean'];
   createGive: GiveResponse;
   updateGive: UpdateGiveResponse;
-  createGiveOrder: GiveOrderResponse;
   deleteGive: GiveResponse;
+  createGiveOrder: GiveOrderResponse;
   deleteGiveOrder: Scalars['Boolean'];
 };
 
@@ -198,13 +198,13 @@ export type MutationUpdateGiveArgs = {
 };
 
 
-export type MutationCreateGiveOrderArgs = {
-  input: GiveOrderInput;
+export type MutationDeleteGiveArgs = {
+  id: Scalars['Int'];
 };
 
 
-export type MutationDeleteGiveArgs = {
-  id: Scalars['Int'];
+export type MutationCreateGiveOrderArgs = {
+  input: GiveOrderInput;
 };
 
 
@@ -591,6 +591,17 @@ export type GiveOrderByIdQuery = (
   ) }
 );
 
+export type GiveOrdersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GiveOrdersQuery = (
+  { __typename?: 'Query' }
+  & { giveOrders?: Maybe<Array<(
+    { __typename?: 'GiveOrder' }
+    & RegularGiveOrdersFragment
+  )>> }
+);
+
 export type GivesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -937,6 +948,17 @@ export const GiveOrderByIdDocument = gql`
 
 export function useGiveOrderByIdQuery(options: Omit<Urql.UseQueryArgs<GiveOrderByIdQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<GiveOrderByIdQuery>({ query: GiveOrderByIdDocument, ...options });
+};
+export const GiveOrdersDocument = gql`
+    query GiveOrders {
+  giveOrders {
+    ...RegularGiveOrders
+  }
+}
+    ${RegularGiveOrdersFragmentDoc}`;
+
+export function useGiveOrdersQuery(options: Omit<Urql.UseQueryArgs<GiveOrdersQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GiveOrdersQuery>({ query: GiveOrdersDocument, ...options });
 };
 export const GivesDocument = gql`
     query Gives {

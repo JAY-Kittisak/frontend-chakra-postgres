@@ -10,9 +10,10 @@ import {
     RegisterMutation,
     UploadImageMeMutation,
     CreateGiveMutation,
+    DeleteGiveMutationVariables,
     GivesQuery,
     GivesDocument,
-    DeleteGiveMutation
+    // DeleteGiveMutation
 } from "../generated/graphql";
 
 function betterUpdateQuery<Result, Query>(
@@ -107,21 +108,11 @@ export const client = createClient({
                     },
 
                     deleteGive: (_result, args, cache, info) => {
-                        betterUpdateQuery<DeleteGiveMutation, GivesQuery>(cache,
-                            { query: GivesDocument },
-                            _result,
-                            (result, query) => {
-                                if (result.deleteGive.errors) {
-                                    return query
-                                } else {
-                                    return {
-                                        gives: result.deleteGive.give
-                                    }
-                                }
-                            }
-                        )
+                        cache.invalidate({
+                            __typename: "Give",
+                            id: (args as DeleteGiveMutationVariables).id,
+                        });
                     },
-
                 }
             }
         }),
