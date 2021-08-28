@@ -10,6 +10,7 @@ import {
     useColorMode,
     Button,
     Center,
+    Divider
 } from "@chakra-ui/react";
 
 import Layout from "../components/Layout";
@@ -40,6 +41,7 @@ const ManageGives: React.FC<Props> = () => {
                 >
                     Admin Manages
                 </Text>
+                <Divider mt={1} mb={5} orientation="horizontal" />
                 {fetching ? (
                     <Center>
                         <Spinner color="grey" height={50} width={50} />

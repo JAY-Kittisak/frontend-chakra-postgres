@@ -1,6 +1,7 @@
 import { FactoryTab, FactoryIndustrialEstate } from "../types"
 
 export const formatAmount = (amount: number) => amount.toLocaleString('en', { minimumFractionDigits: 0 })
+export const formatDate = (date: number) => new Date(date).toDateString()
 
 type CatProductV1 = "อะไหล่รถยนต์" | "อาหาร" | "อิเล็กทรอนิกส์" | "*โปรดเลือก"
 
@@ -73,4 +74,12 @@ export const catGive: CategoryGive[] = [
     "USB",
     "ปากกา",
     "สมุด"
+]
+
+// ---------------------- Status ----------------------
+export type CategoryStatus = "New" | "Preparing" | "Success"
+export const catStatus: CategoryStatus[] = [
+    "New",
+    "Preparing",
+    "Success",
 ]

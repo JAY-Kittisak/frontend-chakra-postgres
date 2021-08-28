@@ -37,15 +37,22 @@ const GiveDetail: React.FC<Props> = () => {
         },
   });
 
-    if (fetching) return <Spinner color="grey" height={50} width={50} />;
-
     return (
         <Layout variant="regular">
             <Text as="i" fontWeight="semibold" fontSize={["md", "md", "xl", "3xl"]}>
                 รายละเอียดสินค้า
             </Text>
+            <Divider mt={1} mb={3} orientation="horizontal" />
 
             <Center>
+                {fetching &&
+                    <Flex justify="center" mt="5">
+                        <Spinner color="grey" height={50} width={50} />
+                        <Text fontWeight="bold" fontSize="2xl">
+                            &nbsp; Loading...
+                        </Text>
+                    </Flex>}
+
                 {!data?.giveById ? (
                     <Text>No data.</Text>
                 ) : (
@@ -61,7 +68,7 @@ const GiveDetail: React.FC<Props> = () => {
                                 {data.giveById.imageUrl && (
                                     <Image boxSize="400px" src={data.giveById.imageUrl} />
                                 )}
-                                <Flex flexDir="column" justifyContent="space-between">
+                                <Flex flexDir="column">
                                     <Flex p={5} flexDir="column" justifyContent="space-between">
                                         <Center>
                                             <Text fontSize="xl" fontWeight="bold">{data.giveById.giveName}</Text>

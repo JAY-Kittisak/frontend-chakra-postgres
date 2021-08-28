@@ -6,7 +6,7 @@ import {
 } from "@chakra-ui/react";
 import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
 import { RegularGiveFragment, useDeleteGiveMutation } from "../../generated/graphql";
-import { formatAmount } from "../../utils/helpers";
+import { formatAmount, formatDate } from "../../utils/helpers";
 
 interface Props {
     give: RegularGiveFragment;
@@ -59,7 +59,7 @@ const AdminGiveItem: React.FC<Props> = ({
                 <Center>{give.category}</Center>
             </Td>
             <Td>
-                <Center>{new Date(+give.updatedAt).toDateString()}</Center>
+                <Center>{formatDate(+give.updatedAt)}</Center>
             </Td>
             <Td>
                 <Center>

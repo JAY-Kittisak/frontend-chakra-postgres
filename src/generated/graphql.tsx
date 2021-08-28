@@ -131,6 +131,7 @@ export type Mutation = {
   updateGive: UpdateGiveResponse;
   deleteGive: GiveResponse;
   createGiveOrder: GiveOrderResponse;
+  updateGiveOrder: Scalars['Boolean'];
   deleteGiveOrder: Scalars['Boolean'];
 };
 
@@ -205,6 +206,12 @@ export type MutationDeleteGiveArgs = {
 
 export type MutationCreateGiveOrderArgs = {
   input: GiveOrderInput;
+};
+
+
+export type MutationUpdateGiveOrderArgs = {
+  newStatus: Scalars['String'];
+  id: Scalars['Int'];
 };
 
 
@@ -503,6 +510,17 @@ export type UpdateGiveMutation = (
       & RegularGiveFragment
     )> }
   ) }
+);
+
+export type UpdateGiveOrderMutationVariables = Exact<{
+  id: Scalars['Int'];
+  newStatus: Scalars['String'];
+}>;
+
+
+export type UpdateGiveOrderMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'updateGiveOrder'>
 );
 
 export type UpdateUserMutationVariables = Exact<{
@@ -862,6 +880,15 @@ export const UpdateGiveDocument = gql`
 
 export function useUpdateGiveMutation() {
   return Urql.useMutation<UpdateGiveMutation, UpdateGiveMutationVariables>(UpdateGiveDocument);
+};
+export const UpdateGiveOrderDocument = gql`
+    mutation UpdateGiveOrder($id: Int!, $newStatus: String!) {
+  updateGiveOrder(id: $id, newStatus: $newStatus)
+}
+    `;
+
+export function useUpdateGiveOrderMutation() {
+  return Urql.useMutation<UpdateGiveOrderMutation, UpdateGiveOrderMutationVariables>(UpdateGiveOrderDocument);
 };
 export const UpdateUserDocument = gql`
     mutation UpdateUser($options: updateUserInput!) {
