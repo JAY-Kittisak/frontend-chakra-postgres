@@ -26,7 +26,7 @@ const ManageGiveOrders: React.FC<Props> = () => {
             </Text>
 
             <Flex flexDir="column" p={9} rounded="7px" boxShadow="md" bg={bg}>
-                <Flex flexDir="column" overflowX="scroll">
+                <Flex flexDir="column" overflowX="auto">
                     <Flex
                         // justify="space-around"
                         bg={bgColumn}

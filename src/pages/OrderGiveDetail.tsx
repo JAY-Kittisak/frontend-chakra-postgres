@@ -51,98 +51,85 @@ const OrderGiveDetail: React.FC<Props> = () => {
                 {!data?.giveOrderById ? (
                     <Text>No data.</Text>
                 ) : (
-                    <Flex flexDir={["column", "column", "column", "row"]} w={[null, null, null, "70%"]} p={5} rounded="7px" boxShadow="md" bg={bg}>
-                        <Flex w={[null, null, null, "40%"]} justify="center">
-                            {data.giveOrderById.give.imageUrl && (
-                                <Image
-                                    boxSize="400px"
-                                    src={data.giveOrderById.give.imageUrl}
-                                />
-                            )}
-                        </Flex>
-                        <Flex p={5} flexDir="column" w={[null, null, null, "60%"]}>
-                            <Stack isInline mt={3} justify="space-between">
-                                <Text
-                                    fontSize="xl"
-                                    fontWeight="bold"
-                                    align="center"
-                                >
-                                    Order ID : {data.giveOrderById.id}
-                                </Text>
-                                <Text
-                                    as="i"
-                                    fontWeight="bold"
-                                    fontSize="xl"
-                                    color={
-                                        data.giveOrderById.status === "New"
-                                            ? colorMode === "light"
-                                                ? "cyan.600"
-                                                : "cyan"
-                                            : data.giveOrderById.status === "Preparing"
-                                                ? "orange"
-                                                : data.giveOrderById.status === "Success"
-                                                    ? "green"
-                                                    : undefined
-                                    }
-                                >
-                                    {data.giveOrderById.status}
-                                </Text>
-                            </Stack>
-                            <Stack isInline mt={3}>
-                                <Text
-                                    fontSize={["sm", "sm", "md", "md"]}
-                                    fontWeight="semibold"
-                                >
-                                    จำนวนที่เบิก :{" "}
-                                </Text>
-                                <Text fontSize={["sm", "sm", "md", "md"]}>
-                                    {data.giveOrderById.amount}
-                                </Text>
-                            </Stack>
-                            <Divider mt={3} orientation="horizontal" />
-                            <Stack isInline mt={3}>
-                                <Text
-                                    fontSize={["sm", "sm", "md", "md"]}
-                                    fontWeight="semibold"
-                                >
-                                    ราคารวม :{" "}
-                                </Text>
-                                <Text fontSize={["sm", "sm", "md", "md"]}>
-                                    {data.giveOrderById.price &&
-                                        formatAmount(data.giveOrderById.price)}
-                                </Text>
-                            </Stack>
-                            <Divider mt={3} orientation="horizontal" />
-                            <Text
-                                fontSize={["sm", "sm", "md", "md"]}
-                                mt={3}
-                                fontWeight="semibold"
-                            >
-                                ชื่อสินค้า :{" "}
-                            </Text>
-                            <Text fontSize={["sm", "sm", "md", "md"]} ml="6">
-                                {data.giveOrderById.give.giveName}
-                            </Text>
-                            <Divider mt={3} orientation="horizontal" />
-                            <Text
-                                fontSize={["sm", "sm", "md", "md"]}
-                                mt={3}
-                                fontWeight="semibold"
-                            >
-                                รายละเอียด :{" "}
-                            </Text>
-                            <Text fontSize={["sm", "sm", "md", "md"]} ml="6">
-                                {data.giveOrderById.customerDetail}
-                            </Text>
-                            <Divider mt={3} orientation="horizontal" />
-                            <Stack isInline mt={3}>
-                                <Text
-                                    fontSize={["sm", "sm", "md", "md"]}
-                                    fontWeight="semibold"
-                                >
-                                    วันที่เบิก :{" "}
-                                </Text>
-                                <Text fontSize={["sm", "sm", "md", "md"]}>
+                        <Flex
+                            flexDir={["column", "column", "column", "row"]}
+                            w={[null, null, null, "70%"]}
+                            p="1"
+                            rounded="7px"
+                            boxShadow="md"
+                            bg={bg}
+                        >
+                            <Flex w={[null, null, null, "40%"]} justify="center">
+                                {data.giveOrderById.give.imageUrl && (
+                                    <Image boxSize="400px" src={data.giveOrderById.give.imageUrl} />
+                                )}
+                            </Flex>
+                            <Flex p={5} flexDir="column" w={[null, null, null, "60%"]} justify="center">
+
+                                <Stack isInline mt={3} justify="space-between" mb="10">
+                                    <Text fontSize={["md", "xl", "xl", "2xl"]} fontWeight="bold" align="center">
+                                        Order ID : {data.giveOrderById.id}
+                                    </Text>
+                                    <Text
+                                        as="i"
+                                        fontWeight="bold"
+                                        fontSize={["md", "xl", "xl", "2xl"]}
+                                        color={
+                                            data.giveOrderById.status === "New"
+                                                ? colorMode === "light"
+                                                    ? "cyan.600"
+                                                    : "cyan"
+                                                : data.giveOrderById.status === "Preparing"
+                                                    ? "orange"
+                                                    : data.giveOrderById.status === "Success"
+                                                        ? "green"
+                                                        : undefined
+                                        }
+                                    >
+                                        {data.giveOrderById.status}
+                                    </Text>
+                                </Stack>
+
+                                <Stack isInline mt={3} justify="space-between">
+                                    <Text fontSize={["sm", "sm", "md", "xl"]}>จำนวนที่เบิก : </Text>
+                                    <Text fontSize={["sm", "sm", "md", "xl"]} fontWeight="semibold">
+                                        {data.giveOrderById.amount} ชิ้น
+                                    </Text>
+                                </Stack>
+                                <Divider mt={3} orientation="horizontal" />
+
+                                <Stack isInline mt={3} justify="space-between">
+                                    <Text fontSize={["sm", "sm", "md", "xl"]}>ราคารวม : </Text>
+                                    <Text fontSize={["sm", "sm", "md", "xl"]} fontWeight="semibold">
+                                        {data.giveOrderById.price &&
+                                            formatAmount(data.giveOrderById.price)} บาท
+                                    </Text>
+                                </Stack>
+                                <Divider mt={3} orientation="horizontal" />
+
+                                <Stack isInline mt={3} justify="space-between">
+                                    <Text fontSize={["sm", "sm", "md", "xl"]}>
+                                        ชื่อสินค้า :{" "}
+                                    </Text>
+                                    <Text fontSize={["sm", "sm", "md", "xl"]} fontWeight="semibold">
+                                        {data.giveOrderById.give.giveName}
+                                    </Text>
+                                </Stack>
+                                <Divider mt={3} orientation="horizontal" />
+
+                                <Stack isInline mt={3} justify="space-between">
+                                    <Text fontSize={["sm", "sm", "md", "xl"]} >
+                                        รายละเอียด :{" "}
+                                    </Text>
+                                    <Text fontSize={["sm", "sm", "md", "xl"]} fontWeight="semibold">
+                                        {data.giveOrderById.customerDetail}
+                                    </Text>
+                                </Stack>
+                                <Divider mt={3} orientation="horizontal" />
+
+                                <Stack isInline mt={3} justify="space-between">
+                                    <Text fontSize={["sm", "sm", "md", "xl"]}>วันที่เบิก : </Text>
+                                    <Text fontSize={["sm", "sm", "md", "xl"]} fontWeight="semibold">
                                     {data.giveOrderById.createdAt &&
                                         formatDate(+data.giveOrderById.createdAt)}
                                 </Text>

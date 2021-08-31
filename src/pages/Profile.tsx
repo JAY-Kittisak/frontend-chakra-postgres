@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Text, Flex, Box, Heading, Button, Center } from "@chakra-ui/react";
-import { useMeQuery } from "../generated/graphql";
-import Layout from "../components/Layout";
 import { Form, Formik } from "formik";
+import { Redirect } from 'react-router-dom'
+
+import { useMeQuery, RegularUserFragment } from "../generated/graphql";
+import Layout from "../components/Layout";
 import InputField from "../components/InputField";
 import AddImageUser from "../components/manage-users/AddImageUser";
 import Card from "../components/chakra-ui/Card";
 import Spinner from "../components/Spinner";
-import { Redirect } from 'react-router-dom'
 import AddAndEditProfile from "../components/manage-users/AddAndEditProfile";
 import { useDialog } from "../components/dialogs/useDialog";
 
@@ -15,6 +16,7 @@ import { useDialog } from "../components/dialogs/useDialog";
 interface Props { }
 
 const Profile: React.FC<Props> = () => {
+    const [userToEdit, setUserToEdit] = useState<RegularUserFragment | null>(null)
     const [{ data, fetching }] = useMeQuery();
     const { isOpen, setIsOpen } = useDialog()
 
@@ -53,9 +55,7 @@ const Profile: React.FC<Props> = () => {
                                 nickName: "",
                                 email: "",
                             }}
-                            onSubmit={async (values) => {
-                                console.log(values)
-                            }}
+                            onSubmit={async () => { }}
                         >
                             {({ isSubmitting }) => (
                                 <Form>
@@ -127,13 +127,20 @@ const Profile: React.FC<Props> = () => {
                                             type="submit"
                                             isLoading={isSubmitting}
                                             colorScheme="teal"
-                                            onClick={() => setIsOpen(true)}
+                                            onClick={() => {
+                                                setIsOpen(true)
+
+                                                if (data.me) {
+                                                    setUserToEdit(data.me)
+                                                }
+                                            }}
                                         >
                                             แก้ไขข้อมูล
                                         </Button>
                                         {isOpen &&
                                             <AddAndEditProfile
                                                 Open={true}
+                                            userToEdit={userToEdit}
                                                 setOpen={() => setIsOpen(false)}
                                             />
                                         }

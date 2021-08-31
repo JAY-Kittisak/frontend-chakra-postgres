@@ -17,16 +17,17 @@ const AdminStatusControl: React.FC<Props> = ({ orderId, prevStatus }) => {
     const [orderStatus, setOrderStatus] = useState(prevStatus)
     const [loading, setLoading] = useState(false)
 
-    const bgButton = useColorModeValue("#DD6B20", "#20B2AA");
+    const bgSelect = useColorModeValue("#DD6B20", "#20B2AA");
+    const bgButton = useColorModeValue("orange", "teal");
 
     const [, updateGiveOrder] = useUpdateGiveOrderMutation()
 
-    console.log("ID TEST", orderId)
     return (
         <Stack isInline mt={3}>
             <Select
-                bg={bgButton}
-                borderColor={bgButton}
+                fontWeight="semibold"
+                bg={bgSelect}
+                borderColor={bgSelect}
                 value={orderStatus}
                 onChange={(e) => setOrderStatus(e.target.value)}
             >
@@ -39,9 +40,10 @@ const AdminStatusControl: React.FC<Props> = ({ orderId, prevStatus }) => {
             <Button
                 w="40vh"
                 color="white"
-                bg={bgButton}
-                disabled={orderStatus === prevStatus}
                 isLoading={loading}
+                loadingText="Loading..."
+                colorScheme={bgButton}
+                disabled={orderStatus === prevStatus}
                 onClick={async () => {
                     setLoading(true)
                     const response = await updateGiveOrder({ id: orderId, newStatus: orderStatus })
