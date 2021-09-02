@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Search2Icon } from "@chakra-ui/icons";
+import { NavLink } from 'react-router-dom'
+import { Avatar, AvatarBadge } from "@chakra-ui/react"
 
 import MenuItem from "./MenuItem";
 import MenuItemFooter from "./MenuItemFooter";
+import { useMeQuery } from "../generated/graphql";
+import Spinner from "./Spinner"
 
 interface Props {
     onCollapse: (inactive: boolean) => void;
@@ -36,6 +40,31 @@ const menuItems = [
         iconClassName: "bi bi-gift-fill",
         subMenus: [{ name: "ประวัติการเบิกของคุณ", to: "/order-give/my-orders" }],
     },
+    {
+        name: "แจ้งงาน It",
+        to: "/Job_It",
+        iconClassName: "bi bi-headset",
+        subMenus: [
+            { name: "IT", to: "/แจ้งงาน_IT" },
+            { name: "Altas", to: "/แจ้งงาน_Altas" },
+        ],
+    },
+    {
+        name: "เบิก-ยืม อุปกรณ์ IT",
+        to: "/stock_It",
+        iconClassName: "bi bi-basket",
+        subMenus: [
+            { name: "ประวัติการเบิกของคุณ", to: "/orderIT/IT" },
+        ],
+    },
+    {
+        name: "เบิก-ยืม Catalog",
+        to: "/cat",
+        iconClassName: "bi bi-basket",
+        subMenus: [
+            { name: "ประวัติการเบิกของคุณ", to: "/orderCat/Cat" },
+        ],
+    },
 ];
 
 const menuItemsFooter = [
@@ -55,8 +84,8 @@ const menuItemsFooter = [
 
 const SideMenu: React.FC<Props> = ({ onCollapse }) => {
     const [inactive, setInactive] = useState(false);
-  // const { pathname } = useLocation()
-  // console.log(pathname)
+
+    const [{ data, fetching }] = useMeQuery();
 
     useEffect(() => {
         if (inactive) {
@@ -71,6 +100,7 @@ const SideMenu: React.FC<Props> = ({ onCollapse }) => {
         // <div className="side-menu inactive">
         <div className={`side-menu ${inactive ? "inactive" : ""}`}>
             <div className="top-section">
+                <NavLink to="/">
                 <div className="logo">
                     {/* FIXME: แก้รูป */}
                     <img
@@ -82,6 +112,7 @@ const SideMenu: React.FC<Props> = ({ onCollapse }) => {
                 {/* <div onClick={() => setInactive(!inactive)} className="toggle-menu-btn">
                     {inactive ? <HamburgerIcon /> : <i className="bi bi-x-circle-fill"></i>}
                 </div> */}
+                </NavLink>
             </div>
 
             <div className="search-controller">
@@ -98,6 +129,7 @@ const SideMenu: React.FC<Props> = ({ onCollapse }) => {
                     {menuItems.map((menuItem, index) => (
                         <MenuItem
                             key={index}
+                            inactive={inactive}
                             menuName={menuItem.name}
                             exact={menuItem.exact}
                             to={menuItem.to}
@@ -157,17 +189,35 @@ const SideMenu: React.FC<Props> = ({ onCollapse }) => {
             </div>
 
             <div className="side-menu-footer">
-                <div className="avatar">
-                    {/* <img src="http://localhost:4000/users/29683771-1646834875399602-495472060878897639-n-1626514721174.jpg" alt="user" /> */}
-                    <img
+                <NavLink to="/profile">
+                    {fetching || !data?.me ? (
+                        <>
+                            <div className="avatar">
+                                <Spinner color="white" height={30} width={50} />
+                            </div>
+                            <div className="user-info">
+                                <h5>&nbsp;No data...</h5>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            {/* <div className="avatar"> */}
+                            <Avatar src={data.me.imageUrl as string}>
+                                <AvatarBadge boxSize="1em" bg="green.500" />
+                            </Avatar>
+                            {/* <img src={data.me.imageUrl as string} alt="user" /> */}
+                            {/* <img
                         src="http://200.1.1.99:4000/users/kittisak2021-1629278601111.jpg"
                         alt="user"
-                    />
-                </div>
+                    /> */}
+                                {/* </div> */}
                 <div className="user-info">
-                    <h5>Kittisak Raksakul</h5>
-                    <p>kittisak-rak@outlook.co.th</p>
+                                    <h5>{data.me.fullNameTH}</h5>
+                                    <p>{data.me.email}</p>
                 </div>
+                        </>
+                    )}
+                </NavLink>
                 <div className="footer-section">
                     <div
                         onClick={() => setInactive(!inactive)}

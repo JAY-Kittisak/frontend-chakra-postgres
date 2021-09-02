@@ -19,12 +19,12 @@ interface Props {
 
 const Card: React.FC<Props> = ({ label, content }) => {
     return (
-        <Box w="100%" h="100%" bg="#0AB68B" rounded="10px" boxShadow="md" mb="3">
+        <Box w="100%" h="100%" bg="#fff" rounded="10px" boxShadow="md" mb="3">
             <Text fontWeight="semibold" fontSize="xl" p="3">
                 {label}
             </Text>
             <Box align="center" mt="-6">
-                <Text fontWeight="semibold" fontSize="6xl" color="pink.500">
+                <Text fontWeight="semibold" fontSize="6xl" color="#0AB68B">
                     {content}
                 </Text>
             </Box>

@@ -67,7 +67,7 @@ const GiveDetail: React.FC<Props> = () => {
                             <Flex flexDir={["column", "column", "column", "row"]} align="center">
                                 <Flex w={[null, null, null, "40%"]} justify="center" align="center">
                                 {data.giveById.imageUrl && (
-                                    <Image boxSize="400px" src={data.giveById.imageUrl} />
+                                        <Image borderRadius="xl" boxSize="400px" src={data.giveById.imageUrl} />
                                 )}
                                 </Flex>
                                 <Flex flexDir="column" w={[null, null, null, "60%"]} justify="center">

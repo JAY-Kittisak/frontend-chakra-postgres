@@ -85,7 +85,7 @@ const NavBar: React.FC<Props> = () => {
             zIndex={1}
             position="sticky"
             top={0}
-            bg={colorMode === "light" ? "#028174" : "#3E54D3"}
+            bg={colorMode === "light" ? "#333" : "#3E54D3"}
             p={3}
         >
             <Menu>

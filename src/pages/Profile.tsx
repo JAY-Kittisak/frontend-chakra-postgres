@@ -27,19 +27,19 @@ const Profile: React.FC<Props> = () => {
 
     return (
         <Layout variant="regular">
-            <Box p="2" align="center">
-                <Heading fontSize="4xl">Profile</Heading>
+            <Box align="center">
+                <Heading fontSize="4xl">Dashboard</Heading>
             </Box>
 
             <Flex flexDir={["column", "column", "column", "row"]} overflow="hidden">
                 {/* ---------------------------------------Column 1--------------------------------------- */}
                 <Flex
-                    w={["100%", "100%", "100%", "50%"]}
+                    w={["100%", "100%", "100%", "40%"]}
                     direction={["column", "column", "column", "column"]}
                     justify="center"
                     mt="5"
                     p="10"
-                    bg="#028174"
+                    bg="#eee"
                     rounded="10px"
                     boxShadow="md"
                 >
@@ -47,7 +47,7 @@ const Profile: React.FC<Props> = () => {
                         <AddImageUser imagesUrl={data.me.imageUrl as string} />
                     }
 
-                    <Box w="100%" p="5" bg="gray.600" rounded="10px" boxShadow="md">
+                    <Box w="100%" p="5" bg="#fff" rounded="10px" boxShadow="md">
                         <Formik
                             initialValues={{
                                 fullNameTH: "",
@@ -153,11 +153,11 @@ const Profile: React.FC<Props> = () => {
 
                 {/* ---------------------------------------Column 2--------------------------------------- */}
                 <Flex
-                    w={["100%", "100%", "100%", "25%"]}
-                    p="5"
+                    w={["100%", "100%", "100%", "30%"]}
+                    p="2"
                     flexDir="column"
                     alignItems="center"
-                    bg="#028174"
+                    bg="#eee"
                     rounded="10px"
                     boxShadow="md"
                     mt="5"
@@ -174,11 +174,11 @@ const Profile: React.FC<Props> = () => {
 
                 {/* ---------------------------------------Column 2--------------------------------------- */}
                 <Flex
-                    w={["100%", "100%", "100%", "25%"]}
-                    p="5"
+                    w={["100%", "100%", "100%", "30%"]}
+                    p="2"
                     flexDir="column"
                     alignItems="center"
-                    bg="#028174"
+                    bg="#eee"
                     rounded="10px"
                     boxShadow="md"
                     mt="5"

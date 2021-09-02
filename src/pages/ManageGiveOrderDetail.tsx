@@ -73,6 +73,7 @@ const ManageGiveOrderDetail: React.FC<Props> = () => {
                                     >
                                         {data.giveOrderById.give.imageUrl && (
                                             <Image
+                                                borderRadius="xl"
                                                 boxSize="400px"
                                                 src={data.giveOrderById.give.imageUrl}
                                             />
@@ -211,6 +212,7 @@ const ManageGiveOrderDetail: React.FC<Props> = () => {
                                 >
                                     {data.giveOrderById.give.imageUrl && (
                                         <Image
+                                            borderRadius="xl"
                                             boxSize="400px"
                                             src={data.giveOrderById.give.imageUrl}
                                         />

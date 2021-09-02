@@ -1,5 +1,5 @@
 import React from "react";
-// import Layout from "../components/Layout";
+import Layout from "../components/Layout";
 import { Box, Divider, Flex, Text, useColorMode } from "@chakra-ui/react";
 
 interface Props { }
@@ -8,8 +8,7 @@ const Index: React.FC<Props> = () => {
     const { colorMode } = useColorMode();
     const bgColor = { light: "#0AB68B", dark: "#4F80E2" };
     return (
-        // <Layout variant="regular">
-        <>
+        <Layout variant="regular">
             <Flex
                 maxW="1080px"
                 w={["90vw", "90vw", "90vw", "70vw"]}
@@ -62,8 +61,7 @@ const Index: React.FC<Props> = () => {
                     </Box>
                 </Flex>
             </Flex>
-            {/* </Layout> */}
-        </>
+        </Layout>
     );
 };
 

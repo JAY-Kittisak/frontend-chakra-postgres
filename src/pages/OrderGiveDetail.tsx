@@ -61,7 +61,7 @@ const OrderGiveDetail: React.FC<Props> = () => {
                         >
                             <Flex w={[null, null, null, "40%"]} justify="center">
                                 {data.giveOrderById.give.imageUrl && (
-                                    <Image boxSize="400px" src={data.giveOrderById.give.imageUrl} />
+                                    <Image borderRadius="xl" boxSize="400px" src={data.giveOrderById.give.imageUrl} />
                                 )}
                             </Flex>
                             <Flex p={5} flexDir="column" w={[null, null, null, "60%"]} justify="center">
