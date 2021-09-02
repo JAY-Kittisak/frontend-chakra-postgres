@@ -12,8 +12,6 @@ import OrderGiveRoute from './OrderGiveRoute'
 import AdminRoutes from './AdminRoutes'
 import SideMenu from "../components/SideMenu"
 
-import "../styles/TestSidebar.css"
-
 interface Props { }
 
 const Routes: React.FC<Props> = () => {
@@ -22,7 +20,6 @@ const Routes: React.FC<Props> = () => {
     return (
         <>
             <SideMenu onCollapse={(inactive) => {
-                console.log(inactive)
                 setInactive(inactive)
             }} />
 

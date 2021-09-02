@@ -9,26 +9,25 @@ type SubName = {
 interface Props {
     menuName: string
     to: string
-    exact: boolean | undefined
     iconClassName: string
     subMenus: SubName[] | undefined
     onClick: () => void
 }
 
 
-const MenuItem: React.FC<Props> = ({ menuName, to, exact, iconClassName, subMenus, onClick }) => {
+const MenuItemFooter: React.FC<Props> = ({ menuName, to, iconClassName, subMenus, onClick }) => {
     const [expand, setExpand] = useState(false)
 
     return (
         <li onClick={onClick}>
-            <NavLink exact={exact} to={to} onClick={() => setExpand(!expand)} className="menu-item">
-                <div className="menu-icon">
+            <NavLink to={to} onClick={() => setExpand(!expand)} className="menu-item-footer">
+                <div className="menu-icon-footer">
                     <i className={iconClassName}></i>
                 </div>
                 <span>{menuName}</span>
             </NavLink>
             {subMenus && subMenus.length > 0 ? (
-                <ul className={`sub-menu ${expand ? "active" : ""}`}>
+                <ul className={`sub-menu-footer ${expand ? "active" : ""}`}>
                     {subMenus.map((menu, index) => (
                         <li key={index}>
                             <NavLink to={`${menu.to}`}>{menu.name}</NavLink>
@@ -40,4 +39,4 @@ const MenuItem: React.FC<Props> = ({ menuName, to, exact, iconClassName, subMenu
     )
 }
 
-export default MenuItem
+export default MenuItemFooter

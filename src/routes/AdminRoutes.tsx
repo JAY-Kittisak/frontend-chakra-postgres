@@ -2,6 +2,7 @@ import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 
 import { useIsAuth } from '../utils/uselsAuth'
+import Administrator from '../pages/Administrator'
 import ManageGives from '../pages/ManageGives'
 import ManageGiveOrders from '../pages/ManageGiveOrders'
 import ManageGiveOrderDetail from '../pages/ManageGiveOrderDetail'
@@ -23,6 +24,9 @@ const AdminRoutes: React.FC<Props> = () => {
                 <Route path="/admin/manage-give-orders">
                     <ManageGiveOrders />
                 </Route>
+            <Route path="/admin">
+                <Administrator />
+            </Route>
                 <Route path="*">
                     <PageNotFound />
                 </Route>

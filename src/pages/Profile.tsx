@@ -39,7 +39,7 @@ const Profile: React.FC<Props> = () => {
                     justify="center"
                     mt="5"
                     p="10"
-                    bg="gray.700"
+                    bg="#028174"
                     rounded="10px"
                     boxShadow="md"
                 >
@@ -157,13 +157,13 @@ const Profile: React.FC<Props> = () => {
                     p="5"
                     flexDir="column"
                     alignItems="center"
-                    bg="gray.700"
+                    bg="#028174"
                     rounded="10px"
                     boxShadow="md"
                     mt="5"
                     mx={[null, null, null, "5"]}
                 >
-                    <Text fontWeight="semibold" fontSize={["sm", "md", "xl"]} p={3}>
+                    <Text h="155px" fontWeight="semibold" fontSize={["sm", "md", "xl"]} p={3} isTruncated>
                         ประวัติการแจ้ง JOB และเบิกอุปกรณืต่างๆ
                     </Text>
                     <Card label="สถานะงาน IT" content="20" />
@@ -178,12 +178,12 @@ const Profile: React.FC<Props> = () => {
                     p="5"
                     flexDir="column"
                     alignItems="center"
-                    bg="gray.700"
+                    bg="#028174"
                     rounded="10px"
                     boxShadow="md"
                     mt="5"
                 >
-                    <Text fontWeight="semibold" fontSize={["sm", "md", "xl"]} p={3}>
+                    <Text h="155px" fontWeight="semibold" fontSize={["sm", "md", "xl"]} p={3} isTruncated>
                         ประวัติการ ลา/หยุดงาน
                     </Text>
 
