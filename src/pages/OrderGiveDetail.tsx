@@ -53,7 +53,7 @@ const OrderGiveDetail: React.FC<Props> = () => {
                 ) : (
                         <Flex
                             flexDir={["column", "column", "column", "row"]}
-                            w={[null, null, null, "70%"]}
+                            w={[null, null, "70%", "70%"]}
                             p="1"
                             rounded="7px"
                             boxShadow="md"

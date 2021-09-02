@@ -61,7 +61,7 @@ const ManageGiveOrderDetail: React.FC<Props> = () => {
                             <Flex display="none">
                                 <Flex
                                     flexDir={["column", "column", "column", "row"]}
-                                    w={[null, null, null, "70%"]}
+                                    w={[null, null, "70%", "70%"]}
                                     p={9}
                                     bg={bg}
                                     ref={printRef}

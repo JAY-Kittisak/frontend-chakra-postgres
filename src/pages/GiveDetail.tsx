@@ -58,54 +58,64 @@ const GiveDetail: React.FC<Props> = () => {
                 ) : (
                         <Flex
                             flexDir="column"
-                            w="50%"
+                            w={[null, null, "70%", "70%"]}
                             p={5}
                             rounded="7px"
                             boxShadow="md"
                             bg={bg}
                         >
-                            <Flex flexDir="row" align="center">
+                            <Flex flexDir={["column", "column", "column", "row"]} align="center">
+                                <Flex w={[null, null, null, "40%"]} justify="center" align="center">
                                 {data.giveById.imageUrl && (
                                     <Image boxSize="400px" src={data.giveById.imageUrl} />
                                 )}
-                                <Flex flexDir="column">
+                                </Flex>
+                                <Flex flexDir="column" w={[null, null, null, "60%"]} justify="center">
                                     <Flex p={5} flexDir="column" justifyContent="space-between">
                                         <Center>
                                             <Text fontSize="xl" fontWeight="bold">{data.giveById.giveName}</Text>
                                         </Center>
-                                        <Stack isInline mt={3}>
-                                            <Text fontWeight="semibold">ราคา : </Text>
-                                            <Text>{data.giveById.price && formatAmount(data.giveById.price)}</Text>
+
+                                        <Stack isInline mt={3} justify="space-between">
+                                            <Text fontSize={["sm", "sm", "md", "xl"]}>ราคา : </Text>
+                                            <Text fontSize={["sm", "sm", "md", "xl"]} fontWeight="semibold">{data.giveById.price && formatAmount(data.giveById.price)} บาท</Text>
                                         </Stack>
-                                        <Divider orientation="horizontal" />
-                                        <Stack isInline mt={3}>
-                                            <Text fontWeight="semibold">จำนวนคงเหลือ : </Text>
+                                        <Divider orientation="horizontal" mt={3} />
+
+                                        <Stack isInline mt={3} justify="space-between">
+                                            <Text fontSize={["sm", "sm", "md", "xl"]}>จำนวนคงเหลือ : </Text>
                                             <Text
+                                                fontSize={["sm", "sm", "md", "xl"]}
+                                                fontWeight="semibold"
                                                 color={data.giveById.inventory === 0 ? "red" : undefined}
                                             >
-                                                {data.giveById.inventory}
+                                                {data.giveById.inventory} ชิ้น
                                             </Text>
                                         </Stack>
-                                        <Divider orientation="horizontal" />
-                                        <Stack isInline mt={3}>
-                                            <Text fontWeight="semibold">ประเภท : </Text>
-                                            <Text>{data.giveById.category}</Text>
+                                        <Divider orientation="horizontal" mt={3} />
+
+                                        <Stack isInline mt={3} justify="space-between">
+                                            <Text fontSize={["sm", "sm", "md", "xl"]}>ประเภท : </Text>
+                                            <Text fontSize={["sm", "sm", "md", "xl"]} fontWeight="semibold">{data.giveById.category}</Text>
                                         </Stack>
-                                        <Divider orientation="horizontal" />
+                                        <Divider orientation="horizontal" mt={3} />
+
                                         <Flex mt={3}>
-                                            <Text w="130px" fontWeight="semibold">
+                                            <Text w="130px" fontSize={["sm", "sm", "md", "xl"]}>
                                                 Details :{" "}
                                             </Text>
                                         </Flex>
                                         <Flex ml={4}>
-                                            <Flex overflow="inherit">{data.giveById.details}</Flex>
+                                            <Flex fontSize={["sm", "sm", "md", "xl"]} overflow="inherit" fontWeight="semibold">{data.giveById.details}</Flex>
                                         </Flex>
-                                        <Divider orientation="horizontal" />
-                                        <Stack isInline mt={3}>
-                                            <Text fontWeight="semibold">วันที่ซื้อ : </Text>
-                                            <Text>{new Date(+data.giveById.createdAt).toDateString()}</Text>
+                                        <Divider orientation="horizontal" mt={3} />
+
+                                        <Stack isInline mt={3} justify="space-between">
+                                            <Text fontSize={["sm", "sm", "md", "xl"]}>วันที่ซื้อ : </Text>
+                                            <Text fontSize={["sm", "sm", "md", "xl"]} fontWeight="semibold">{new Date(+data.giveById.createdAt).toDateString()}</Text>
                                         </Stack>
-                                        <Divider orientation="horizontal" />
+                                        <Divider orientation="horizontal" mt={3} />
+
                                     </Flex>
                                 </Flex>
                             </Flex>
