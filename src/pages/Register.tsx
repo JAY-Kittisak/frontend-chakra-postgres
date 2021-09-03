@@ -1,9 +1,4 @@
-import {
-    Button,
-    Center,
-    Flex,
-    Text,
-} from "@chakra-ui/react";
+import { Button, Center, Flex, Text } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import React from "react";
 import { useHistory } from "react-router-dom";
@@ -40,13 +35,16 @@ const Register: React.FC<Props> = () => {
                         if (values.roles === "ชลบุรี") {
                             values.roles = "client-CDC";
                         }
-                        if (values.departments === "" || values.roles === "*โปรดเลือกแผนก") return alert("*โปรดเลือกแผนก ของคุณ");
-                        if (values.roles === "" || values.roles === "*โปรดเลือกสาขา") return alert("*โปรดเลือกสาขา ของคุณ");
-                        const response = await register({ options: values });
+                        if (values.departments === "" || values.roles === "*โปรดเลือกแผนก")
+                            return alert("*โปรดเลือกแผนก ของคุณ");
+                        if (values.roles === "" || values.roles === "*โปรดเลือกสาขา")
+                            return alert("*โปรดเลือกสาขา ของคุณ");
+
+                        const response = await register({ options: values })
                         if (response.data?.register.errors) {
                             setErrors(toErrorMap(response.data.register.errors));
                         } else if (response.data?.register.user) {
-                            history.push("/profile");
+                            return history.push('/')
                         }
                     }}
                 >
@@ -82,7 +80,7 @@ const Register: React.FC<Props> = () => {
                                 <Text fontWeight="semibold" fontSize={["sm", "md"]} p={2}>
                                     สาขา
                                 </Text>
-                                <SelectControl name="roles" defaultValue="*โปรดเลือกสาขา" >
+                                <SelectControl name="roles" defaultValue="*โปรดเลือกสาขา">
                                     {catUserRole.map((cat) => (
                                         <option key={cat} value={cat}>
                                             {cat}

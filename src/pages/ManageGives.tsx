@@ -87,22 +87,22 @@ const ManageGives: React.FC<Props> = () => {
                             >
                                 <Thead>
                                     <Tr bg={colorMode === "light" ? "#028174" : "#3E54D3"}>
-                                            <Th textAlign="center" fontSize="md" color="white" w="15%">
+                                            <Th textAlign="center" fontSize={["xs", "xs", "sm", "md"]} color="white" w="20%">
                                             Image
                                         </Th>
-                                            <Th textAlign="center" fontSize="md" color="white" w="15%">
+                                            <Th textAlign="center" fontSize={["xs", "xs", "sm", "md"]} color="white" w="10%">
                                             ราคาต่อหน่วย
                                         </Th>
-                                            <Th textAlign="center" fontSize="md" color="white" w="15%">
+                                            <Th textAlign="center" fontSize={["xs", "xs", "sm", "md"]} color="white" w="10%">
                                             จำนวนใน Stock
                                         </Th>
-                                            <Th textAlign="center" fontSize="md" color="white" w="15%">
+                                            <Th textAlign="center" fontSize={["xs", "xs", "sm", "md"]} color="white" w="15%">
                                             ประเภท
                                         </Th>
-                                            <Th textAlign="center" fontSize="md" color="white" w="20%">
+                                            <Th textAlign="center" fontSize={["xs", "xs", "sm", "md"]} color="white" w="20%">
                                             วันที่ Update
                                         </Th>
-                                            <Th textAlign="center" fontSize="md" color="white" w="20%">
+                                            <Th textAlign="center" fontSize={["xs", "xs", "sm", "md"]} color="white" w="20%">
                                             Manage
                                         </Th>
                                     </Tr>

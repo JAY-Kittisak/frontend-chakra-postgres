@@ -6,7 +6,6 @@ import { Avatar, AvatarBadge } from "@chakra-ui/react"
 import MenuItem from "./MenuItem";
 import MenuItemFooter from "./MenuItemFooter";
 import { useMeQuery } from "../generated/graphql";
-import Spinner from "./Spinner"
 
 interface Props {
     onCollapse: (inactive: boolean) => void;
@@ -29,16 +28,16 @@ const menuItems = [
         ],
     },
     {
-        name: "Tier",
-        to: "/tiers/factories",
-        iconClassName: "bi bi-diagram-3",
-        subMenus: [{ name: "Product", to: "/tiers/product-tier" }],
-    },
-    {
         name: "ของแจกลูกค้า",
         to: "/gives/gives-all",
         iconClassName: "bi bi-gift-fill",
         subMenus: [{ name: "ประวัติการเบิกของคุณ", to: "/order-give/my-orders" }],
+    },
+    {
+        name: "Tier",
+        to: "/tiers/factories",
+        iconClassName: "bi bi-diagram-3",
+        subMenus: [{ name: "Product", to: "/tiers/product-tier" }],
     },
     {
         name: "แจ้งงาน It",
@@ -168,8 +167,9 @@ const SideMenu: React.FC<Props> = ({ onCollapse }) => {
                 </ul>
             </div>
 
+            <div className="divider"></div>
+
             <div className="main-menu-footer top">
-                <div className="divider"></div>
                 <ul>
                     {menuItemsFooter.map((menuItemsFooter, index) => (
                         <MenuItemFooter
@@ -191,14 +191,9 @@ const SideMenu: React.FC<Props> = ({ onCollapse }) => {
             <div className="side-menu-footer">
                 <NavLink to="/profile">
                     {fetching || !data?.me ? (
-                        <>
-                            <div className="avatar">
-                                <Spinner color="white" height={30} width={50} />
-                            </div>
                             <div className="user-info">
                                 <h5>&nbsp;No data...</h5>
-                            </div>
-                        </>
+                        </div>
                     ) : (
                         <>
                             {/* <div className="avatar"> */}

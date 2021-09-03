@@ -171,14 +171,15 @@ const NavBar: React.FC<Props> = () => {
                     </MenuItem>
                 </MenuList>
             </Menu>
-            <Link
+            {/* <Link
                 mr={2}
                 onClick={() => { history.push('/') }}
-            >
+            > */}
+            <a href="/">
                 <Box p="2" align="center">
-                    <Heading fontSize={["sm", "md", "lg", "xl"]} color="white">MK Management</Heading>
+                    <Heading fontSize={["sm", "md", "lg", "xl"]} color="white">MK</Heading>
                 </Box>
-            </Link>
+            </a>
 
             <ColorModeSwitcher justifySelf="flex-end" color="white" />
 

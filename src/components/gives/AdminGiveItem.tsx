@@ -28,7 +28,7 @@ const AdminGiveItem: React.FC<Props> = ({
     return (
         <Tr>
             <Td fontSize={["xs", "xs", "sm", "md"]}>
-                <Flex align="center">
+                <Flex align="center" >
                     {give.imageUrl &&
                         <Image
                             mr={2}
@@ -40,7 +40,7 @@ const AdminGiveItem: React.FC<Props> = ({
                     }
                     <Flex flexDir="column">
                         <Heading size="sm" letterSpacing="tight">{give.giveName}</Heading>
-                        <Text fontSize="sm" color="gray" isTruncated w="xs">{give.details}</Text>
+                        <Text fontSize="sm" color="gray" isTruncated w="250px" mr="5">{give.details}</Text>
                     </Flex>
                 </Flex>
             </Td>
