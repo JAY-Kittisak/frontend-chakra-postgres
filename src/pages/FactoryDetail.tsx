@@ -14,7 +14,6 @@ import {
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import Layout from "../components/Layout";
 import AddAndEditJoinTier from "../components/tier/AddAndEditJoinTier";
 import AddAndEditProductTier from "../components/tier/AddAndEditProductTier";
 import { useFactoryByIdQuery } from "../generated/graphql";
@@ -55,7 +54,7 @@ const FactoryDetail: React.FC<Props> = () => {
         return <div>you got query failed for some reason</div>;
     }
     return (
-        <Layout variant="regular">
+        <>
             {!data && fetching ? (
                 <div>Loading...</div>
             ) : (
@@ -437,7 +436,7 @@ const FactoryDetail: React.FC<Props> = () => {
                     </Flex>
                 </Box>
             )}
-        </Layout>
+        </>
     );
 };
 

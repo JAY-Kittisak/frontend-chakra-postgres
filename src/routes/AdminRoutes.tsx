@@ -2,6 +2,7 @@ import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 
 import { useIsAuth } from '../utils/uselsAuth'
+import { useIsAdminAuth } from '../utils/useIsAdminAuth'
 import Administrator from '../pages/Administrator'
 import ManageGives from '../pages/ManageGives'
 import ManageGiveOrders from '../pages/ManageGiveOrders'
@@ -12,6 +13,7 @@ interface Props { }
 
 const AdminRoutes: React.FC<Props> = () => {
     useIsAuth()
+    useIsAdminAuth()
 
     return (
             <Switch>

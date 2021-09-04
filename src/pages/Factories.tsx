@@ -4,7 +4,6 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import Layout from "../components/Layout";
 import FactoryChart from "../components/tier/FactoryChart";
 import FactoryItem from "../components/tier/FactoryItem";
 import { Factory, useFactoriesQuery } from "../generated/graphql";
@@ -91,7 +90,7 @@ const Factories: React.FC<Props> = () => {
         .map(data => <Text as="ins" color="orange" key={data.id}>{data.industrialEstate}</Text>)
 
     return (
-        <Layout variant="regular">
+        <>
             <Stack isInline justify="space-between">
                 <Box mb="5" w="20%">
                     <Text as="h2" fontWeight="semibold" fontSize={["sm", "sm", "lg", "xl"]} my={2}>
@@ -192,7 +191,7 @@ const Factories: React.FC<Props> = () => {
                         </Flex>
             )}
             </Box>
-        </Layout>
+        </>
     );
 };
 

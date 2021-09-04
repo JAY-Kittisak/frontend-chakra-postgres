@@ -13,7 +13,6 @@ import {
     useColorMode,
 } from "@chakra-ui/react";
 
-import Layout from "../components/Layout";
 import Spinner from "../components/Spinner";
 import { useGiveOrderByIdQuery } from "../generated/graphql";
 import { formatAmount, formatDate } from "../utils/helpers";
@@ -32,7 +31,7 @@ const OrderGiveDetail: React.FC<Props> = () => {
     });
 
     return (
-        <Layout variant="regular">
+        <>
             <Text as="i" fontWeight="semibold" fontSize={["xl", "xl", "xl", "3xl"]}>
                 รายละเอียด Order
             </Text>
@@ -139,7 +138,7 @@ const OrderGiveDetail: React.FC<Props> = () => {
                     </Flex>
                 )}
             </Center>
-        </Layout>
+        </>
     );
 };
 

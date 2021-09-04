@@ -220,7 +220,6 @@ body{
     font-size: 15px;
     display: block;
     font-weight: 600;
-    cursor: not-allowed;
 }
 
 .side-menu .main-menu-footer .menu-item-footer.active{
@@ -251,6 +250,22 @@ body{
 }
 
 .side-menu.inactive .main-menu-footer .menu-item-footer span{
+    opacity: 0;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+.side-menu .main-menu-footer .menu-item-footer button{
+    position: absolute;
+    display: inline-block;
+    line-height: 40px;
+    right: 25px;
+    opacity: 1;
+    transition: opacity .2s ease-in;
+}
+
+.side-menu.inactive .main-menu-footer .menu-item-footer button{
     opacity: 0;
     width: 0;
     height: 0;
@@ -298,7 +313,7 @@ body{
     position: absolute;
     bottom: 0;
     left: 0;
-    padding: 20px 20px;
+    padding: 12px 20px;
     box-sizing: border-box;
 }
 
@@ -362,6 +377,10 @@ body{
     height: 1px;
     border-radius: 1px;
     background: #fff;
+}
+
+.side-menu .side-menu-footer .divider{
+    margin-top: 5px;
 }
 
 .container{

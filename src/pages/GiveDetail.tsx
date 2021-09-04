@@ -14,7 +14,6 @@ import {
 import { SmallAddIcon, MinusIcon } from "@chakra-ui/icons";
 
 import { useGiveByIdQuery } from "../generated/graphql";
-import Layout from "../components/Layout";
 import Spinner from "../components/Spinner";
 import { useDialog } from "../components/dialogs/useDialog";
 import CreateGiveOrder from "../components/gives/CreateGiveOrder";
@@ -38,7 +37,7 @@ const GiveDetail: React.FC<Props> = () => {
   });
 
     return (
-        <Layout variant="regular">
+        <>
             <Text as="i" fontWeight="semibold" fontSize={["md", "md", "xl", "3xl"]}>
                 รายละเอียดสินค้า
             </Text>
@@ -201,7 +200,7 @@ const GiveDetail: React.FC<Props> = () => {
                     </Flex>
                 )}
             </Center>
-        </Layout>
+        </>
     );
 };
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
 
 type SubName = {
@@ -7,6 +7,7 @@ type SubName = {
 }
 
 interface Props {
+    inactive: boolean
     menuName: string
     to: string
     iconClassName: string
@@ -15,8 +16,14 @@ interface Props {
 }
 
 
-const MenuItemFooter: React.FC<Props> = ({ menuName, to, iconClassName, subMenus, onClick }) => {
+const MenuItemFooter: React.FC<Props> = ({ inactive, menuName, to, iconClassName, subMenus, onClick }) => {
     const [expand, setExpand] = useState(false)
+
+    useEffect(() => {
+        if (inactive) {
+            setExpand(false)
+        }
+    }, [inactive]);
 
     return (
         <li onClick={onClick}>
@@ -25,6 +32,10 @@ const MenuItemFooter: React.FC<Props> = ({ menuName, to, iconClassName, subMenus
                     <i className={iconClassName}></i>
                 </div>
                 <span>{menuName}</span>
+                <button
+                    className={subMenus && subMenus.length > 0 ? (expand ? "bi bi-caret-up-fill" : "bi bi-caret-down-fill") : ""}
+                    onClick={() => setExpand(!expand)}>
+                </button>
             </NavLink>
             {subMenus && subMenus.length > 0 ? (
                 <ul className={`sub-menu-footer ${expand ? "active" : ""}`}>

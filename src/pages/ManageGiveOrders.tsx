@@ -1,8 +1,6 @@
 import React from "react";
 import { Flex, Text, useColorModeValue } from "@chakra-ui/react";
 
-
-import Layout from "../components/Layout";
 import Spinner from "../components/Spinner";
 import { useGiveOrdersQuery } from "../generated/graphql";
 import AdminOrderGivesItem from "../components/gives/AdminOrderGivesItem";
@@ -15,7 +13,7 @@ const ManageGiveOrders: React.FC<Props> = () => {
     const bgColumn = useColorModeValue("#028174", "#3E54D3");
 
     return (
-        <Layout variant="regular">
+        <>
             <Text
                 as="i"
                 fontWeight="semibold"
@@ -71,7 +69,7 @@ const ManageGiveOrders: React.FC<Props> = () => {
                     </Flex>
                 </Flex>
             </Flex>
-        </Layout>
+        </>
     )
 }
 

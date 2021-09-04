@@ -3,7 +3,6 @@ import { Form, Formik } from 'formik'
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import InputField from '../components/InputField'
-import Layout from '../components/Layout'
 import { useLoginMutation } from '../generated/graphql'
 import { toErrorMap } from '../utils/toErrorMap'
 
@@ -13,7 +12,7 @@ const Login: React.FC<{}> = () => {
     const history = useHistory()
     const [, login] = useLoginMutation()
     return (
-        <Layout variant="small">
+        <>
             <Flex direction="column" align="center">
                 <Heading as="h3" size="xl" mb="7">Login</Heading>
                 <Formik
@@ -27,7 +26,7 @@ const Login: React.FC<{}> = () => {
                                 history.push(history.location.state)
                             } else {
                                 //worked
-                                history.push('/')
+                                history.push('/profile')
                             }
                         }
                     }}
@@ -59,7 +58,7 @@ const Login: React.FC<{}> = () => {
                     )}
                 </Formik>
             </Flex>
-        </Layout>
+        </>
     )
 }
 

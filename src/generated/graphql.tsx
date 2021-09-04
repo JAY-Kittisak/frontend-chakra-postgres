@@ -359,10 +359,6 @@ export type RegularGiveOrdersFragment = (
 export type RegularUserFragment = (
   { __typename?: 'User' }
   & Pick<User, 'id' | 'username' | 'email' | 'roles' | 'departments' | 'fullNameTH' | 'fullNameEN' | 'nickName' | 'imageUrl' | 'createdAt' | 'updatedAt'>
-  & { giveOrders: Array<(
-    { __typename?: 'GiveOrder' }
-    & RegularGiveOrdersFragment
-  )> }
 );
 
 export type CreateGiveMutationVariables = Exact<{
@@ -738,11 +734,8 @@ export const RegularUserFragmentDoc = gql`
   imageUrl
   createdAt
   updatedAt
-  giveOrders {
-    ...RegularGiveOrders
-  }
 }
-    ${RegularGiveOrdersFragmentDoc}`;
+    `;
 export const CreateGiveDocument = gql`
     mutation CreateGive($input: GiveInput!, $options: Upload!) {
   createGive(input: $input, options: $options) {

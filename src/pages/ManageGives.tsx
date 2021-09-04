@@ -13,7 +13,6 @@ import {
     Divider
 } from "@chakra-ui/react";
 
-import Layout from "../components/Layout";
 import Spinner from "../components/Spinner";
 import AdminGiveItem from "../components/gives/AdminGiveItem";
 import AddAndEditGive from "../components/gives/AddAndEditGive";
@@ -32,7 +31,7 @@ const ManageGives: React.FC<Props> = () => {
     const { colorMode } = useColorMode();
 
     return (
-        <Layout variant="regular">
+        <>
             <Flex flexDir="column">
                 <Text
                     as="i"
@@ -123,7 +122,7 @@ const ManageGives: React.FC<Props> = () => {
                     </>
                 )}
             </Flex>
-        </Layout>
+        </>
     );
 };
 

@@ -1,15 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Wrapper, { WrapperVariant } from './Wrapper'
 import NavBar from './NavBar'
+import SideMenu from "./SideMenu"
 
 interface Props {
     variant?: WrapperVariant
 }
 
 const Layout: React.FC<Props> = ({ children, variant }) => {
+    const [inactive, setInactive] = useState(true)
     return (
         <>
-            <NavBar />
+            <SideMenu onCollapse={(inactive) => {
+                setInactive(inactive)
+            }} />
+
+            <div className={`container ${inactive ? "inactive" : ""}`}>
+                <NavBar />
+            </div>
 
             {/* <Flex
                 h="100vh"
@@ -35,7 +43,9 @@ const Layout: React.FC<Props> = ({ children, variant }) => {
                     alignItems="center"
                 > */}
             <Wrapper variant={variant}>
+                <div className={`container ${inactive ? "inactive" : ""}`}>
                 {children}
+                </div>
             </Wrapper>
             {/* </Flex>
             </Flex> */}

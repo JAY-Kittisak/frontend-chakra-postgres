@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 
 import Index from '../pages/Index'
@@ -10,21 +10,14 @@ import TierRoute from './TierRoute'
 import GiveRoute from './GiveRoute'
 import OrderGiveRoute from './OrderGiveRoute'
 import AdminRoutes from './AdminRoutes'
-import SideMenu from "../components/SideMenu"
+import Layout from "../components/Layout";
 
 interface Props { }
 
 const Routes: React.FC<Props> = () => {
-    const [inactive, setInactive] = useState(false)
 
     return (
-        <>
-            <SideMenu onCollapse={(inactive) => {
-                setInactive(inactive)
-            }} />
-
-            {/* <div className="container inactive"> */}
-            <div className={`container ${inactive ? "inactive" : ""}`}>
+        <Layout variant="regular">
                 <Switch>
                     <Route path="/profile">
                         <Profile />
@@ -54,9 +47,8 @@ const Routes: React.FC<Props> = () => {
                     <Route path="*">
                         <PageNotFound />
                     </Route>
-                </Switch>
-            </div>
-        </>
+            </Switch>
+        </Layout>
     )
 }
 

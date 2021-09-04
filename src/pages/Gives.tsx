@@ -1,7 +1,6 @@
 import React from 'react'
 import { Grid, Text, Flex, Divider } from "@chakra-ui/react";
 
-import Layout from "../components/Layout";
 import Spinner from "../components/Spinner";
 import GiveItem from "../components/gives/GiveItem"
 import { useGivesQuery } from '../generated/graphql'
@@ -12,7 +11,7 @@ const Gives: React.FC<Props> = () => {
     const [{ data, fetching }] = useGivesQuery()
 
     return (
-        <Layout variant="regular">
+        <>
             <Text as="i" fontWeight="semibold" fontSize={["md", "md", "xl", "3xl"]}>
                 ของแจกลูกค้า
             </Text>
@@ -37,7 +36,7 @@ const Gives: React.FC<Props> = () => {
                         ))}
                     </Grid>
             )}
-        </Layout>
+        </>
     )
 }
 

@@ -3,7 +3,6 @@ import { Form, Formik } from "formik";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import InputField from "../components/InputField";
-import Layout from "../components/Layout";
 import { SelectControl } from "../components/Selectfield";
 import { useRegisterMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
@@ -15,7 +14,7 @@ const Register: React.FC<Props> = () => {
     const history = useHistory();
     const [, register] = useRegisterMutation();
     return (
-        <Layout variant="small">
+        <>
             <Flex direction="column" align="center">
                 <Text as="h2" fontWeight="semibold" fontSize="2xl" mb="2">
                     Register
@@ -44,7 +43,7 @@ const Register: React.FC<Props> = () => {
                         if (response.data?.register.errors) {
                             setErrors(toErrorMap(response.data.register.errors));
                         } else if (response.data?.register.user) {
-                            return history.push('/')
+                            return history.push('/profile')
                         }
                     }}
                 >
@@ -102,7 +101,7 @@ const Register: React.FC<Props> = () => {
                     )}
                 </Formik>
             </Flex>
-        </Layout>
+        </>
     );
 };
 

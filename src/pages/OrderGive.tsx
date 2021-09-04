@@ -2,7 +2,6 @@ import React from "react";
 import { Flex, Text, useColorModeValue } from "@chakra-ui/react";
 
 import { useGiveOrderByCreatorIdQuery } from "../generated/graphql";
-import Layout from "../components/Layout";
 import Spinner from "../components/Spinner";
 import OrderGiveItem from "../components/gives/OrderGiveItem";
 
@@ -14,7 +13,7 @@ const OrderGive: React.FC<Props> = () => {
     const bgColumn = useColorModeValue("#028174", "#3E54D3");
 
     return (
-        <Layout variant="regular">
+        <>
             <Text
                 as="i"
                 fontWeight="semibold"
@@ -64,7 +63,7 @@ const OrderGive: React.FC<Props> = () => {
                     </Flex>
                 </Flex>
             </Flex>
-        </Layout>
+        </>
     );
 };
 

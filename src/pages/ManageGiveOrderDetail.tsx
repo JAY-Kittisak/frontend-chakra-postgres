@@ -13,7 +13,6 @@ import {
 } from "@chakra-ui/react";
 import { useReactToPrint } from "react-to-print";
 
-import Layout from "../components/Layout";
 import Spinner from "../components/Spinner";
 import AdminStatusControl from "../components/AdminStatusControl";
 import { useGiveOrderByIdQuery } from "../generated/graphql";
@@ -41,7 +40,7 @@ const ManageGiveOrderDetail: React.FC<Props> = () => {
     });
 
     return (
-        <Layout variant="regular">
+        <>
             <Text as="i" fontWeight="semibold" fontSize={["md", "md", "xl", "3xl"]}>
                 Admin manage order
             </Text>
@@ -348,7 +347,7 @@ const ManageGiveOrderDetail: React.FC<Props> = () => {
                         </>
                 )}
             </Center>
-        </Layout>
+        </>
     );
 };
 

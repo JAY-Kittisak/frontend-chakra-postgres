@@ -2,7 +2,6 @@ import {
     Table, Tbody, Text, Tfoot, Th, Thead, Tr, Td, Box
 } from "@chakra-ui/react";
 import React from "react";
-import Layout from "../components/Layout";
 import { useProductByTiersQuery } from "../generated/graphql";
 
 interface Props { }
@@ -10,7 +9,7 @@ interface Props { }
 const ProductTier: React.FC<Props> = () => {
     const [{ data }] = useProductByTiersQuery()
     return (
-        <Layout variant="regular">
+        <>
             <Text as="h2" fontWeight="semibold" fontSize="xl" my={2}>
                 Product โดยบริษัทต่างๆ
             </Text>
@@ -64,7 +63,7 @@ const ProductTier: React.FC<Props> = () => {
             </Table>
 
 
-        </Layout>
+        </>
     )
 }
 
