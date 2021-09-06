@@ -30,6 +30,7 @@ const menuItems = [
         iconClassName: "bi bi-diagram-3",
         subMenus: [{ name: "Product", to: "/tiers/product-tier" }],
     },
+    { name: "คู่มือแผนก AD", to: "/manual-ad/factories", iconClassName: "bi bi-file-earmark-pdf" },
     {
         name: "แจ้งงาน It",
         to: "/Job_It",
@@ -143,7 +144,7 @@ const SideMenu: React.FC<Props> = ({ onCollapse }) => {
             </div>
 
             <div className="divider"></div>
-
+            {data?.me && (
             <div className="main-menu">
                 <ul>
                     {menuItems.map((menuItem, index) => (
@@ -164,8 +165,11 @@ const SideMenu: React.FC<Props> = ({ onCollapse }) => {
                     ))}
                 </ul>
             </div>
+            )}
 
-            {!data?.me || data.me.roles !== ("admin" || "superAdmin") ? null : (
+            {/* {!data?.me || data.me.roles !== ("admin" || "superAdmin") ? null : ( */}
+            {/* false-true */}
+            {!data?.me || (data.me.roles !== "admin" && data.me.roles !== "superAdmin") ? null : (
                 <div className="main-menu-footer top">
                     <ul>
                         {menuItemsFooter.map((menuItemsFooter, index) => (

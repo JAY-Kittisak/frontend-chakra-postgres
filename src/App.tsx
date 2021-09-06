@@ -6,12 +6,16 @@ import { Provider } from "urql"
 import "./App.css"
 import Routes from "./routes/Routes"
 import { client } from "./apollo/client"
+import Layout from "./components/Layout";
+
 
 export const App = () => (
     <Provider value={client}>
         <ChakraProvider theme={theme}>
             <BrowserRouter>
-                <Routes />
+                <Layout variant="regular">
+                    <Routes />
+                </Layout>
             </BrowserRouter>
         </ChakraProvider>
     </Provider>

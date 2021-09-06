@@ -9,7 +9,7 @@ export const useIsAdminAuth = () => {
 
     useEffect(() => {
         const locations = { pathname: '/' }
-        if (!fetching && data?.me?.roles !== ("admin" || "superAdmin")) {
+        if (!fetching && (data?.me?.roles !== "admin" && data?.me?.roles !== "superAdmin")) {
             history.replace(locations)
         }
     }, [fetching, data, history])

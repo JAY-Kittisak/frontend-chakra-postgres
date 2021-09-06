@@ -121,6 +121,13 @@ body{
     display: block;
     font-weight: 600;
     cursor: pointer;
+    transition: all 0.4s ease;
+}
+
+.side-menu .main-menu .menu-item:hover{
+    background: #0AB68B;
+    border-radius: 5px;
+    color: #fff;
 }
 
 .side-menu .main-menu .menu-item.active{
@@ -194,8 +201,13 @@ body{
     font-size: 15px;
     font-weight: 600;
     text-decoration: none;
-    color: #fff;
+    color: #888;
     padding: 5px;
+    transition: all 0.4s ease;
+}
+
+.side-menu .main-menu .sub-menu a:hover{
+    color: #fff;
 }
 
 .side-menu .main-menu .sub-menu a.active{
@@ -220,6 +232,13 @@ body{
     font-size: 15px;
     display: block;
     font-weight: 600;
+    transition: all 0.4s ease;
+}
+
+.side-menu .main-menu-footer .menu-item-footer:hover{
+    background: #0AB68B;
+    border-radius: 5px;
+    color: #fff;
 }
 
 .side-menu .main-menu-footer .menu-item-footer.active{
@@ -294,8 +313,13 @@ body{
     font-size: 15px;
     font-weight: 600;
     text-decoration: none;
-    color: #fff;
+    color: #888;
     padding: 5px;
+    transition: all 0.4s ease;
+}
+
+.side-menu .main-menu-footer .sub-menu-footer a:hover{
+    color: #fff;
 }
 
 .side-menu .main-menu-footer .sub-menu-footer a.active{

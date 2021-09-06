@@ -10,15 +10,16 @@ import TierRoute from './TierRoute'
 import GiveRoute from './GiveRoute'
 import OrderGiveRoute from './OrderGiveRoute'
 import AdminRoutes from './AdminRoutes'
-import Layout from "../components/Layout";
+import ManualADRoute from './ManualADRoute'
 
 interface Props { }
 
 const Routes: React.FC<Props> = () => {
-
     return (
-        <Layout variant="regular">
                 <Switch>
+            <Route path="/manual-ad">
+                <ManualADRoute />
+            </Route>
                     <Route path="/profile">
                         <Profile />
                     </Route>
@@ -47,8 +48,7 @@ const Routes: React.FC<Props> = () => {
                     <Route path="*">
                         <PageNotFound />
                     </Route>
-            </Switch>
-        </Layout>
+        </Switch>
     )
 }
 
