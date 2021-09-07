@@ -10,7 +10,6 @@ interface Props {
 const Wrapper: React.FC<Props> = ({ children, variant = 'regular' }) => {
     return (
         <Flex
-            mt={8}
             mx="auto"
             maxW={variant === 'regular' ? "95%" : ["95%", "75%", "50%",]}
             flexDir="column"

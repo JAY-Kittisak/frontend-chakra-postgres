@@ -16,6 +16,7 @@ import { Link, useParams } from "react-router-dom";
 
 import AddAndEditJoinTier from "../components/tier/AddAndEditJoinTier";
 import AddAndEditProductTier from "../components/tier/AddAndEditProductTier";
+import { useDialog } from "../components/dialogs/useDialog";
 import { useFactoryByIdQuery } from "../generated/graphql";
 
 interface Props { }
@@ -24,16 +25,17 @@ type Display = "none" | "hide" | "show";
 
 const FactoryDetail: React.FC<Props> = () => {
     const [display, changeDisplay] = useState<Display>("hide");
-    const [openProductForm, setOpenProductForm] = useState(false);
+    // const [openProductForm, setOpenProductForm] = useState(false);
     const [creatorId, setCreatorId] = useState<number>(Number);
     const [creatorName, setCreatorName] = useState<string>("");
     const [openJoinForm, setOpenJoinForm] = useState(false);
+    const { isOpen, setIsOpen } = useDialog();
 
     const params = useParams<{ id: string }>();
 
     const bg = useColorModeValue("gray.200", "gray.700");
-    const color = useColorModeValue("blue", "blue");
-    const colorW = useColorModeValue("orange", "black.100");
+    const color = useColorModeValue("green", "green");
+    const colorW = useColorModeValue("white", "black.100");
 
 
     const paramsId = params.id;
@@ -179,16 +181,20 @@ const FactoryDetail: React.FC<Props> = () => {
                                         rightIcon={<AddIcon />}
                                         colorScheme={color}
                                         onClick={() => {
-                                            setOpenProductForm(true);
+                                            // setOpenProductForm(true);
+                                            setIsOpen(true)
                                         }}
                                     >
                                         <Text color={colorW}>Add Product</Text>
                                     </Button>
-                                    {openProductForm && creatorId && (
+                                    {/* {openProductForm && creatorId && ( */}
+                                    {isOpen && creatorId && (
                                         <AddAndEditProductTier
                                             creatorId={creatorId}
                                             creatorName={creatorName}
-                                            setOpenProductForm={setOpenProductForm}
+                                            Open={true}
+                                            // setOpenProductForm={setOpenProductForm}
+                                            setOpen={() => setIsOpen(false)}
                                         />
                                     )}
                                 </Box>

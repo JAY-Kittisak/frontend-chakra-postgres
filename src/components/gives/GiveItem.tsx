@@ -8,7 +8,7 @@ interface Props {
     give: RegularGiveFragment
 }
 
-const GiveItem: React.FC<Props> = ({ give: { id, giveName, imageUrl } }) => {
+const GiveItem: React.FC<Props> = ({ give: { id, giveName, imageUrl, inventory } }) => {
     const bg = useColorModeValue("white", "gray.700");
 
     return (
@@ -32,7 +32,7 @@ const GiveItem: React.FC<Props> = ({ give: { id, giveName, imageUrl } }) => {
                         src={imageUrl}
                     />
                 }
-                <Text isTruncated>{giveName}</Text>
+                <Text color={inventory === 0 ? "red" : "#111"} isTruncated>{giveName}</Text>
             </Flex>
         </Link>
     )

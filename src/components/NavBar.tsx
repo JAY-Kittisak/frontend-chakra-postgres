@@ -60,8 +60,8 @@ const NavBar: React.FC<Props> = () => {
         // user is logged in
     } else {
         body = (
-            <Flex color="white">
-                <Box p="2">
+            <Flex color="#0AB68B">
+                <Box p="1">
                     <Heading size="md">{data.me.username}</Heading>
                 </Box>
 
@@ -72,9 +72,11 @@ const NavBar: React.FC<Props> = () => {
                     isLoading={logoutFetching}
                     variant='link'
                     as="u"
-                    color="white"
+                    cursor="pointer"
+                    color="#0AB68B"
                 >
                     Logout
+                    <i className="bi bi-door-open"></i>
                 </Button>
             </Flex>
         )
@@ -85,7 +87,7 @@ const NavBar: React.FC<Props> = () => {
             zIndex={1}
             position="sticky"
             top={0}
-            bg={colorMode === "light" ? "#333" : "#3E54D3"}
+            bg={colorMode === "light" ? "#fff" : "#3E54D3"}
             p={3}
         >
             <Menu>
@@ -93,7 +95,7 @@ const NavBar: React.FC<Props> = () => {
                     as={IconButton}
                     aria-label="Options"
                     icon={<HamburgerIcon />}
-                    variant="outline"
+                    variant="none"
                     color="white"
                 />
                 <MenuList minWidth="240px">
