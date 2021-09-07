@@ -95,7 +95,7 @@ export type GiveOrder = {
 export type GiveOrderResponse = {
   __typename?: 'GiveOrderResponse';
   errors?: Maybe<Array<FieldErrorGive>>;
-  giveOrder?: Maybe<GiveOrder>;
+  giveOrder?: Maybe<Array<GiveOrder>>;
 };
 
 export type GiveResponse = {
@@ -131,7 +131,7 @@ export type Mutation = {
   updateGive: UpdateGiveResponse;
   deleteGive: GiveResponse;
   createGiveOrder: GiveOrderResponse;
-  updateGiveOrder: Scalars['Boolean'];
+  updateGiveOrder: UpdateGiveOrderResponse;
   deleteGiveOrder: Scalars['Boolean'];
 };
 
@@ -296,6 +296,12 @@ export type RegisterInput = {
   departments: Scalars['String'];
 };
 
+export type UpdateGiveOrderResponse = {
+  __typename?: 'UpdateGiveOrderResponse';
+  errors?: Maybe<Array<FieldErrorGive>>;
+  giveOrder?: Maybe<GiveOrder>;
+};
+
 export type UpdateGiveResponse = {
   __typename?: 'UpdateGiveResponse';
   errors?: Maybe<Array<FieldErrorGive>>;
@@ -393,10 +399,10 @@ export type CreateGiveOrderMutation = (
     & { errors?: Maybe<Array<(
       { __typename?: 'FieldErrorGive' }
       & Pick<FieldErrorGive, 'field' | 'message'>
-    )>>, giveOrder?: Maybe<(
+    )>>, giveOrder?: Maybe<Array<(
       { __typename?: 'GiveOrder' }
       & RegularGiveOrdersFragment
-    )> }
+    )>> }
   ) }
 );
 
@@ -516,7 +522,16 @@ export type UpdateGiveOrderMutationVariables = Exact<{
 
 export type UpdateGiveOrderMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'updateGiveOrder'>
+  & { updateGiveOrder: (
+    { __typename?: 'UpdateGiveOrderResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorGive' }
+      & Pick<FieldErrorGive, 'field' | 'message'>
+    )>>, giveOrder?: Maybe<(
+      { __typename?: 'GiveOrder' }
+      & RegularGiveOrdersFragment
+    )> }
+  ) }
 );
 
 export type UpdateUserMutationVariables = Exact<{
@@ -876,9 +891,17 @@ export function useUpdateGiveMutation() {
 };
 export const UpdateGiveOrderDocument = gql`
     mutation UpdateGiveOrder($id: Int!, $newStatus: String!) {
-  updateGiveOrder(id: $id, newStatus: $newStatus)
+  updateGiveOrder(id: $id, newStatus: $newStatus) {
+    errors {
+      field
+      message
+    }
+    giveOrder {
+      ...RegularGiveOrders
+    }
+  }
 }
-    `;
+    ${RegularGiveOrdersFragmentDoc}`;
 
 export function useUpdateGiveOrderMutation() {
   return Urql.useMutation<UpdateGiveOrderMutation, UpdateGiveOrderMutationVariables>(UpdateGiveOrderDocument);

@@ -60,11 +60,6 @@ const NavBar: React.FC<Props> = () => {
         // user is logged in
     } else {
         body = (
-            <Flex color="#0AB68B">
-                <Box p="1">
-                    <Heading size="md">{data.me.username}</Heading>
-                </Box>
-
                 <Button
                     onClick={() => {
                         logout()
@@ -72,13 +67,13 @@ const NavBar: React.FC<Props> = () => {
                     isLoading={logoutFetching}
                     variant='link'
                     as="u"
+                fontSize="xl"
                     cursor="pointer"
                     color="#0AB68B"
-                >
-                    Logout
-                    <i className="bi bi-door-open"></i>
-                </Button>
-            </Flex>
+            >
+                <i className="bi bi-door-open-fill"></i>
+                Log Out
+            </Button>
         )
     }
 

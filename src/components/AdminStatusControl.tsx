@@ -47,10 +47,10 @@ const AdminStatusControl: React.FC<Props> = ({ orderId, prevStatus }) => {
                 onClick={async () => {
                     setLoading(true)
                     const response = await updateGiveOrder({ id: orderId, newStatus: orderStatus })
-                    if (response.error) {
+                    if (response.error?.message) {
                         alert(response.error.message)
-                    } else if (response.data?.updateGiveOrder) {
-                        alert("ทำการบันทึกเรียบร้อยโปรด Reface หน้าเว็บหรือกด F5")
+                    } else if (response.data?.updateGiveOrder.giveOrder) {
+                        alert("ทำการบันทึกเรียบร้อย")
                     }
                     setLoading(false)
                 }}

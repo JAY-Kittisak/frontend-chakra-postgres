@@ -1,3 +1,11 @@
 mutation UpdateGiveOrder($id: Int!, $newStatus: String!) {
-  updateGiveOrder(id: $id, newStatus: $newStatus)
+  updateGiveOrder(id: $id, newStatus: $newStatus){
+    errors {
+      field
+      message
+    }
+    giveOrder{
+      ...RegularGiveOrders
+    }
+  }
 }
