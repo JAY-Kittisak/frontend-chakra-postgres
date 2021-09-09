@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, Flex, Box, Heading, Button, Center } from "@chakra-ui/react";
+import { Text, Flex, Box, Button, Center, Divider } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 
 import {
@@ -30,9 +30,16 @@ const Profile: React.FC<Props> = () => {
 
     return (
         <>
-            <Box align="center">
-                <Heading fontSize="4xl">Dashboard</Heading>
-            </Box>
+            <Text
+                as="i"
+                fontWeight="semibold"
+                fontSize={["md", "md", "xl", "3xl"]}
+                bgGradient="linear(to-l, teal.500,green.500)"
+                bgClip="text"
+            >
+                Dashboard
+            </Text>
+            <Divider mt={1} mb={5} orientation="horizontal" />
 
             {fetching || !data?.me?.username ? (
                 <Flex justify="center" mt="5">

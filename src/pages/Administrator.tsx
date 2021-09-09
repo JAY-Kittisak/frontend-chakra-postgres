@@ -7,7 +7,13 @@ interface Props { }
 const Administrator: React.FC<Props> = () => {
     return (
         <>
-            <Text as="i" fontWeight="semibold" fontSize={["md", "md", "xl", "3xl"]}>
+            <Text
+                as="i"
+                fontWeight="semibold"
+                fontSize={["md", "md", "xl", "3xl"]}
+                bgGradient="linear(to-l, #7928CA,#FF0080)"
+                bgClip="text"
+            >
                 ผู้ดูแลระบบ
             </Text>
             <Divider mt={1} mb={5} orientation="horizontal" />

@@ -435,4 +435,12 @@ body{
   cursor: pointer;
   transition: 0.4s ease-in;
 }
+
+.my-icon{
+    display: inline-block;
+    margin-right: 2px;
+    font-size: 20px;
+    line-height: 0px;
+    text-align: center;
+}
   

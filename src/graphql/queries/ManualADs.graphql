@@ -1,0 +1,5 @@
+query ManualADs{
+    manualADs{
+        ...RegularManualAD
+    }
+}

@@ -69,10 +69,11 @@ const NavBar: React.FC<Props> = () => {
                     as="u"
                 fontSize="xl"
                     cursor="pointer"
-                    color="#0AB68B"
+                bgGradient="linear(to-l, #0AB68B,#4F80E2)"
+                bgClip="text"
             >
                 <i className="bi bi-door-open-fill"></i>
-                Log Out
+                <Text>Log Out</Text>
             </Button>
         )
     }

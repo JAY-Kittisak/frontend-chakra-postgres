@@ -1,0 +1,5 @@
+query ManualADById($id: Int!){
+  manualADById(id: $id) {
+    ...RegularManualAD
+  }
+}

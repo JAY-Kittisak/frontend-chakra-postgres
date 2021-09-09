@@ -12,10 +12,17 @@ const Gives: React.FC<Props> = () => {
 
     return (
         <>
-            <Text as="i" fontWeight="semibold" fontSize={["md", "md", "xl", "3xl"]}>
+            <Text
+                as="i"
+                fontWeight="semibold"
+                fontSize={["md", "md", "xl", "3xl"]}
+                bgGradient="linear(to-l, teal.500,green.500)"
+                bgClip="text"
+            >
                 ของแจกลูกค้า
             </Text>
             <Divider mt={1} mb={5} orientation="horizontal" />
+
             {fetching &&
                 <Flex justify="center" mt="5">
                     <Spinner color="grey" height={50} width={50} />

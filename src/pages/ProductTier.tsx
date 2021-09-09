@@ -10,7 +10,13 @@ const ProductTier: React.FC<Props> = () => {
     const [{ data }] = useProductByTiersQuery()
     return (
         <>
-            <Text as="h2" fontWeight="semibold" fontSize="xl" my={2}>
+            <Text
+                as="i"
+                fontWeight="semibold"
+                fontSize={["md", "md", "xl", "3xl"]}
+                bgGradient="linear(to-l, teal.500,green.500)"
+                bgClip="text"
+            >
                 Product โดยบริษัทต่างๆ
             </Text>
 

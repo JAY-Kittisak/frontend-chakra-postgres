@@ -54,6 +54,12 @@ export type FieldErrorGive = {
   message: Scalars['String'];
 };
 
+export type FieldErrorManualAd = {
+  __typename?: 'FieldErrorManualAD';
+  field: Scalars['String'];
+  message: Scalars['String'];
+};
+
 export type Give = {
   __typename?: 'Give';
   id: Scalars['Float'];
@@ -114,6 +120,40 @@ export type LoginInput = {
   password: Scalars['String'];
 };
 
+export type ManualAd = {
+  __typename?: 'ManualAD';
+  id: Scalars['Float'];
+  factoryName: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
+  telephoneNumber?: Maybe<Scalars['String']>;
+  manualADUrl: Array<ManualAdUrl>;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type ManualAdInput = {
+  factoryName: Scalars['String'];
+  email: Scalars['String'];
+  telephoneNumber: Scalars['String'];
+};
+
+export type ManualAdResponse = {
+  __typename?: 'ManualADResponse';
+  errors?: Maybe<Array<FieldErrorManualAd>>;
+  manualAD?: Maybe<Array<ManualAd>>;
+};
+
+export type ManualAdUrl = {
+  __typename?: 'ManualADUrl';
+  id: Scalars['Float'];
+  manualId: Scalars['Float'];
+  title: Scalars['String'];
+  url: Scalars['String'];
+  manualAD: ManualAd;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   register: UserResponse;
@@ -133,6 +173,9 @@ export type Mutation = {
   createGiveOrder: GiveOrderResponse;
   updateGiveOrder: UpdateGiveOrderResponse;
   deleteGiveOrder: Scalars['Boolean'];
+  createManualAD: ManualAdResponse;
+  uploadPDFAd: ManualAdUrl;
+  deleteManualAD: ManualAdResponse;
 };
 
 
@@ -219,6 +262,23 @@ export type MutationDeleteGiveOrderArgs = {
   id: Scalars['Int'];
 };
 
+
+export type MutationCreateManualAdArgs = {
+  input: ManualAdInput;
+};
+
+
+export type MutationUploadPdfAdArgs = {
+  options: Scalars['Upload'];
+  title: Scalars['String'];
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeleteManualAdArgs = {
+  id: Scalars['Int'];
+};
+
 export type ProductByTier = {
   __typename?: 'ProductByTier';
   id: Scalars['Float'];
@@ -256,6 +316,8 @@ export type Query = {
   giveOrders?: Maybe<Array<GiveOrder>>;
   giveOrderById: GiveOrder;
   giveOrderByCreatorId: Array<GiveOrder>;
+  manualADs: Array<ManualAd>;
+  manualADById: ManualAd;
 };
 
 
@@ -285,6 +347,11 @@ export type QueryGiveByIdArgs = {
 
 
 export type QueryGiveOrderByIdArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryManualAdByIdArgs = {
   id: Scalars['Int'];
 };
 
@@ -360,6 +427,15 @@ export type RegularGiveOrdersFragment = (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'roles' | 'departments' | 'fullNameTH'>
   ) }
+);
+
+export type RegularManualAdFragment = (
+  { __typename?: 'ManualAD' }
+  & Pick<ManualAd, 'id' | 'factoryName' | 'email' | 'telephoneNumber' | 'createdAt' | 'updatedAt'>
+  & { manualADUrl: Array<(
+    { __typename?: 'ManualADUrl' }
+    & Pick<ManualAdUrl, 'id' | 'manualId' | 'title' | 'url' | 'createdAt' | 'updatedAt'>
+  )> }
 );
 
 export type RegularUserFragment = (
@@ -642,6 +718,30 @@ export type GivesQuery = (
   )>> }
 );
 
+export type ManualAdByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type ManualAdByIdQuery = (
+  { __typename?: 'Query' }
+  & { manualADById: (
+    { __typename?: 'ManualAD' }
+    & RegularManualAdFragment
+  ) }
+);
+
+export type ManualADsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ManualADsQuery = (
+  { __typename?: 'Query' }
+  & { manualADs: Array<(
+    { __typename?: 'ManualAD' }
+    & RegularManualAdFragment
+  )> }
+);
+
 export type ProductByTiersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -736,6 +836,24 @@ export const RegularGiveOrdersFragmentDoc = gql`
   updatedAt
 }
     ${RegularGiveFragmentDoc}`;
+export const RegularManualAdFragmentDoc = gql`
+    fragment RegularManualAD on ManualAD {
+  id
+  factoryName
+  email
+  telephoneNumber
+  createdAt
+  updatedAt
+  manualADUrl {
+    id
+    manualId
+    title
+    url
+    createdAt
+    updatedAt
+  }
+}
+    `;
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
   id
@@ -1013,6 +1131,28 @@ export const GivesDocument = gql`
 
 export function useGivesQuery(options: Omit<Urql.UseQueryArgs<GivesQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<GivesQuery>({ query: GivesDocument, ...options });
+};
+export const ManualAdByIdDocument = gql`
+    query ManualADById($id: Int!) {
+  manualADById(id: $id) {
+    ...RegularManualAD
+  }
+}
+    ${RegularManualAdFragmentDoc}`;
+
+export function useManualAdByIdQuery(options: Omit<Urql.UseQueryArgs<ManualAdByIdQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<ManualAdByIdQuery>({ query: ManualAdByIdDocument, ...options });
+};
+export const ManualADsDocument = gql`
+    query ManualADs {
+  manualADs {
+    ...RegularManualAD
+  }
+}
+    ${RegularManualAdFragmentDoc}`;
+
+export function useManualADsQuery(options: Omit<Urql.UseQueryArgs<ManualADsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<ManualADsQuery>({ query: ManualADsDocument, ...options });
 };
 export const ProductByTiersDocument = gql`
     query ProductByTiers {

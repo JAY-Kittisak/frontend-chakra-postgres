@@ -18,7 +18,8 @@ const OrderGive: React.FC<Props> = () => {
                 as="i"
                 fontWeight="semibold"
                 fontSize={["md", "md", "xl", "3xl"]}
-                my={2}
+                bgGradient="linear(to-l, teal.500,green.500)"
+                bgClip="text"
             >
                 Your order
             </Text>

@@ -32,7 +32,13 @@ const OrderGiveDetail: React.FC<Props> = () => {
 
     return (
         <>
-            <Text as="i" fontWeight="semibold" fontSize={["xl", "xl", "xl", "3xl"]}>
+            <Text
+                as="i"
+                fontWeight="semibold"
+                fontSize={["md", "md", "xl", "3xl"]}
+                bgGradient="linear(to-l, teal.500,green.500)"
+                bgClip="text"
+            >
                 รายละเอียด Order
             </Text>
             <Divider mt={1} mb={5} orientation="horizontal" />

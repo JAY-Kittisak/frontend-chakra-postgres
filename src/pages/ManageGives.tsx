@@ -32,15 +32,18 @@ const ManageGives: React.FC<Props> = () => {
 
     return (
         <>
-            <Flex flexDir="column">
                 <Text
                     as="i"
                     fontWeight="semibold"
                     fontSize={["md", "md", "xl", "3xl"]}
+                bgGradient="linear(to-l, #7928CA,#FF0080)"
+                bgClip="text"
                 >
                     Admin Manages
                 </Text>
                 <Divider mt={1} mb={5} orientation="horizontal" />
+
+            <Flex flexDir="column">
                 {fetching ? (
                     <Center>
                         <Spinner color="grey" height={50} width={50} />

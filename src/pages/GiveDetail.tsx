@@ -38,7 +38,13 @@ const GiveDetail: React.FC<Props> = () => {
 
     return (
         <>
-            <Text as="i" fontWeight="semibold" fontSize={["md", "md", "xl", "3xl"]}>
+            <Text
+                as="i"
+                fontWeight="semibold"
+                fontSize={["md", "md", "xl", "3xl"]}
+                bgGradient="linear(to-l, teal.500,green.500)"
+                bgClip="text"
+            >
                 รายละเอียดสินค้า
             </Text>
             <Divider mt={1} mb={3} orientation="horizontal" />

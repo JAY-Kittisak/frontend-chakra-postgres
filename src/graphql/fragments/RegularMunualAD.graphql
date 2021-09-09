@@ -1,0 +1,16 @@
+fragment RegularManualAD on ManualAD {
+    id
+    factoryName
+    email
+    telephoneNumber
+    createdAt
+    updatedAt
+    manualADUrl {
+      id
+      manualId
+      title
+      url
+      createdAt
+      updatedAt
+    }
+}
