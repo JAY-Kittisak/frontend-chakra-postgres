@@ -54,6 +54,12 @@ export type FieldErrorGive = {
   message: Scalars['String'];
 };
 
+export type FieldErrorJobIt = {
+  __typename?: 'FieldErrorJobIT';
+  field: Scalars['String'];
+  message: Scalars['String'];
+};
+
 export type FieldErrorManualAd = {
   __typename?: 'FieldErrorManualAD';
   field: Scalars['String'];
@@ -108,6 +114,33 @@ export type GiveResponse = {
   __typename?: 'GiveResponse';
   errors?: Maybe<Array<FieldErrorGive>>;
   give?: Maybe<Array<Give>>;
+};
+
+export type JobIt = {
+  __typename?: 'JobIT';
+  id: Scalars['Float'];
+  titled: Scalars['String'];
+  desiredDate: Scalars['String'];
+  category: Scalars['String'];
+  status: Scalars['String'];
+  itComment?: Maybe<Scalars['String']>;
+  itActionName?: Maybe<Scalars['String']>;
+  creatorId: Scalars['Float'];
+  creator: User;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type JobIt_Input = {
+  titled: Scalars['String'];
+  desiredDate: Scalars['String'];
+  category: Scalars['String'];
+};
+
+export type JobIt_Response = {
+  __typename?: 'JobIT_Response';
+  errors?: Maybe<Array<FieldErrorJobIt>>;
+  jobIT?: Maybe<JobIt>;
 };
 
 export type JoinTierInput = {
@@ -176,6 +209,7 @@ export type Mutation = {
   createManualAD: ManualAdResponse;
   uploadPDFAd: ManualAdUrl;
   deleteManualAD: ManualAdResponse;
+  createJobIT: JobIt_Response;
 };
 
 
@@ -279,6 +313,11 @@ export type MutationDeleteManualAdArgs = {
   id: Scalars['Int'];
 };
 
+
+export type MutationCreateJobItArgs = {
+  input: JobIt_Input;
+};
+
 export type ProductByTier = {
   __typename?: 'ProductByTier';
   id: Scalars['Float'];
@@ -318,6 +357,8 @@ export type Query = {
   giveOrderByCreatorId: Array<GiveOrder>;
   manualADs: Array<ManualAd>;
   manualADById: ManualAd;
+  jobITs?: Maybe<Array<JobIt>>;
+  jobITById: JobIt;
 };
 
 
@@ -355,6 +396,11 @@ export type QueryManualAdByIdArgs = {
   id: Scalars['Int'];
 };
 
+
+export type QueryJobItByIdArgs = {
+  id: Scalars['Int'];
+};
+
 export type RegisterInput = {
   username: Scalars['String'];
   password: Scalars['String'];
@@ -388,6 +434,7 @@ export type User = {
   imageUrl?: Maybe<Scalars['String']>;
   departments: Scalars['String'];
   giveOrders: Array<GiveOrder>;
+  jobITs: Array<JobIt>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -441,6 +488,13 @@ export type RegularManualAdFragment = (
 export type RegularUserFragment = (
   { __typename?: 'User' }
   & Pick<User, 'id' | 'username' | 'email' | 'roles' | 'departments' | 'fullNameTH' | 'fullNameEN' | 'nickName' | 'imageUrl' | 'createdAt' | 'updatedAt'>
+  & { giveOrders: Array<(
+    { __typename?: 'GiveOrder' }
+    & Pick<GiveOrder, 'id'>
+  )>, jobITs: Array<(
+    { __typename?: 'JobIT' }
+    & Pick<JobIt, 'id'>
+  )> }
 );
 
 export type CreateGiveMutationVariables = Exact<{
@@ -867,6 +921,12 @@ export const RegularUserFragmentDoc = gql`
   imageUrl
   createdAt
   updatedAt
+  giveOrders {
+    id
+  }
+  jobITs {
+    id
+  }
 }
     `;
 export const CreateGiveDocument = gql`

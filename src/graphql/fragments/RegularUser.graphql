@@ -10,4 +10,10 @@ fragment RegularUser on User {
     imageUrl
     createdAt
     updatedAt
+    giveOrders{
+        id
+    }
+    jobITs{
+        id
+    }
 }

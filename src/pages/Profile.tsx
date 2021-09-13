@@ -5,7 +5,6 @@ import { Form, Formik } from "formik";
 import {
     useMeQuery,
     RegularUserFragment,
-    useGiveOrderByCreatorIdQuery,
 } from "../generated/graphql";
 import InputField from "../components/InputField";
 import AddImageUser from "../components/manage-users/AddImageUser";
@@ -24,7 +23,6 @@ const Profile: React.FC<Props> = () => {
     );
 
     const [{ data, fetching }] = useMeQuery();
-    const [{ data: dataGiveOrder }] = useGiveOrderByCreatorIdQuery();
 
     const { isOpen, setIsOpen } = useDialog();
 
@@ -188,13 +186,13 @@ const Profile: React.FC<Props> = () => {
                             >
                                 ประวัติการแจ้ง JOB และเบิกอุปกรณืต่างๆ
                             </Text>
-                            <Card label="สถานะงาน IT" content="20" />
-                            <Card label="สถานะงาน Altas" content="10" />
+                            <Card label="สถานะงาน IT" content={data.me.jobITs.length} />
+                            <Card label="สถานะงาน Altas" content={10} />
                             <Card
                                 label="สถานะงาน เบิกของแจกลูกค้า"
-                                content={String(dataGiveOrder?.giveOrderByCreatorId.length)}
+                                content={data.me.giveOrders.length}
                             />
-                            <Card label="สถานะงาน สั่งซื้อ" content="4" />
+                            <Card label="สถานะงาน สั่งซื้อ" content={4} />
                         </Flex>
 
                         {/* ---------------------------------------Column 2--------------------------------------- */}
@@ -218,10 +216,10 @@ const Profile: React.FC<Props> = () => {
                                 ประวัติการ ลา/หยุดงาน
                             </Text>
 
-                            <Card label="วันลาที่เหลือ" content="10" />
-                            <Card label="ลาป่วย" content="4" />
-                            <Card label="ลากิจ" content="8" />
-                            <Card label="หยุดงาน" content="1" />
+                            <Card label="วันลาที่เหลือ" content={10} />
+                            <Card label="ลาป่วย" content={4} />
+                            <Card label="ลากิจ" content={8} />
+                            <Card label="หยุดงาน" content={1} />
                         </Flex>
                     </Flex>
             )}

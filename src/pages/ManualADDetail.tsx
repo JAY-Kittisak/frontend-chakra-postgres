@@ -23,6 +23,7 @@ const ManualADDetail: React.FC<Props> = () => {
             p={5}
             rounded="7px"
             boxShadow="md"
+            bg="#eee"
         >
 
             {data?.manualADById && (

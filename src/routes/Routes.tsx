@@ -5,6 +5,7 @@ import Index from '../pages/Index'
 import Register from '../pages/Register'
 import Login from '../pages/Login'
 import Profile from '../pages/Profile'
+import JobIT from "../pages/JobIT"
 import PageNotFound from '../pages/PageNotFound'
 import TierRoute from './TierRoute'
 import GiveRoute from './GiveRoute'
@@ -16,7 +17,10 @@ interface Props { }
 
 const Routes: React.FC<Props> = () => {
     return (
-                <Switch>
+        <Switch>
+            <Route path="/job-it">
+                <JobIT />
+            </Route>
             <Route path="/manual-ad">
                 <ManualADRoute />
             </Route>

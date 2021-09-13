@@ -32,8 +32,8 @@ const menuItems = [
     },
     { name: "คู่มือแผนก AD", to: "/manual-ad/factories", iconClassName: "bi bi-file-earmark-pdf" },
     {
-        name: "แจ้งงาน It",
-        to: "/Job_It",
+        name: "แจ้งงาน IT",
+        to: "/job-it",
         iconClassName: "bi bi-headset",
         subMenus: [
             { name: "IT", to: "/แจ้งงาน_IT" },

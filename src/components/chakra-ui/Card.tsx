@@ -14,7 +14,7 @@ type Label =
 
 interface Props {
     label: Label;
-    content: string;
+    content: number;
 }
 
 const Card: React.FC<Props> = ({ label, content }) => {
