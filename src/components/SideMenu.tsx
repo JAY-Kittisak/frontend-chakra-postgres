@@ -54,6 +54,19 @@ const menuItems = [
     },
 ];
 
+// let fruits = ['apple', 'banana', 'grapes', 'mango', 'orange']
+
+// 
+//  Filter array items based on search criteria (query)
+//  
+// function filterItems(arr: string[], query: string) {
+//     return arr.filter(function (el) {
+//         return el.toLowerCase().indexOf(query.toLowerCase()) !== -1
+//     })
+// }
+
+// console.log(filterItems(fruits, 'ban'))  // ['apple', 'grapes']
+
 const menuItemsFooter = [
     {
         name: "Administrator",

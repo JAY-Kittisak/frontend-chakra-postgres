@@ -25,6 +25,10 @@ const JobIT: React.FC<Props> = () => {
         setDate(date);
     };
 
+    let desiredDate = date.toDateString().split(" ")
+
+    const dateToArray = { ...desiredDate }
+
     return (
         <Flex flexDir="column">
             <Text
@@ -60,7 +64,7 @@ const JobIT: React.FC<Props> = () => {
                                 boxShadow="xl"
                                 mb="3"
                             >
-                                <Text fontSize="xl">เลือกประเภท :</Text>
+                                <Text fontSize="xl" mb="2">เลือกประเภท :</Text>
                                 <Grid
                                     templateColumns={["repeat(3, 1fr)"]}
                                     gap={6}
@@ -88,21 +92,29 @@ const JobIT: React.FC<Props> = () => {
                                     textarea
                                     name="titled"
                                     placeholder="รายละเอียด..."
-                                    label="รายละเอียด : "
+                                    label="รายละเอียด :"
                                 />
                             </Box>
 
-                            <Box w="600px" p="5" bg="#fff" rounded="7px" boxShadow="xl" mb="3">
-                                <Text fontSize="xl">วันที่ต้องการ :</Text>
+                            <Box w="600px" p="3" bg="#fff" rounded="7px" boxShadow="xl" mb="3">
+                                <Text fontSize="2xl" mb="1">วันที่ต้องการ : {date.toLocaleDateString()}</Text>
+                                <Box w="100%" p="2" bg="#006EDC" rounded="7px" boxShadow="xl">
                                 <Flex>
-                                    <Flex bg="#006EDC" w="250px" p="10" align="center">
-                                        <Text fontSize="4xl" fontWeight="bold" color="white">
-                                            {date.toLocaleString()}
+                                        <Flex flexDir="column" bg="#006EDC" w="250px" p="10" align="center">
+                                            <Text fontSize="5xl" fontWeight="bold" color="white">
+                                                {dateToArray[1]}
+                                            </Text>
+                                            <Text fontSize="6xl" fontWeight="bold" color="white">
+                                                {dateToArray[2]}
+                                            </Text>
+                                            <Text fontSize="4xl" fontWeight="bold" color="white">
+                                                {dateToArray[3]}
                                         </Text>
                                     </Flex>
                                     <Calendar onChange={onChange} value={date} />
                                 </Flex>
 
+                            </Box>
                             </Box>
 
                             <Button
