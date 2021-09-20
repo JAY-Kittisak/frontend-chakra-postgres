@@ -1,0 +1,5 @@
+query JobITById($id: Int!){
+  jobITById(id: $id){
+    ...RegularJobIT
+  }
+}

@@ -4,10 +4,12 @@ import { Grid, Text, Flex, Divider } from "@chakra-ui/react";
 import { useManualADsQuery } from "../generated/graphql";
 import Spinner from "../components/Spinner";
 import ManualADItem from "../components/manualAD/ManualADItem";
+import { useIsAuth } from '../utils/uselsAuth'
 
 interface Props { }
 
 const ManualAD: React.FC<Props> = () => {
+    useIsAuth()
     const [{ data, fetching }] = useManualADsQuery();
     return (
         <>

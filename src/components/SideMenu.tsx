@@ -36,8 +36,7 @@ const menuItems = [
         to: "/job-it",
         iconClassName: "bi bi-headset",
         subMenus: [
-            { name: "IT", to: "/แจ้งงาน_IT" },
-            { name: "Altas", to: "/แจ้งงาน_Altas" },
+            { name: "ประวัติการแจ้ง Job IT", to: "/job-it/me" },
         ],
     },
     {
@@ -75,6 +74,7 @@ const menuItemsFooter = [
         subMenus: [
             { name: "จัดการของแจกลูกค้า", to: "/admin/manage-gives" },
             { name: "จัดการ Order ของแจกลูกค้า", to: "/admin/manage-give-orders" },
+            { name: "จัดการ Job IT", to: "/admin/manage-job-it" },
         ],
     },
     { name: "Setting", to: "/setting", iconClassName: "bi bi-gear-fill" },

@@ -1,17 +1,16 @@
-import React from "react";
+import React from 'react'
 import { Flex, Text, useColorModeValue } from "@chakra-ui/react";
 
 import Spinner from "../components/Spinner";
-import { useGiveOrdersQuery } from "../generated/graphql";
-import AdminOrderGivesItem from "../components/gives/AdminOrderGivesItem";
+import { useJobITsQuery } from "../generated/graphql"
+import AdminJobITItem from '../components/jobIT/AdminJobITItem';
 
 interface Props { }
 
-const ManageGiveOrders: React.FC<Props> = () => {
-    const [{ data, fetching }] = useGiveOrdersQuery()
+const ManageJobIT: React.FC<Props> = () => {
+    const [{ data, fetching }] = useJobITsQuery()
     const bg = useColorModeValue("white", "gray.700");
     const bgColumn = useColorModeValue("#028174", "#3E54D3");
-
     return (
         <>
             <Text
@@ -21,7 +20,7 @@ const ManageGiveOrders: React.FC<Props> = () => {
                 bgGradient="linear(to-l, #7928CA,#FF0080)"
                 bgClip="text"
             >
-                Your order
+                Manage Job IT
             </Text>
 
             <Flex flexDir="column" p={9} rounded="7px" boxShadow="md" bg={bg}>
@@ -38,7 +37,7 @@ const ManageGiveOrders: React.FC<Props> = () => {
                             วันที่สั่ง
                         </Text>
                         <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="18%" textAlign="center">
-                            รายละเอียด
+                            ผู้เบิก
                         </Text>
                         <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="15%" textAlign="center">
                             จำนวนร้องขอ
@@ -55,7 +54,7 @@ const ManageGiveOrders: React.FC<Props> = () => {
                     </Flex>
 
                     <Flex flexDir="column">
-                        {fetching || !data?.giveOrders ? (
+                        {fetching || !data?.jobITs ? (
                             <Flex justify="center" mt="5">
                                 <Spinner color="grey" height={50} width={50} />
                                 <Text fontWeight="bold" fontSize="2xl">
@@ -63,8 +62,8 @@ const ManageGiveOrders: React.FC<Props> = () => {
                                 </Text>
                             </Flex>
                         ) : (
-                            data.giveOrders.map((order) => (
-                                <AdminOrderGivesItem key={order.id} order={order} />
+                            data.jobITs.map((jobIT) => (
+                                <AdminJobITItem key={jobIT.id} jobIT={jobIT} />
                             ))
                         )}
                     </Flex>
@@ -74,4 +73,4 @@ const ManageGiveOrders: React.FC<Props> = () => {
     )
 }
 
-export default ManageGiveOrders
+export default ManageJobIT

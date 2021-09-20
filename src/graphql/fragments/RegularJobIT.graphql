@@ -1,0 +1,18 @@
+fragment RegularJobIT on JobIT {
+    id
+    titled
+    desiredDate
+    category
+    status
+    itComment
+    itActionName
+    creatorId
+    createdAt
+    updatedAt
+    creator {
+        id
+        roles
+        departments
+        fullNameTH
+    }
+}

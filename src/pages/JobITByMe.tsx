@@ -1,14 +1,16 @@
-import React from "react";
+import React from 'react'
 import { Flex, Text, useColorModeValue } from "@chakra-ui/react";
 
+import { useMeQuery } from "../generated/graphql";
 import Spinner from "../components/Spinner";
-import { useGiveOrdersQuery } from "../generated/graphql";
-import AdminOrderGivesItem from "../components/gives/AdminOrderGivesItem";
+import JobITItem from '../components/jobIT/JobITItem';
+import { useIsAuth } from '../utils/uselsAuth'
 
 interface Props { }
 
-const ManageGiveOrders: React.FC<Props> = () => {
-    const [{ data, fetching }] = useGiveOrdersQuery()
+const JobITByMe: React.FC<Props> = () => {
+    useIsAuth()
+    const [{ data, fetching }] = useMeQuery();
     const bg = useColorModeValue("white", "gray.700");
     const bgColumn = useColorModeValue("#028174", "#3E54D3");
 
@@ -18,44 +20,38 @@ const ManageGiveOrders: React.FC<Props> = () => {
                 as="i"
                 fontWeight="semibold"
                 fontSize={["md", "md", "xl", "3xl"]}
-                bgGradient="linear(to-l, #7928CA,#FF0080)"
+                bgGradient="linear(to-l, teal.500,green.500)"
                 bgClip="text"
             >
-                Your order
+                Your Job IT
             </Text>
 
             <Flex flexDir="column" p={9} rounded="7px" boxShadow="md" bg={bg}>
-                <Flex flexDir="column" overflowX="auto">
+                <Flex flexDir="column">
                     <Flex
-                        // justify="space-around"
+                        justify="space-around"
                         bg={bgColumn}
                         rounded="7px"
                         color="white"
                         h="35px"
                         align="center"
                     >
-                        <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="16%" textAlign="center">
+                        <Text fontSize={["md", "md", "xl", "xl"]} fontWeight="bold">
                             วันที่สั่ง
                         </Text>
-                        <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="18%" textAlign="center">
-                            รายละเอียด
-                        </Text>
-                        <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="15%" textAlign="center">
+                        <Text fontSize={["md", "md", "xl", "xl"]} fontWeight="bold">
                             จำนวนร้องขอ
                         </Text>
-                        <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="21%" textAlign="center">
+                        <Text fontSize={["md", "md", "xl", "xl"]} fontWeight="bold">
                             ราคารวม
                         </Text>
-                        <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="12%" textAlign="center">
+                        <Text fontSize={["md", "md", "xl", "xl"]} fontWeight="bold">
                             สถานะ
-                        </Text>
-                        <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="18%" textAlign="center">
-                            Manage order
                         </Text>
                     </Flex>
 
                     <Flex flexDir="column">
-                        {fetching || !data?.giveOrders ? (
+                        {fetching || !data?.me ? (
                             <Flex justify="center" mt="5">
                                 <Spinner color="grey" height={50} width={50} />
                                 <Text fontWeight="bold" fontSize="2xl">
@@ -63,8 +59,8 @@ const ManageGiveOrders: React.FC<Props> = () => {
                                 </Text>
                             </Flex>
                         ) : (
-                            data.giveOrders.map((order) => (
-                                <AdminOrderGivesItem key={order.id} order={order} />
+                            data.me.jobITs.map((jobIT) => (
+                                <JobITItem key={jobIT.id} id={jobIT.id} />
                             ))
                         )}
                     </Flex>
@@ -74,4 +70,4 @@ const ManageGiveOrders: React.FC<Props> = () => {
     )
 }
 
-export default ManageGiveOrders
+export default JobITByMe

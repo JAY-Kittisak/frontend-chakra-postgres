@@ -1,7 +1,7 @@
 import { FactoryTab, FactoryIndustrialEstate } from "../types"
 
 export const formatAmount = (amount: number) => amount.toLocaleString('en', { minimumFractionDigits: 0 })
-export const formatDate = (date: number) => new Date(date).toDateString()
+export const formatDate = (date: number) => new Date(date).toLocaleDateString()
 
 type CatProductV1 = "อะไหล่รถยนต์" | "อาหาร" | "อิเล็กทรอนิกส์" | "*โปรดเลือก"
 

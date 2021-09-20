@@ -5,11 +5,13 @@ import {
     useColorMode,
     Divider,
     Button,
+    Image,
+    Flex
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
 import { RegularGiveOrdersFragment } from "../../generated/graphql";
-import { formatAmount } from "../../utils/helpers"
+import { formatAmount, formatDate } from "../../utils/helpers"
 
 interface Props {
     order: RegularGiveOrdersFragment;
@@ -22,6 +24,7 @@ const AdminOrderGivesItem: React.FC<Props> = ({
         amount,
         price,
         status,
+        give: { giveName, imageUrl },
         creator: { fullNameTH }
     },
 }) => {
@@ -31,11 +34,23 @@ const AdminOrderGivesItem: React.FC<Props> = ({
         <Link to={`/admin/manage-give-orders/${id}`}>
             <div className='orders-content orders-content--content'>
                 <Box w="16%">
-                    <Text fontSize={["xs", "xs", "sm", "md"]} align="center">{new Date(+createdAt).toDateString()}</Text>
+                    <Text fontSize={["xs", "xs", "sm", "md"]} align="center">{formatDate(+createdAt)}</Text>
                 </Box>
-                <Box w="16%">
-                    <Text fontSize={["xs", "xs", "sm", "md"]} align="center">{fullNameTH}</Text>
-                </Box>
+                <Flex align="center" w="16%">
+                    {imageUrl &&
+                        <Image
+                            mr={2}
+                            borderRadius="2xl"
+                            boxSize="60px"
+                            objectFit="cover"
+                            src={imageUrl}
+                        />
+                    }
+                    <Flex flexDir="column">
+                        <Text fontSize={["xs", "xs", "sm", "md"]}>{fullNameTH}</Text>
+                        <Text fontSize={["xs", "xs", "sm", "md"]} color="green">{giveName}</Text>
+                    </Flex>
+                </Flex>
                 <Box w="16%">
                     <Text fontSize={["xs", "xs", "sm", "md"]} align="center">{amount}</Text>
                 </Box>

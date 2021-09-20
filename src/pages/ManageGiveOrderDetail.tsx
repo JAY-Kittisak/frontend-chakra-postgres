@@ -345,7 +345,8 @@ const ManageGiveOrderDetail: React.FC<Props> = () => {
                                         สถานะการจัดส่ง :{" "}
                                     </Text>
                                     <AdminStatusControl
-                                        orderId={data.giveOrderById.id}
+                                        functionName="GiveOrder"
+                                        id={data.giveOrderById.id}
                                         prevStatus={data.giveOrderById.status}
                                     />
                                 </Flex>

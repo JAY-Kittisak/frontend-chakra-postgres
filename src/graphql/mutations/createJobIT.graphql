@@ -1,0 +1,11 @@
+mutation CreateJobIT($input: JobIT_Input!){
+  createJobIT(input:$input){
+    errors{
+      field
+      message
+    }
+    jobIT{
+      ...RegularJobIT
+    }
+  }
+}

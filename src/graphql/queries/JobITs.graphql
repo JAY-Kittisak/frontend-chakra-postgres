@@ -1,0 +1,5 @@
+query JobITs{
+  jobITs{
+    ...RegularJobIT
+  }
+}

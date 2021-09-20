@@ -9,11 +9,12 @@ import {
 import { catStatus } from "../utils/helpers"
 import { useUpdateGiveOrderMutation } from '../generated/graphql';
 interface Props {
-    orderId: number
+    functionName: string
+    id: number
     prevStatus: string
 }
 
-const AdminStatusControl: React.FC<Props> = ({ orderId, prevStatus }) => {
+const AdminStatusControl: React.FC<Props> = ({ id, prevStatus, functionName }) => {
     const [orderStatus, setOrderStatus] = useState(prevStatus)
     const [loading, setLoading] = useState(false)
 
@@ -46,13 +47,20 @@ const AdminStatusControl: React.FC<Props> = ({ orderId, prevStatus }) => {
                 disabled={orderStatus === prevStatus}
                 onClick={async () => {
                     setLoading(true)
-                    const response = await updateGiveOrder({ id: orderId, newStatus: orderStatus })
-                    if (response.error?.message) {
-                        alert(response.error.message)
-                    } else if (response.data?.updateGiveOrder.giveOrder) {
-                        alert("ทำการบันทึกเรียบร้อย")
+
+                    if (functionName === "GiveOrder") {
+                        const response = await updateGiveOrder({ id, newStatus: orderStatus })
+                        if (response.error?.message) {
+                            alert(response.error.message)
+                        } else if (response.data?.updateGiveOrder.giveOrder) {
+                            alert("ทำการบันทึกเรียบร้อย")
+                        }
+                        setLoading(false)
                     }
-                    setLoading(false)
+
+                    if (functionName === "JobIT") {
+                        alert("test Status Control")
+                    }
                 }}
             >
                 Update
