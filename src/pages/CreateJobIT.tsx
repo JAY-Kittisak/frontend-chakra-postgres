@@ -39,6 +39,8 @@ const CreateJobIT: React.FC<Props> = () => {
 
     const dateToArray = { ...desiredDate }
 
+    const newDate = new Date()
+
     return (
         <Flex flexDir="column">
             <Text
@@ -60,6 +62,9 @@ const CreateJobIT: React.FC<Props> = () => {
                         titled: "",
                     }}
                     onSubmit={async (values, { setErrors }) => {
+
+                        if (date.toLocaleDateString() < newDate.toLocaleDateString()) return alert("ย้อนเวลาไม่ได้")
+
                         const obj = { desiredDate: date.toLocaleDateString() }
                         const mergeObj = { ...values, ...obj }
 
@@ -67,7 +72,7 @@ const CreateJobIT: React.FC<Props> = () => {
                         if (response.data?.createJobIT.errors) {
                             setErrors(toErrorMap(response.data.createJobIT.errors as FieldError[]));
                         } else if (response.data?.createJobIT.jobIT) {
-                            history.push("/order-give/my-orders")
+                            history.push("/job-it/me")
                         }
                     }}
                 >

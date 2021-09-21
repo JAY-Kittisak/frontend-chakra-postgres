@@ -1,0 +1,5 @@
+mutation UpdateJobIT($id: Int!, $newStatus: String!){
+  updateJobIT(id: $id,newStatus: $newStatus){
+      ...RegularJobIT
+  }
+}

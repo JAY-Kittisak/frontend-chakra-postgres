@@ -37,13 +37,13 @@ const ManageJobIT: React.FC<Props> = () => {
                             วันที่สั่ง
                         </Text>
                         <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="18%" textAlign="center">
-                            ผู้เบิก
+                            เรื่องที่แจ้ง
                         </Text>
                         <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="15%" textAlign="center">
-                            จำนวนร้องขอ
+                            IT ผู้ปฏิบัติงาน
                         </Text>
                         <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="21%" textAlign="center">
-                            ราคารวม
+                            วันที่ต้องการ
                         </Text>
                         <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="12%" textAlign="center">
                             สถานะ

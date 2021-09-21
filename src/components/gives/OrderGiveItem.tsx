@@ -8,7 +8,7 @@ import {
 import { Link } from "react-router-dom";
 
 import { RegularGiveOrdersFragment } from "../../generated/graphql";
-import { formatAmount } from "../../utils/helpers"
+import { formatAmount, formatDate } from "../../utils/helpers"
 
 interface Props {
     order: RegularGiveOrdersFragment;
@@ -29,7 +29,7 @@ const OrderGiveItem: React.FC<Props> = ({
         <Link to={`/order-give/my-orders/${id}`}>
             <div className='orders-content orders-content--content'>
                 <Box w="25%">
-                    <Text fontSize={["xs", "xs", "sm", "md"]} align="center">{new Date(+createdAt).toDateString()}</Text>
+                    <Text fontSize={["xs", "xs", "sm", "md"]} align="center">{formatDate(+createdAt)}</Text>
                 </Box>
                 <Box w="25%">
                     <Text fontSize="md" align="center">{amount}</Text>

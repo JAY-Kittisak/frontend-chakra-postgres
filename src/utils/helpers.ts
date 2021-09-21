@@ -2,6 +2,7 @@ import { FactoryTab, FactoryIndustrialEstate } from "../types"
 
 export const formatAmount = (amount: number) => amount.toLocaleString('en', { minimumFractionDigits: 0 })
 export const formatDate = (date: number) => new Date(date).toLocaleDateString()
+export const formatUpperCase = (category: string) => category.toUpperCase()
 
 type CatProductV1 = "อะไหล่รถยนต์" | "อาหาร" | "อิเล็กทรอนิกส์" | "*โปรดเลือก"
 
@@ -82,4 +83,13 @@ export const catStatus: CategoryStatus[] = [
     "New",
     "Preparing",
     "Success",
+]
+
+// ---------------------- Job Status ----------------------
+export type statusIt = "New" | "Wait Approve" | "Success" | "Impossible"
+export const jobStatus: statusIt[] = [
+    "New",
+    "Wait Approve",
+    "Success",
+    "Impossible"
 ]

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Flex, Text, useColorModeValue } from "@chakra-ui/react";
 
-import { useMeQuery } from "../generated/graphql";
+import { useJobItByCreatorIdQuery } from "../generated/graphql";
 import Spinner from "../components/Spinner";
 import JobITItem from '../components/jobIT/JobITItem';
 import { useIsAuth } from '../utils/uselsAuth'
@@ -10,7 +10,7 @@ interface Props { }
 
 const JobITByMe: React.FC<Props> = () => {
     useIsAuth()
-    const [{ data, fetching }] = useMeQuery();
+    const [{ data, fetching }] = useJobItByCreatorIdQuery();
     const bg = useColorModeValue("white", "gray.700");
     const bgColumn = useColorModeValue("#028174", "#3E54D3");
 
@@ -40,10 +40,13 @@ const JobITByMe: React.FC<Props> = () => {
                             วันที่สั่ง
                         </Text>
                         <Text fontSize={["md", "md", "xl", "xl"]} fontWeight="bold">
-                            จำนวนร้องขอ
+                            เรื่องที่แจ้ง
                         </Text>
                         <Text fontSize={["md", "md", "xl", "xl"]} fontWeight="bold">
-                            ราคารวม
+                            IT Comment
+                        </Text>
+                        <Text fontSize={["md", "md", "xl", "xl"]} fontWeight="bold">
+                            วันที่ต้องการ
                         </Text>
                         <Text fontSize={["md", "md", "xl", "xl"]} fontWeight="bold">
                             สถานะ
@@ -51,7 +54,7 @@ const JobITByMe: React.FC<Props> = () => {
                     </Flex>
 
                     <Flex flexDir="column">
-                        {fetching || !data?.me ? (
+                        {fetching || !data?.jobITByCreatorId ? (
                             <Flex justify="center" mt="5">
                                 <Spinner color="grey" height={50} width={50} />
                                 <Text fontWeight="bold" fontSize="2xl">
@@ -59,8 +62,8 @@ const JobITByMe: React.FC<Props> = () => {
                                 </Text>
                             </Flex>
                         ) : (
-                            data.me.jobITs.map((jobIT) => (
-                                <JobITItem key={jobIT.id} id={jobIT.id} />
+                                data.jobITByCreatorId.map((jobIT) => (
+                                    <JobITItem key={jobIT.id} jobIt={jobIT} />
                             ))
                         )}
                     </Flex>

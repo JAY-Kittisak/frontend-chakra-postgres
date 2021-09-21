@@ -140,7 +140,7 @@ export type JobIt_Input = {
 export type JobIt_Response = {
   __typename?: 'JobIT_Response';
   errors?: Maybe<Array<FieldErrorJobIt>>;
-  jobIT?: Maybe<JobIt>;
+  jobIT?: Maybe<Array<JobIt>>;
 };
 
 export type JoinTierInput = {
@@ -210,6 +210,8 @@ export type Mutation = {
   uploadPDFAd: ManualAdUrl;
   deleteManualAD: ManualAdResponse;
   createJobIT: JobIt_Response;
+  updateJobIT: JobIt;
+  jobITComment: JobIt;
 };
 
 
@@ -318,6 +320,18 @@ export type MutationCreateJobItArgs = {
   input: JobIt_Input;
 };
 
+
+export type MutationUpdateJobItArgs = {
+  newStatus: Scalars['String'];
+  id: Scalars['Int'];
+};
+
+
+export type MutationJobItCommentArgs = {
+  input: Scalars['String'];
+  id: Scalars['Int'];
+};
+
 export type ProductByTier = {
   __typename?: 'ProductByTier';
   id: Scalars['Float'];
@@ -359,6 +373,7 @@ export type Query = {
   manualADById: ManualAd;
   jobITs?: Maybe<Array<JobIt>>;
   jobITById: JobIt;
+  jobITByCreatorId: Array<JobIt>;
 };
 
 
@@ -557,10 +572,10 @@ export type CreateJobItMutation = (
     & { errors?: Maybe<Array<(
       { __typename?: 'FieldErrorJobIT' }
       & Pick<FieldErrorJobIt, 'field' | 'message'>
-    )>>, jobIT?: Maybe<(
+    )>>, jobIT?: Maybe<Array<(
       { __typename?: 'JobIT' }
       & RegularJobItFragment
-    )> }
+    )>> }
   ) }
 );
 
@@ -593,6 +608,20 @@ export type DeleteGiveMutation = (
       { __typename?: 'Give' }
       & RegularGiveFragment
     )>> }
+  ) }
+);
+
+export type JobItCommentMutationVariables = Exact<{
+  id: Scalars['Int'];
+  input: Scalars['String'];
+}>;
+
+
+export type JobItCommentMutation = (
+  { __typename?: 'Mutation' }
+  & { jobITComment: (
+    { __typename?: 'JobIT' }
+    & RegularJobItFragment
   ) }
 );
 
@@ -689,6 +718,20 @@ export type UpdateGiveOrderMutation = (
       { __typename?: 'GiveOrder' }
       & RegularGiveOrdersFragment
     )> }
+  ) }
+);
+
+export type UpdateJobItMutationVariables = Exact<{
+  id: Scalars['Int'];
+  newStatus: Scalars['String'];
+}>;
+
+
+export type UpdateJobItMutation = (
+  { __typename?: 'Mutation' }
+  & { updateJobIT: (
+    { __typename?: 'JobIT' }
+    & RegularJobItFragment
   ) }
 );
 
@@ -798,6 +841,17 @@ export type GivesQuery = (
     { __typename?: 'Give' }
     & RegularGiveFragment
   )>> }
+);
+
+export type JobItByCreatorIdQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type JobItByCreatorIdQuery = (
+  { __typename?: 'Query' }
+  & { jobITByCreatorId: Array<(
+    { __typename?: 'JobIT' }
+    & RegularJobItFragment
+  )> }
 );
 
 export type JobItByIdQueryVariables = Exact<{
@@ -1087,6 +1141,17 @@ export const DeleteGiveDocument = gql`
 export function useDeleteGiveMutation() {
   return Urql.useMutation<DeleteGiveMutation, DeleteGiveMutationVariables>(DeleteGiveDocument);
 };
+export const JobItCommentDocument = gql`
+    mutation JobITComment($id: Int!, $input: String!) {
+  jobITComment(id: $id, input: $input) {
+    ...RegularJobIT
+  }
+}
+    ${RegularJobItFragmentDoc}`;
+
+export function useJobItCommentMutation() {
+  return Urql.useMutation<JobItCommentMutation, JobItCommentMutationVariables>(JobItCommentDocument);
+};
 export const JoinFactoryDocument = gql`
     mutation JoinFactory($input: JoinTierInput!) {
   joinFactory(input: $input)
@@ -1172,6 +1237,17 @@ export const UpdateGiveOrderDocument = gql`
 
 export function useUpdateGiveOrderMutation() {
   return Urql.useMutation<UpdateGiveOrderMutation, UpdateGiveOrderMutationVariables>(UpdateGiveOrderDocument);
+};
+export const UpdateJobItDocument = gql`
+    mutation UpdateJobIT($id: Int!, $newStatus: String!) {
+  updateJobIT(id: $id, newStatus: $newStatus) {
+    ...RegularJobIT
+  }
+}
+    ${RegularJobItFragmentDoc}`;
+
+export function useUpdateJobItMutation() {
+  return Urql.useMutation<UpdateJobItMutation, UpdateJobItMutationVariables>(UpdateJobItDocument);
 };
 export const UpdateUserDocument = gql`
     mutation UpdateUser($options: updateUserInput!) {
@@ -1280,6 +1356,17 @@ export const GivesDocument = gql`
 
 export function useGivesQuery(options: Omit<Urql.UseQueryArgs<GivesQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<GivesQuery>({ query: GivesDocument, ...options });
+};
+export const JobItByCreatorIdDocument = gql`
+    query JobITByCreatorId {
+  jobITByCreatorId {
+    ...RegularJobIT
+  }
+}
+    ${RegularJobItFragmentDoc}`;
+
+export function useJobItByCreatorIdQuery(options: Omit<Urql.UseQueryArgs<JobItByCreatorIdQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<JobItByCreatorIdQuery>({ query: JobItByCreatorIdDocument, ...options });
 };
 export const JobItByIdDocument = gql`
     query JobITById($id: Int!) {
