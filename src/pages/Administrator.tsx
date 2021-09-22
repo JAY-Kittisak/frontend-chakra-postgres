@@ -2,6 +2,8 @@ import React from "react";
 import { Text, Flex, Image, Button, Divider } from "@chakra-ui/react";
 import { Link } from "react-router-dom"
 
+import Chart from "../components/chart/Chart";
+
 interface Props { }
 
 const Administrator: React.FC<Props> = () => {
@@ -17,9 +19,9 @@ const Administrator: React.FC<Props> = () => {
                 ผู้ดูแลระบบ
             </Text>
             <Divider mt={1} mb={5} orientation="horizontal" />
+            <Chart />
 
-            <Flex flexDir="row" ml="-5">
-
+            <Flex flexDir="row" mt="5">
                 <Flex
                     flexDir="column"
                     w="20%"
@@ -73,8 +75,8 @@ const Administrator: React.FC<Props> = () => {
                         </Link>
                     </Flex>
                 </Flex>
-
             </Flex>
+
         </>
     );
 };

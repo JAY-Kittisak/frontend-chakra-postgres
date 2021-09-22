@@ -13,7 +13,6 @@ import Spinner from "../components/Spinner";
 import AddAndEditProfile from "../components/manage-users/AddAndEditProfile";
 import { useDialog } from "../components/dialogs/useDialog";
 import { useIsAuth } from '../utils/uselsAuth'
-import Chart from "../components/chart/Chart";
 
 interface Props { }
 
@@ -48,8 +47,6 @@ const Profile: React.FC<Props> = () => {
                     </Text>
                 </Flex>
             ) : (
-                    <>
-                        <Chart />
                         <Flex flexDir={["column", "column", "column", "row"]} overflow="hidden">
                             {/* ---------------------------------------Column 1--------------------------------------- */}
                             <Flex
@@ -219,8 +216,7 @@ const Profile: React.FC<Props> = () => {
                                 <Card label="ลากิจ" content={8} />
                                 <Card label="หยุดงาน" content={1} />
                             </Flex>
-                        </Flex>
-                    </>
+                    </Flex>
             )}
         </>
     );

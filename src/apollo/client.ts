@@ -13,7 +13,9 @@ import {
     DeleteGiveMutationVariables,
     GivesQuery,
     GivesDocument,
-    // DeleteGiveMutation
+    CreateJobItMutation,
+    JobITsQuery,
+    JobITsDocument,
 } from "../generated/graphql";
 
 function betterUpdateQuery<Result, Query>(
@@ -113,6 +115,23 @@ export const client = createClient({
                             id: (args as DeleteGiveMutationVariables).id,
                         });
                     },
+
+                    createJobIT: (_result, args, cache, info) => {
+                        betterUpdateQuery<CreateJobItMutation, JobITsQuery>(cache,
+                            { query: JobITsDocument },
+                            _result,
+                            (result, query) => {
+                                if (result.createJobIT.errors) {
+                                    return query
+                                } else {
+                                    return {
+                                        jobITs: result.createJobIT.jobIT
+                                    }
+                                }
+                            }
+                        )
+                    },
+
                 }
             }
         }),

@@ -27,32 +27,37 @@ const JobITItem: React.FC<Props> = ({ jobIt: {
     return (
         <>
             <div className='orders-content orders-content--content'>
-                <Box w="25%">
+                <Box w="20%">
                     <Text fontSize={["xs", "xs", "sm", "md"]} align="center">{formatDate(+createdAt)}</Text>
                 </Box>
-                <Box w="25%">
+                <Box w="20%">
                     <Text fontSize="md" align="center">{titled}</Text>
                 </Box>
-                <Box w="25%">
-                    <Text fontSize="md" align="center">{itComment}{itActionName}</Text>
+                <Box w="20%">
+                    <Text fontSize="md" align="center">{itComment}</Text>
                 </Box>
-                <Box w="25%">
+                <Box w="20%">
+                    <Text fontSize="md" align="center">{itActionName}</Text>
+                </Box>
+                <Box w="20%">
                     <Text fontSize="md" align="center" ml="10">{desiredDate}</Text>
                 </Box>
-                <Box w="25%">
+                <Box w="20%">
                     <Text
                         ml="4"
-                        align="center"
+                        align="center" ff
                         fontWeight="semibold"
                         fontSize={["md", "md", "md", "md"]}
                         color={
                             status === "New"
                                 ? colorMode === "light" ? "cyan.600" : "cyan"
-                                : status === "Preparing"
+                                : status === "Wait Approve"
                                     ? "orange"
                                     : status === "Success"
                                         ? "green"
-                                        : undefined
+                                        : status === "Impossible"
+                                            ? "red"
+                                            : undefined
                         }
                     >
                         {status}

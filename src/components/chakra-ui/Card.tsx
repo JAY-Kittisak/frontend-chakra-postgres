@@ -32,7 +32,7 @@ const Card: React.FC<Props> = ({ label, content }) => {
                 <Link
                     to={
                         label === "สถานะงาน IT"
-                            ? "/สถานะงาน IT"
+                            ? "/job-it/me"
                             : label === "สถานะงาน Altas"
                                 ? "/สถานะงาน Altas"
                                 : label === "สถานะงาน เบิกของแจกลูกค้า"

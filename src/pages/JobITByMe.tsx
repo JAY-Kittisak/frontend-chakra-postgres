@@ -46,6 +46,9 @@ const JobITByMe: React.FC<Props> = () => {
                             IT Comment
                         </Text>
                         <Text fontSize={["md", "md", "xl", "xl"]} fontWeight="bold">
+                            ผู้ปฏิบัติงาน
+                        </Text>
+                        <Text fontSize={["md", "md", "xl", "xl"]} fontWeight="bold">
                             วันที่ต้องการ
                         </Text>
                         <Text fontSize={["md", "md", "xl", "xl"]} fontWeight="bold">

@@ -21,7 +21,7 @@ const ManageGiveOrders: React.FC<Props> = () => {
                 bgGradient="linear(to-l, #7928CA,#FF0080)"
                 bgClip="text"
             >
-                Your order
+                Manages give order
             </Text>
 
             <Flex flexDir="column" p={9} rounded="7px" boxShadow="md" bg={bg}>

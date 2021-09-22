@@ -39,7 +39,7 @@ const ManageGives: React.FC<Props> = () => {
                 bgGradient="linear(to-l, #7928CA,#FF0080)"
                 bgClip="text"
                 >
-                    Admin Manages
+                Manages Give
                 </Text>
                 <Divider mt={1} mb={5} orientation="horizontal" />
 
@@ -102,7 +102,7 @@ const ManageGives: React.FC<Props> = () => {
                                             ประเภท
                                         </Th>
                                             <Th textAlign="center" fontSize={["xs", "xs", "sm", "md"]} color="white" w="20%">
-                                            วันที่ Update
+                                                วันที่สร้าง
                                         </Th>
                                             <Th textAlign="center" fontSize={["xs", "xs", "sm", "md"]} color="white" w="20%">
                                             Manage

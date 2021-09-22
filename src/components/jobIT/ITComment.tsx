@@ -20,7 +20,6 @@ const ITComment: React.FC<Props> = ({ id, comment }) => {
                     itComment: "",
                 }}
                 onSubmit={async (values) => {
-                    console.log(values)
                     if (values.itComment.length <= 5) return alert("น้อยกว่า 5 ตัวอักษร")
 
                     const response = await jobItComment({ id, input: values.itComment });

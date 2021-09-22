@@ -59,7 +59,7 @@ const AdminGiveItem: React.FC<Props> = ({
                 <Center>{give.category}</Center>
             </Td>
             <Td>
-                <Center>{formatDate(+give.updatedAt)}</Center>
+                <Center>{formatDate(+give.createdAt)}</Center>
             </Td>
             <Td>
                 <Center>
