@@ -13,8 +13,14 @@ interface Props {
 const ITComment: React.FC<Props> = ({ id, comment }) => {
     const [, jobItComment] = useJobItCommentMutation()
     return (
-        <Box flexDir="column" align="center">
-            <Text>{comment}</Text>
+        <Box flexDir="column" align="end">
+            <Text
+                fontSize={["sm", "sm", "md", "md"]}
+                as="i"
+                fontWeight="semibold"
+            >
+                {comment}
+            </Text>
             <Formik
                 initialValues={{
                     itComment: "",
@@ -25,13 +31,15 @@ const ITComment: React.FC<Props> = ({ id, comment }) => {
                     const response = await jobItComment({ id, input: values.itComment });
                     if (response.error) {
                         alert(response.error)
-                    } else if (response.data?.jobITComment) {
-                        alert("บันทึกเส็จเรียบร้อย")
                     }
+                    //  else if (response.data?.jobITComment) {
+                    //     alert("บันทึกเส็จเรียบร้อย")
+                    // }
                 }}
             >
                 {({ isSubmitting }) => (
                     <Form>
+                        <Box marginY="-5">
                         <InputField
                             textarea
                             name="itComment"
@@ -47,6 +55,7 @@ const ITComment: React.FC<Props> = ({ id, comment }) => {
                         >
                             Save
                         </Button>
+                        </Box>
 
                     </Form>
                 )}

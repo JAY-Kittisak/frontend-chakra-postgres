@@ -62,7 +62,7 @@ const AdminJobITItem: React.FC<Props> = ({ jobIT: { id, titled, itActionName, de
                         boxShadow="sm"
                     >
                         <Text color="white" fontSize={["xs", "xs", "sm", "md"]}>
-                            Manage order
+                            Manage Job
                         </Text>
                     </Button>
                 </Box>

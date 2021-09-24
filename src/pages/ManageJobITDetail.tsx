@@ -154,7 +154,7 @@ const ManageJobITDetail: React.FC<Props> = () => {
                                 <Divider mt={3} orientation="horizontal" />
 
                                 {data.jobITById.itComment &&
-                                    data.jobITById.status === "Success" ? (
+                                    (data.jobITById.status === "Success" || data.jobITById.status === "Impossible") ? (
                                     <>
                                             <Stack isInline mt={3} justify="space-between">
                                                 <Text fontSize={["sm", "sm", "md", "md"]}>

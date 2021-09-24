@@ -181,7 +181,7 @@ const Profile: React.FC<Props> = () => {
                                     p={3}
                                     isTruncated
                                 >
-                                    ประวัติการแจ้ง JOB และเบิกอุปกรณืต่างๆ
+                                ประวัติการแจ้ง JOB
                                 </Text>
                                 <Card label="สถานะงาน IT" content={data.me.jobITs.length} />
                                 <Card label="สถานะงาน Altas" content={10} />

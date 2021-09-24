@@ -78,17 +78,6 @@ const menuItemsFooter = [
         ],
     },
     { name: "Setting", to: "/setting", iconClassName: "bi bi-gear-fill" },
-    {
-        name: "Notification",
-        to: "/notification",
-        iconClassName: "bi bi-bell",
-    },
-    {
-        name: "Apps",
-        to: "/apps",
-        iconClassName: "bi bi-emoji-smile-fill",
-        subMenus: [{ name: "ประวัติการเบิกของคุณ", to: "/order-give/my-orders" }],
-    },
 ];
 
 const SideMenu: React.FC<Props> = ({ onCollapse }) => {

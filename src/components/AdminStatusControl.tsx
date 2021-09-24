@@ -70,12 +70,11 @@ const AdminStatusControl: React.FC<Props> = ({
                     newStatus: orderStatus,
                 });
                 if (response.error?.message) {
-                  alert(response.error.message);
-              } else if (response.data?.updateGiveOrder.giveOrder) {
-                  alert("ทำการบันทึกเรียบร้อย");
-              }
-                setLoading(false);
-            }
+                    alert(response.error.message);
+                } else if (response.data?.updateGiveOrder.giveOrder) {
+                    setLoading(false);
+                }
+                  }
 
                   if (functionName === "JobIT") {
                         const response = await updateJobIt({
@@ -85,9 +84,8 @@ const AdminStatusControl: React.FC<Props> = ({
                         if (response.error?.message) {
                             alert(response.error.message);
                         } else if (response.data?.updateJobIT) {
-                            alert("ทำการบันทึกเรียบร้อย");
+                            setLoading(false);
                         }
-                        setLoading(false);
                     }
                 }}
             >
