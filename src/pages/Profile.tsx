@@ -5,6 +5,8 @@ import { Form, Formik } from "formik";
 import {
     useMeQuery,
     RegularUserFragment,
+    useGiveOrderByCreatorIdQuery,
+    useJobItByCreatorIdQuery,
 } from "../generated/graphql";
 import InputField from "../components/InputField";
 import AddImageUser from "../components/manage-users/AddImageUser";
@@ -23,6 +25,8 @@ const Profile: React.FC<Props> = () => {
     );
 
     const [{ data, fetching }] = useMeQuery();
+    const [{ data: giveOrder }] = useGiveOrderByCreatorIdQuery()
+    const [{ data: jobIt }] = useJobItByCreatorIdQuery()
 
     const { isOpen, setIsOpen } = useDialog();
 
@@ -183,12 +187,16 @@ const Profile: React.FC<Props> = () => {
                                 >
                                 ประวัติการแจ้ง JOB
                                 </Text>
-                                <Card label="สถานะงาน IT" content={data.me.jobITs.length} />
+                            {jobIt?.jobITByCreatorId &&
+                                <Card label="สถานะงาน IT" content={jobIt.jobITByCreatorId.length} />
+                            }
                                 <Card label="สถานะงาน Altas" content={10} />
+                            {giveOrder?.giveOrderByCreatorId &&
                                 <Card
                                     label="สถานะงาน เบิกของแจกลูกค้า"
-                                    content={data.me.giveOrders.length}
+                                content={giveOrder.giveOrderByCreatorId.length}
                                 />
+                            }
                                 <Card label="สถานะงาน สั่งซื้อ" content={4} />
                             </Flex>
                             {/* ---------------------------------------Column 2--------------------------------------- */}

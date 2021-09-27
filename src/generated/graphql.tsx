@@ -512,13 +512,6 @@ export type RegularManualAdFragment = (
 export type RegularUserFragment = (
   { __typename?: 'User' }
   & Pick<User, 'id' | 'username' | 'email' | 'roles' | 'departments' | 'fullNameTH' | 'fullNameEN' | 'nickName' | 'imageUrl' | 'createdAt' | 'updatedAt'>
-  & { giveOrders: Array<(
-    { __typename?: 'GiveOrder' }
-    & Pick<GiveOrder, 'id'>
-  )>, jobITs: Array<(
-    { __typename?: 'JobIT' }
-    & Pick<JobIt, 'id'>
-  )> }
 );
 
 export type CreateGiveMutationVariables = Exact<{
@@ -1047,12 +1040,6 @@ export const RegularUserFragmentDoc = gql`
   imageUrl
   createdAt
   updatedAt
-  giveOrders {
-    id
-  }
-  jobITs {
-    id
-  }
 }
     `;
 export const CreateGiveDocument = gql`
