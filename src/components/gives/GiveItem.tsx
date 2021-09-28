@@ -2,10 +2,10 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useColorModeValue, Flex, Image, Text } from "@chakra-ui/react";
 
-import { RegularGiveFragment } from '../../generated/graphql'
+import { RegularGiveFragment, RegularGiveCdcFragment } from '../../generated/graphql'
 
 interface Props {
-    give: RegularGiveFragment
+    give: RegularGiveFragment | RegularGiveCdcFragment
 }
 
 const GiveItem: React.FC<Props> = ({ give: { id, giveName, imageUrl, inventory } }) => {

@@ -1,0 +1,11 @@
+fragment RegularGiveCdc on GiveCdc {
+    id
+    giveName
+    details
+    price
+    inventory
+    category
+    imageUrl
+    createdAt
+    updatedAt
+}

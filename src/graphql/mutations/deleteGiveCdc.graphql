@@ -1,0 +1,11 @@
+mutation DeleteGiveCdc($id: Int!){
+  deleteGiveCdc(id: $id){
+    errors {
+      field
+      message
+    }
+    give {
+        ...RegularGiveCdc
+    }
+  }
+}

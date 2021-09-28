@@ -69,12 +69,15 @@ export const catDepartments: CatDepartments[] = [
 export const fileType = ['image/png', 'image/jpeg', 'image/ipg']
 
 // ---------------------- Give ----------------------
-export type CategoryGive = "USB" | "สมุด" | "ปากกา" | "เลือกกลุ่มสินค้า"
+export type CategoryGive = "USB" | "สมุด" | "ปากกา" | "เลือกกลุ่มสินค้า" | "พวงกุญแจ" | "เหล้า" | "ขนม"
 export const catGive: CategoryGive[] = [
     "เลือกกลุ่มสินค้า",
     "USB",
     "ปากกา",
-    "สมุด"
+    "สมุด",
+    "พวงกุญแจ",
+    "เหล้า",
+    "ขนม",
 ]
 
 // ---------------------- Status ----------------------

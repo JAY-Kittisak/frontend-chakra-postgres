@@ -17,26 +17,26 @@ import { SelectControl } from "../Selectfield";
 import { catGive, fileType } from "../../utils/helpers";
 import { toErrorMap } from "../../utils/toErrorMap";
 import {
-    RegularGiveFragment,
-    useCreateGiveMutation,
-    useUpdateGiveMutation,
+    RegularGiveCdcFragment,
+    useCreateGiveCdcMutation,
+    useUpdateGiveCdcMutation,
     FieldError,
 } from "../../generated/graphql";
 
 interface Props {
     Open: boolean;
     setOpen: () => void;
-    giveToEdit: RegularGiveFragment | null;
+    giveToEdit: RegularGiveCdcFragment | null;
 }
 
-const AddAndEditGive: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
+const AddAndEditGiveCdc: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [errorImage, setErrorImage] = useState(false);
 
     const cancelRef = useRef();
 
-    const [, createGive] = useCreateGiveMutation();
-    const [, updateGive] = useUpdateGiveMutation();
+    const [, createGive] = useCreateGiveCdcMutation();
+    const [, updateGive] = useUpdateGiveCdcMutation();
 
     return (
         <AlertDialog
@@ -68,12 +68,12 @@ const AddAndEditGive: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
                             options: selectedFile,
                         });
 
-                        if (response.data?.createGive.errors) {
+                        if (response.data?.createGiveCdc.errors) {
                             setErrorImage(false);
                             setErrors(
-                                toErrorMap(response.data.createGive.errors as FieldError[])
+                                toErrorMap(response.data.createGiveCdc.errors as FieldError[])
                             );
-                        } else if (response.data?.createGive.give) {
+                        } else if (response.data?.createGiveCdc.give) {
                             setErrorImage(false);
                             setOpen();
                         }
@@ -90,11 +90,11 @@ const AddAndEditGive: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
                         if (isNotEdited) return setOpen();
 
                         const response = await updateGive({ id, input: values });
-                        if (response.data?.updateGive.errors) {
+                        if (response.data?.updateGiveCdc.errors) {
                             setErrors(
-                                toErrorMap(response.data.updateGive.errors as FieldError[])
+                                toErrorMap(response.data.updateGiveCdc.errors as FieldError[])
                             );
-                        } else if (response.data?.updateGive.give) {
+                        } else if (response.data?.updateGiveCdc.give) {
                             setOpen();
                         }
                     }
@@ -143,26 +143,26 @@ const AddAndEditGive: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
                                             </Text>
                                             <input
                                                 name="imageUrl"
-                                            type="file"
-                                            onChange={(e) => {
-                                                const files = e.target.files;
-                                                if (!files || !files[0]) return;
-                                                const file = files[0];
-                                                if (!fileType.includes(file.type)) {
-                                                    alert(
-                                                        'Wrong file format, allow only "png" or "jpeg" or "jpg"'
-                                                    );
-                                                    return;
-                                                }
-                                                setSelectedFile(file);
-                                            }}
-                                        />
+                                                type="file"
+                                                onChange={(e) => {
+                                                    const files = e.target.files;
+                                                    if (!files || !files[0]) return;
+                                                    const file = files[0];
+                                                    if (!fileType.includes(file.type)) {
+                                                        alert(
+                                                            'Wrong file format, allow only "png" or "jpeg" or "jpg"'
+                                                        );
+                                                        return;
+                                                    }
+                                                    setSelectedFile(file);
+                                                }}
+                                            />
                                         </Flex>}
                                     {errorImage && (
                                         <>
                                             <Text color="yellow.400" p="3">
                                                 Warning:!! ขนาดไฟล์ของคุณคือ {selectedFile?.size}
-                                                KB. ซึ่งใหญ่เกิน 500000 KB.
+                                                KB. ซึ่งใหญ่เกิน 5000000 KB.
                                             </Text>
                                         </>
                                     )}
@@ -190,4 +190,4 @@ const AddAndEditGive: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
     );
 };
 
-export default AddAndEditGive;
+export default AddAndEditGiveCdc;

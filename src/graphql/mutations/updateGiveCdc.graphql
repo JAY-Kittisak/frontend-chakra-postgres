@@ -1,0 +1,11 @@
+mutation UpdateGiveCdc($id: Int!,$input: GiveInput!){
+  updateGiveCdc(id: $id,input: $input){
+    errors{
+      field
+      message
+    }
+    give{
+      ...RegularGiveCdc
+    }
+  }
+}

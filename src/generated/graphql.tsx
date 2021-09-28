@@ -80,6 +80,26 @@ export type Give = {
   updatedAt: Scalars['String'];
 };
 
+export type GiveCdc = {
+  __typename?: 'GiveCdc';
+  id: Scalars['Float'];
+  giveName: Scalars['String'];
+  details?: Maybe<Scalars['String']>;
+  price?: Maybe<Scalars['Float']>;
+  inventory?: Maybe<Scalars['Float']>;
+  category?: Maybe<Scalars['String']>;
+  imageUrl?: Maybe<Scalars['String']>;
+  orders: Array<GiveOrder>;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type GiveCdcResponse = {
+  __typename?: 'GiveCdcResponse';
+  errors?: Maybe<Array<FieldErrorGive>>;
+  give?: Maybe<Array<GiveCdc>>;
+};
+
 export type GiveInput = {
   giveName: Scalars['String'];
   details: Scalars['String'];
@@ -102,6 +122,28 @@ export type GiveOrder = {
   give: Give;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
+};
+
+export type GiveOrderCdc = {
+  __typename?: 'GiveOrderCdc';
+  id: Scalars['Float'];
+  creatorId: Scalars['Float'];
+  giveId: Scalars['Float'];
+  amount?: Maybe<Scalars['Float']>;
+  price?: Maybe<Scalars['Float']>;
+  customerId?: Maybe<Scalars['Float']>;
+  customerDetail?: Maybe<Scalars['String']>;
+  status: Scalars['String'];
+  creator: User;
+  give: Give;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type GiveOrderCdcResponse = {
+  __typename?: 'GiveOrderCdcResponse';
+  errors?: Maybe<Array<FieldErrorGive>>;
+  giveOrder?: Maybe<Array<GiveOrderCdc>>;
 };
 
 export type GiveOrderResponse = {
@@ -201,9 +243,13 @@ export type Mutation = {
   joinFactory: Scalars['Boolean'];
   deleteProduct: Scalars['Boolean'];
   createGive: GiveResponse;
+  createGiveCdc: GiveCdcResponse;
   updateGive: UpdateGiveResponse;
+  updateGiveCdc: UpdateGiveCdcResponse;
   deleteGive: GiveResponse;
+  deleteGiveCdc: GiveCdcResponse;
   createGiveOrder: GiveOrderResponse;
+  createGiveOrderCdc: GiveOrderCdcResponse;
   updateGiveOrder: UpdateGiveOrderResponse;
   deleteGiveOrder: Scalars['Boolean'];
   createManualAD: ManualAdResponse;
@@ -272,7 +318,19 @@ export type MutationCreateGiveArgs = {
 };
 
 
+export type MutationCreateGiveCdcArgs = {
+  options: Scalars['Upload'];
+  input: GiveInput;
+};
+
+
 export type MutationUpdateGiveArgs = {
+  input: GiveInput;
+  id: Scalars['Int'];
+};
+
+
+export type MutationUpdateGiveCdcArgs = {
   input: GiveInput;
   id: Scalars['Int'];
 };
@@ -283,7 +341,17 @@ export type MutationDeleteGiveArgs = {
 };
 
 
+export type MutationDeleteGiveCdcArgs = {
+  id: Scalars['Int'];
+};
+
+
 export type MutationCreateGiveOrderArgs = {
+  input: GiveOrderInput;
+};
+
+
+export type MutationCreateGiveOrderCdcArgs = {
   input: GiveOrderInput;
 };
 
@@ -365,9 +433,13 @@ export type Query = {
   companyName?: Maybe<Factory>;
   ProductByTiers: Array<Maybe<ProductByTier>>;
   gives?: Maybe<Array<Give>>;
+  givesCdc?: Maybe<Array<GiveCdc>>;
   giveById: Give;
+  giveByIdCdc: GiveCdc;
   giveOrders?: Maybe<Array<GiveOrder>>;
+  giveOrdersCdc?: Maybe<Array<GiveOrderCdc>>;
   giveOrderById: GiveOrder;
+  giveOrderByIdCdc: GiveOrderCdc;
   giveOrderByCreatorId: Array<GiveOrder>;
   manualADs: Array<ManualAd>;
   manualADById: ManualAd;
@@ -402,7 +474,17 @@ export type QueryGiveByIdArgs = {
 };
 
 
+export type QueryGiveByIdCdcArgs = {
+  id: Scalars['Int'];
+};
+
+
 export type QueryGiveOrderByIdArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryGiveOrderByIdCdcArgs = {
   id: Scalars['Int'];
 };
 
@@ -422,6 +504,12 @@ export type RegisterInput = {
   email: Scalars['String'];
   roles: Scalars['String'];
   departments: Scalars['String'];
+};
+
+export type UpdateGiveCdcResponse = {
+  __typename?: 'UpdateGiveCdcResponse';
+  errors?: Maybe<Array<FieldErrorGive>>;
+  give?: Maybe<GiveCdc>;
 };
 
 export type UpdateGiveOrderResponse = {
@@ -479,9 +567,26 @@ export type RegularGiveFragment = (
   & Pick<Give, 'id' | 'giveName' | 'details' | 'price' | 'inventory' | 'category' | 'imageUrl' | 'createdAt' | 'updatedAt'>
 );
 
+export type RegularGiveCdcFragment = (
+  { __typename?: 'GiveCdc' }
+  & Pick<GiveCdc, 'id' | 'giveName' | 'details' | 'price' | 'inventory' | 'category' | 'imageUrl' | 'createdAt' | 'updatedAt'>
+);
+
 export type RegularGiveOrdersFragment = (
   { __typename?: 'GiveOrder' }
   & Pick<GiveOrder, 'id' | 'creatorId' | 'giveId' | 'amount' | 'price' | 'customerId' | 'customerDetail' | 'status' | 'createdAt' | 'updatedAt'>
+  & { give: (
+    { __typename?: 'Give' }
+    & RegularGiveFragment
+  ), creator: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'roles' | 'departments' | 'fullNameTH'>
+  ) }
+);
+
+export type RegularGiveOrdersCdcFragment = (
+  { __typename?: 'GiveOrderCdc' }
+  & Pick<GiveOrderCdc, 'id' | 'creatorId' | 'giveId' | 'amount' | 'price' | 'customerId' | 'customerDetail' | 'status' | 'createdAt' | 'updatedAt'>
   & { give: (
     { __typename?: 'Give' }
     & RegularGiveFragment
@@ -534,6 +639,26 @@ export type CreateGiveMutation = (
   ) }
 );
 
+export type CreateGiveCdcMutationVariables = Exact<{
+  input: GiveInput;
+  options: Scalars['Upload'];
+}>;
+
+
+export type CreateGiveCdcMutation = (
+  { __typename?: 'Mutation' }
+  & { createGiveCdc: (
+    { __typename?: 'GiveCdcResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorGive' }
+      & Pick<FieldErrorGive, 'field' | 'message'>
+    )>>, give?: Maybe<Array<(
+      { __typename?: 'GiveCdc' }
+      & RegularGiveCdcFragment
+    )>> }
+  ) }
+);
+
 export type CreateGiveOrderMutationVariables = Exact<{
   input: GiveOrderInput;
 }>;
@@ -549,6 +674,25 @@ export type CreateGiveOrderMutation = (
     )>>, giveOrder?: Maybe<Array<(
       { __typename?: 'GiveOrder' }
       & RegularGiveOrdersFragment
+    )>> }
+  ) }
+);
+
+export type CreateGiveOrderCdcMutationVariables = Exact<{
+  input: GiveOrderInput;
+}>;
+
+
+export type CreateGiveOrderCdcMutation = (
+  { __typename?: 'Mutation' }
+  & { createGiveOrderCdc: (
+    { __typename?: 'GiveOrderCdcResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorGive' }
+      & Pick<FieldErrorGive, 'field' | 'message'>
+    )>>, giveOrder?: Maybe<Array<(
+      { __typename?: 'GiveOrderCdc' }
+      & RegularGiveOrdersCdcFragment
     )>> }
   ) }
 );
@@ -600,6 +744,25 @@ export type DeleteGiveMutation = (
     )>>, give?: Maybe<Array<(
       { __typename?: 'Give' }
       & RegularGiveFragment
+    )>> }
+  ) }
+);
+
+export type DeleteGiveCdcMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteGiveCdcMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteGiveCdc: (
+    { __typename?: 'GiveCdcResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorGive' }
+      & Pick<FieldErrorGive, 'field' | 'message'>
+    )>>, give?: Maybe<Array<(
+      { __typename?: 'GiveCdc' }
+      & RegularGiveCdcFragment
     )>> }
   ) }
 );
@@ -690,6 +853,26 @@ export type UpdateGiveMutation = (
     )>>, give?: Maybe<(
       { __typename?: 'Give' }
       & RegularGiveFragment
+    )> }
+  ) }
+);
+
+export type UpdateGiveCdcMutationVariables = Exact<{
+  id: Scalars['Int'];
+  input: GiveInput;
+}>;
+
+
+export type UpdateGiveCdcMutation = (
+  { __typename?: 'Mutation' }
+  & { updateGiveCdc: (
+    { __typename?: 'UpdateGiveCdcResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorGive' }
+      & Pick<FieldErrorGive, 'field' | 'message'>
+    )>>, give?: Maybe<(
+      { __typename?: 'GiveCdc' }
+      & RegularGiveCdcFragment
     )> }
   ) }
 );
@@ -790,6 +973,19 @@ export type GiveByIdQuery = (
   ) }
 );
 
+export type GiveByIdCdcQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GiveByIdCdcQuery = (
+  { __typename?: 'Query' }
+  & { giveByIdCdc: (
+    { __typename?: 'GiveCdc' }
+    & RegularGiveCdcFragment
+  ) }
+);
+
 export type GiveOrderByCreatorIdQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -833,6 +1029,17 @@ export type GivesQuery = (
   & { gives?: Maybe<Array<(
     { __typename?: 'Give' }
     & RegularGiveFragment
+  )>> }
+);
+
+export type GivesCdcQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GivesCdcQuery = (
+  { __typename?: 'Query' }
+  & { givesCdc?: Maybe<Array<(
+    { __typename?: 'GiveCdc' }
+    & RegularGiveCdcFragment
   )>> }
 );
 
@@ -953,6 +1160,19 @@ export type MeQuery = (
   )> }
 );
 
+export const RegularGiveCdcFragmentDoc = gql`
+    fragment RegularGiveCdc on GiveCdc {
+  id
+  giveName
+  details
+  price
+  inventory
+  category
+  imageUrl
+  createdAt
+  updatedAt
+}
+    `;
 export const RegularGiveFragmentDoc = gql`
     fragment RegularGive on Give {
   id
@@ -968,6 +1188,29 @@ export const RegularGiveFragmentDoc = gql`
     `;
 export const RegularGiveOrdersFragmentDoc = gql`
     fragment RegularGiveOrders on GiveOrder {
+  id
+  creatorId
+  giveId
+  amount
+  price
+  customerId
+  customerDetail
+  status
+  give {
+    ...RegularGive
+  }
+  creator {
+    id
+    roles
+    departments
+    fullNameTH
+  }
+  createdAt
+  updatedAt
+}
+    ${RegularGiveFragmentDoc}`;
+export const RegularGiveOrdersCdcFragmentDoc = gql`
+    fragment RegularGiveOrdersCdc on GiveOrderCdc {
   id
   creatorId
   giveId
@@ -1059,6 +1302,23 @@ export const CreateGiveDocument = gql`
 export function useCreateGiveMutation() {
   return Urql.useMutation<CreateGiveMutation, CreateGiveMutationVariables>(CreateGiveDocument);
 };
+export const CreateGiveCdcDocument = gql`
+    mutation CreateGiveCdc($input: GiveInput!, $options: Upload!) {
+  createGiveCdc(input: $input, options: $options) {
+    errors {
+      field
+      message
+    }
+    give {
+      ...RegularGiveCdc
+    }
+  }
+}
+    ${RegularGiveCdcFragmentDoc}`;
+
+export function useCreateGiveCdcMutation() {
+  return Urql.useMutation<CreateGiveCdcMutation, CreateGiveCdcMutationVariables>(CreateGiveCdcDocument);
+};
 export const CreateGiveOrderDocument = gql`
     mutation CreateGiveOrder($input: giveOrderInput!) {
   createGiveOrder(input: $input) {
@@ -1075,6 +1335,23 @@ export const CreateGiveOrderDocument = gql`
 
 export function useCreateGiveOrderMutation() {
   return Urql.useMutation<CreateGiveOrderMutation, CreateGiveOrderMutationVariables>(CreateGiveOrderDocument);
+};
+export const CreateGiveOrderCdcDocument = gql`
+    mutation CreateGiveOrderCdc($input: giveOrderInput!) {
+  createGiveOrderCdc(input: $input) {
+    errors {
+      field
+      message
+    }
+    giveOrder {
+      ...RegularGiveOrdersCdc
+    }
+  }
+}
+    ${RegularGiveOrdersCdcFragmentDoc}`;
+
+export function useCreateGiveOrderCdcMutation() {
+  return Urql.useMutation<CreateGiveOrderCdcMutation, CreateGiveOrderCdcMutationVariables>(CreateGiveOrderCdcDocument);
 };
 export const CreateJobItDocument = gql`
     mutation CreateJobIT($input: JobIT_Input!) {
@@ -1127,6 +1404,23 @@ export const DeleteGiveDocument = gql`
 
 export function useDeleteGiveMutation() {
   return Urql.useMutation<DeleteGiveMutation, DeleteGiveMutationVariables>(DeleteGiveDocument);
+};
+export const DeleteGiveCdcDocument = gql`
+    mutation DeleteGiveCdc($id: Int!) {
+  deleteGiveCdc(id: $id) {
+    errors {
+      field
+      message
+    }
+    give {
+      ...RegularGiveCdc
+    }
+  }
+}
+    ${RegularGiveCdcFragmentDoc}`;
+
+export function useDeleteGiveCdcMutation() {
+  return Urql.useMutation<DeleteGiveCdcMutation, DeleteGiveCdcMutationVariables>(DeleteGiveCdcDocument);
 };
 export const JobItCommentDocument = gql`
     mutation JobITComment($id: Int!, $input: String!) {
@@ -1207,6 +1501,23 @@ export const UpdateGiveDocument = gql`
 
 export function useUpdateGiveMutation() {
   return Urql.useMutation<UpdateGiveMutation, UpdateGiveMutationVariables>(UpdateGiveDocument);
+};
+export const UpdateGiveCdcDocument = gql`
+    mutation UpdateGiveCdc($id: Int!, $input: GiveInput!) {
+  updateGiveCdc(id: $id, input: $input) {
+    errors {
+      field
+      message
+    }
+    give {
+      ...RegularGiveCdc
+    }
+  }
+}
+    ${RegularGiveCdcFragmentDoc}`;
+
+export function useUpdateGiveCdcMutation() {
+  return Urql.useMutation<UpdateGiveCdcMutation, UpdateGiveCdcMutationVariables>(UpdateGiveCdcDocument);
 };
 export const UpdateGiveOrderDocument = gql`
     mutation UpdateGiveOrder($id: Int!, $newStatus: String!) {
@@ -1300,6 +1611,17 @@ export const GiveByIdDocument = gql`
 export function useGiveByIdQuery(options: Omit<Urql.UseQueryArgs<GiveByIdQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<GiveByIdQuery>({ query: GiveByIdDocument, ...options });
 };
+export const GiveByIdCdcDocument = gql`
+    query GiveByIdCdc($id: Int!) {
+  giveByIdCdc(id: $id) {
+    ...RegularGiveCdc
+  }
+}
+    ${RegularGiveCdcFragmentDoc}`;
+
+export function useGiveByIdCdcQuery(options: Omit<Urql.UseQueryArgs<GiveByIdCdcQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GiveByIdCdcQuery>({ query: GiveByIdCdcDocument, ...options });
+};
 export const GiveOrderByCreatorIdDocument = gql`
     query GiveOrderByCreatorId {
   giveOrderByCreatorId {
@@ -1343,6 +1665,17 @@ export const GivesDocument = gql`
 
 export function useGivesQuery(options: Omit<Urql.UseQueryArgs<GivesQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<GivesQuery>({ query: GivesDocument, ...options });
+};
+export const GivesCdcDocument = gql`
+    query GivesCdc {
+  givesCdc {
+    ...RegularGiveCdc
+  }
+}
+    ${RegularGiveCdcFragmentDoc}`;
+
+export function useGivesCdcQuery(options: Omit<Urql.UseQueryArgs<GivesCdcQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GivesCdcQuery>({ query: GivesCdcDocument, ...options });
 };
 export const JobItByCreatorIdDocument = gql`
     query JobITByCreatorId {

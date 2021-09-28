@@ -1,0 +1,11 @@
+mutation CreateGiveOrderCdc($input: giveOrderInput!){
+  createGiveOrderCdc(input: $input){
+    errors{
+      field
+      message
+    }
+    giveOrder{
+      ...RegularGiveOrdersCdc
+    }
+  }
+}

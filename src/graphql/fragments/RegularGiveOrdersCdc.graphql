@@ -1,0 +1,21 @@
+fragment RegularGiveOrdersCdc on GiveOrderCdc {
+      id
+      creatorId
+      giveId
+      amount
+      price
+      customerId
+      customerDetail
+      status
+      give{
+          ...RegularGive
+      }
+      creator{
+            id
+            roles
+            departments
+            fullNameTH
+      }
+      createdAt
+      updatedAt
+}

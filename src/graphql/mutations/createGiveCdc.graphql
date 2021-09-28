@@ -1,0 +1,11 @@
+mutation CreateGiveCdc($input: GiveInput!,$options: Upload!) {
+  createGiveCdc(input: $input,options: $options) {
+    errors {
+      field
+      message
+    }
+    give {
+        ...RegularGiveCdc
+    }
+  }
+}
