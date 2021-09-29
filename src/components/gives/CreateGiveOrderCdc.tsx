@@ -28,6 +28,8 @@ const CreateGiveOrderCdc: React.FC<Props> = ({ Open, setOpen, giveId, amount }) 
 
     const [, createGiveOrder] = useCreateGiveOrderCdcMutation()
 
+    console.log("amount", amount)
+
     return (
         <AlertDialog
             isOpen={Open}
@@ -45,9 +47,11 @@ const CreateGiveOrderCdc: React.FC<Props> = ({ Open, setOpen, giveId, amount }) 
                     const response = await createGiveOrder({ input: values });
                     if (response.data?.createGiveOrderCdc.errors) {
                         setErrors(toErrorMap(response.data.createGiveOrderCdc.errors as FieldError[]));
+                        console.log("test1")
                     } else if (response.data?.createGiveOrderCdc.giveOrder) {
                         setOpen()
                         history.push("/order-give/my-orders")
+                        console.log("test1")
                     }
                 }}
             >

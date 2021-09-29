@@ -89,7 +89,7 @@ export type GiveCdc = {
   inventory?: Maybe<Scalars['Float']>;
   category?: Maybe<Scalars['String']>;
   imageUrl?: Maybe<Scalars['String']>;
-  orders: Array<GiveOrder>;
+  orders: Array<GiveOrderCdc>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -135,7 +135,7 @@ export type GiveOrderCdc = {
   customerDetail?: Maybe<Scalars['String']>;
   status: Scalars['String'];
   creator: User;
-  give: Give;
+  give: GiveCdc;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -251,7 +251,9 @@ export type Mutation = {
   createGiveOrder: GiveOrderResponse;
   createGiveOrderCdc: GiveOrderCdcResponse;
   updateGiveOrder: UpdateGiveOrderResponse;
+  updateGiveOrderCdc: UpdateGiveOrderCdcResponse;
   deleteGiveOrder: Scalars['Boolean'];
+  deleteGiveOrderCdc: Scalars['Boolean'];
   createManualAD: ManualAdResponse;
   uploadPDFAd: ManualAdUrl;
   deleteManualAD: ManualAdResponse;
@@ -362,7 +364,18 @@ export type MutationUpdateGiveOrderArgs = {
 };
 
 
+export type MutationUpdateGiveOrderCdcArgs = {
+  newStatus: Scalars['String'];
+  id: Scalars['Int'];
+};
+
+
 export type MutationDeleteGiveOrderArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeleteGiveOrderCdcArgs = {
   id: Scalars['Int'];
 };
 
@@ -441,6 +454,7 @@ export type Query = {
   giveOrderById: GiveOrder;
   giveOrderByIdCdc: GiveOrderCdc;
   giveOrderByCreatorId: Array<GiveOrder>;
+  giveOrderByCreatorIdCdc: Array<GiveOrderCdc>;
   manualADs: Array<ManualAd>;
   manualADById: ManualAd;
   jobITs?: Maybe<Array<JobIt>>;
@@ -510,6 +524,12 @@ export type UpdateGiveCdcResponse = {
   __typename?: 'UpdateGiveCdcResponse';
   errors?: Maybe<Array<FieldErrorGive>>;
   give?: Maybe<GiveCdc>;
+};
+
+export type UpdateGiveOrderCdcResponse = {
+  __typename?: 'UpdateGiveOrderCdcResponse';
+  errors?: Maybe<Array<FieldErrorGive>>;
+  giveOrder?: Maybe<GiveOrderCdc>;
 };
 
 export type UpdateGiveOrderResponse = {
@@ -588,8 +608,8 @@ export type RegularGiveOrdersCdcFragment = (
   { __typename?: 'GiveOrderCdc' }
   & Pick<GiveOrderCdc, 'id' | 'creatorId' | 'giveId' | 'amount' | 'price' | 'customerId' | 'customerDetail' | 'status' | 'createdAt' | 'updatedAt'>
   & { give: (
-    { __typename?: 'Give' }
-    & RegularGiveFragment
+    { __typename?: 'GiveCdc' }
+    & RegularGiveCdcFragment
   ), creator: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'roles' | 'departments' | 'fullNameTH'>
@@ -767,6 +787,26 @@ export type DeleteGiveCdcMutation = (
   ) }
 );
 
+export type DeleteGiveOrderMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteGiveOrderMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteGiveOrder'>
+);
+
+export type DeleteGiveOrderCdcMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteGiveOrderCdcMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteGiveOrderCdc'>
+);
+
 export type JobItCommentMutationVariables = Exact<{
   id: Scalars['Int'];
   input: Scalars['String'];
@@ -897,6 +937,26 @@ export type UpdateGiveOrderMutation = (
   ) }
 );
 
+export type UpdateGiveOrderCdcMutationVariables = Exact<{
+  id: Scalars['Int'];
+  newStatus: Scalars['String'];
+}>;
+
+
+export type UpdateGiveOrderCdcMutation = (
+  { __typename?: 'Mutation' }
+  & { updateGiveOrderCdc: (
+    { __typename?: 'UpdateGiveOrderCdcResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorGive' }
+      & Pick<FieldErrorGive, 'field' | 'message'>
+    )>>, giveOrder?: Maybe<(
+      { __typename?: 'GiveOrderCdc' }
+      & RegularGiveOrdersCdcFragment
+    )> }
+  ) }
+);
+
 export type UpdateJobItMutationVariables = Exact<{
   id: Scalars['Int'];
   newStatus: Scalars['String'];
@@ -997,6 +1057,17 @@ export type GiveOrderByCreatorIdQuery = (
   )> }
 );
 
+export type GiveOrderByCreatorIdCdcQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GiveOrderByCreatorIdCdcQuery = (
+  { __typename?: 'Query' }
+  & { giveOrderByCreatorIdCdc: Array<(
+    { __typename?: 'GiveOrderCdc' }
+    & RegularGiveOrdersCdcFragment
+  )> }
+);
+
 export type GiveOrderByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -1010,6 +1081,19 @@ export type GiveOrderByIdQuery = (
   ) }
 );
 
+export type GiveOrderByIdCdcQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GiveOrderByIdCdcQuery = (
+  { __typename?: 'Query' }
+  & { giveOrderByIdCdc: (
+    { __typename?: 'GiveOrderCdc' }
+    & RegularGiveOrdersCdcFragment
+  ) }
+);
+
 export type GiveOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1018,6 +1102,17 @@ export type GiveOrdersQuery = (
   & { giveOrders?: Maybe<Array<(
     { __typename?: 'GiveOrder' }
     & RegularGiveOrdersFragment
+  )>> }
+);
+
+export type GiveOrdersCdcQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GiveOrdersCdcQuery = (
+  { __typename?: 'Query' }
+  & { giveOrdersCdc?: Maybe<Array<(
+    { __typename?: 'GiveOrderCdc' }
+    & RegularGiveOrdersCdcFragment
   )>> }
 );
 
@@ -1160,19 +1255,6 @@ export type MeQuery = (
   )> }
 );
 
-export const RegularGiveCdcFragmentDoc = gql`
-    fragment RegularGiveCdc on GiveCdc {
-  id
-  giveName
-  details
-  price
-  inventory
-  category
-  imageUrl
-  createdAt
-  updatedAt
-}
-    `;
 export const RegularGiveFragmentDoc = gql`
     fragment RegularGive on Give {
   id
@@ -1209,6 +1291,19 @@ export const RegularGiveOrdersFragmentDoc = gql`
   updatedAt
 }
     ${RegularGiveFragmentDoc}`;
+export const RegularGiveCdcFragmentDoc = gql`
+    fragment RegularGiveCdc on GiveCdc {
+  id
+  giveName
+  details
+  price
+  inventory
+  category
+  imageUrl
+  createdAt
+  updatedAt
+}
+    `;
 export const RegularGiveOrdersCdcFragmentDoc = gql`
     fragment RegularGiveOrdersCdc on GiveOrderCdc {
   id
@@ -1220,7 +1315,7 @@ export const RegularGiveOrdersCdcFragmentDoc = gql`
   customerDetail
   status
   give {
-    ...RegularGive
+    ...RegularGiveCdc
   }
   creator {
     id
@@ -1231,7 +1326,7 @@ export const RegularGiveOrdersCdcFragmentDoc = gql`
   createdAt
   updatedAt
 }
-    ${RegularGiveFragmentDoc}`;
+    ${RegularGiveCdcFragmentDoc}`;
 export const RegularJobItFragmentDoc = gql`
     fragment RegularJobIT on JobIT {
   id
@@ -1422,6 +1517,24 @@ export const DeleteGiveCdcDocument = gql`
 export function useDeleteGiveCdcMutation() {
   return Urql.useMutation<DeleteGiveCdcMutation, DeleteGiveCdcMutationVariables>(DeleteGiveCdcDocument);
 };
+export const DeleteGiveOrderDocument = gql`
+    mutation DeleteGiveOrder($id: Int!) {
+  deleteGiveOrder(id: $id)
+}
+    `;
+
+export function useDeleteGiveOrderMutation() {
+  return Urql.useMutation<DeleteGiveOrderMutation, DeleteGiveOrderMutationVariables>(DeleteGiveOrderDocument);
+};
+export const DeleteGiveOrderCdcDocument = gql`
+    mutation DeleteGiveOrderCdc($id: Int!) {
+  deleteGiveOrderCdc(id: $id)
+}
+    `;
+
+export function useDeleteGiveOrderCdcMutation() {
+  return Urql.useMutation<DeleteGiveOrderCdcMutation, DeleteGiveOrderCdcMutationVariables>(DeleteGiveOrderCdcDocument);
+};
 export const JobItCommentDocument = gql`
     mutation JobITComment($id: Int!, $input: String!) {
   jobITComment(id: $id, input: $input) {
@@ -1536,6 +1649,23 @@ export const UpdateGiveOrderDocument = gql`
 export function useUpdateGiveOrderMutation() {
   return Urql.useMutation<UpdateGiveOrderMutation, UpdateGiveOrderMutationVariables>(UpdateGiveOrderDocument);
 };
+export const UpdateGiveOrderCdcDocument = gql`
+    mutation UpdateGiveOrderCdc($id: Int!, $newStatus: String!) {
+  updateGiveOrderCdc(id: $id, newStatus: $newStatus) {
+    errors {
+      field
+      message
+    }
+    giveOrder {
+      ...RegularGiveOrdersCdc
+    }
+  }
+}
+    ${RegularGiveOrdersCdcFragmentDoc}`;
+
+export function useUpdateGiveOrderCdcMutation() {
+  return Urql.useMutation<UpdateGiveOrderCdcMutation, UpdateGiveOrderCdcMutationVariables>(UpdateGiveOrderCdcDocument);
+};
 export const UpdateJobItDocument = gql`
     mutation UpdateJobIT($id: Int!, $newStatus: String!) {
   updateJobIT(id: $id, newStatus: $newStatus) {
@@ -1633,6 +1763,17 @@ export const GiveOrderByCreatorIdDocument = gql`
 export function useGiveOrderByCreatorIdQuery(options: Omit<Urql.UseQueryArgs<GiveOrderByCreatorIdQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<GiveOrderByCreatorIdQuery>({ query: GiveOrderByCreatorIdDocument, ...options });
 };
+export const GiveOrderByCreatorIdCdcDocument = gql`
+    query GiveOrderByCreatorIdCdc {
+  giveOrderByCreatorIdCdc {
+    ...RegularGiveOrdersCdc
+  }
+}
+    ${RegularGiveOrdersCdcFragmentDoc}`;
+
+export function useGiveOrderByCreatorIdCdcQuery(options: Omit<Urql.UseQueryArgs<GiveOrderByCreatorIdCdcQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GiveOrderByCreatorIdCdcQuery>({ query: GiveOrderByCreatorIdCdcDocument, ...options });
+};
 export const GiveOrderByIdDocument = gql`
     query GiveOrderById($id: Int!) {
   giveOrderById(id: $id) {
@@ -1644,6 +1785,17 @@ export const GiveOrderByIdDocument = gql`
 export function useGiveOrderByIdQuery(options: Omit<Urql.UseQueryArgs<GiveOrderByIdQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<GiveOrderByIdQuery>({ query: GiveOrderByIdDocument, ...options });
 };
+export const GiveOrderByIdCdcDocument = gql`
+    query GiveOrderByIdCdc($id: Int!) {
+  giveOrderByIdCdc(id: $id) {
+    ...RegularGiveOrdersCdc
+  }
+}
+    ${RegularGiveOrdersCdcFragmentDoc}`;
+
+export function useGiveOrderByIdCdcQuery(options: Omit<Urql.UseQueryArgs<GiveOrderByIdCdcQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GiveOrderByIdCdcQuery>({ query: GiveOrderByIdCdcDocument, ...options });
+};
 export const GiveOrdersDocument = gql`
     query GiveOrders {
   giveOrders {
@@ -1654,6 +1806,17 @@ export const GiveOrdersDocument = gql`
 
 export function useGiveOrdersQuery(options: Omit<Urql.UseQueryArgs<GiveOrdersQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<GiveOrdersQuery>({ query: GiveOrdersDocument, ...options });
+};
+export const GiveOrdersCdcDocument = gql`
+    query GiveOrdersCdc {
+  giveOrdersCdc {
+    ...RegularGiveOrdersCdc
+  }
+}
+    ${RegularGiveOrdersCdcFragmentDoc}`;
+
+export function useGiveOrdersCdcQuery(options: Omit<Urql.UseQueryArgs<GiveOrdersCdcQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GiveOrdersCdcQuery>({ query: GiveOrdersCdcDocument, ...options });
 };
 export const GivesDocument = gql`
     query Gives {

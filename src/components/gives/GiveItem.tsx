@@ -1,14 +1,16 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react";
+import { Link } from "react-router-dom";
 import { useColorModeValue, Flex, Image, Text } from "@chakra-ui/react";
 
-import { RegularGiveFragment, RegularGiveCdcFragment } from '../../generated/graphql'
+import { RegularGiveFragment } from "../../generated/graphql";
 
 interface Props {
-    give: RegularGiveFragment | RegularGiveCdcFragment
+    give: RegularGiveFragment;
 }
 
-const GiveItem: React.FC<Props> = ({ give: { id, giveName, imageUrl, inventory } }) => {
+const GiveItem: React.FC<Props> = ({
+    give: { id, giveName, imageUrl, inventory },
+}) => {
     const bg = useColorModeValue("white", "gray.700");
 
     return (
@@ -23,19 +25,26 @@ const GiveItem: React.FC<Props> = ({ give: { id, giveName, imageUrl, inventory }
                 p="3"
                 ml="5"
             >
-                {imageUrl &&
-                    <Image
-                        mr={2}
-                        borderRadius="2xl"
-                        boxSize="150px"
-                        objectFit="cover"
-                        src={imageUrl}
-                    />
-                }
-                <Text color={inventory === 0 ? "red" : "#111"} isTruncated>{giveName}</Text>
-            </Flex>
-        </Link>
-    )
-}
+              {imageUrl && (
+                  <Image
+                      mr={2}
+                      borderRadius="2xl"
+                      boxSize="150px"
+                      objectFit="cover"
+                      src={imageUrl}
+                  />
+              )}
+              <Text
+                  align="center"
+                  w="200px"
+                  color={inventory === 0 ? "red" : "#111"}
+                  isTruncated
+              >
+                  {giveName}
+              </Text>
+          </Flex>
+      </Link>
+    );
+};
 
-export default GiveItem
+export default GiveItem;

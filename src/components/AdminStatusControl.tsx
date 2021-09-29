@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Stack, Button, Select, useColorModeValue } from "@chakra-ui/react";
 
 import { catStatus, jobStatus } from "../utils/helpers";
-import { useUpdateGiveOrderMutation, useUpdateJobItMutation } from "../generated/graphql";
+import { useUpdateGiveOrderCdcMutation, useUpdateGiveOrderMutation, useUpdateJobItMutation } from "../generated/graphql";
 interface Props {
-    functionName: "GiveOrder" | "JobIT";
+    functionName: "GiveOrder" | "GiveOrderCdc" | "JobIT";
     id: number;
     prevStatus: string;
 }
@@ -21,11 +21,12 @@ const AdminStatusControl: React.FC<Props> = ({
     const bgButton = useColorModeValue("orange", "teal");
 
     const [, updateGiveOrder] = useUpdateGiveOrderMutation();
+    const [, updateGiveOrderCdc] = useUpdateGiveOrderCdcMutation();
     const [, updateJobIt] = useUpdateJobItMutation()
 
     return (
         <Stack isInline mt={3}>
-            {functionName === "GiveOrder" ? (
+            {(functionName === "GiveOrder" || functionName === "GiveOrderCdc") ? (
                 <Select
                     fontWeight="semibold"
                     bg={bgSelect}
@@ -62,21 +63,34 @@ const AdminStatusControl: React.FC<Props> = ({
                 colorScheme={bgButton}
                 disabled={orderStatus === prevStatus}
                 onClick={async () => {
-                  setLoading(true);
+                    setLoading(true);
 
-                  if (functionName === "GiveOrder") {
-                const response = await updateGiveOrder({
-                    id,
-                    newStatus: orderStatus,
-                });
-                if (response.error?.message) {
-                    alert(response.error.message);
-                } else if (response.data?.updateGiveOrder.giveOrder) {
-                    setLoading(false);
-                }
-                  }
+                    if (functionName === "GiveOrder") {
+                        const response = await updateGiveOrder({
+                            id,
+                            newStatus: orderStatus,
+                        });
+                        if (response.error?.message) {
+                            alert(response.error.message);
+                        } else if (response.data?.updateGiveOrder.giveOrder) {
+                            setLoading(false);
+                        }
+                    }
 
-                  if (functionName === "JobIT") {
+
+                    if (functionName === "GiveOrderCdc") {
+                        const response = await updateGiveOrderCdc({
+                            id,
+                            newStatus: orderStatus,
+                        });
+                        if (response.error?.message) {
+                            alert(response.error.message);
+                        } else if (response.data?.updateGiveOrderCdc.giveOrder) {
+                            setLoading(false);
+                        }
+                    }
+
+                    if (functionName === "JobIT") {
                         const response = await updateJobIt({
                             id,
                             newStatus: orderStatus,

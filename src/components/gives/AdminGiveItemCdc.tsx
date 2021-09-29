@@ -11,13 +11,13 @@ import { formatAmount, formatDate } from "../../utils/helpers";
 interface Props {
     give: RegularGiveCdcFragment;
     setOpen: (open: boolean) => void
-    setGiveToEdit: (give: RegularGiveCdcFragment | null) => void
+    setGiveToEditCdc: (give: RegularGiveCdcFragment | null) => void
 }
 
 const AdminGiveItemCdc: React.FC<Props> = ({
     give,
     setOpen,
-    setGiveToEdit
+    setGiveToEditCdc
 }) => {
     const [deleteDialog, setDeleteDialog] = useState(false)
     const onClose = () => setDeleteDialog(false)
@@ -70,7 +70,7 @@ const AdminGiveItemCdc: React.FC<Props> = ({
                         colorScheme={colorMode === "light" ? "green" : "blue"}
                         onClick={() => {
                             setOpen(true)
-                            setGiveToEdit(give)
+                            setGiveToEditCdc(give)
                         }}
                     />
                     <IconButton

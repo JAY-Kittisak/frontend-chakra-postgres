@@ -8,7 +8,7 @@ fragment RegularGiveOrdersCdc on GiveOrderCdc {
       customerDetail
       status
       give{
-          ...RegularGive
+          ...RegularGiveCdc
       }
       creator{
             id

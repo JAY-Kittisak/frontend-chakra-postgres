@@ -1,0 +1,5 @@
+query GiveOrderByIdCdc($id: Int!) {
+  giveOrderByIdCdc(id: $id) {
+    ...RegularGiveOrdersCdc
+  }
+}

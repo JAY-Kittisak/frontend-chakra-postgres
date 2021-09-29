@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 
 import OrderGive from '../pages/OrderGive'
 import OrderGiveDetail from '../pages/OrderGiveDetail'
+import OrderGiveDetailCdc from '../pages/OrderGiveDetailCdc'
 import PageNotFound from '../pages/PageNotFound'
 import { useIsAuth } from '../utils/uselsAuth'
 
@@ -12,6 +13,9 @@ const OrderGiveRoute: React.FC<Props> = () => {
     useIsAuth()
     return (
             <Switch>
+            <Route path="/order-give/my-orders-cdc/:orderId">
+                <OrderGiveDetailCdc />
+            </Route>
                 <Route path="/order-give/my-orders/:orderId">
                     <OrderGiveDetail />
                 </Route>

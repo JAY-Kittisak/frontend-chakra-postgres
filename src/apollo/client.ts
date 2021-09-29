@@ -16,6 +16,12 @@ import {
     CreateJobItMutation,
     JobITsQuery,
     JobITsDocument,
+    DeleteGiveOrderMutationVariables,
+    CreateGiveCdcMutation,
+    GivesCdcQuery,
+    GivesCdcDocument,
+    DeleteGiveCdcMutationVariables,
+    DeleteGiveOrderCdcMutationVariables,
 } from "../generated/graphql";
 
 function betterUpdateQuery<Result, Query>(
@@ -113,6 +119,43 @@ export const client = createClient({
                         cache.invalidate({
                             __typename: "Give",
                             id: (args as DeleteGiveMutationVariables).id,
+                        });
+                    },
+
+                    deleteGiveOrder: (_result, args, cache, info) => {
+                        cache.invalidate({
+                            __typename: "GiveOrder",
+                            id: (args as DeleteGiveOrderMutationVariables).id,
+                        });
+                    },
+
+                    createGiveCdc: (_result, args, cache, info) => {
+                        betterUpdateQuery<CreateGiveCdcMutation, GivesCdcQuery>(cache,
+                            { query: GivesCdcDocument },
+                            _result,
+                            (result, query) => {
+                                if (result.createGiveCdc.errors) {
+                                    return query
+                                } else {
+                                    return {
+                                        givesCdc: result.createGiveCdc.give
+                                    }
+                                }
+                            }
+                        )
+                    },
+
+                    deleteGiveCdc: (_result, args, cache, info) => {
+                        cache.invalidate({
+                            __typename: "GiveCdc",
+                            id: (args as DeleteGiveCdcMutationVariables).id,
+                        });
+                    },
+
+                    deleteGiveOrderCdc: (_result, args, cache, info) => {
+                        cache.invalidate({
+                            __typename: "GiveOrderCdc",
+                            id: (args as DeleteGiveOrderCdcMutationVariables).id,
                         });
                     },
 

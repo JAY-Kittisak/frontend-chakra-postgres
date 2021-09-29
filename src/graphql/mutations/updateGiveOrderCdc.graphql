@@ -1,0 +1,11 @@
+mutation UpdateGiveOrderCdc($id: Int!, $newStatus: String!) {
+  updateGiveOrderCdc(id: $id, newStatus: $newStatus){
+    errors {
+      field
+      message
+    }
+    giveOrder{
+      ...RegularGiveOrdersCdc
+    }
+  }
+}

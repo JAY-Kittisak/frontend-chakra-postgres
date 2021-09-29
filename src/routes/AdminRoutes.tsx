@@ -7,6 +7,7 @@ import Administrator from '../pages/Administrator'
 import ManageGives from '../pages/ManageGives'
 import ManageGiveOrders from '../pages/ManageGiveOrders'
 import ManageGiveOrderDetail from '../pages/ManageGiveOrderDetail'
+import ManageGiveOrderDetailCdc from '../pages/ManageGiveOrderDetailCdc'
 import ManageJobITDetail from '../pages/ManageJobITDetail'
 import ManageJobIT from '../pages/ManageJobIT'
 import PageNotFound from '../pages/PageNotFound'
@@ -28,6 +29,9 @@ const AdminRoutes: React.FC<Props> = () => {
                 <Route path="/admin/manage-gives">
                     <ManageGives />
                 </Route>
+            <Route path="/admin/manage-give-orders-cdc/:id">
+                <ManageGiveOrderDetailCdc />
+            </Route>
             <Route path="/admin/manage-give-orders/:id">
                 <ManageGiveOrderDetail />
             </Route>

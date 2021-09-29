@@ -26,10 +26,10 @@ import {
 interface Props {
     Open: boolean;
     setOpen: () => void;
-    giveToEdit: RegularGiveCdcFragment | null;
+    giveToEditCdc: RegularGiveCdcFragment | null;
 }
 
-const AddAndEditGiveCdc: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
+const AddAndEditGiveCdc: React.FC<Props> = ({ Open, setOpen, giveToEditCdc }) => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [errorImage, setErrorImage] = useState(false);
 
@@ -46,17 +46,17 @@ const AddAndEditGiveCdc: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
         >
             <Formik
                 initialValues={{
-                    giveName: giveToEdit ? giveToEdit.giveName : "",
-                    details: giveToEdit?.details ? giveToEdit.details : "",
-                    price: giveToEdit?.price ? giveToEdit.price : 0,
-                    inventory: giveToEdit?.inventory ? giveToEdit.inventory : 0,
-                    category: giveToEdit?.category ? giveToEdit.category : "",
+                    giveName: giveToEditCdc ? giveToEditCdc.giveName : "",
+                    details: giveToEditCdc?.details ? giveToEditCdc.details : "",
+                    price: giveToEditCdc?.price ? giveToEditCdc.price : 0,
+                    inventory: giveToEditCdc?.inventory ? giveToEditCdc.inventory : 0,
+                    category: giveToEditCdc?.category ? giveToEditCdc.category : "",
                 }}
                 onSubmit={async (values, { setErrors }) => {
                     if (values.category === "เลือกกลุ่มสินค้า") return alert("เลือก Category");
                     if (values.category === "") return alert("เลือก Category");
 
-                    if (!giveToEdit) {
+                    if (!giveToEditCdc) {
                         if (!selectedFile) return alert("เลือกรูปภาพที่ต้องการ Upload");
 
                         if (selectedFile.size >= 5000000) {
@@ -77,9 +77,9 @@ const AddAndEditGiveCdc: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
                             setErrorImage(false);
                             setOpen();
                         }
-                    } else if (giveToEdit) {
+                    } else if (giveToEditCdc) {
                         const { id, giveName, details, price, inventory, category } =
-                            giveToEdit;
+                            giveToEditCdc;
                         const isNotEdited =
                             giveName === values.giveName &&
                             details === values.details &&
@@ -136,7 +136,7 @@ const AddAndEditGiveCdc: React.FC<Props> = ({ Open, setOpen, giveToEdit }) => {
                                             </option>
                                         ))}
                                     </SelectControl>
-                                    {!giveToEdit &&
+                                    {!giveToEditCdc &&
                                         <Flex flexDir="column">
                                             <Text fontWeight="semibold" fontSize={["sm", "md"]} mb="2">
                                                 Image

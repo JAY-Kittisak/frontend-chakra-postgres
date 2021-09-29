@@ -12,20 +12,25 @@ import {
     useColorMode,
 } from "@chakra-ui/react";
 import { useReactToPrint } from "react-to-print";
+import { DeleteIcon } from '@chakra-ui/icons'
+import { useHistory } from 'react-router-dom'
 
 import Spinner from "../components/Spinner";
 import AdminStatusControl from "../components/AdminStatusControl";
-import { useGiveOrderByIdQuery } from "../generated/graphql";
+import { useDeleteGiveOrderMutation, useGiveOrderByIdQuery } from "../generated/graphql";
 import { formatAmount, formatDate } from "../utils/helpers";
 
 interface Props { }
 
 const ManageGiveOrderDetail: React.FC<Props> = () => {
     const printRef = useRef<HTMLDivElement>(null);
+    const history = useHistory()
 
     const bg = useColorModeValue("white", "gray.700");
     const { colorMode } = useColorMode();
     const bgButton = useColorModeValue("orange", "teal");
+
+    const [, deleteGiveOrder] = useDeleteGiveOrderMutation()
 
     const params = useParams<{ id: string }>();
     const [{ data, fetching }] = useGiveOrderByIdQuery({
@@ -224,6 +229,20 @@ const ManageGiveOrderDetail: React.FC<Props> = () => {
                                     )}
                                 </Flex>
                                 <Flex p={5} flexDir="column" w={[null, null, null, "60%"]}>
+                                    <Flex justify="end">
+                                        <Button colorScheme="red" variant="link" fontSize="xl" rightIcon={<DeleteIcon />}
+                                            onClick={async () => {
+                                                const response = await deleteGiveOrder({ id: data.giveOrderById.id })
+                                                if (!response) {
+                                                    alert("Delete Error! โปรดติดต่อผู้ดูแล")
+                                                } else if (response) {
+                                                    history.push("/admin/manage-give-orders")
+                                                }
+                                            }}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </Flex>
                                     <Stack isInline mt={3} justify="space-between">
                                         <Flex>
                                             <Text fontSize="xl" fontWeight="bold" align="center" mr="4">
@@ -330,11 +349,11 @@ const ManageGiveOrderDetail: React.FC<Props> = () => {
 
                                     <Stack isInline mt={3} justify="space-between">
                                         <Text fontSize={["sm", "sm", "md", "md"]}>วันที่เบิก : </Text>
-                            <Text
-                                fontSize={["sm", "sm", "md", "md"]}
+                                        <Text
+                                            fontSize={["sm", "sm", "md", "md"]}
                                             as="i"
-                                fontWeight="semibold"
-                            >
+                                            fontWeight="semibold"
+                                        >
                                             {data.giveOrderById.createdAt &&
                                                 formatDate(+data.giveOrderById.createdAt)}
                                         </Text>

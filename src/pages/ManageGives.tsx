@@ -27,22 +27,21 @@ import {
     useGivesQuery,
     RegularGiveFragment,
     RegularGiveCdcFragment,
-    useGivesCdcQuery
+    useGivesCdcQuery,
 } from "../generated/graphql";
 
 interface Props { }
 
 const ManageGives: React.FC<Props> = () => {
     const [{ data, fetching }] = useGivesQuery();
-    const [{ data: dataCdc, fetching: fetchingCdc }] = useGivesCdcQuery()
+    const [{ data: dataCdc, fetching: fetchingCdc }] = useGivesCdcQuery();
     const { isOpen, setIsOpen } = useDialog();
     const { isOpenCdc, setIsOpenCdc } = useDialog();
     const [giveToEdit, setGiveToEdit] = useState<RegularGiveFragment | null>(
         null
     );
-    const [giveToEditCdc, setGiveToEditCdc] = useState<RegularGiveCdcFragment | null>(
-        null
-    );
+    const [giveToEditCdc, setGiveToEditCdc] =
+        useState<RegularGiveCdcFragment | null>(null);
 
     const { colorMode } = useColorMode();
 
@@ -203,91 +202,91 @@ const ManageGives: React.FC<Props> = () => {
                                             colorScheme={colorMode === "light" ? "green" : "blue"}
                                             boxShadow="sm"
                                             onClick={() => {
-                                                setGiveToEdit(null);
-                                                setIsOpenCdc(true);
-                                            }}
-                                        >
-                                            <Text color="white" as="u" ml="1">
-                                                เพิ่มของแจก
-                                            </Text>
-                                        </Button>
-                                        {isOpenCdc && (
-                                            <AddAndEditGiveCdc
-                                                Open={true}
-                                                setOpen={() => setIsOpenCdc(false)}
-                                                giveToEdit={giveToEditCdc}
-                                            />
-                                        )}
-                                    </Center>
+                                                    setGiveToEditCdc(null);
+                                                    setIsOpenCdc(true);
+                                                }}
+                                            >
+                                                <Text color="white" as="u" ml="1">
+                                                    เพิ่มของแจก
+                                                </Text>
+                                            </Button>
+                                            {isOpenCdc && (
+                                                <AddAndEditGiveCdc
+                                                    Open={true}
+                                                    setOpen={() => setIsOpenCdc(false)}
+                                                    giveToEditCdc={giveToEditCdc}
+                                                />
+                                            )}
+                                        </Center>
 
-                                    {/* // <Text key={order.id}>{order.give.giveName}</Text> */}
-                                    <Flex w="100%" overflowX="auto" rounded="7px" boxShadow="xl">
-                                        <Table
-                                            variant="striped"
-                                            colorScheme={colorMode === "light" ? "green" : "blue"}
-                                        >
-                                            <Thead>
-                                                <Tr bg={colorMode === "light" ? "#028174" : "#3E54D3"}>
-                                                    <Th
-                                                        textAlign="center"
-                                                        fontSize={["xs", "xs", "sm", "md"]}
-                                                        color="white"
-                                                        w="20%"
-                                                    >
-                                                        Image
-                                                    </Th>
-                                                    <Th
-                                                        textAlign="center"
-                                                        fontSize={["xs", "xs", "sm", "md"]}
-                                                        color="white"
-                                                        w="10%"
-                                                    >
-                                                        ราคาต่อหน่วย
-                                                    </Th>
-                                                    <Th
-                                                        textAlign="center"
-                                                        fontSize={["xs", "xs", "sm", "md"]}
-                                                        color="white"
-                                                        w="10%"
-                                                    >
-                                                        จำนวนใน Stock
-                                                    </Th>
-                                                    <Th
-                                                        textAlign="center"
-                                                        fontSize={["xs", "xs", "sm", "md"]}
-                                                        color="white"
-                                                        w="15%"
-                                                    >
-                                                        ประเภท
-                                                    </Th>
-                                                    <Th
-                                                        textAlign="center"
-                                                        fontSize={["xs", "xs", "sm", "md"]}
-                                                        color="white"
-                                                        w="20%"
-                                                    >
-                                                        วันที่สร้าง
-                                                    </Th>
-                                                    <Th
-                                                        textAlign="center"
-                                                        fontSize={["xs", "xs", "sm", "md"]}
-                                                        color="white"
-                                                        w="20%"
-                                                    >
-                                                        Manage
-                                                    </Th>
-                                                </Tr>
-                                            </Thead>
-                                            <Tbody>
-                                                {dataCdc?.givesCdc &&
-                                                    dataCdc.givesCdc.map((give) => (
-                                                        <AdminGiveItemCdc
-                                                            key={give.id}
-                                                            give={give}
-                                                            setOpen={() => setIsOpen(true)}
-                                                            setGiveToEdit={setGiveToEditCdc}
-                                                        />
-                                                    ))}
+                                        {/* // <Text key={order.id}>{order.give.giveName}</Text> */}
+                                        <Flex w="100%" overflowX="auto" rounded="7px" boxShadow="xl">
+                                            <Table
+                                                variant="striped"
+                                                colorScheme={colorMode === "light" ? "green" : "blue"}
+                                            >
+                                                <Thead>
+                                                    <Tr bg={colorMode === "light" ? "#028174" : "#3E54D3"}>
+                                                        <Th
+                                                            textAlign="center"
+                                                            fontSize={["xs", "xs", "sm", "md"]}
+                                                            color="white"
+                                                            w="20%"
+                                                        >
+                                                            Image
+                                                        </Th>
+                                                        <Th
+                                                            textAlign="center"
+                                                            fontSize={["xs", "xs", "sm", "md"]}
+                                                            color="white"
+                                                            w="10%"
+                                                        >
+                                                            ราคาต่อหน่วย
+                                                        </Th>
+                                                        <Th
+                                                            textAlign="center"
+                                                            fontSize={["xs", "xs", "sm", "md"]}
+                                                            color="white"
+                                                            w="10%"
+                                                        >
+                                                            จำนวนใน Stock
+                                                        </Th>
+                                                        <Th
+                                                            textAlign="center"
+                                                            fontSize={["xs", "xs", "sm", "md"]}
+                                                            color="white"
+                                                            w="15%"
+                                                        >
+                                                            ประเภท
+                                                        </Th>
+                                                        <Th
+                                                            textAlign="center"
+                                                            fontSize={["xs", "xs", "sm", "md"]}
+                                                            color="white"
+                                                            w="20%"
+                                                        >
+                                                            วันที่สร้าง
+                                                        </Th>
+                                                        <Th
+                                                            textAlign="center"
+                                                            fontSize={["xs", "xs", "sm", "md"]}
+                                                            color="white"
+                                                            w="20%"
+                                                        >
+                                                            Manage
+                                                        </Th>
+                                                    </Tr>
+                                                </Thead>
+                                                <Tbody>
+                                                    {dataCdc?.givesCdc &&
+                                                        dataCdc.givesCdc.map((give) => (
+                                                            <AdminGiveItemCdc
+                                                                key={give.id}
+                                                                give={give}
+                                                                setOpen={() => setIsOpenCdc(true)}
+                                                                setGiveToEditCdc={setGiveToEditCdc}
+                                                            />
+                                                        ))}
                                             </Tbody>
                                         </Table>
                                     </Flex>

@@ -1,0 +1,3 @@
+mutation DeleteGiveOrderCdc($id: Int!){
+  deleteGiveOrderCdc(id: $id)
+}

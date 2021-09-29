@@ -1,6 +1,9 @@
 import React from "react";
 import {
-    Grid, Text, Flex, Divider, Tabs,
+    Grid,
+    Text,
+    Flex,
+    Tabs,
     TabList,
     Tab,
     TabPanels,
@@ -12,48 +15,14 @@ import GiveItem from "../components/gives/GiveItem";
 import {
     useGivesCdcQuery,
     useGivesQuery,
-    useMeQuery,
 } from "../generated/graphql";
+import GiveItemCdc from "../components/gives/GiveItemCdc";
 
 interface Props { }
 
 const Gives: React.FC<Props> = () => {
-    const [{ data: me, fetching: fetchingMe }] = useMeQuery();
     const [{ data, fetching }] = useGivesQuery();
     const [{ data: dataCdc, fetching: fetchingCdc }] = useGivesCdcQuery();
-
-    let body = null;
-
-    if (fetchingMe) {
-    } else if (me?.me?.roles === "client-LKB") {
-        body = !data?.gives ? (
-            <Flex justify="center" mt="5">
-                <Text fontWeight="bold" fontSize="2xl">
-                    No. Data
-                </Text>
-            </Flex>
-        ) : (
-            <Grid templateColumns={["repeat(5, 1fr)"]} gap={6}>
-                {data.gives.map((give) => (
-                    <GiveItem key={give.id} give={give} />
-                ))}
-            </Grid>
-        )
-    } else {
-        body = !dataCdc?.givesCdc ? (
-            <Flex justify="center" mt="5">
-                <Text fontWeight="bold" fontSize="2xl">
-                    No. Data
-                </Text>
-            </Flex>
-        ) : (
-            <Grid templateColumns={["repeat(5, 1fr)"]} gap={6}>
-                {dataCdc.givesCdc.map((give) => (
-                    <GiveItem key={give.id} give={give} />
-                ))}
-            </Grid>
-        );
-    }
 
     return (
         <>
@@ -66,7 +35,6 @@ const Gives: React.FC<Props> = () => {
             >
                 ของแจกลูกค้า
             </Text>
-            <Divider mt={1} mb={5} orientation="horizontal" />
 
             {(fetching || fetchingCdc) && (
                 <Flex justify="center" mt="5">
@@ -77,7 +45,45 @@ const Gives: React.FC<Props> = () => {
                 </Flex>
             )}
 
-            {body}
+            <Tabs align="end" variant="enclosed" mt="-8">
+                <TabList>
+                    <Tab>ลาดกระบัง</Tab>
+                    <Tab>ชลบุรี</Tab>
+                </TabList>
+                <TabPanels>
+                    <TabPanel>
+                        {!data?.gives ? (
+                            <Flex justify="center" mt="5">
+                                <Text fontWeight="bold" fontSize="2xl">
+                                    No. Data
+                                </Text>
+                            </Flex>
+                        ) : (
+                            <Grid templateColumns={["repeat(5, 1fr)"]} gap={6}>
+                                {data.gives.map((give) => (
+                                    <GiveItem key={give.id} give={give} />
+                                ))}
+                            </Grid>
+                        )}
+                    </TabPanel>
+
+                    <TabPanel>
+                        {!dataCdc?.givesCdc ? (
+                            <Flex justify="center" mt="5">
+                                <Text fontWeight="bold" fontSize="2xl">
+                                    No. Data
+                                </Text>
+                            </Flex>
+                        ) : (
+                            <Grid templateColumns={["repeat(5, 1fr)"]} gap={6}>
+                                {dataCdc.givesCdc.map((give) => (
+                                    <GiveItemCdc key={give.id} give={give} />
+                                ))}
+                                </Grid>
+                        )}
+                    </TabPanel>
+                </TabPanels>
+            </Tabs>
         </>
     );
 };
