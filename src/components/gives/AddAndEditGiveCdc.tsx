@@ -3,6 +3,8 @@ import {
     Flex,
     Text,
     Button,
+    Input,
+    Icon,
     AlertDialog,
     AlertDialogBody,
     AlertDialogFooter,
@@ -14,14 +16,16 @@ import {
 import { Form, Formik } from "formik";
 import InputField from "../InputField";
 import { SelectControl } from "../Selectfield";
-import { catGive, fileType } from "../../utils/helpers";
+import { fileType } from "../../utils/helpers";
 import { toErrorMap } from "../../utils/toErrorMap";
 import {
     RegularGiveCdcFragment,
     useCreateGiveCdcMutation,
     useUpdateGiveCdcMutation,
     FieldError,
+    useGiveCategoriesQuery,
 } from "../../generated/graphql";
+import { Search2Icon } from "@chakra-ui/icons";
 
 interface Props {
     Open: boolean;
@@ -32,11 +36,13 @@ interface Props {
 const AddAndEditGiveCdc: React.FC<Props> = ({ Open, setOpen, giveToEditCdc }) => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [errorImage, setErrorImage] = useState(false);
+    const [searchCat, setSearchCat] = useState("");
 
     const cancelRef = useRef();
 
     const [, createGive] = useCreateGiveCdcMutation();
     const [, updateGive] = useUpdateGiveCdcMutation();
+    const [{ data }] = useGiveCategoriesQuery();
 
     return (
         <AlertDialog
@@ -123,19 +129,50 @@ const AddAndEditGiveCdc: React.FC<Props> = ({ Open, setOpen, giveToEditCdc }) =>
                                         name="inventory"
                                         label="Inventory"
                                     />
-                                    <Text fontWeight="semibold" fontSize={["sm", "md"]} mb="2">
+                                    <Text fontWeight="semibold" fontSize={["sm", "md"]} mb="1">
                                         Category
                                     </Text>
-                                    <SelectControl
-                                        name="category"
-                                        defaultValue="เลือกกลุ่มสินค้า"
-                                    >
-                                        {catGive.map((cat) => (
-                                            <option key={cat} value={cat}>
-                                                {cat}
-                                            </option>
-                                        ))}
-                                    </SelectControl>
+                                    <Flex p="1">
+                                        {data?.giveCategories && (
+                                            <SelectControl
+                                                name="category"
+                                                defaultValue="เลือกกลุ่มสินค้า"
+                                            >
+                                                {data.giveCategories
+                                                    .filter((val) => {
+                                                        if (searchCat === "") {
+                                                            return val;
+                                                        } else if (
+                                                            val.catName
+                                                                .toLowerCase()
+                                                                .includes(searchCat.toLowerCase())
+                                                        ) {
+                                                            return val;
+                                                        }
+                                                        return false;
+                                                    })
+                                                    .map((val) => (
+                                                        <option key={val.id} value={val.catName}>
+                                                            {val.catName}
+                                                        </option>
+                                                    ))}
+                                            </SelectControl>
+                                        )}
+
+                                        <Flex p="3">
+                                            <Icon as={Search2Icon} />
+                                        </Flex>
+                                        <Input
+                                            ml="-2"
+                                            w="150px"
+                                            className="searchInput"
+                                            type="text"
+                                            placeholder="Search..."
+                                            onChange={(event) => {
+                                                setSearchCat(event.target.value);
+                                            }}
+                                        />
+                                    </Flex>
                                     {!giveToEditCdc &&
                                         <Flex flexDir="column">
                                             <Text fontWeight="semibold" fontSize={["sm", "md"]} mb="2">

@@ -1,5 +1,5 @@
 import React from 'react'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Box, Text, Flex, Button, Stack } from "@chakra-ui/react";
 import { Link } from "react-router-dom"
 
@@ -71,7 +71,7 @@ const Chart: React.FC<Props> = () => {
         // {/* {fetching &&
         //      <h3 className="chartTitle">Loading...</h3>
         //   } */}
-        <Flex flexDir="column" w="60%" boxShadow="md" rounded="lg" p="5">
+        <Flex flexDir="column" w={["100%", "100%", "100%", "100%", "60%"]} boxShadow="md" rounded="lg" p="5">
             <Stack isInline align="baseline" justify="space-between" mb={4}>
                 <Text ml="3" fontSize="md" fontWeight="bold">ประวัติการแจ้ง job IT</Text>
                 <Flex justify="center">
@@ -98,8 +98,7 @@ const Chart: React.FC<Props> = () => {
                     <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="month" />
                     <YAxis />
-                    <Tooltip />
-                    <Legend />
+                        <Tooltip />
                         <Bar dataKey="Altas" fill="#87CEFA" />
                         <Bar dataKey="Hardware" fill="#4682B4" />
                         <Bar dataKey="Software" fill="#00BFFF" />

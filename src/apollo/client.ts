@@ -22,6 +22,9 @@ import {
     GivesCdcDocument,
     DeleteGiveCdcMutationVariables,
     DeleteGiveOrderCdcMutationVariables,
+    CreateGiveCatMutation,
+    GiveCategoriesQuery,
+    GiveCategoriesDocument
 } from "../generated/graphql";
 
 function betterUpdateQuery<Result, Query>(
@@ -34,7 +37,7 @@ function betterUpdateQuery<Result, Query>(
 }
 
 export const client = createClient({
-    url: "http://183.88.226.202:8504/graphql",
+    url: "http://200.1.1.99:4000/graphql",
     fetchOptions: {
         credentials: "include"
     },
@@ -169,6 +172,22 @@ export const client = createClient({
                                 } else {
                                     return {
                                         jobITs: result.createJobIT.jobIT
+                                    }
+                                }
+                            }
+                        )
+                    },
+
+                    createGiveCat: (_result, args, cache, info) => {
+                        betterUpdateQuery<CreateGiveCatMutation, GiveCategoriesQuery>(cache,
+                            { query: GiveCategoriesDocument },
+                            _result,
+                            (result, query) => {
+                                if (result.createGiveCat.errors) {
+                                    return query
+                                } else {
+                                    return {
+                                        giveCategories: result.createGiveCat.giveCat
                                     }
                                 }
                             }

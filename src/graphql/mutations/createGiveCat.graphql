@@ -1,0 +1,11 @@
+mutation CreateGiveCat($catName: String!){
+  createGiveCat(catName: $catName) {
+    errors {
+      field
+      message
+    }
+    giveCat {
+      ...RegularGiveCat
+    }
+  }
+}

@@ -101,7 +101,6 @@ const ManageGives: React.FC<Props> = () => {
                                             />
                                         )}
                                     </Center>
-
                                         {/* // <Text key={order.id}>{order.give.giveName}</Text> */}
                                         <Flex w="100%" overflowX="auto" rounded="7px" boxShadow="xl">
                                             <Table
@@ -168,8 +167,8 @@ const ManageGives: React.FC<Props> = () => {
                                                                 give={give}
                                                                 setOpen={() => setIsOpen(true)}
                                                                 setGiveToEdit={setGiveToEdit}
-                                                        />
-                                                    ))}
+                                                            />
+                                                        ))}
                                             </Tbody>
                                         </Table>
                                     </Flex>
@@ -177,9 +176,7 @@ const ManageGives: React.FC<Props> = () => {
                             )}
                         </Flex>
                     </TabPanel>
-
                     {/* -------------------------------------------CDC------------------------------------------------------------------------------------- */}
-
                     <TabPanel>
                         <Flex flexDir="column">
                             {fetchingCdc ? (
@@ -218,7 +215,6 @@ const ManageGives: React.FC<Props> = () => {
                                                 />
                                             )}
                                         </Center>
-
                                         {/* // <Text key={order.id}>{order.give.giveName}</Text> */}
                                         <Flex w="100%" overflowX="auto" rounded="7px" boxShadow="xl">
                                             <Table

@@ -2,6 +2,8 @@ import React from "react";
 import { Text, Flex, Image, Button } from "@chakra-ui/react";
 import { Link } from "react-router-dom"
 
+import pjaray from "../pjaray.svg"
+
 interface Props { }
 
 const Index: React.FC<Props> = () => {
@@ -10,23 +12,23 @@ const Index: React.FC<Props> = () => {
             {/* -------------------------------------- Title --------------------------------------*/}
             <Flex
                 w="100%"
-                h="550px"
-                flexDir="row"
+                h="100%"
+                flexDir={["column", "column", "column", "column", "row"]}
                 align="center"
                 bg="#eee"
                 boxShadow="md"
                 rounded="lg"
             >
-                <Flex flexDir="column" p="10" w="50%">
+                <Flex flexDir="column" p="10" w={["100%", "100%", "100%", "100%", "50%"]}>
                     <Text
                         as="h2"
-                        fontSize={["sm", "md", "lg", "5xl"]}
+                        fontSize={["sm", "sm", "md", "lg", "5xl"]}
                         fontWeight="bold"
                         mb="2"
                     >
                         MK Management
                     </Text>
-                    <Text as="h3" fontSize={["sm", "sm", "md", "lg"]} fontWeight="light">
+                    <Text as="h3" fontSize={["sm", "sm", "sm", "md", "lg"]} fontWeight="light">
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse
                         possimus ratione, maiores voluptatem distinctio quod quisquam. Quia
                         placeat hic porro dolorem saepe numquam, vero ipsa sit, odit,
@@ -36,10 +38,10 @@ const Index: React.FC<Props> = () => {
                         consequatur quibusdam iure sed excepturi vero ducimus nulla neque.
                     </Text>
                 </Flex>
-                <Flex w="50%" justify="center">
+                <Flex w={["100%", "100%", "100%", "100%", "50%"]} justify="center">
                     <Image
-                        boxSize="200px"
-                        src="https://jsr.co.th/wp-content/uploads/2018/02/Jsr-group-header.png"
+                        boxSize="550px"
+                        src={pjaray}
                         alt="Dan Abramov"
                     />
                 </Flex>

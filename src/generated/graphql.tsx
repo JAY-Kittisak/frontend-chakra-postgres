@@ -80,6 +80,19 @@ export type Give = {
   updatedAt: Scalars['String'];
 };
 
+export type GiveCatResponse = {
+  __typename?: 'GiveCatResponse';
+  errors?: Maybe<Array<FieldErrorGive>>;
+  giveCat?: Maybe<Array<GiveCategory>>;
+};
+
+export type GiveCategory = {
+  __typename?: 'GiveCategory';
+  id: Scalars['Float'];
+  catName: Scalars['String'];
+  createdAt: Scalars['String'];
+};
+
 export type GiveCdc = {
   __typename?: 'GiveCdc';
   id: Scalars['Float'];
@@ -254,6 +267,8 @@ export type Mutation = {
   updateGiveOrderCdc: UpdateGiveOrderCdcResponse;
   deleteGiveOrder: Scalars['Boolean'];
   deleteGiveOrderCdc: Scalars['Boolean'];
+  createGiveCat: GiveCatResponse;
+  deleteGiveCat: Scalars['Boolean'];
   createManualAD: ManualAdResponse;
   uploadPDFAd: ManualAdUrl;
   deleteManualAD: ManualAdResponse;
@@ -380,6 +395,16 @@ export type MutationDeleteGiveOrderCdcArgs = {
 };
 
 
+export type MutationCreateGiveCatArgs = {
+  catName: Scalars['String'];
+};
+
+
+export type MutationDeleteGiveCatArgs = {
+  id: Scalars['Int'];
+};
+
+
 export type MutationCreateManualAdArgs = {
   input: ManualAdInput;
 };
@@ -455,6 +480,7 @@ export type Query = {
   giveOrderByIdCdc: GiveOrderCdc;
   giveOrderByCreatorId: Array<GiveOrder>;
   giveOrderByCreatorIdCdc: Array<GiveOrderCdc>;
+  giveCategories?: Maybe<Array<GiveCategory>>;
   manualADs: Array<ManualAd>;
   manualADById: ManualAd;
   jobITs?: Maybe<Array<JobIt>>;
@@ -557,6 +583,7 @@ export type User = {
   imageUrl?: Maybe<Scalars['String']>;
   departments: Scalars['String'];
   giveOrders: Array<GiveOrder>;
+  giveOrdersCdc: Array<GiveOrderCdc>;
   jobITs: Array<JobIt>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
@@ -585,6 +612,11 @@ export type UpdateUserInput = {
 export type RegularGiveFragment = (
   { __typename?: 'Give' }
   & Pick<Give, 'id' | 'giveName' | 'details' | 'price' | 'inventory' | 'category' | 'imageUrl' | 'createdAt' | 'updatedAt'>
+);
+
+export type RegularGiveCatFragment = (
+  { __typename?: 'GiveCategory' }
+  & Pick<GiveCategory, 'id' | 'catName'>
 );
 
 export type RegularGiveCdcFragment = (
@@ -655,6 +687,25 @@ export type CreateGiveMutation = (
     )>>, give?: Maybe<Array<(
       { __typename?: 'Give' }
       & RegularGiveFragment
+    )>> }
+  ) }
+);
+
+export type CreateGiveCatMutationVariables = Exact<{
+  catName: Scalars['String'];
+}>;
+
+
+export type CreateGiveCatMutation = (
+  { __typename?: 'Mutation' }
+  & { createGiveCat: (
+    { __typename?: 'GiveCatResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorGive' }
+      & Pick<FieldErrorGive, 'field' | 'message'>
+    )>>, giveCat?: Maybe<Array<(
+      { __typename?: 'GiveCategory' }
+      & RegularGiveCatFragment
     )>> }
   ) }
 );
@@ -1046,6 +1097,17 @@ export type GiveByIdCdcQuery = (
   ) }
 );
 
+export type GiveCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GiveCategoriesQuery = (
+  { __typename?: 'Query' }
+  & { giveCategories?: Maybe<Array<(
+    { __typename?: 'GiveCategory' }
+    & RegularGiveCatFragment
+  )>> }
+);
+
 export type GiveOrderByCreatorIdQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1255,6 +1317,12 @@ export type MeQuery = (
   )> }
 );
 
+export const RegularGiveCatFragmentDoc = gql`
+    fragment RegularGiveCat on GiveCategory {
+  id
+  catName
+}
+    `;
 export const RegularGiveFragmentDoc = gql`
     fragment RegularGive on Give {
   id
@@ -1396,6 +1464,23 @@ export const CreateGiveDocument = gql`
 
 export function useCreateGiveMutation() {
   return Urql.useMutation<CreateGiveMutation, CreateGiveMutationVariables>(CreateGiveDocument);
+};
+export const CreateGiveCatDocument = gql`
+    mutation CreateGiveCat($catName: String!) {
+  createGiveCat(catName: $catName) {
+    errors {
+      field
+      message
+    }
+    giveCat {
+      ...RegularGiveCat
+    }
+  }
+}
+    ${RegularGiveCatFragmentDoc}`;
+
+export function useCreateGiveCatMutation() {
+  return Urql.useMutation<CreateGiveCatMutation, CreateGiveCatMutationVariables>(CreateGiveCatDocument);
 };
 export const CreateGiveCdcDocument = gql`
     mutation CreateGiveCdc($input: GiveInput!, $options: Upload!) {
@@ -1751,6 +1836,17 @@ export const GiveByIdCdcDocument = gql`
 
 export function useGiveByIdCdcQuery(options: Omit<Urql.UseQueryArgs<GiveByIdCdcQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<GiveByIdCdcQuery>({ query: GiveByIdCdcDocument, ...options });
+};
+export const GiveCategoriesDocument = gql`
+    query GiveCategories {
+  giveCategories {
+    ...RegularGiveCat
+  }
+}
+    ${RegularGiveCatFragmentDoc}`;
+
+export function useGiveCategoriesQuery(options: Omit<Urql.UseQueryArgs<GiveCategoriesQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GiveCategoriesQuery>({ query: GiveCategoriesDocument, ...options });
 };
 export const GiveOrderByCreatorIdDocument = gql`
     query GiveOrderByCreatorId {
