@@ -15,7 +15,7 @@ interface Props {
     jobIT: RegularJobItFragment
 }
 
-const AdminJobITItem: React.FC<Props> = ({ jobIT: { id, titled, itActionName, desiredDate, createdAt, status } }) => {
+const AdminJobITItem: React.FC<Props> = ({ jobIT: { id, titled, itActionName, desiredDate, createdAt, status, branch } }) => {
     const { colorMode } = useColorMode();
     return (
         <Link to={`/admin/manage-job-it/${id}`}>
@@ -31,6 +31,11 @@ const AdminJobITItem: React.FC<Props> = ({ jobIT: { id, titled, itActionName, de
                 </Box>
                 <Box w="16%">
                     <Text fontSize={["xs", "xs", "sm", "md"]} align="center" ml="10">{desiredDate}</Text>
+                </Box>
+                <Box w="16%">
+                    <Text fontSize={["xs", "xs", "sm", "md"]} align="center" ml="10">
+                        {branch === 0 ? "ลาดกระบัง" : "ชลบุรี"}
+                    </Text>
                 </Box>
 
                 <Box w="16%">

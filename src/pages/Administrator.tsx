@@ -56,7 +56,7 @@ const Administrator: React.FC<Props> = () => {
                 rounded="lg"
                 p="3"
             >
-                <Text fontSize="2xl" fontWeight="bold" as="i">
+                <Text fontSize="2xl" fontWeight="bold" as="i" color="gray">
                     ระบบเบิกของแจกลูกค้า
                 </Text>
                 <Flex flexDir="column" mt="5">

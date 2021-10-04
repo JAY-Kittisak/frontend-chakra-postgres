@@ -6,6 +6,7 @@ fragment RegularJobIT on JobIT {
     status
     itComment
     itActionName
+    branch
     creatorId
     createdAt
     updatedAt

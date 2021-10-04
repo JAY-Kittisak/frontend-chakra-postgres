@@ -181,6 +181,7 @@ export type JobIt = {
   itComment?: Maybe<Scalars['String']>;
   itActionName?: Maybe<Scalars['String']>;
   creatorId: Scalars['Float'];
+  branch: Scalars['Float'];
   creator: User;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
@@ -463,6 +464,7 @@ export type ProductByTierInput = {
 export type Query = {
   __typename?: 'Query';
   users: Array<User>;
+  userAdmin: Array<User>;
   me?: Maybe<User>;
   factories: Array<Factory>;
   factoryById?: Maybe<Factory>;
@@ -650,7 +652,7 @@ export type RegularGiveOrdersCdcFragment = (
 
 export type RegularJobItFragment = (
   { __typename?: 'JobIT' }
-  & Pick<JobIt, 'id' | 'titled' | 'desiredDate' | 'category' | 'status' | 'itComment' | 'itActionName' | 'creatorId' | 'createdAt' | 'updatedAt'>
+  & Pick<JobIt, 'id' | 'titled' | 'desiredDate' | 'category' | 'status' | 'itComment' | 'itActionName' | 'branch' | 'creatorId' | 'createdAt' | 'updatedAt'>
   & { creator: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'roles' | 'departments' | 'fullNameTH'>
@@ -1278,6 +1280,17 @@ export type ProductByTiersQuery = (
   )>> }
 );
 
+export type UserAdminQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserAdminQuery = (
+  { __typename?: 'Query' }
+  & { userAdmin: Array<(
+    { __typename?: 'User' }
+    & RegularUserFragment
+  )> }
+);
+
 export type FactoryByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -1404,6 +1417,7 @@ export const RegularJobItFragmentDoc = gql`
   status
   itComment
   itActionName
+  branch
   creatorId
   createdAt
   updatedAt
@@ -2018,6 +2032,17 @@ export const ProductByTiersDocument = gql`
 
 export function useProductByTiersQuery(options: Omit<Urql.UseQueryArgs<ProductByTiersQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<ProductByTiersQuery>({ query: ProductByTiersDocument, ...options });
+};
+export const UserAdminDocument = gql`
+    query UserAdmin {
+  userAdmin {
+    ...RegularUser
+  }
+}
+    ${RegularUserFragmentDoc}`;
+
+export function useUserAdminQuery(options: Omit<Urql.UseQueryArgs<UserAdminQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<UserAdminQuery>({ query: UserAdminDocument, ...options });
 };
 export const FactoryByIdDocument = gql`
     query FactoryById($id: Int!) {
