@@ -3,13 +3,10 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { Box, Text, Flex, Button, Stack } from "@chakra-ui/react";
 import { Link } from "react-router-dom"
 
-import { useJobITsQuery } from '../../generated/graphql';
-
 // import "./chart.css"
 interface Props { }
 
 const Chart: React.FC<Props> = () => {
-    const [{ data }] = useJobITsQuery()
     // "titled": "ทดสอบแจ้งงาน",
     // "desiredDate": "13/09/2021",
     // "category": "hardware",
@@ -21,13 +18,12 @@ const Chart: React.FC<Props> = () => {
     // "updatedAt": "1632108136178",
 
     // console.log(data?.jobITs)
-    const testDate = data?.jobITs?.filter(count => (count.status === "New" && count.category === "hardware"))
 
     const dataCh = [
         {
             month: 'january',
             Altas: 5,
-            Hardware: testDate?.length,
+            Hardware: 5,
             Software: 9,
             Network: 4,
             Email: 4,

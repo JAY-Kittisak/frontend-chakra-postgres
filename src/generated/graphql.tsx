@@ -536,8 +536,20 @@ export type QueryManualAdByIdArgs = {
 };
 
 
+export type QueryJobITsArgs = {
+  input: QueryJobIt_Input;
+};
+
+
 export type QueryJobItByIdArgs = {
   id: Scalars['Int'];
+};
+
+export type QueryJobIt_Input = {
+  nameItAction?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  dateBegin?: Maybe<Scalars['String']>;
+  dateEnd?: Maybe<Scalars['String']>;
 };
 
 export type RegisterInput = {
@@ -1226,7 +1238,9 @@ export type JobItByIdQuery = (
   ) }
 );
 
-export type JobITsQueryVariables = Exact<{ [key: string]: never; }>;
+export type JobITsQueryVariables = Exact<{
+  input: QueryJobIt_Input;
+}>;
 
 
 export type JobITsQuery = (
@@ -1973,8 +1987,8 @@ export function useJobItByIdQuery(options: Omit<Urql.UseQueryArgs<JobItByIdQuery
   return Urql.useQuery<JobItByIdQuery>({ query: JobItByIdDocument, ...options });
 };
 export const JobITsDocument = gql`
-    query JobITs {
-  jobITs {
+    query JobITs($input: QueryJobIT_Input!) {
+  jobITs(input: $input) {
     ...RegularJobIT
   }
 }

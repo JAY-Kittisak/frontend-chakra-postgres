@@ -33,7 +33,7 @@ const Administrator: React.FC<Props> = () => {
     );
     const giveSuccessCdc = dataCdc?.giveOrdersCdc?.filter(
         (give) => give.status === "Success"
-    );
+    )
 
     return (
         <>
@@ -41,8 +41,7 @@ const Administrator: React.FC<Props> = () => {
                 as="i"
                 fontWeight="semibold"
                 fontSize={["md", "md", "xl", "3xl"]}
-                bgGradient="linear(to-l, #7928CA,#FF0080)"
-                bgClip="text"
+                color="gray.600"
             >
                 ผู้ดูแลระบบ
             </Text>

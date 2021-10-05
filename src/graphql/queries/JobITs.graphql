@@ -1,5 +1,5 @@
-query JobITs{
-  jobITs{
+query JobITs($input: QueryJobIT_Input!){
+  jobITs(input: $input){
     ...RegularJobIT
   }
 }

@@ -1,36 +1,51 @@
-import React from 'react'
+import React from "react";
 import {
+    Flex,
     Text,
     Box,
     useColorMode,
     Divider,
-    Button,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
 import { RegularJobItFragment } from "../../generated/graphql";
-import { formatDate } from "../../utils/helpers"
+import { formatDate } from "../../utils/helpers";
 
 interface Props {
-    jobIT: RegularJobItFragment
+    jobIT: RegularJobItFragment;
 }
 
-const AdminJobITItem: React.FC<Props> = ({ jobIT: { id, titled, itActionName, desiredDate, createdAt, status, branch } }) => {
+const AdminJobITItem: React.FC<Props> = ({
+    jobIT: { id, titled, itActionName, desiredDate, createdAt, status, branch },
+}) => {
     const { colorMode } = useColorMode();
     return (
         <Link to={`/admin/manage-job-it/${id}`}>
-            <div className='orders-content orders-content--content'>
+            <Flex
+                _hover={{ bgColor: "#eee" }}
+                p="3"
+                align="center"
+                rounded="lg"
+            >
                 <Box w="16%">
-                    <Text fontSize={["xs", "xs", "sm", "md"]} align="center">{formatDate(+createdAt)}</Text>
+                    <Text fontSize={["xs", "xs", "sm", "md"]} align="center">
+                        {formatDate(+createdAt)}
+                    </Text>
                 </Box>
                 <Box w="16%">
-                    <Text fontSize={["xs", "xs", "sm", "md"]} align="center">{titled}</Text>
+                    <Text fontSize={["xs", "xs", "sm", "md"]} align="center">
+                        {titled}
+                    </Text>
                 </Box>
                 <Box w="16%">
-                    <Text fontSize={["xs", "xs", "sm", "md"]} align="center">{itActionName}</Text>
+                    <Text fontSize={["xs", "xs", "sm", "md"]} align="center">
+                        {itActionName}
+                    </Text>
                 </Box>
                 <Box w="16%">
-                    <Text fontSize={["xs", "xs", "sm", "md"]} align="center" ml="10">{desiredDate}</Text>
+                    <Text fontSize={["xs", "xs", "sm", "md"]} align="center" ml="10">
+                        {desiredDate}
+                    </Text>
                 </Box>
                 <Box w="16%">
                     <Text fontSize={["xs", "xs", "sm", "md"]} align="center" ml="10">
@@ -46,7 +61,9 @@ const AdminJobITItem: React.FC<Props> = ({ jobIT: { id, titled, itActionName, de
                         fontSize={["md", "md", "md", "md"]}
                         color={
                             status === "New"
-                                ? colorMode === "light" ? "cyan.600" : "cyan"
+                                ? colorMode === "light"
+                                    ? "cyan.600"
+                                    : "cyan"
                                 : status === "Wait Approve"
                                     ? "orange"
                                     : status === "Success"
@@ -59,22 +76,10 @@ const AdminJobITItem: React.FC<Props> = ({ jobIT: { id, titled, itActionName, de
                         {status}
                     </Text>
                 </Box>
-
-                <Box textAlign="center" w="16%">
-                    <Button
-                        size="md"
-                        colorScheme="blue"
-                        boxShadow="sm"
-                    >
-                        <Text color="white" fontSize={["xs", "xs", "sm", "md"]}>
-                            Manage Job
-                        </Text>
-                    </Button>
-                </Box>
-            </div>
+            </Flex>
             <Divider orientation="horizontal" />
         </Link>
-    )
-}
+    );
+};
 
-export default AdminJobITItem
+export default AdminJobITItem;

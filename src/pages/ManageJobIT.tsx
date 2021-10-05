@@ -13,7 +13,26 @@ type Branch = "All" | "ลาดกระบัง" | "ชลบุรี"
 const ManageJobIT: React.FC<Props> = () => {
     const [jobData, setJobData] = useState<RegularJobItFragment[] | undefined>(undefined)
     const [branch, setBranch] = useState<Branch>("All")
-    const [{ data, fetching }] = useJobITsQuery()
+
+    const [reset, setReset] = useState(false)
+
+    const [nameItAction, setNameItAction] = useState("")
+    const [status, setStatus] = useState("")
+    const [dateBeginStrTo, setDateBeginStrTo] = useState("")
+    const [dateEndStrTo, setDateEndStrTo] = useState("")
+    // const [dateBegin, setDateBegin] = useState("")
+    // const [dateEnd, setDateEnd] = useState("")
+
+    const [{ data, fetching }] = useJobITsQuery({
+        variables: {
+            input: {
+                nameItAction: nameItAction,
+                status: status,
+                dateBegin: dateBeginStrTo,
+                dateEnd: dateEndStrTo
+            },
+        }
+    });
     const bg = useColorModeValue("white", "gray.700");
     const bgColumn = useColorModeValue("#028174", "#3E54D3");
 
@@ -36,6 +55,39 @@ const ManageJobIT: React.FC<Props> = () => {
         }
     }, [branch, data])
 
+    useEffect(() => {
+        if (reset) {
+            setNameItAction("")
+            setStatus("")
+            setDateBeginStrTo("")
+            setDateEndStrTo("")
+        }
+        setReset(false)
+    }, [reset])
+
+    const newStatus = jobData?.filter((value) => value.status === "New")
+    const wait = jobData?.filter((value) => value.status === "Wait Approve")
+    const success = jobData?.filter((value) => value.status === "Success")
+    const impossible = jobData?.filter((value) => value.status === "Impossible")
+    const arrayStatus = [newStatus?.length, wait?.length, success?.length, impossible?.length]
+
+    const altas = jobData?.filter((value) => value.category === "altas")
+    const hardware = jobData?.filter((value) => value.category === "hardware")
+    const software = jobData?.filter((value) => value.category === "software")
+    const network = jobData?.filter((value) => value.category === "network")
+    const email = jobData?.filter((value) => value.category === "email")
+    const ups = jobData?.filter((value) => value.category === "ups")
+    const telephone = jobData?.filter((value) => value.category === "โทรศัพท์")
+    const arrayCat = [
+        altas?.length,
+        hardware?.length,
+        software?.length,
+        network?.length,
+        email?.length,
+        ups?.length,
+        telephone?.length
+    ]
+
     return (
         <Flex>
             <Flex w="80%" flexDir="column">
@@ -44,8 +96,7 @@ const ManageJobIT: React.FC<Props> = () => {
                         as="i"
                         fontWeight="semibold"
                         fontSize={["md", "md", "xl", "3xl"]}
-                        bgGradient="linear(to-l, #7928CA,#FF0080)"
-                        bgClip="text"
+                        color="gray.600"
                     >
                         Manage Job IT
                     </Text>
@@ -73,27 +124,24 @@ const ManageJobIT: React.FC<Props> = () => {
                         h="35px"
                         align="center"
                     >
-                        <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="16%" textAlign="center">
+                            <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="18%" textAlign="center">
                             วันที่สั่ง
                         </Text>
-                        <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="18%" textAlign="center">
+                            <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="15%" textAlign="center">
                             เรื่องที่แจ้ง
                         </Text>
                         <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="15%" textAlign="center">
                             IT ผู้ปฏิบัติงาน
                         </Text>
-                            <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="15%" textAlign="center">
+                            <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="20%" textAlign="center">
                             วันที่ต้องการ
                         </Text>
-                            <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="20%" textAlign="center">
+                            <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="13%" textAlign="center">
                                 สาขา
                             </Text>
-                        <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="12%" textAlign="center">
+                            <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="15%" textAlign="center">
                             สถานะ
-                        </Text>
-                        <Text fontSize={["xs", "xs", "md", "xl"]} fontWeight="bold" w="18%" textAlign="center">
-                            Manage order
-                        </Text>
+                            </Text>
                     </Flex>
 
                     <Flex flexDir="column">
@@ -114,9 +162,22 @@ const ManageJobIT: React.FC<Props> = () => {
             </Flex>
             </Flex>
 
-            <Flex flexDir="column" rounded="7px" mt="9">
-                <ViewStatus />
-                <ViewAdmin />
+            <Flex flexDir="column" rounded="7px" mt="8">
+                <Flex justify="end" h="30px">
+                    {(nameItAction || status || dateBeginStrTo || dateEndStrTo) &&
+                        <Button ml="5" size="lg" colorScheme="orange" variant="link" onClick={() => setReset(true)}>
+                            Reset
+                        </Button>
+                    }
+                </Flex>
+                <ViewStatus
+                    setStatus={setStatus}
+                    arrayStatus={arrayStatus}
+                    arrayCat={arrayCat}
+                    setDateBeginStrTo={setDateBeginStrTo}
+                    setDateEndStrTo={setDateEndStrTo}
+                />
+                <ViewAdmin setNameItAction={setNameItAction} />
             </Flex>
         </Flex>
     )
