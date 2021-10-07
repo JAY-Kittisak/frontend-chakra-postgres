@@ -132,9 +132,9 @@ const Profile: React.FC<Props> = () => {
                                                       as="u"
                                                       p={2}
                                                   >
-                                                      {data?.me?.roles === "client_LKB"
+                                                        {data?.me?.roles === "client-LKB"
                                                           ? "ลาดกระบัง"
-                                                          : data?.me?.roles === "client_CDC"
+                                                            : data?.me?.roles === "client-CDC"
                                                               ? "ชลบุรี"
                                                               : "Admin"}
                                                   </Text>

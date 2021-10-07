@@ -24,7 +24,13 @@ import {
     DeleteGiveOrderCdcMutationVariables,
     CreateGiveCatMutation,
     GiveCategoriesQuery,
-    GiveCategoriesDocument
+    GiveCategoriesDocument,
+    CreateGiveOrderMutation,
+    GiveOrderByCreatorIdQuery,
+    GiveOrderByCreatorIdDocument,
+    CreateGiveOrderCdcMutation,
+    GiveOrderByCreatorIdCdcQuery,
+    GiveOrderByCreatorIdCdcDocument
 } from "../generated/graphql";
 
 function betterUpdateQuery<Result, Query>(
@@ -188,6 +194,38 @@ export const client = createClient({
                                 } else {
                                     return {
                                         giveCategories: result.createGiveCat.giveCat
+                                    }
+                                }
+                            }
+                        )
+                    },
+
+                    createGiveOrder: (_result, args, cache, info) => {
+                        betterUpdateQuery<CreateGiveOrderMutation, GiveOrderByCreatorIdQuery>(cache,
+                            { query: GiveOrderByCreatorIdDocument },
+                            _result,
+                            (result, query) => {
+                                if (result.createGiveOrder.errors) {
+                                    return query
+                                } else {
+                                    return {
+                                        giveOrderByCreatorId: result.createGiveOrder.giveOrder
+                                    }
+                                }
+                            }
+                        )
+                    },
+
+                    createGiveOrderCdc: (_result, args, cache, info) => {
+                        betterUpdateQuery<CreateGiveOrderCdcMutation, GiveOrderByCreatorIdCdcQuery>(cache,
+                            { query: GiveOrderByCreatorIdCdcDocument },
+                            _result,
+                            (result, query) => {
+                                if (result.createGiveOrderCdc.errors) {
+                                    return query
+                                } else {
+                                    return {
+                                        giveOrderByCreatorIdCdc: result.createGiveOrderCdc.giveOrder
                                     }
                                 }
                             }

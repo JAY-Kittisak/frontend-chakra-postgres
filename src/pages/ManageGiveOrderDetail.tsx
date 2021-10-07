@@ -114,15 +114,13 @@ const ManageGiveOrderDetail: React.FC<Props> = () => {
                                             </Text>
                                         </Stack>
                                         <Stack isInline mt={3} justify="space-between">
-                                            <Text fontSize={["sm", "sm", "md", "md"]}>
-                                                จำนวนที่เบิก :{" "}
-                                            </Text>
+                                            <Text fontSize={["sm", "sm", "md", "md"]}>ชื่อสินค้า : </Text>
                                             <Text
                                                 fontSize={["sm", "sm", "md", "md"]}
                                                 as="i"
                                                 fontWeight="semibold"
                                             >
-                                                {data.giveOrderById.amount} ชิ้น
+                                                {data.giveOrderById.give.giveName}
                                             </Text>
                                         </Stack>
                                         <Divider mt={3} orientation="horizontal" />
@@ -140,6 +138,20 @@ const ManageGiveOrderDetail: React.FC<Props> = () => {
                                         </Stack>
                                         <Divider mt={3} orientation="horizontal" />
                                         <Stack isInline mt={3} justify="space-between">
+                                            <Text fontSize={["sm", "sm", "md", "md"]}>
+                                                จำนวนที่เบิก :{" "}
+                                            </Text>
+                                            <Text
+                                                fontSize={["sm", "sm", "md", "md"]}
+                                                as="i"
+                                                fontWeight="semibold"
+                                            >
+                                                {data.giveOrderById.amount} ชิ้น
+                                            </Text>
+                                        </Stack>
+                                        <Divider mt={3} orientation="horizontal" />
+
+                                        <Stack isInline mt={3} justify="space-between">
                                             <Text fontSize={["sm", "sm", "md", "md"]}>ราคารวม : </Text>
                                             <Text
                                                 fontSize={["sm", "sm", "md", "md"]}
@@ -152,17 +164,7 @@ const ManageGiveOrderDetail: React.FC<Props> = () => {
                                             </Text>
                                         </Stack>
                                         <Divider mt={3} orientation="horizontal" />
-                                        <Stack isInline mt={3} justify="space-between">
-                                            <Text fontSize={["sm", "sm", "md", "md"]}>ชื่อสินค้า : </Text>
-                                            <Text
-                                                fontSize={["sm", "sm", "md", "md"]}
-                                                as="i"
-                                                fontWeight="semibold"
-                                            >
-                                                {data.giveOrderById.give.giveName}
-                                            </Text>
-                                        </Stack>
-                                        <Divider mt={3} orientation="horizontal" />
+
                                         <Stack isInline mt={3} justify="space-between">
                                             <Text fontSize={["sm", "sm", "md", "md"]} w="60vh">
                                                 รายละเอียด :{" "}
@@ -280,15 +282,13 @@ const ManageGiveOrderDetail: React.FC<Props> = () => {
                                     </Stack>
 
                                     <Stack isInline mt={3} justify="space-between">
-                                        <Text fontSize={["sm", "sm", "md", "md"]}>
-                                            จำนวนที่เบิก :{" "}
-                                        </Text>
+                                        <Text fontSize={["sm", "sm", "md", "md"]}>ชื่อสินค้า : </Text>
                                         <Text
                                             fontSize={["sm", "sm", "md", "md"]}
                                             as="i"
                                             fontWeight="semibold"
                                         >
-                                            {data.giveOrderById.amount} ชิ้น
+                                            {data.giveOrderById.give.giveName}
                                         </Text>
                                     </Stack>
                                     <Divider mt={3} orientation="horizontal" />
@@ -303,9 +303,30 @@ const ManageGiveOrderDetail: React.FC<Props> = () => {
                                             fontWeight="semibold"
                                         >
                                             {data.giveOrderById.creator.fullNameTH}
+                                            &nbsp; สาขา
+                                            {data.giveOrderById.creator.roles === "client-LKB"
+                                                ? "ลาดกระบัง"
+                                                : data.giveOrderById.creator.roles === "client-CDC"
+                                                    ? "ชลบุรี"
+                                                    : "Admin"}
                                         </Text>
                                     </Stack>
                                     <Divider mt={3} orientation="horizontal" />
+
+                                    <Stack isInline mt={3} justify="space-between">
+                                        <Text fontSize={["sm", "sm", "md", "md"]}>
+                                            จำนวนที่เบิก :{" "}
+                                        </Text>
+                                        <Text
+                                            fontSize={["sm", "sm", "md", "md"]}
+                                            as="i"
+                                            fontWeight="semibold"
+                                        >
+                                            {data.giveOrderById.amount} ชิ้น
+                                        </Text>
+                                    </Stack>
+                                    <Divider mt={3} orientation="horizontal" />
+
 
                                     <Stack isInline mt={3} justify="space-between">
                                         <Text fontSize={["sm", "sm", "md", "md"]}>ราคารวม : </Text>
@@ -321,17 +342,6 @@ const ManageGiveOrderDetail: React.FC<Props> = () => {
                                     </Stack>
                                     <Divider mt={3} orientation="horizontal" />
 
-                                    <Stack isInline mt={3} justify="space-between">
-                                        <Text fontSize={["sm", "sm", "md", "md"]}>ชื่อสินค้า : </Text>
-                                        <Text
-                                            fontSize={["sm", "sm", "md", "md"]}
-                                            as="i"
-                                            fontWeight="semibold"
-                                        >
-                                            {data.giveOrderById.give.giveName}
-                                        </Text>
-                                    </Stack>
-                                    <Divider mt={3} orientation="horizontal" />
 
                                     <Stack isInline mt={3} justify="space-between">
                                         <Text fontSize={["sm", "sm", "md", "md"]} w="60vh">

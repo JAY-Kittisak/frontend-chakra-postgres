@@ -33,7 +33,7 @@ const AdminJobITItem: React.FC<Props> = ({
                     </Text>
                 </Box>
                 <Box w="16%">
-                    <Text fontSize={["xs", "xs", "sm", "md"]} align="center">
+                    <Text fontSize={["xs", "xs", "sm", "md"]} align="center" isTruncated>
                         {titled}
                     </Text>
                 </Box>

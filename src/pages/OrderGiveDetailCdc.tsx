@@ -96,28 +96,28 @@ const OrderGiveDetail: React.FC<Props> = () => {
                             </Stack>
 
                             <Stack isInline mt={3} justify="space-between">
-                                <Text fontSize={["sm", "sm", "md", "xl"]}>จำนวนที่เบิก : </Text>
+                                    <Text fontSize={["sm", "sm", "md", "xl"]}>
+                                        ชื่อสินค้า :{" "}
+                                    </Text>
                                 <Text fontSize={["sm", "sm", "md", "xl"]} fontWeight="semibold">
-                                    {data.giveOrderByIdCdc.amount} ชิ้น
+                                        {data.giveOrderByIdCdc.give.giveName}
                                 </Text>
                             </Stack>
                             <Divider mt={3} orientation="horizontal" />
 
                             <Stack isInline mt={3} justify="space-between">
-                                <Text fontSize={["sm", "sm", "md", "xl"]}>ราคารวม : </Text>
+                                    <Text fontSize={["sm", "sm", "md", "xl"]}>จำนวนที่เบิก : </Text>
                                 <Text fontSize={["sm", "sm", "md", "xl"]} fontWeight="semibold">
-                                    {data.giveOrderByIdCdc.price &&
-                                        formatAmount(data.giveOrderByIdCdc.price)} บาท
+                                        {data.giveOrderByIdCdc.amount} ชิ้น
                                 </Text>
                             </Stack>
                             <Divider mt={3} orientation="horizontal" />
 
                             <Stack isInline mt={3} justify="space-between">
-                                <Text fontSize={["sm", "sm", "md", "xl"]}>
-                                    ชื่อสินค้า :{" "}
-                                </Text>
+                                    <Text fontSize={["sm", "sm", "md", "xl"]}>ราคารวม : </Text>
                                 <Text fontSize={["sm", "sm", "md", "xl"]} fontWeight="semibold">
-                                    {data.giveOrderByIdCdc.give.giveName}
+                                        {data.giveOrderByIdCdc.price &&
+                                            formatAmount(data.giveOrderByIdCdc.price)} บาท
                                 </Text>
                             </Stack>
                             <Divider mt={3} orientation="horizontal" />

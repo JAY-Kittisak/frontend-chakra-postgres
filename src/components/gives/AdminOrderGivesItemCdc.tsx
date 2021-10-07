@@ -36,7 +36,7 @@ const AdminOrderGivesItemCdc: React.FC<Props> = ({
                 <Box w="16%">
                     <Text fontSize={["xs", "xs", "sm", "md"]} align="center">{formatDate(+createdAt)}</Text>
                 </Box>
-                <Flex align="center" w="16%">
+                <Flex justify="space-between" w="16%">
                     {imageUrl &&
                         <Image
                             mr={2}
@@ -47,8 +47,8 @@ const AdminOrderGivesItemCdc: React.FC<Props> = ({
                         />
                     }
                     <Flex flexDir="column">
-                        <Text fontSize={["xs", "xs", "sm", "md"]}>{fullNameTH}</Text>
-                        <Text fontSize={["xs", "xs", "sm", "md"]} color="green">{giveName}</Text>
+                        <Text fontSize={["xs", "xs", "sm", "md"]} isTruncated w="200px">{fullNameTH}</Text>
+                        <Text fontSize={["xs", "xs", "sm", "md"]} color="green" isTruncated w="200px">{giveName}</Text>
                     </Flex>
                 </Flex>
                 <Box w="16%">

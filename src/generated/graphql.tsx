@@ -480,8 +480,8 @@ export type Query = {
   giveOrdersCdc?: Maybe<Array<GiveOrderCdc>>;
   giveOrderById: GiveOrder;
   giveOrderByIdCdc: GiveOrderCdc;
-  giveOrderByCreatorId: Array<GiveOrder>;
-  giveOrderByCreatorIdCdc: Array<GiveOrderCdc>;
+  giveOrderByCreatorId?: Maybe<Array<GiveOrder>>;
+  giveOrderByCreatorIdCdc?: Maybe<Array<GiveOrderCdc>>;
   giveCategories?: Maybe<Array<GiveCategory>>;
   manualADs: Array<ManualAd>;
   manualADById: ManualAd;
@@ -1127,10 +1127,10 @@ export type GiveOrderByCreatorIdQueryVariables = Exact<{ [key: string]: never; }
 
 export type GiveOrderByCreatorIdQuery = (
   { __typename?: 'Query' }
-  & { giveOrderByCreatorId: Array<(
+  & { giveOrderByCreatorId?: Maybe<Array<(
     { __typename?: 'GiveOrder' }
     & RegularGiveOrdersFragment
-  )> }
+  )>> }
 );
 
 export type GiveOrderByCreatorIdCdcQueryVariables = Exact<{ [key: string]: never; }>;
@@ -1138,10 +1138,10 @@ export type GiveOrderByCreatorIdCdcQueryVariables = Exact<{ [key: string]: never
 
 export type GiveOrderByCreatorIdCdcQuery = (
   { __typename?: 'Query' }
-  & { giveOrderByCreatorIdCdc: Array<(
+  & { giveOrderByCreatorIdCdc?: Maybe<Array<(
     { __typename?: 'GiveOrderCdc' }
     & RegularGiveOrdersCdcFragment
-  )> }
+  )>> }
 );
 
 export type GiveOrderByIdQueryVariables = Exact<{

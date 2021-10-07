@@ -52,7 +52,7 @@ const ManageJobITDetail: React.FC<Props> = () => {
                 ) : (
                     <Flex
                         flexDir={["column", "column", "column", "row"]}
-                            w={[null, null, null, "40%"]}
+                            w={["100%", "100%", "100%", "70%", "50%"]}
                         p={1}
                         rounded="7px"
                         boxShadow="md"
@@ -100,7 +100,7 @@ const ManageJobITDetail: React.FC<Props> = () => {
                                 <Divider mt={3} orientation="horizontal" />
 
                                 <Stack isInline mt={3} justify="space-between">
-                                    <Text fontSize={["sm", "sm", "md", "md"]}>
+                                    <Text w="600px" fontSize={["sm", "sm", "md", "md"]}>
                                         เรื่องที่แจ้ง Job :{" "}
                                     </Text>
                                     <Text

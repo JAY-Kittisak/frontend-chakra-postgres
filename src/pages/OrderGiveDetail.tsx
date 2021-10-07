@@ -96,6 +96,16 @@ const OrderGiveDetail: React.FC<Props> = () => {
                                 </Stack>
 
                                 <Stack isInline mt={3} justify="space-between">
+                                    <Text fontSize={["sm", "sm", "md", "xl"]}>
+                                        ชื่อสินค้า :{" "}
+                                    </Text>
+                                    <Text fontSize={["sm", "sm", "md", "xl"]} fontWeight="semibold">
+                                        {data.giveOrderById.give.giveName}
+                                    </Text>
+                                </Stack>
+                                <Divider mt={3} orientation="horizontal" />
+
+                                <Stack isInline mt={3} justify="space-between">
                                     <Text fontSize={["sm", "sm", "md", "xl"]}>จำนวนที่เบิก : </Text>
                                     <Text fontSize={["sm", "sm", "md", "xl"]} fontWeight="semibold">
                                         {data.giveOrderById.amount} ชิ้น
@@ -103,21 +113,12 @@ const OrderGiveDetail: React.FC<Props> = () => {
                                 </Stack>
                                 <Divider mt={3} orientation="horizontal" />
 
+
                                 <Stack isInline mt={3} justify="space-between">
                                     <Text fontSize={["sm", "sm", "md", "xl"]}>ราคารวม : </Text>
                                     <Text fontSize={["sm", "sm", "md", "xl"]} fontWeight="semibold">
                                         {data.giveOrderById.price &&
                                             formatAmount(data.giveOrderById.price)} บาท
-                                    </Text>
-                                </Stack>
-                                <Divider mt={3} orientation="horizontal" />
-
-                                <Stack isInline mt={3} justify="space-between">
-                                    <Text fontSize={["sm", "sm", "md", "xl"]}>
-                                        ชื่อสินค้า :{" "}
-                                    </Text>
-                                    <Text fontSize={["sm", "sm", "md", "xl"]} fontWeight="semibold">
-                                        {data.giveOrderById.give.giveName}
                                     </Text>
                                 </Stack>
                                 <Divider mt={3} orientation="horizontal" />

@@ -280,15 +280,13 @@ const ManageGiveOrderDetailCdc: React.FC<Props> = () => {
                                 </Stack>
 
                                 <Stack isInline mt={3} justify="space-between">
-                                    <Text fontSize={["sm", "sm", "md", "md"]}>
-                                        จำนวนที่เบิก :{" "}
-                                    </Text>
+                                        <Text fontSize={["sm", "sm", "md", "md"]}>ชื่อสินค้า : </Text>
                                     <Text
                                         fontSize={["sm", "sm", "md", "md"]}
                                         as="i"
                                         fontWeight="semibold"
                                     >
-                                        {data.giveOrderByIdCdc.amount} ชิ้น
+                                            {data.giveOrderByIdCdc.give.giveName}
                                     </Text>
                                 </Stack>
                                 <Divider mt={3} orientation="horizontal" />
@@ -303,32 +301,40 @@ const ManageGiveOrderDetailCdc: React.FC<Props> = () => {
                                         fontWeight="semibold"
                                     >
                                         {data.giveOrderByIdCdc.creator.fullNameTH}
+                                            &nbsp; สาขา
+                                            {data.giveOrderByIdCdc.creator.roles === "client-LKB"
+                                                ? "ลาดกระบัง"
+                                                : data.giveOrderByIdCdc.creator.roles === "client-CDC"
+                                                    ? "ชลบุรี"
+                                                    : "Admin"}
                                     </Text>
                                 </Stack>
                                 <Divider mt={3} orientation="horizontal" />
 
                                 <Stack isInline mt={3} justify="space-between">
-                                    <Text fontSize={["sm", "sm", "md", "md"]}>ราคารวม : </Text>
+                                        <Text fontSize={["sm", "sm", "md", "md"]}>
+                                            จำนวนที่เบิก :{" "}
+                                        </Text>
                                     <Text
                                         fontSize={["sm", "sm", "md", "md"]}
                                         as="i"
                                         fontWeight="semibold"
                                     >
-                                        {data.giveOrderByIdCdc.price &&
-                                            formatAmount(data.giveOrderByIdCdc.price)}{" "}
-                                        บาท
+                                            {data.giveOrderByIdCdc.amount} ชิ้น
                                     </Text>
                                 </Stack>
                                 <Divider mt={3} orientation="horizontal" />
 
                                 <Stack isInline mt={3} justify="space-between">
-                                    <Text fontSize={["sm", "sm", "md", "md"]}>ชื่อสินค้า : </Text>
+                                        <Text fontSize={["sm", "sm", "md", "md"]}>ราคารวม : </Text>
                                     <Text
                                         fontSize={["sm", "sm", "md", "md"]}
                                         as="i"
                                         fontWeight="semibold"
                                     >
-                                        {data.giveOrderByIdCdc.give.giveName}
+                                            {data.giveOrderByIdCdc.price &&
+                                                formatAmount(data.giveOrderByIdCdc.price)}{" "}
+                                            บาท
                                     </Text>
                                 </Stack>
                                 <Divider mt={3} orientation="horizontal" />

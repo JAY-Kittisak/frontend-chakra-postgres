@@ -4,9 +4,13 @@ import {
     Flex,
     Box,
     Button,
-    Menu,
-    MenuButton,
-    MenuList,
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverHeader,
+    PopoverBody,
+    PopoverArrow,
+    PopoverCloseButton,
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
@@ -84,15 +88,7 @@ const ViewStatus: React.FC<Props> = ({
         setDateEndStrTo(dateEnd.toDateString());
     };
     return (
-        <Flex
-            flexDir="column"
-            w="375px"
-            h="410px"
-            boxShadow="md"
-            ml="5"
-            rounded="lg"
-            p="3"
-        >
+        <Flex flexDir="column" h="410px" boxShadow="md" ml="5" rounded="lg" p="3">
             <Text fontSize="2xl" fontWeight="bold" as="i" color="gray">
                 Job Status
             </Text>
@@ -118,12 +114,12 @@ const ViewStatus: React.FC<Props> = ({
                 </ResponsiveContainer>
             </Box>
             <Flex flexDir="column">
-                <Flex flexDir="row" mb="3">
+                <Flex flexDir="row" mb="3" justify="center" mx="2">
                     <Flex
+                        w="25%"
                         color="cyan.600"
                         _hover={{ bgColor: "cyan.600", textColor: "white" }}
                         cursor="pointer"
-                        w="100px"
                         flexDir="column"
                         boxShadow="md"
                         rounded="lg"
@@ -136,16 +132,16 @@ const ViewStatus: React.FC<Props> = ({
                         <Text fontSize="4xl" fontWeight="bold">
                             {arrayStatus[0]}
                         </Text>
-                        <Text fontSize="xs" fontWeight="bold" >
+                        <Text fontSize="xs" fontWeight="bold">
                             New
                         </Text>
                     </Flex>
 
                     <Flex
+                        w="25%"
                         color="orange"
                         _hover={{ bgColor: "orange", textColor: "white" }}
                         cursor="pointer"
-                        w="100px"
                         flexDir="column"
                         boxShadow="md"
                         rounded="lg"
@@ -163,10 +159,10 @@ const ViewStatus: React.FC<Props> = ({
                         </Text>
                     </Flex>
                     <Flex
+                        w="25%"
                         color="green"
                         _hover={{ bgColor: "green", textColor: "white" }}
                         cursor="pointer"
-                        w="100px"
                         flexDir="column"
                         boxShadow="md"
                         rounded="lg"
@@ -184,10 +180,10 @@ const ViewStatus: React.FC<Props> = ({
                         </Text>
                     </Flex>
                     <Flex
+                        w="25%"
                         color="red"
                         _hover={{ bgColor: "red", textColor: "white" }}
                         cursor="pointer"
-                        w="100px"
                         flexDir="column"
                         boxShadow="md"
                         rounded="lg"
@@ -203,39 +199,49 @@ const ViewStatus: React.FC<Props> = ({
                         </Text>
                     </Flex>
                 </Flex>
-                <Flex justifyContent="space-between">
-                    <Flex mr="1">
-                        <Menu>
-                            <MenuButton
-                                _hover={{ bgColor: "#00FA9A" }}
+                <Flex justify="space-between">
+                    <Popover>
+                        <PopoverTrigger>
+                            <Button
+                                mr="1"
+                                bg="teal"
                                 color="white"
-                                bg="green"
-                                as={Button}
+                                _hover={{ bgColor: "green" }}
                                 rightIcon={<ChevronDownIcon />}
                             >
-                                {dateBeginStr ? dateBeginStr : "Start"}
-                            </MenuButton>
-                            <MenuList>
+                                {dateBeginStr ? dateBeginStr : "Begin"}
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent>
+                            <PopoverArrow />
+                            <PopoverCloseButton />
+                            <PopoverHeader>Begin Date</PopoverHeader>
+                            <PopoverBody>
                                 <Calendar onChange={onChangeBegin} value={dateBegin} />
-                            </MenuList>
-                        </Menu>
-                    </Flex>
-                    <Flex ml="1">
-                        <Menu>
-                            <MenuButton
-                                _hover={{ bgColor: "#FF6347" }}
+                            </PopoverBody>
+                        </PopoverContent>
+                    </Popover>
+
+                    <Popover>
+                        <PopoverTrigger>
+                            <Button
+                                bg="orange.500"
                                 color="white"
-                                bg="red"
-                                as={Button}
+                                _hover={{ bgColor: "red" }}
                                 rightIcon={<ChevronDownIcon />}
                             >
                                 {dateEndStr ? dateEndStr : "End"}
-                            </MenuButton>
-                            <MenuList>
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent>
+                            <PopoverArrow />
+                            <PopoverCloseButton />
+                            <PopoverHeader>End Date</PopoverHeader>
+                            <PopoverBody>
                                 <Calendar onChange={onChangeEnd} value={dateEnd} />
-                            </MenuList>
-                        </Menu>
-                    </Flex>
+                            </PopoverBody>
+                        </PopoverContent>
+                    </Popover>
                 </Flex>
             </Flex>
         </Flex>
