@@ -1,0 +1,5 @@
+query StockItById($id: Int!){
+  stockItById(id: $id){
+    ...RegularStockIt
+  }
+}

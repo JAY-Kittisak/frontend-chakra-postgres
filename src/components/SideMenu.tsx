@@ -41,7 +41,7 @@ const menuItems = [
     },
     {
         name: "เบิก-ยืม อุปกรณ์ IT",
-        to: "/stock_It",
+        to: "/stock-it/stock-all",
         iconClassName: "bi bi-basket",
         subMenus: [{ name: "ประวัติการเบิกของคุณ", to: "/orderIT/IT" }],
     },

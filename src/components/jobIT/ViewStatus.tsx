@@ -118,7 +118,7 @@ const ViewStatus: React.FC<Props> = ({
                     <Flex
                         w="25%"
                         color="cyan.600"
-                        _hover={{ bgColor: "cyan.600", textColor: "white" }}
+                        _hover={{ bgGradient: "linear(to-t, cyan.100, cyan.600)", textColor: "white" }}
                         cursor="pointer"
                         flexDir="column"
                         boxShadow="md"
@@ -140,7 +140,7 @@ const ViewStatus: React.FC<Props> = ({
                     <Flex
                         w="25%"
                         color="orange"
-                        _hover={{ bgColor: "orange", textColor: "white" }}
+                        _hover={{ bgGradient: "linear(to-t, orange.200, orange)", textColor: "white" }}
                         cursor="pointer"
                         flexDir="column"
                         boxShadow="md"
@@ -161,7 +161,7 @@ const ViewStatus: React.FC<Props> = ({
                     <Flex
                         w="25%"
                         color="green"
-                        _hover={{ bgColor: "green", textColor: "white" }}
+                        _hover={{ bgGradient: "linear(to-t, green.200, green)", textColor: "white" }}
                         cursor="pointer"
                         flexDir="column"
                         boxShadow="md"
@@ -182,7 +182,7 @@ const ViewStatus: React.FC<Props> = ({
                     <Flex
                         w="25%"
                         color="red"
-                        _hover={{ bgColor: "red", textColor: "white" }}
+                        _hover={{ bgGradient: "linear(to-t, red.200, red)", textColor: "white" }}
                         cursor="pointer"
                         flexDir="column"
                         boxShadow="md"

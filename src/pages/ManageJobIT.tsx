@@ -6,9 +6,9 @@ import { useJobITsQuery, RegularJobItFragment } from "../generated/graphql";
 import AdminJobITItem from "../components/jobIT/AdminJobITItem";
 import ViewStatus from "../components/jobIT/ViewStatus";
 import ViewAdmin from "../components/jobIT/ViewAdmin";
+import { Branch } from "../utils/helpers"
 
 interface Props { }
-type Branch = "All" | "ลาดกระบัง" | "ชลบุรี";
 
 const ManageJobIT: React.FC<Props> = () => {
     const [jobData, setJobData] = useState<RegularJobItFragment[] | undefined>(
@@ -101,7 +101,6 @@ const ManageJobIT: React.FC<Props> = () => {
         );
     }
 
-    console.log(reset);
     return (
         <Flex flexDir={["column", "column", "column", "column", "row"]}>
             <Flex w={["100%", "100%", "100%", "100%", "75%"]} flexDir="column">
@@ -231,7 +230,6 @@ const ManageJobIT: React.FC<Props> = () => {
 
             <Flex
                 flexDir="column"
-                rounded="7px"
                 w={["100%", "100%", "100%", "100%", "25%"]}
             >
                 <Flex justify="end" h="30px">

@@ -66,6 +66,12 @@ export type FieldErrorManualAd = {
   message: Scalars['String'];
 };
 
+export type FieldErrorStockIt = {
+  __typename?: 'FieldErrorStockIt';
+  field: Scalars['String'];
+  message: Scalars['String'];
+};
+
 export type Give = {
   __typename?: 'Give';
   id: Scalars['Float'];
@@ -276,6 +282,8 @@ export type Mutation = {
   createJobIT: JobIt_Response;
   updateJobIT: JobIt;
   jobITComment: JobIt;
+  createStockIt: StockItResponse;
+  deleteStockIt: Scalars['Boolean'];
 };
 
 
@@ -439,6 +447,17 @@ export type MutationJobItCommentArgs = {
   id: Scalars['Int'];
 };
 
+
+export type MutationCreateStockItArgs = {
+  options: Scalars['Upload'];
+  input: StockIt_Input;
+};
+
+
+export type MutationDeleteStockItArgs = {
+  id: Scalars['Float'];
+};
+
 export type ProductByTier = {
   __typename?: 'ProductByTier';
   id: Scalars['Float'];
@@ -488,6 +507,8 @@ export type Query = {
   jobITs?: Maybe<Array<JobIt>>;
   jobITById: JobIt;
   jobITByCreatorId: Array<JobIt>;
+  stockIts?: Maybe<Array<StockIt>>;
+  stockItById: StockIt;
 };
 
 
@@ -545,6 +566,11 @@ export type QueryJobItByIdArgs = {
   id: Scalars['Int'];
 };
 
+
+export type QueryStockItByIdArgs = {
+  id: Scalars['Int'];
+};
+
 export type QueryJobIt_Input = {
   nameItAction?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
@@ -558,6 +584,47 @@ export type RegisterInput = {
   email: Scalars['String'];
   roles: Scalars['String'];
   departments: Scalars['String'];
+};
+
+export type StockIt = {
+  __typename?: 'StockIt';
+  id: Scalars['Float'];
+  itemName: Scalars['String'];
+  details: Scalars['String'];
+  location: Scalars['String'];
+  serialNum: Scalars['String'];
+  warranty: Scalars['String'];
+  price: Scalars['Float'];
+  inventory: Scalars['Float'];
+  branch: Scalars['String'];
+  brand: Scalars['String'];
+  category: Scalars['String'];
+  holdStatus: Scalars['String'];
+  status: Scalars['String'];
+  imageUrl?: Maybe<Scalars['String']>;
+  useById?: Maybe<Scalars['Float']>;
+  useBy?: Maybe<User>;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type StockItResponse = {
+  __typename?: 'StockItResponse';
+  errors?: Maybe<Array<FieldErrorStockIt>>;
+  stockIt?: Maybe<Array<StockIt>>;
+};
+
+export type StockIt_Input = {
+  itemName: Scalars['String'];
+  details: Scalars['String'];
+  location: Scalars['String'];
+  serialNum: Scalars['String'];
+  warranty: Scalars['String'];
+  price: Scalars['Float'];
+  inventory: Scalars['Float'];
+  branch: Scalars['String'];
+  brand: Scalars['String'];
+  category: Scalars['String'];
 };
 
 export type UpdateGiveCdcResponse = {
@@ -599,6 +666,7 @@ export type User = {
   giveOrders: Array<GiveOrder>;
   giveOrdersCdc: Array<GiveOrderCdc>;
   jobITs: Array<JobIt>;
+  stockIts: Array<StockIt>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -677,6 +745,15 @@ export type RegularManualAdFragment = (
   & { manualADUrl: Array<(
     { __typename?: 'ManualADUrl' }
     & Pick<ManualAdUrl, 'id' | 'manualId' | 'title' | 'url' | 'createdAt' | 'updatedAt'>
+  )> }
+);
+
+export type RegularStockItFragment = (
+  { __typename?: 'StockIt' }
+  & Pick<StockIt, 'id' | 'itemName' | 'details' | 'location' | 'serialNum' | 'warranty' | 'price' | 'inventory' | 'branch' | 'brand' | 'category' | 'holdStatus' | 'status' | 'imageUrl' | 'useById' | 'createdAt' | 'updatedAt'>
+  & { useBy?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'fullNameTH' | 'departments' | 'roles'>
   )> }
 );
 
@@ -1294,6 +1371,30 @@ export type ProductByTiersQuery = (
   )>> }
 );
 
+export type StockItByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type StockItByIdQuery = (
+  { __typename?: 'Query' }
+  & { stockItById: (
+    { __typename?: 'StockIt' }
+    & RegularStockItFragment
+  ) }
+);
+
+export type StockItsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StockItsQuery = (
+  { __typename?: 'Query' }
+  & { stockIts?: Maybe<Array<(
+    { __typename?: 'StockIt' }
+    & RegularStockItFragment
+  )>> }
+);
+
 export type UserAdminQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1458,6 +1559,32 @@ export const RegularManualAdFragmentDoc = gql`
     url
     createdAt
     updatedAt
+  }
+}
+    `;
+export const RegularStockItFragmentDoc = gql`
+    fragment RegularStockIt on StockIt {
+  id
+  itemName
+  details
+  location
+  serialNum
+  warranty
+  price
+  inventory
+  branch
+  brand
+  category
+  holdStatus
+  status
+  imageUrl
+  useById
+  createdAt
+  updatedAt
+  useBy {
+    fullNameTH
+    departments
+    roles
   }
 }
     `;
@@ -2046,6 +2173,28 @@ export const ProductByTiersDocument = gql`
 
 export function useProductByTiersQuery(options: Omit<Urql.UseQueryArgs<ProductByTiersQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<ProductByTiersQuery>({ query: ProductByTiersDocument, ...options });
+};
+export const StockItByIdDocument = gql`
+    query StockItById($id: Int!) {
+  stockItById(id: $id) {
+    ...RegularStockIt
+  }
+}
+    ${RegularStockItFragmentDoc}`;
+
+export function useStockItByIdQuery(options: Omit<Urql.UseQueryArgs<StockItByIdQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<StockItByIdQuery>({ query: StockItByIdDocument, ...options });
+};
+export const StockItsDocument = gql`
+    query StockIts {
+  stockIts {
+    ...RegularStockIt
+  }
+}
+    ${RegularStockItFragmentDoc}`;
+
+export function useStockItsQuery(options: Omit<Urql.UseQueryArgs<StockItsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<StockItsQuery>({ query: StockItsDocument, ...options });
 };
 export const UserAdminDocument = gql`
     query UserAdmin {

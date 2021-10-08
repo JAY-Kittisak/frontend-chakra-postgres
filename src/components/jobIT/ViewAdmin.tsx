@@ -46,7 +46,7 @@ const ViewAdmin: React.FC<Props> = ({ setNameItAction }) => {
                               <Heading size="sm" letterSpacing="tight">
                                   {value.fullNameTH}
                               </Heading>
-                              <Text fontSize="sm" color="gray" isTruncated w="250px" mr="5">
+                                <Text fontSize="sm" color="gray" isTruncated w="250px" mr="5" mt="1">
                                   {value.roles}
                               </Text>
                           </Flex>

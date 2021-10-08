@@ -1,0 +1,24 @@
+fragment RegularStockIt on StockIt {
+      id
+      itemName
+      details
+      location
+      serialNum
+      warranty
+      price
+      inventory
+      branch
+      brand
+      category
+      holdStatus
+      status
+      imageUrl
+      useById
+      createdAt
+      updatedAt
+      useBy{
+        fullNameTH
+        departments
+        roles
+      }
+}
