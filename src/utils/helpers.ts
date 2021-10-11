@@ -94,11 +94,16 @@ export const jobStatus: statusIt[] = [
 ];
 // ---------------------- สาขา ----------------------
 export type Branch = "All" | "ลาดกระบัง" | "ชลบุรี";
-
+export const selectBranch: Branch[] = [
+    "All",
+    "ลาดกระบัง",
+    "ชลบุรี",
+]
 // ---------------------- CategoryItemIt ----------------------
 export type CategoryItemIt =
     | "Battery UPS"
     | "Keyboard"
+    | "Software"
     | "NoteBook"
     | "Router"
     | "Mouse"
@@ -107,6 +112,7 @@ export type CategoryItemIt =
 export const itemIt: CategoryItemIt[] = [
     "Battery UPS",
     "NoteBook",
+    "Software",
     "Keyboard",
     "Router",
     "Mouse",
@@ -114,7 +120,7 @@ export const itemIt: CategoryItemIt[] = [
     "PC",
 ];
 // ---------------------- Brand stock IT ----------------------
-export type BrandItemIt =
+export type BrandItem =
     | "MICROSOFT"
     | "HUAWEI"
     | "LENOVO"
@@ -122,7 +128,7 @@ export type BrandItemIt =
     | "DELL"
     | "MSI"
     | "HP"
-export const brandItemIt: BrandItemIt[] = [
+export const brandItemIt: BrandItem[] = [
     "MICROSOFT",
     "HUAWEI",
     "LENOVO",
@@ -130,4 +136,28 @@ export const brandItemIt: BrandItemIt[] = [
     "DELL",
     "MSI",
     "HP",
+];
+// ---------------------- location ----------------------
+export type LocationIt =
+    | "Stock IT"
+    | "หน้าห้องผู้บริหาร"
+    | "ชั้น 4"
+export const locationStock: LocationIt[] = [
+    "Stock IT",
+    "หน้าห้องผู้บริหาร",
+    "ชั้น 4",
+];
+// ---------------------- Warranty ----------------------
+export type Warranty =
+    | "ประกัน 1 ปี"
+    | "ประกัน 2 ปี"
+    | "ประกัน 3 ปี"
+    | "ประกัน 5 ปี"
+    | "ประกัน LT."
+export const warrantyIt: Warranty[] = [
+    "ประกัน 1 ปี",
+    "ประกัน 2 ปี",
+    "ประกัน 3 ปี",
+    "ประกัน 5 ปี",
+    "ประกัน LT."
 ];

@@ -37,7 +37,6 @@ const GiveDetailCdc: React.FC<Props> = () => {
         },
     });
 
-
     return (
         <>
             <Text

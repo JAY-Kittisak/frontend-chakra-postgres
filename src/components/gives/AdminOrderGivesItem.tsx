@@ -32,7 +32,7 @@ const AdminOrderGivesItem: React.FC<Props> = ({
 
     return (
         <Link to={`/admin/manage-give-orders/${id}`}>
-            <div className='orders-content orders-content--content'>
+            <Flex className='orders-content orders-content--content' _hover={{ bgColor: "#eee" }}>
                 <Box w="16%">
                     <Text fontSize={["xs", "xs", "sm", "md"]} align="center">{formatDate(+createdAt)}</Text>
                 </Box>
@@ -89,7 +89,7 @@ const AdminOrderGivesItem: React.FC<Props> = ({
                         </Text>
                     </Button>
                 </Box>
-            </div>
+            </Flex>
             <Divider orientation="horizontal" />
         </Link>
     )

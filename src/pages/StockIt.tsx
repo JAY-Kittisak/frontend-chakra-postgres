@@ -13,6 +13,7 @@ import { useStockItsQuery, RegularStockItFragment } from "../generated/graphql";
 import { Branch } from "../utils/helpers"
 import CategoryFilter from "../components/StockIt/CategoryFilter";
 import BrandFilter from "../components/StockIt/BrandFilter";
+import SelectBranch from "../components/SelectBranch";
 
 interface Props { }
 
@@ -66,46 +67,11 @@ const StockIt: React.FC<Props> = () => {
     return (
         <Flex flexDir={["column", "column", "column", "column", "row"]}>
             <Flex w={["100%", "100%", "100%", "100%", "80%"]} flexDir="column" mr="2">
-                <Flex justify="space-between" h="40px">
-                    <Text
-                        as="i"
-                        fontWeight="semibold"
-                        fontSize={["md", "md", "xl", "3xl"]}
-                        color="gray.600"
-                    >
-                        เบิก/ยืม อุปกรณ์ IT
-                    </Text>
-                    <Flex mt="1">
-                        <Button
-                            size="md"
-                            colorScheme="teal"
-                            variant={(branch === "All") ? "outline" : "link"}
-                            mr="3"
-                            onClick={() => setBranch("All")}
-                        >
-                            All
-                        </Button>
-                        <Button
-                            size="md"
-                            colorScheme="teal"
-                            variant={(branch === "ลาดกระบัง") ? "outline" : "link"}
-                            mr="3"
-                            onClick={() => setBranch("ลาดกระบัง")}
-                        >
-                            ลาดกระบัง
-                        </Button>
-                        <Button
-                            size="md"
-                            colorScheme="teal"
-                            variant={(branch === "ชลบุรี") ? "outline" : "link"}
-                            onClick={() => setBranch("ชลบุรี")}
-                        >
-                            ชลบุรี
-                        </Button>
-                    </Flex>
-                </Flex>
-                <Divider my={3} orientation="horizontal" />
-
+                <SelectBranch
+                    title="เบิก/ยืม อุปกรณ์ IT"
+                    branch={branch}
+                    setBranch={setBranch}
+                />
                 {fetching && (
                     <Flex justify="center" mt="5">
                         <Spinner color="grey" height={50} width={50} />

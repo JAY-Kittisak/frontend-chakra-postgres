@@ -75,6 +75,7 @@ const menuItemsFooter = [
             { name: "จัดการของแจกลูกค้า", to: "/admin/manage-gives" },
             { name: "จัดการ Order ของแจกลูกค้า", to: "/admin/manage-give-orders" },
             { name: "จัดการ Job IT", to: "/admin/manage-job-it" },
+            { name: "จัดการ Stock IT", to: "/admin/manage-stock-it" },
         ],
     },
     { name: "Setting", to: "/setting", iconClassName: "bi bi-gear-fill" },

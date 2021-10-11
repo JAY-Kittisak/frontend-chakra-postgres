@@ -116,27 +116,27 @@ const ManageJobIT: React.FC<Props> = () => {
 
                     <Flex mt="3">
                         <Button
-                            size="lg"
+                            size="md"
                             colorScheme="teal"
-                            variant="link"
+                            variant={(branch === "All") ? "outline" : "link"}
                             mr="3"
                             onClick={() => setBranch("All")}
                         >
                             All
                         </Button>
                         <Button
-                            size="lg"
+                            size="md"
                             colorScheme="teal"
-                            variant="link"
+                            variant={(branch === "ลาดกระบัง") ? "outline" : "link"}
                             mr="3"
                             onClick={() => setBranch("ลาดกระบัง")}
                         >
                             ลาดกระบัง
                         </Button>
                         <Button
-                            size="lg"
+                            size="md"
                             colorScheme="teal"
-                            variant="link"
+                            variant={(branch === "ชลบุรี") ? "outline" : "link"}
                             onClick={() => setBranch("ชลบุรี")}
                         >
                             ชลบุรี

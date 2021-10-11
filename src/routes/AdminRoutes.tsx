@@ -5,6 +5,7 @@ import { useIsAuth } from '../utils/uselsAuth'
 import { useIsAdminAuth } from '../utils/useIsAdminAuth'
 import Administrator from '../pages/Administrator'
 import ManageGives from '../pages/ManageGives'
+import ManageStockIt from '../pages/ManageStockIt'
 import ManageGiveCategory from '../pages/ManageGiveCategory'
 import ManageGiveOrders from '../pages/ManageGiveOrders'
 import ManageGiveOrderDetail from '../pages/ManageGiveOrderDetail'
@@ -21,6 +22,9 @@ const AdminRoutes: React.FC<Props> = () => {
 
     return (
             <Switch>
+            <Route path="/admin/manage-stock-it">
+                <ManageStockIt />
+            </Route>
             <Route path="/admin/manage-job-it/:id">
                 <ManageJobITDetail />
             </Route>

@@ -23,6 +23,7 @@ const StockItDetail: React.FC<Props> = () => {
             id: +params.id,
         },
     });
+
     return (
         <>
             <Text
