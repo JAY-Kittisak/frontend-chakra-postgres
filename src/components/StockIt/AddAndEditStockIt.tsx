@@ -15,19 +15,17 @@ import {
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { Search2Icon } from "@chakra-ui/icons";
-import { RegularStockItFragment } from "../../generated/graphql";
+import { RegularStockItFragment, useCreateStockItMutation, FieldError, } from "../../generated/graphql";
 
 import InputField from "../InputField";
 import {
     fileType,
-    LocationIt,
     locationStock,
     itemIt,
-    BrandItem,
     brandItemIt,
-    Warranty,
     warrantyIt,
 } from "../../utils/helpers";
+import { toErrorMap } from "../../utils/toErrorMap";
 import SelectControl from "../Selectfield";
 
 interface Props {
@@ -40,16 +38,14 @@ const AddAndEditStockIt: React.FC<Props> = ({ Open, setOpen, stockToEdit }) => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [
         errorImage,
-        // setErrorImage
+        setErrorImage
     ] = useState(false);
     const [searchCat, setSearchCat] = useState("");
     // const [status, setStatus] = useState("");
-    const [location, setLocation] = useState<LocationIt>("Stock IT");
-    const [warranty, setWarranty] = useState<Warranty>("ประกัน 1 ปี");
-    const [brand, setBrand] = useState<BrandItem | any>("MICROSOFT");
-    const [branch, setBranch] = useState<"ลาดกระบัง" | "ชลบุรี">("ลาดกระบัง");
-
     const cancelRef = useRef();
+
+    const [, createStockIt] = useCreateStockItMutation();
+
     return (
         <AlertDialog
             size="4xl"
@@ -61,24 +57,57 @@ const AddAndEditStockIt: React.FC<Props> = ({ Open, setOpen, stockToEdit }) => {
                 initialValues={{
                     itemName: stockToEdit ? stockToEdit.itemName : "",
                     details: stockToEdit ? stockToEdit.details : "",
-                    location: stockToEdit ? stockToEdit.location : location,
+                    location: stockToEdit ? stockToEdit.location : "Stock IT",
                     serialNum: stockToEdit ? stockToEdit.serialNum : "",
-                    warranty: stockToEdit ? stockToEdit.warranty : warranty,
-                    price: stockToEdit ? stockToEdit.price : "",
-                    inventory: stockToEdit ? stockToEdit.inventory : "",
-                    branch: stockToEdit ? stockToEdit.branch : branch,
-                    brand: stockToEdit ? stockToEdit.brand : brand,
-                    category: stockToEdit ? stockToEdit.category : "",
+                    warranty: stockToEdit ? stockToEdit.warranty : "ประกัน 1 ปี",
+                    price: stockToEdit ? stockToEdit.price : 0,
+                    branch: stockToEdit ? stockToEdit.branch : "ลาดกระบัง",
+                    brand: stockToEdit ? stockToEdit.brand : "MICROSOFT",
+                    category: stockToEdit ? stockToEdit.category : "Battery UPS",
                 }}
-                onSubmit={async (values) => {
-                    // if (!selectedFile) return alert("เลือกรูปภาพที่ต้องการ Upload");
-                    // if (selectedFile.size >= 5000000) {
-                    //     setErrorImage(true);
+                onSubmit={async (values, { setErrors }) => {
+                    // if (!stockToEdit) {
+                        // if (!selectedFile) return alert("เลือกรูปภาพที่ต้องการ Upload");
+
+                        // if (selectedFile.size >= 5000000) {
+                        //     setErrorImage(true);
+                        // }
+
+                    const response = await createStockIt({
+                        input: values,
+                        // options: selectedFile,
+                    });
+
+                    if (response.data?.createStockIt.errors) {
+                        setErrorImage(false);
+                        setErrors(
+                            toErrorMap(response.data.createStockIt.errors as FieldError[])
+                        );
+                        alert("errors");
+                    } else if (response.data?.createStockIt.stockIt) {
+                        setErrorImage(false);
+                        setOpen();
+                        alert("stockIt");
+                    }
                     // }
+                    //  else if (stockToEdit) {
+                    //     const { id, details, price, category } = stockToEdit;
+                    //     const isNotEdited =
+                    //         details === values.details &&
+                    //         price === values.price &&
+                    //         category === values.category;
 
+                    //     if (isNotEdited) return setOpen();
 
-                    console.table(values);
-                    // console.log(values);
+                    //     const response = await updateGive({ id, input: values });
+                    //     if (response.data?.updateGive.errors) {
+                    //         setErrors(
+                    //             toErrorMap(response.data.updateGive.errors as FieldError[])
+                    //         );
+                    //     } else if (response.data?.updateGive.give) {
+                    //         setOpen();
+                    //     }
+                    // }
                 }}
             >
                 {({ isSubmitting }) => (
@@ -152,10 +181,7 @@ const AddAndEditStockIt: React.FC<Props> = ({ Open, setOpen, stockToEdit }) => {
                                                 Location
                                             </Text>
 
-                                            <SelectControl
-                                                name="location"
-                                                onChange={(e) => setLocation(e.target.value as LocationIt)}
-                                            >
+                                            <SelectControl name="location">
                                                 {locationStock.map((value, i) => (
                                                     <option key={i} value={value}>
                                                         {value}
@@ -171,10 +197,7 @@ const AddAndEditStockIt: React.FC<Props> = ({ Open, setOpen, stockToEdit }) => {
                                                 Warranty
                                             </Text>
 
-                                            <SelectControl
-                                                name="warranty"
-                                                onChange={(e) => setWarranty(e.target.value as Warranty)}
-                                            >
+                                            <SelectControl name="warranty">
                                                 {warrantyIt.map((value, i) => (
                                                     <option key={i} value={value}>
                                                         {value}
@@ -189,10 +212,7 @@ const AddAndEditStockIt: React.FC<Props> = ({ Open, setOpen, stockToEdit }) => {
                                                 Brand
                                             </Text>
 
-                                            <SelectControl
-                                                name="brand"
-                                                onChange={(e) => setBrand(e.target.value as BrandItem)}
-                                            >
+                                            <SelectControl name="brand">
                                                 {brandItemIt.map((value, i) => (
                                                     <option key={i} value={value}>
                                                         {value}
@@ -208,10 +228,7 @@ const AddAndEditStockIt: React.FC<Props> = ({ Open, setOpen, stockToEdit }) => {
                                                 Branch
                                             </Text>
 
-                                            <SelectControl
-                                                name="branch"
-                                                onChange={(e) => setBranch(e.target.value as "ลาดกระบัง" | "ชลบุรี")}
-                                            >
+                                            <SelectControl name="branch">
                                                 <option value="ลาดกระบัง">ลาดกระบัง</option>
                                                 <option value="ชลบุรี">ชลบุรี</option>
                                             </SelectControl>

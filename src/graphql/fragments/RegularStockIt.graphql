@@ -6,7 +6,6 @@ fragment RegularStockIt on StockIt {
       serialNum
       warranty
       price
-      inventory
       branch
       brand
       category

@@ -449,8 +449,7 @@ export type MutationJobItCommentArgs = {
 
 
 export type MutationCreateStockItArgs = {
-  options: Scalars['Upload'];
-  input: StockIt_Input;
+  input: StockItInput;
 };
 
 
@@ -595,7 +594,6 @@ export type StockIt = {
   serialNum: Scalars['String'];
   warranty: Scalars['String'];
   price: Scalars['Float'];
-  inventory: Scalars['Float'];
   branch: Scalars['String'];
   brand: Scalars['String'];
   category: Scalars['String'];
@@ -608,23 +606,22 @@ export type StockIt = {
   updatedAt: Scalars['String'];
 };
 
-export type StockItResponse = {
-  __typename?: 'StockItResponse';
-  errors?: Maybe<Array<FieldErrorStockIt>>;
-  stockIt?: Maybe<Array<StockIt>>;
-};
-
-export type StockIt_Input = {
+export type StockItInput = {
   itemName: Scalars['String'];
   details: Scalars['String'];
   location: Scalars['String'];
   serialNum: Scalars['String'];
   warranty: Scalars['String'];
   price: Scalars['Float'];
-  inventory: Scalars['Float'];
   branch: Scalars['String'];
   brand: Scalars['String'];
   category: Scalars['String'];
+};
+
+export type StockItResponse = {
+  __typename?: 'StockItResponse';
+  errors?: Maybe<Array<FieldErrorStockIt>>;
+  stockIt?: Maybe<Array<StockIt>>;
 };
 
 export type UpdateGiveCdcResponse = {
@@ -750,7 +747,7 @@ export type RegularManualAdFragment = (
 
 export type RegularStockItFragment = (
   { __typename?: 'StockIt' }
-  & Pick<StockIt, 'id' | 'itemName' | 'details' | 'location' | 'serialNum' | 'warranty' | 'price' | 'inventory' | 'branch' | 'brand' | 'category' | 'holdStatus' | 'status' | 'imageUrl' | 'useById' | 'createdAt' | 'updatedAt'>
+  & Pick<StockIt, 'id' | 'itemName' | 'details' | 'location' | 'serialNum' | 'warranty' | 'price' | 'branch' | 'brand' | 'category' | 'holdStatus' | 'status' | 'imageUrl' | 'useById' | 'createdAt' | 'updatedAt'>
   & { useBy?: Maybe<(
     { __typename?: 'User' }
     & Pick<User, 'fullNameTH' | 'departments' | 'roles'>
@@ -888,6 +885,25 @@ export type CreateProductByTierMutation = (
   & { createProductByTier: (
     { __typename?: 'ProductByTier' }
     & Pick<ProductByTier, 'id' | 'productName' | 'description' | 'category' | 'creatorId' | 'creatorName' | 'createdAt' | 'updatedAt'>
+  ) }
+);
+
+export type CreateStockItMutationVariables = Exact<{
+  input: StockItInput;
+}>;
+
+
+export type CreateStockItMutation = (
+  { __typename?: 'Mutation' }
+  & { createStockIt: (
+    { __typename?: 'StockItResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorStockIt' }
+      & Pick<FieldErrorStockIt, 'field' | 'message'>
+    )>>, stockIt?: Maybe<Array<(
+      { __typename?: 'StockIt' }
+      & RegularStockItFragment
+    )>> }
   ) }
 );
 
@@ -1571,7 +1587,6 @@ export const RegularStockItFragmentDoc = gql`
   serialNum
   warranty
   price
-  inventory
   branch
   brand
   category
@@ -1722,6 +1737,23 @@ export const CreateProductByTierDocument = gql`
 
 export function useCreateProductByTierMutation() {
   return Urql.useMutation<CreateProductByTierMutation, CreateProductByTierMutationVariables>(CreateProductByTierDocument);
+};
+export const CreateStockItDocument = gql`
+    mutation CreateStockIt($input: StockItInput!) {
+  createStockIt(input: $input) {
+    errors {
+      field
+      message
+    }
+    stockIt {
+      ...RegularStockIt
+    }
+  }
+}
+    ${RegularStockItFragmentDoc}`;
+
+export function useCreateStockItMutation() {
+  return Urql.useMutation<CreateStockItMutation, CreateStockItMutationVariables>(CreateStockItDocument);
 };
 export const DeleteGiveDocument = gql`
     mutation DeleteGive($id: Int!) {

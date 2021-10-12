@@ -109,6 +109,7 @@ export type CategoryItemIt =
     | "Mouse"
     | "UPS"
     | "PC"
+    | "อื่นๆ"
 export const itemIt: CategoryItemIt[] = [
     "Battery UPS",
     "NoteBook",
@@ -118,6 +119,7 @@ export const itemIt: CategoryItemIt[] = [
     "Mouse",
     "UPS",
     "PC",
+    "อื่นๆ"
 ];
 // ---------------------- Brand stock IT ----------------------
 export type BrandItem =
@@ -128,6 +130,7 @@ export type BrandItem =
     | "DELL"
     | "MSI"
     | "HP"
+    | "อื่นๆ"
 export const brandItemIt: BrandItem[] = [
     "MICROSOFT",
     "HUAWEI",
@@ -136,6 +139,7 @@ export const brandItemIt: BrandItem[] = [
     "DELL",
     "MSI",
     "HP",
+    "อื่นๆ",
 ];
 // ---------------------- location ----------------------
 export type LocationIt =
