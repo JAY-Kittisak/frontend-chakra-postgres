@@ -17,7 +17,8 @@ import { useStockItsQuery, RegularStockItFragment } from "../generated/graphql";
 import AdminStockItItem from "../components/StockIt/AdminStockItItem";
 import { useDialog } from "../components/dialogs/useDialog";
 import SelectBranch from "../components/SelectBranch";
-import AddAndEditStockIt from "../components/StockIt/AddAndEditStockIt";
+import AddStockIt from "../components/StockIt/AddStockIt";
+import EditStockIt from "../components/StockIt/EditStockIt";
 
 interface Props { }
 
@@ -29,6 +30,7 @@ const ManageStockIt: React.FC<Props> = () => {
     const [stockToEdit, setStockToEdit] = useState<RegularStockItFragment | null>(
         null
     );
+    const [isOpenEdit, setIsOpenEdit] = useState(false)
 
     const { isOpen, setIsOpen } = useDialog();
 
@@ -99,18 +101,23 @@ const ManageStockIt: React.FC<Props> = () => {
                                     </Text>
                                 </Button>
                                 {isOpen && (
-                                    <AddAndEditStockIt
+                                        <AddStockIt
                                         Open={true}
                                         setOpen={() => setIsOpen(false)}
-                                        stockToEdit={stockToEdit}
-                                    />
-                                )}
+                                        />
+                                    )}
+                                    {isOpenEdit && (
+                                        <EditStockIt
+                                            Open={true}
+                                            setOpenEdit={() => setIsOpenEdit(false)}
+                                            stockToEdit={stockToEdit}
+                                        />
+                                    )}
                             </Center>
                             <Flex w="100%" overflowX="auto" rounded="7px" boxShadow="md">
                                 <Table
-                                    variant="striped"
-                                    colorScheme="whiteAlpha"
-                                    _hover={{ bgColor: "#eee" }}
+                                        variant="simple"
+                                        colorScheme="blackAlpha"
                                 >
                                     <Thead>
                                         <Tr bg="#028174">
@@ -178,7 +185,7 @@ const ManageStockIt: React.FC<Props> = () => {
                                                 <AdminStockItItem
                                                     key={value.id}
                                                     item={value}
-                                                    setOpen={() => setIsOpen(true)}
+                                                    setOpenEdit={() => setIsOpenEdit(true)}
                                                     setStockToEdit={setStockToEdit}
                                                 />
                                             ))}

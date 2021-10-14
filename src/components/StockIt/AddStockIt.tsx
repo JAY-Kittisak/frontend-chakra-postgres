@@ -1,10 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, {
+    useState,
+    useRef
+} from "react";
 import {
     Flex,
     Text,
     Button,
-    Input,
-    Icon,
     AlertDialog,
     AlertDialogBody,
     AlertDialogFooter,
@@ -14,8 +15,7 @@ import {
     ModalCloseButton,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import { Search2Icon } from "@chakra-ui/icons";
-import { RegularStockItFragment, useCreateStockItMutation, FieldError, } from "../../generated/graphql";
+import { useCreateStockItMutation, FieldError, } from "../../generated/graphql";
 
 import InputField from "../InputField";
 import {
@@ -31,17 +31,15 @@ import SelectControl from "../Selectfield";
 interface Props {
     Open: boolean;
     setOpen: () => void;
-    stockToEdit: RegularStockItFragment | null;
 }
 
-const AddAndEditStockIt: React.FC<Props> = ({ Open, setOpen, stockToEdit }) => {
+const AddStockIt: React.FC<Props> = ({ Open, setOpen }) => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [
         errorImage,
         setErrorImage
     ] = useState(false);
-    const [searchCat, setSearchCat] = useState("");
-    // const [status, setStatus] = useState("");
+
     const cancelRef = useRef();
 
     const [, createStockIt] = useCreateStockItMutation();
@@ -55,27 +53,27 @@ const AddAndEditStockIt: React.FC<Props> = ({ Open, setOpen, stockToEdit }) => {
         >
             <Formik
                 initialValues={{
-                    itemName: stockToEdit ? stockToEdit.itemName : "",
-                    details: stockToEdit ? stockToEdit.details : "",
-                    location: stockToEdit ? stockToEdit.location : "Stock IT",
-                    serialNum: stockToEdit ? stockToEdit.serialNum : "",
-                    warranty: stockToEdit ? stockToEdit.warranty : "ประกัน 1 ปี",
-                    price: stockToEdit ? stockToEdit.price : 0,
-                    branch: stockToEdit ? stockToEdit.branch : "ลาดกระบัง",
-                    brand: stockToEdit ? stockToEdit.brand : "MICROSOFT",
-                    category: stockToEdit ? stockToEdit.category : "Battery UPS",
+                    itemName: "",
+                    details: "",
+                    location: "Stock IT",
+                    serialNum: "",
+                    warranty: "ประกัน 1 ปี",
+                    price: 0,
+                    branch: "ลาดกระบัง",
+                    brand: "MICROSOFT",
+                    category: "Battery UPS",
                 }}
                 onSubmit={async (values, { setErrors }) => {
-                    // if (!stockToEdit) {
-                        // if (!selectedFile) return alert("เลือกรูปภาพที่ต้องการ Upload");
+                    if (!selectedFile) return alert("เลือกรูปภาพที่ต้องการ Upload");
 
-                        // if (selectedFile.size >= 5000000) {
-                        //     setErrorImage(true);
-                        // }
+                    if (selectedFile.size >= 5000000) {
+                        setErrorImage(true);
+                    }
+                    console.table(values)
 
                     const response = await createStockIt({
                         input: values,
-                        // options: selectedFile,
+                        options: selectedFile,
                     });
 
                     if (response.data?.createStockIt.errors) {
@@ -83,32 +81,12 @@ const AddAndEditStockIt: React.FC<Props> = ({ Open, setOpen, stockToEdit }) => {
                         setErrors(
                             toErrorMap(response.data.createStockIt.errors as FieldError[])
                         );
-                        alert("errors");
                     } else if (response.data?.createStockIt.stockIt) {
                         setErrorImage(false);
                         setOpen();
-                        alert("stockIt");
                     }
-                    // }
-                    //  else if (stockToEdit) {
-                    //     const { id, details, price, category } = stockToEdit;
-                    //     const isNotEdited =
-                    //         details === values.details &&
-                    //         price === values.price &&
-                    //         category === values.category;
-
-                    //     if (isNotEdited) return setOpen();
-
-                    //     const response = await updateGive({ id, input: values });
-                    //     if (response.data?.updateGive.errors) {
-                    //         setErrors(
-                    //             toErrorMap(response.data.updateGive.errors as FieldError[])
-                    //         );
-                    //     } else if (response.data?.updateGive.give) {
-                    //         setOpen();
-                    //     }
-                    // }
-                }}
+                }
+                }
             >
                 {({ isSubmitting }) => (
                     <AlertDialogOverlay>
@@ -138,39 +116,38 @@ const AddAndEditStockIt: React.FC<Props> = ({ Open, setOpen, stockToEdit }) => {
                                                 placeholder="S/N"
                                                 label="Serial Number"
                                             />
+                                            {/* FIXME: ถ้าเป็น Number ต้องใส่ type="number" */}
                                             <InputField
+                                                type="number"
                                                 name="price"
                                                 placeholder="ราคา"
                                                 label="Price"
                                             />
-
-                                            {!stockToEdit && (
-                                                <Flex flexDir="column">
-                                                    <Text
-                                                        fontWeight="semibold"
-                                                        fontSize={["sm", "md"]}
-                                                        mb="2"
-                                                    >
-                                                        Image
-                                                    </Text>
-                                                    <input
-                                                        name="imageUrl"
-                                                        type="file"
-                                                        onChange={(e) => {
-                                                            const files = e.target.files;
-                                                            if (!files || !files[0]) return;
-                                                            const file = files[0];
-                                                            if (!fileType.includes(file.type)) {
-                                                                alert(
-                                                                    'Wrong file format, allow only "png" or "jpeg" or "jpg"'
-                                                                );
-                                                                return;
-                                                            }
-                                                            setSelectedFile(file);
-                                                        }}
-                                                    />
-                                                </Flex>
-                                            )}
+                                            <Flex flexDir="column">
+                                                <Text
+                                                    fontWeight="semibold"
+                                                    fontSize={["sm", "md"]}
+                                                    mb="2"
+                                                >
+                                                    Image
+                                                </Text>
+                                                <input
+                                                    name="imageUrl"
+                                                    type="file"
+                                                    onChange={(e) => {
+                                                        const files = e.target.files;
+                                                        if (!files || !files[0]) return;
+                                                        const file = files[0];
+                                                        if (!fileType.includes(file.type)) {
+                                                            alert(
+                                                                'Wrong file format, allow only "png" or "jpeg" or "jpg"'
+                                                            );
+                                                            return;
+                                                        }
+                                                        setSelectedFile(file);
+                                                    }}
+                                                />
+                                            </Flex>
                                         </Flex>
                                         <Flex flexDir="column" w="50%" ml="5">
                                             <Text
@@ -240,45 +217,15 @@ const AddAndEditStockIt: React.FC<Props> = ({ Open, setOpen, stockToEdit }) => {
                                             >
                                                 Category
                                             </Text>
-                                            <Flex p="1">
-                                                {itemIt && (
-                                                    <SelectControl name="category">
-                                                        {itemIt
-                                                            .filter((val) => {
-                                                                if (searchCat === "") {
-                                                                    return val;
-                                                                } else if (
-                                                                    val
-                                                                        .toLowerCase()
-                                                                        .includes(searchCat.toLowerCase())
-                                                                ) {
-                                                                    return val;
-                                                                }
-                                                                return false;
-                                                            })
-                                                            .map((val, i) => (
-                                                                <option key={i} value={val}>
-                                                                    {val}
-                                                                </option>
-                                                            ))}
-                                                    </SelectControl>
-                                                )}
-
-                                                <Flex p="3">
-                                                    <Icon as={Search2Icon} />
-                                                </Flex>
-                                                <Input
-                                                    ml="-2"
-                                                    w="150px"
-                                                    className="searchInput"
-                                                    type="text"
-                                                    placeholder="Search..."
-                                                    onChange={(event) => {
-                                                        setSearchCat(event.target.value);
-                                                    }}
-                                                />
-                                            </Flex>
-
+                                            {itemIt && (
+                                                <SelectControl name="category">
+                                                    {itemIt.map((val, i) => (
+                                                        <option key={i} value={val}>
+                                                            {val}
+                                                        </option>
+                                                    ))}
+                                                </SelectControl>
+                                            )}
                                             {errorImage && (
                                                 <>
                                                     <Text color="yellow.400" p="3">
@@ -313,4 +260,4 @@ const AddAndEditStockIt: React.FC<Props> = ({ Open, setOpen, stockToEdit }) => {
     );
 };
 
-export default AddAndEditStockIt;
+export default AddStockIt;

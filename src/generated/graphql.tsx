@@ -449,6 +449,7 @@ export type MutationJobItCommentArgs = {
 
 
 export type MutationCreateStockItArgs = {
+  options: Scalars['Upload'];
   input: StockItInput;
 };
 
@@ -890,6 +891,7 @@ export type CreateProductByTierMutation = (
 
 export type CreateStockItMutationVariables = Exact<{
   input: StockItInput;
+  options: Scalars['Upload'];
 }>;
 
 
@@ -1739,8 +1741,8 @@ export function useCreateProductByTierMutation() {
   return Urql.useMutation<CreateProductByTierMutation, CreateProductByTierMutationVariables>(CreateProductByTierDocument);
 };
 export const CreateStockItDocument = gql`
-    mutation CreateStockIt($input: StockItInput!) {
-  createStockIt(input: $input) {
+    mutation CreateStockIt($input: StockItInput!, $options: Upload!) {
+  createStockIt(input: $input, options: $options) {
     errors {
       field
       message

@@ -165,3 +165,13 @@ export const warrantyIt: Warranty[] = [
     "ประกัน 5 ปี",
     "ประกัน LT."
 ];
+// ---------------------- Hold Status ----------------------
+export type Hold =
+    | "ว่าง"
+    | "เบิก"
+    | "ยืม"
+export const holdItem: Hold[] = [
+    "ว่าง",
+    "เบิก",
+    "ยืม"
+];

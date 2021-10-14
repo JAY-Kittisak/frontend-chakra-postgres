@@ -1,5 +1,5 @@
-mutation CreateStockIt($input: StockItInput!){
-  createStockIt(input: $input){
+mutation CreateStockIt($input: StockItInput!,$options: Upload!){
+  createStockIt(input: $input,options: $options){
     errors{
       field
       message
