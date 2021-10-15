@@ -283,7 +283,10 @@ export type Mutation = {
   updateJobIT: JobIt;
   jobITComment: JobIt;
   createStockIt: StockItResponse;
+  updateStockIt: UpdateStockItResponse;
   deleteStockIt: Scalars['Boolean'];
+  createStockItOrder: StockItOrderResponse;
+  deleteStockItOrder: Scalars['Boolean'];
 };
 
 
@@ -454,8 +457,24 @@ export type MutationCreateStockItArgs = {
 };
 
 
+export type MutationUpdateStockItArgs = {
+  input: StockItInput;
+  id: Scalars['Int'];
+};
+
+
 export type MutationDeleteStockItArgs = {
-  id: Scalars['Float'];
+  id: Scalars['Int'];
+};
+
+
+export type MutationCreateStockItOrderArgs = {
+  input: StockItOrderInput;
+};
+
+
+export type MutationDeleteStockItOrderArgs = {
+  id: Scalars['Int'];
 };
 
 export type ProductByTier = {
@@ -509,6 +528,8 @@ export type Query = {
   jobITByCreatorId: Array<JobIt>;
   stockIts?: Maybe<Array<StockIt>>;
   stockItById: StockIt;
+  stockItOrders?: Maybe<Array<StockItOrder>>;
+  stockItOrderById: StockItOrder;
 };
 
 
@@ -571,6 +592,11 @@ export type QueryStockItByIdArgs = {
   id: Scalars['Int'];
 };
 
+
+export type QueryStockItOrderByIdArgs = {
+  id: Scalars['Int'];
+};
+
 export type QueryJobIt_Input = {
   nameItAction?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
@@ -590,7 +616,7 @@ export type StockIt = {
   __typename?: 'StockIt';
   id: Scalars['Float'];
   itemName: Scalars['String'];
-  details: Scalars['String'];
+  detail: Scalars['String'];
   location: Scalars['String'];
   serialNum: Scalars['String'];
   warranty: Scalars['String'];
@@ -598,18 +624,15 @@ export type StockIt = {
   branch: Scalars['String'];
   brand: Scalars['String'];
   category: Scalars['String'];
-  holdStatus: Scalars['String'];
-  status: Scalars['String'];
+  orders: Array<StockItOrder>;
   imageUrl?: Maybe<Scalars['String']>;
-  useById?: Maybe<Scalars['Float']>;
-  useBy?: Maybe<User>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
 
 export type StockItInput = {
   itemName: Scalars['String'];
-  details: Scalars['String'];
+  detail: Scalars['String'];
   location: Scalars['String'];
   serialNum: Scalars['String'];
   warranty: Scalars['String'];
@@ -617,6 +640,33 @@ export type StockItInput = {
   branch: Scalars['String'];
   brand: Scalars['String'];
   category: Scalars['String'];
+};
+
+export type StockItOrder = {
+  __typename?: 'StockItOrder';
+  id: Scalars['Float'];
+  detail?: Maybe<Scalars['String']>;
+  branch: Scalars['String'];
+  creatorId: Scalars['Float'];
+  stockItId: Scalars['Float'];
+  holdStatus: Scalars['String'];
+  status: Scalars['String'];
+  creator: User;
+  stockIt: StockIt;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type StockItOrderInput = {
+  detail?: Maybe<Scalars['String']>;
+  stockItId: Scalars['Float'];
+  holdStatus: Scalars['String'];
+};
+
+export type StockItOrderResponse = {
+  __typename?: 'StockItOrderResponse';
+  errors?: Maybe<Array<FieldErrorStockIt>>;
+  stockItOrder?: Maybe<Array<StockItOrder>>;
 };
 
 export type StockItResponse = {
@@ -649,6 +699,12 @@ export type UpdateGiveResponse = {
   give?: Maybe<Give>;
 };
 
+export type UpdateStockItResponse = {
+  __typename?: 'UpdateStockItResponse';
+  errors?: Maybe<Array<FieldErrorStockIt>>;
+  stockIt?: Maybe<StockIt>;
+};
+
 
 export type User = {
   __typename?: 'User';
@@ -664,7 +720,7 @@ export type User = {
   giveOrders: Array<GiveOrder>;
   giveOrdersCdc: Array<GiveOrderCdc>;
   jobITs: Array<JobIt>;
-  stockIts: Array<StockIt>;
+  stockItOrders: Array<StockItOrder>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -748,11 +804,27 @@ export type RegularManualAdFragment = (
 
 export type RegularStockItFragment = (
   { __typename?: 'StockIt' }
-  & Pick<StockIt, 'id' | 'itemName' | 'details' | 'location' | 'serialNum' | 'warranty' | 'price' | 'branch' | 'brand' | 'category' | 'holdStatus' | 'status' | 'imageUrl' | 'useById' | 'createdAt' | 'updatedAt'>
-  & { useBy?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'fullNameTH' | 'departments' | 'roles'>
+  & Pick<StockIt, 'id' | 'itemName' | 'detail' | 'location' | 'serialNum' | 'warranty' | 'price' | 'branch' | 'brand' | 'category' | 'imageUrl' | 'createdAt' | 'updatedAt'>
+  & { orders: Array<(
+    { __typename?: 'StockItOrder' }
+    & Pick<StockItOrder, 'id' | 'holdStatus' | 'updatedAt'>
+    & { creator: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'fullNameTH'>
+    ) }
   )> }
+);
+
+export type RegularStockItOrderFragment = (
+  { __typename?: 'StockItOrder' }
+  & Pick<StockItOrder, 'id' | 'detail' | 'branch' | 'creatorId' | 'stockItId' | 'holdStatus' | 'status' | 'createdAt' | 'updatedAt'>
+  & { creator: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'fullNameTH'>
+  ), stockIt: (
+    { __typename?: 'StockIt' }
+    & Pick<StockIt, 'id' | 'itemName'>
+  ) }
 );
 
 export type RegularUserFragment = (
@@ -909,6 +981,25 @@ export type CreateStockItMutation = (
   ) }
 );
 
+export type CreateStockItOrderMutationVariables = Exact<{
+  input: StockItOrderInput;
+}>;
+
+
+export type CreateStockItOrderMutation = (
+  { __typename?: 'Mutation' }
+  & { createStockItOrder: (
+    { __typename?: 'StockItOrderResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorStockIt' }
+      & Pick<FieldErrorStockIt, 'field' | 'message'>
+    )>>, stockItOrder?: Maybe<Array<(
+      { __typename?: 'StockItOrder' }
+      & RegularStockItOrderFragment
+    )>> }
+  ) }
+);
+
 export type DeleteGiveMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -965,6 +1056,26 @@ export type DeleteGiveOrderCdcMutationVariables = Exact<{
 export type DeleteGiveOrderCdcMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'deleteGiveOrderCdc'>
+);
+
+export type DeleteStockItMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteStockItMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteStockIt'>
+);
+
+export type DeleteStockItOrderMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteStockItOrderMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteStockItOrder'>
 );
 
 export type JobItCommentMutationVariables = Exact<{
@@ -1128,6 +1239,26 @@ export type UpdateJobItMutation = (
   & { updateJobIT: (
     { __typename?: 'JobIT' }
     & RegularJobItFragment
+  ) }
+);
+
+export type UpdateStockItMutationVariables = Exact<{
+  id: Scalars['Int'];
+  input: StockItInput;
+}>;
+
+
+export type UpdateStockItMutation = (
+  { __typename?: 'Mutation' }
+  & { updateStockIt: (
+    { __typename?: 'UpdateStockItResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorStockIt' }
+      & Pick<FieldErrorStockIt, 'field' | 'message'>
+    )>>, stockIt?: Maybe<(
+      { __typename?: 'StockIt' }
+      & RegularStockItFragment
+    )> }
   ) }
 );
 
@@ -1463,6 +1594,30 @@ export type MeQuery = (
   )> }
 );
 
+export type StockItOrderByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type StockItOrderByIdQuery = (
+  { __typename?: 'Query' }
+  & { stockItOrderById: (
+    { __typename?: 'StockItOrder' }
+    & RegularStockItOrderFragment
+  ) }
+);
+
+export type StockItOrdersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StockItOrdersQuery = (
+  { __typename?: 'Query' }
+  & { stockItOrders?: Maybe<Array<(
+    { __typename?: 'StockItOrder' }
+    & RegularStockItOrderFragment
+  )>> }
+);
+
 export const RegularGiveCatFragmentDoc = gql`
     fragment RegularGiveCat on GiveCategory {
   id
@@ -1584,7 +1739,7 @@ export const RegularStockItFragmentDoc = gql`
     fragment RegularStockIt on StockIt {
   id
   itemName
-  details
+  detail
   location
   serialNum
   warranty
@@ -1592,16 +1747,38 @@ export const RegularStockItFragmentDoc = gql`
   branch
   brand
   category
-  holdStatus
-  status
   imageUrl
-  useById
   createdAt
   updatedAt
-  useBy {
+  orders {
+    id
+    holdStatus
+    updatedAt
+    creator {
+      id
+      fullNameTH
+    }
+  }
+}
+    `;
+export const RegularStockItOrderFragmentDoc = gql`
+    fragment RegularStockItOrder on StockItOrder {
+  id
+  detail
+  branch
+  creatorId
+  stockItId
+  holdStatus
+  status
+  createdAt
+  updatedAt
+  creator {
+    id
     fullNameTH
-    departments
-    roles
+  }
+  stockIt {
+    id
+    itemName
   }
 }
     `;
@@ -1757,6 +1934,23 @@ export const CreateStockItDocument = gql`
 export function useCreateStockItMutation() {
   return Urql.useMutation<CreateStockItMutation, CreateStockItMutationVariables>(CreateStockItDocument);
 };
+export const CreateStockItOrderDocument = gql`
+    mutation CreateStockItOrder($input: StockItOrderInput!) {
+  createStockItOrder(input: $input) {
+    errors {
+      field
+      message
+    }
+    stockItOrder {
+      ...RegularStockItOrder
+    }
+  }
+}
+    ${RegularStockItOrderFragmentDoc}`;
+
+export function useCreateStockItOrderMutation() {
+  return Urql.useMutation<CreateStockItOrderMutation, CreateStockItOrderMutationVariables>(CreateStockItOrderDocument);
+};
 export const DeleteGiveDocument = gql`
     mutation DeleteGive($id: Int!) {
   deleteGive(id: $id) {
@@ -1808,6 +2002,24 @@ export const DeleteGiveOrderCdcDocument = gql`
 
 export function useDeleteGiveOrderCdcMutation() {
   return Urql.useMutation<DeleteGiveOrderCdcMutation, DeleteGiveOrderCdcMutationVariables>(DeleteGiveOrderCdcDocument);
+};
+export const DeleteStockItDocument = gql`
+    mutation DeleteStockIt($id: Int!) {
+  deleteStockIt(id: $id)
+}
+    `;
+
+export function useDeleteStockItMutation() {
+  return Urql.useMutation<DeleteStockItMutation, DeleteStockItMutationVariables>(DeleteStockItDocument);
+};
+export const DeleteStockItOrderDocument = gql`
+    mutation DeleteStockItOrder($id: Int!) {
+  deleteStockItOrder(id: $id)
+}
+    `;
+
+export function useDeleteStockItOrderMutation() {
+  return Urql.useMutation<DeleteStockItOrderMutation, DeleteStockItOrderMutationVariables>(DeleteStockItOrderDocument);
 };
 export const JobItCommentDocument = gql`
     mutation JobITComment($id: Int!, $input: String!) {
@@ -1950,6 +2162,23 @@ export const UpdateJobItDocument = gql`
 
 export function useUpdateJobItMutation() {
   return Urql.useMutation<UpdateJobItMutation, UpdateJobItMutationVariables>(UpdateJobItDocument);
+};
+export const UpdateStockItDocument = gql`
+    mutation UpdateStockIt($id: Int!, $input: StockItInput!) {
+  updateStockIt(id: $id, input: $input) {
+    errors {
+      field
+      message
+    }
+    stockIt {
+      ...RegularStockIt
+    }
+  }
+}
+    ${RegularStockItFragmentDoc}`;
+
+export function useUpdateStockItMutation() {
+  return Urql.useMutation<UpdateStockItMutation, UpdateStockItMutationVariables>(UpdateStockItDocument);
 };
 export const UpdateUserDocument = gql`
     mutation UpdateUser($options: updateUserInput!) {
@@ -2312,4 +2541,26 @@ export const MeDocument = gql`
 
 export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
+};
+export const StockItOrderByIdDocument = gql`
+    query stockItOrderById($id: Int!) {
+  stockItOrderById(id: $id) {
+    ...RegularStockItOrder
+  }
+}
+    ${RegularStockItOrderFragmentDoc}`;
+
+export function useStockItOrderByIdQuery(options: Omit<Urql.UseQueryArgs<StockItOrderByIdQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<StockItOrderByIdQuery>({ query: StockItOrderByIdDocument, ...options });
+};
+export const StockItOrdersDocument = gql`
+    query StockItOrders {
+  stockItOrders {
+    ...RegularStockItOrder
+  }
+}
+    ${RegularStockItOrderFragmentDoc}`;
+
+export function useStockItOrdersQuery(options: Omit<Urql.UseQueryArgs<StockItOrdersQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<StockItOrdersQuery>({ query: StockItOrdersDocument, ...options });
 };

@@ -1,0 +1,11 @@
+mutation UpdateStockIt($id: Int!, $input: StockItInput!) {
+  updateStockIt(id: $id, input: $input) {
+    errors {
+      field
+      message
+    }
+    stockIt{
+        ...RegularStockIt
+    }
+  }
+}

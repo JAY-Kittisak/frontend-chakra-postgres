@@ -1,0 +1,19 @@
+fragment RegularStockItOrder on StockItOrder {
+      id
+      detail
+      branch
+      creatorId
+      stockItId
+      holdStatus
+      status
+      createdAt
+      updatedAt
+      creator {
+        id
+        fullNameTH
+      }
+      stockIt {
+        id
+        itemName
+      }
+}

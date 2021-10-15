@@ -1,0 +1,3 @@
+mutation DeleteStockIt($id: Int!){
+  deleteStockIt(id:$id)
+}

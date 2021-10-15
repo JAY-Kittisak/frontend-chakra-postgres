@@ -15,7 +15,12 @@ import {
     ModalCloseButton,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import { useCreateStockItMutation, FieldError, } from "../../generated/graphql";
+import {
+    useCreateStockItMutation,
+    FieldError,
+    RegularStockItFragment,
+    useUpdateStockItMutation
+} from "../../generated/graphql";
 
 import InputField from "../InputField";
 import {
@@ -31,9 +36,10 @@ import SelectControl from "../Selectfield";
 interface Props {
     Open: boolean;
     setOpen: () => void;
+    stockToEdit: RegularStockItFragment | null;
 }
 
-const AddStockIt: React.FC<Props> = ({ Open, setOpen }) => {
+const AddAndEditStockIt: React.FC<Props> = ({ Open, setOpen, stockToEdit }) => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [
         errorImage,
@@ -43,6 +49,7 @@ const AddStockIt: React.FC<Props> = ({ Open, setOpen }) => {
     const cancelRef = useRef();
 
     const [, createStockIt] = useCreateStockItMutation();
+    const [, updateStockIt] = useUpdateStockItMutation();
 
     return (
         <AlertDialog
@@ -53,37 +60,60 @@ const AddStockIt: React.FC<Props> = ({ Open, setOpen }) => {
         >
             <Formik
                 initialValues={{
-                    itemName: "",
-                    details: "",
-                    location: "Stock IT",
-                    serialNum: "",
-                    warranty: "ประกัน 1 ปี",
-                    price: 0,
-                    branch: "ลาดกระบัง",
-                    brand: "MICROSOFT",
-                    category: "Battery UPS",
+                    itemName: stockToEdit ? stockToEdit.itemName : "",
+                    detail: stockToEdit ? stockToEdit.detail : "",
+                    location: stockToEdit ? stockToEdit.location : "Stock IT",
+                    serialNum: stockToEdit ? stockToEdit.serialNum : "",
+                    warranty: stockToEdit ? stockToEdit.warranty : "ประกัน 1 ปี",
+                    price: stockToEdit ? stockToEdit.price : 0,
+                    branch: stockToEdit ? stockToEdit.branch : "ลาดกระบัง",
+                    brand: stockToEdit ? stockToEdit.brand : "MICROSOFT",
+                    category: stockToEdit ? stockToEdit.category : "Battery UPS",
                 }}
                 onSubmit={async (values, { setErrors }) => {
-                    if (!selectedFile) return alert("เลือกรูปภาพที่ต้องการ Upload");
+                    if (!stockToEdit) {
+                        if (!selectedFile) return alert("เลือกรูปภาพที่ต้องการ Upload");
 
-                    if (selectedFile.size >= 5000000) {
-                        setErrorImage(true);
-                    }
-                    console.table(values)
+                        if (selectedFile.size >= 5000000) {
+                            setErrorImage(true);
+                        }
+                        console.table(values)
 
-                    const response = await createStockIt({
-                        input: values,
-                        options: selectedFile,
-                    });
+                        const response = await createStockIt({
+                            input: values,
+                            options: selectedFile,
+                        });
 
-                    if (response.data?.createStockIt.errors) {
-                        setErrorImage(false);
-                        setErrors(
-                            toErrorMap(response.data.createStockIt.errors as FieldError[])
-                        );
-                    } else if (response.data?.createStockIt.stockIt) {
-                        setErrorImage(false);
-                        setOpen();
+                        if (response.data?.createStockIt.errors) {
+                            setErrorImage(false);
+                            setErrors(
+                                toErrorMap(response.data.createStockIt.errors as FieldError[])
+                            );
+                        } else if (response.data?.createStockIt.stockIt) {
+                            setErrorImage(false);
+                            setOpen();
+                        }
+                    } else if (stockToEdit) {
+                        const isNotEdited =
+                            stockToEdit.itemName === values.itemName &&
+                            stockToEdit.detail === values.detail &&
+                            stockToEdit.location === values.location &&
+                            stockToEdit.serialNum === values.serialNum &&
+                            stockToEdit.warranty === values.warranty &&
+                            stockToEdit.price === values.price &&
+                            stockToEdit.branch === values.branch &&
+                            stockToEdit.brand === values.brand &&
+                            stockToEdit.category === values.category
+
+                        if (isNotEdited) return setOpen();
+
+                        const response = await updateStockIt({ id: stockToEdit.id, input: values });
+                        if (response.data?.updateStockIt.errors) {
+                            setErrors(toErrorMap(response.data.updateStockIt.errors as FieldError[]));
+                        } else if (response.data?.updateStockIt.stockIt) {
+                            setOpen();
+                        }
+
                     }
                 }
                 }
@@ -107,9 +137,9 @@ const AddStockIt: React.FC<Props> = ({ Open, setOpen }) => {
                                             />
                                             <InputField
                                                 textarea
-                                                name="details"
-                                                placeholder="details..."
-                                                label="Details"
+                                                name="detail"
+                                                placeholder="detail..."
+                                                label="Detail"
                                             />
                                             <InputField
                                                 name="serialNum"
@@ -123,31 +153,33 @@ const AddStockIt: React.FC<Props> = ({ Open, setOpen }) => {
                                                 placeholder="ราคา"
                                                 label="Price"
                                             />
-                                            <Flex flexDir="column">
-                                                <Text
-                                                    fontWeight="semibold"
-                                                    fontSize={["sm", "md"]}
-                                                    mb="2"
-                                                >
-                                                    Image
-                                                </Text>
-                                                <input
-                                                    name="imageUrl"
-                                                    type="file"
-                                                    onChange={(e) => {
-                                                        const files = e.target.files;
-                                                        if (!files || !files[0]) return;
-                                                        const file = files[0];
-                                                        if (!fileType.includes(file.type)) {
-                                                            alert(
-                                                                'Wrong file format, allow only "png" or "jpeg" or "jpg"'
-                                                            );
-                                                            return;
-                                                        }
-                                                        setSelectedFile(file);
-                                                    }}
-                                                />
-                                            </Flex>
+                                            {!stockToEdit && (
+                                                <Flex flexDir="column">
+                                                    <Text
+                                                        fontWeight="semibold"
+                                                        fontSize={["sm", "md"]}
+                                                        mb="2"
+                                                    >
+                                                        Image
+                                                    </Text>
+                                                    <input
+                                                        name="imageUrl"
+                                                        type="file"
+                                                        onChange={(e) => {
+                                                            const files = e.target.files;
+                                                            if (!files || !files[0]) return;
+                                                            const file = files[0];
+                                                            if (!fileType.includes(file.type)) {
+                                                                alert(
+                                                                    'Wrong file format, allow only "png" or "jpeg" or "jpg"'
+                                                                );
+                                                                return;
+                                                            }
+                                                            setSelectedFile(file);
+                                                        }}
+                                                    />
+                                                </Flex>
+                                            )}
                                         </Flex>
                                         <Flex flexDir="column" w="50%" ml="5">
                                             <Text
@@ -260,4 +292,4 @@ const AddStockIt: React.FC<Props> = ({ Open, setOpen }) => {
     );
 };
 
-export default AddStockIt;
+export default AddAndEditStockIt;

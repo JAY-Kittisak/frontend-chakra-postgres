@@ -1,0 +1,11 @@
+mutation CreateStockItOrder($input: StockItOrderInput!) {
+  createStockItOrder(input: $input) {
+    errors {
+      field
+      message
+    }
+    stockItOrder {
+      ...RegularStockItOrder
+    }
+  }
+}

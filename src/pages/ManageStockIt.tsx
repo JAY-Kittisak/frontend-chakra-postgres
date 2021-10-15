@@ -17,8 +17,7 @@ import { useStockItsQuery, RegularStockItFragment } from "../generated/graphql";
 import AdminStockItItem from "../components/StockIt/AdminStockItItem";
 import { useDialog } from "../components/dialogs/useDialog";
 import SelectBranch from "../components/SelectBranch";
-import AddStockIt from "../components/StockIt/AddStockIt";
-import EditStockIt from "../components/StockIt/EditStockIt";
+import AddAndEditStockIt from "../components/StockIt/AddAndEditStockIt";
 
 interface Props { }
 
@@ -30,8 +29,6 @@ const ManageStockIt: React.FC<Props> = () => {
     const [stockToEdit, setStockToEdit] = useState<RegularStockItFragment | null>(
         null
     );
-    const [isOpenEdit, setIsOpenEdit] = useState(false)
-
     const { isOpen, setIsOpen } = useDialog();
 
     const [{ data, fetching }] = useStockItsQuery();
@@ -101,15 +98,9 @@ const ManageStockIt: React.FC<Props> = () => {
                                     </Text>
                                 </Button>
                                 {isOpen && (
-                                        <AddStockIt
+                                        <AddAndEditStockIt
                                         Open={true}
-                                        setOpen={() => setIsOpen(false)}
-                                        />
-                                    )}
-                                    {isOpenEdit && (
-                                        <EditStockIt
-                                            Open={true}
-                                            setOpenEdit={() => setIsOpenEdit(false)}
+                                            setOpen={() => setIsOpen(false)}
                                             stockToEdit={stockToEdit}
                                         />
                                     )}
@@ -167,7 +158,7 @@ const ManageStockIt: React.FC<Props> = () => {
                                                 color="white"
                                                 w="15%"
                                             >
-                                                สถานะ Job
+                                                    location
                                             </Th>
                                             <Th
                                                 textAlign="center"
@@ -185,7 +176,7 @@ const ManageStockIt: React.FC<Props> = () => {
                                                 <AdminStockItItem
                                                     key={value.id}
                                                     item={value}
-                                                    setOpenEdit={() => setIsOpenEdit(true)}
+                                                    setOpenEdit={() => setIsOpen(true)}
                                                     setStockToEdit={setStockToEdit}
                                                 />
                                             ))}

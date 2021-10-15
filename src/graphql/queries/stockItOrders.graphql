@@ -1,0 +1,5 @@
+query StockItOrders {
+  stockItOrders {
+      ...RegularStockItOrder
+  }
+}

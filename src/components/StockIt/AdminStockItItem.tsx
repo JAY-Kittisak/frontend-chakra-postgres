@@ -1,11 +1,11 @@
 import React, { useState, useRef } from 'react'
 import {
-    Tr, Td, Center, IconButton, Text, Flex, Image, Heading,
+    Tr, Td, Center, IconButton, Text, Flex, Image, Heading, Divider,
     Button, AlertDialog, AlertDialogBody, AlertDialogFooter,
     AlertDialogHeader, AlertDialogContent, AlertDialogOverlay,
 } from "@chakra-ui/react";
 import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
-import { RegularStockItFragment } from '../../generated/graphql';
+import { RegularStockItFragment, useDeleteStockItMutation } from '../../generated/graphql';
 import { formatDate } from "../../utils/helpers";
 
 interface Props {
@@ -18,7 +18,8 @@ const AdminStockItItem: React.FC<Props> = ({ item, setOpenEdit, setStockToEdit }
     const [deleteDialog, setDeleteDialog] = useState(false)
     const onClose = () => setDeleteDialog(false)
     const cancelRef = useRef()
-    // const [, deleteGive] = useDeleteGiveMutation()
+
+    const [, deleteStockIt] = useDeleteStockItMutation()
 
     return (
         <Tr _hover={{ bgColor: "#eee" }}>
@@ -35,7 +36,7 @@ const AdminStockItItem: React.FC<Props> = ({ item, setOpenEdit, setStockToEdit }
                     }
                     <Flex flexDir="column">
                         <Heading size="sm" letterSpacing="tight" w="200px" isTruncated>{item.itemName}</Heading>
-                        <Text fontSize="sm" color="gray" isTruncated w="200px" mr="5">{item.details}</Text>
+                        <Text fontSize="sm" color="gray" isTruncated w="200px" mr="5">{item.detail}</Text>
                     </Flex>
                 </Flex>
             </Td>
@@ -52,13 +53,19 @@ const AdminStockItItem: React.FC<Props> = ({ item, setOpenEdit, setStockToEdit }
                 <Text>วันที่ create: {formatDate(+item.createdAt)}</Text>
             </Td>
             <Td>
-                <Center>{item.holdStatus}</Center>
-                {item.useBy &&
-                    <Center>โดย: {item.useBy.fullNameTH}</Center>
-                }
+                {item.orders.map((value) => (
+                    <Flex key={value.id} flexDir="column">
+                        <Flex justify="center">
+                            <Text fontWeight="bold">{value.holdStatus}</Text>
+                        </Flex>
+                        <Text fontSize="xs"> โดย : {value.creator.fullNameTH}</Text>
+                        <Text fontSize="xs">วันที่ : {formatDate(+value.updatedAt)}</Text>
+                        <Divider orientation="horizontal" />
+                    </Flex>
+                ))}
             </Td>
             <Td>
-                <Center>{item.status}</Center>
+                <Center>{item.location}</Center>
             </Td>
             <Td>
                 <Center>
@@ -108,14 +115,12 @@ const AdminStockItItem: React.FC<Props> = ({ item, setOpenEdit, setStockToEdit }
                                         bgColor="red"
                                         ml={3}
                                         onClick={async () => {
-                                            alert(`Delete item ID ${item.id}`)
-                                            setDeleteDialog(false)
-                                            // const response = await deleteGive({ id: give.id })
-                                            // if (!response) {
-                                            //     alert("Delete Error! โปรดติดต่อผู้ดูแล")
-                                            // } else if (response) {
-                                            //     setDeleteDialog(false)
-                                            // }
+                                            const response = await deleteStockIt({ id: item.id })
+                                            if (!response) {
+                                                alert("Delete Error! โปรดติดต่อผู้ดูแล")
+                                            } else if (response) {
+                                                setDeleteDialog(false)
+                                            }
                                         }}
                                     >
                                         Delete
