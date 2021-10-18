@@ -72,7 +72,7 @@ const StockItDetail: React.FC<Props> = () => {
                                 <Stack isInline mt={3} justify="space-between">
                                     <Flex>
                                         <Text fontSize="xl" fontWeight="bold" align="center" mr="4">
-                                            Order ID : {data.stockItById.id}
+                                            ID : {data.stockItById.id}
                                         </Text>
                                         {/* {data.stockItById.orders.map(value => (
                                             (value.holdStatus === "ยืม" || value.holdStatus === "เบิก") && (
@@ -87,6 +87,16 @@ const StockItDetail: React.FC<Props> = () => {
                                             )
                                         ))} */}
                                     </Flex>
+                                    {data.stockItById.inventory === 1 && (
+                                        <Text
+                                            as="i"
+                                            fontWeight="bold"
+                                            fontSize="xl"
+                                            color="cyan.500"
+                                        >
+                                            ว่าง
+                                        </Text>
+                                    )}
                                     {data.stockItById.orders.map((value) => (
                                         <Text
                                             key={value.id}
@@ -97,7 +107,7 @@ const StockItDetail: React.FC<Props> = () => {
                                         >
                                             {value.holdStatus}
                                         </Text>
-                                        //FIXME: หา Array ล่าสุดเพราะ holdStatus เป็น Array
+                                        // FIXME: หา Array ล่าสุดเพราะ holdStatus เป็น Array
                                     ))}
                                 </Stack>
 
@@ -115,21 +125,14 @@ const StockItDetail: React.FC<Props> = () => {
 
                                 <Stack isInline mt={3} justify="space-between">
                                     <Text fontSize={["sm", "sm", "md", "md"]}>
-                                        ชื่อผู้ร้องขอ :{" "}
+                                        Serial Number :{" "}
                                     </Text>
                                     <Text
                                         fontSize={["sm", "sm", "md", "md"]}
                                         as="i"
                                         fontWeight="semibold"
                                     >
-                                        งง
-                                        {/* {data.stockItById.orders}
-                                            &nbsp; สาขา
-                                            {data.giveOrderById.creator.roles === "client-LKB"
-                                                ? "ลาดกระบัง"
-                                                : data.giveOrderById.creator.roles === "client-CDC"
-                                                    ? "ชลบุรี"
-                                                    : "Admin"} */}
+                                        {data.stockItById.serialNum}
                                     </Text>
                                     </Stack>
                                 <Divider mt={3} orientation="horizontal" />
@@ -148,23 +151,8 @@ const StockItDetail: React.FC<Props> = () => {
                                     </Stack>
                                 <Divider mt={3} orientation="horizontal" />
 
-
                                 <Stack isInline mt={3} justify="space-between">
-                                    <Text fontSize={["sm", "sm", "md", "md"]} w="60vh">
-                                        รายละเอียด :{" "}
-                                        </Text>
-                                    <Text
-                                        fontSize={["sm", "sm", "md", "md"]}
-                                        as="i"
-                                        fontWeight="semibold"
-                                    >
-                                        {data.stockItById.detail}
-                                    </Text>
-                                </Stack>
-                                <Divider mt={3} orientation="horizontal" />
-
-                                    <Stack isInline mt={3} justify="space-between">
-                                    <Text fontSize={["sm", "sm", "md", "md"]}>วันที่เบิก : </Text>
+                                    <Text fontSize={["sm", "sm", "md", "md"]}>Created Date : </Text>
                                     <Text
                                         fontSize={["sm", "sm", "md", "md"]}
                                         as="i"
@@ -173,7 +161,20 @@ const StockItDetail: React.FC<Props> = () => {
                                         {data.stockItById.createdAt &&
                                             formatDate(+data.stockItById.createdAt)}
                                     </Text>
-                                    </Stack>
+                                </Stack>
+                                <Divider mt={3} orientation="horizontal" />
+
+                                <Stack isInline mt={3} justify="space-between">
+                                    <Text fontSize={["sm", "sm", "md", "md"]} w="40vh">
+                                        รายละเอียด :{" "}
+                                    </Text>
+                                    <Text
+                                        fontSize={["sm", "sm", "md", "md"]}
+                                        as="i"
+                                    >
+                                        {data.stockItById.detail}
+                                    </Text>
+                                </Stack>
                                 <Divider mt={3} orientation="horizontal" />
 
                                 <Text fontSize={["sm", "sm", "md", "md"]} mt={3}>

@@ -621,6 +621,7 @@ export type StockIt = {
   serialNum: Scalars['String'];
   warranty: Scalars['String'];
   price: Scalars['Float'];
+  inventory: Scalars['Float'];
   branch: Scalars['String'];
   brand: Scalars['String'];
   category: Scalars['String'];
@@ -804,7 +805,7 @@ export type RegularManualAdFragment = (
 
 export type RegularStockItFragment = (
   { __typename?: 'StockIt' }
-  & Pick<StockIt, 'id' | 'itemName' | 'detail' | 'location' | 'serialNum' | 'warranty' | 'price' | 'branch' | 'brand' | 'category' | 'imageUrl' | 'createdAt' | 'updatedAt'>
+  & Pick<StockIt, 'id' | 'itemName' | 'detail' | 'location' | 'serialNum' | 'warranty' | 'price' | 'inventory' | 'branch' | 'brand' | 'category' | 'imageUrl' | 'createdAt' | 'updatedAt'>
   & { orders: Array<(
     { __typename?: 'StockItOrder' }
     & Pick<StockItOrder, 'id' | 'holdStatus' | 'updatedAt'>
@@ -1744,6 +1745,7 @@ export const RegularStockItFragmentDoc = gql`
   serialNum
   warranty
   price
+  inventory
   branch
   brand
   category

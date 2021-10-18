@@ -53,6 +53,11 @@ const AdminStockItItem: React.FC<Props> = ({ item, setOpenEdit, setStockToEdit }
                 <Text>วันที่ create: {formatDate(+item.createdAt)}</Text>
             </Td>
             <Td>
+                {item.inventory === 1 && (
+                    <Center>
+                        ว่าง
+                    </Center>
+                )}
                 {item.orders.map((value) => (
                     <Flex key={value.id} flexDir="column">
                         <Flex justify="center">

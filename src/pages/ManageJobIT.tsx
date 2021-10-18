@@ -23,6 +23,8 @@ const ManageJobIT: React.FC<Props> = () => {
     const [dateBeginStrTo, setDateBeginStrTo] = useState("");
     const [dateEndStrTo, setDateEndStrTo] = useState("");
 
+    const [graph, setGraph] = useState(false);
+
     const [{ data, fetching }] = useJobITsQuery({
         variables: {
             input: {
@@ -103,7 +105,8 @@ const ManageJobIT: React.FC<Props> = () => {
 
     return (
         <Flex flexDir={["column", "column", "column", "column", "row"]}>
-            <Flex w={["100%", "100%", "100%", "100%", "75%"]} flexDir="column">
+            {!graph &&
+                <Flex w={["100%", "100%", "100%", "100%", "75%"]} flexDir="column">
                 <Flex justify="space-between">
                     <Text
                         as="i"
@@ -227,10 +230,11 @@ const ManageJobIT: React.FC<Props> = () => {
                     )}
                 </Flex>
             </Flex>
+            }
 
             <Flex
                 flexDir="column"
-                w={["100%", "100%", "100%", "100%", "25%"]}
+                w={["100%", "100%", "100%", "100%", graph ? "100%" : "25%"]}
             >
                 <Flex justify="end" h="30px">
                     <Button
@@ -251,6 +255,17 @@ const ManageJobIT: React.FC<Props> = () => {
                     >
                         All Data
                     </Button>
+                    <Button
+                        ml="5"
+                        mb="2"
+                        size="md"
+                        colorScheme="teal"
+                        variant="outline"
+                        boxShadow="md"
+                        onClick={() => setGraph(!graph)}
+                    >
+                        Graph
+                    </Button>
                 </Flex>
                 <ViewStatus
                     setStatus={setStatus}
@@ -258,8 +273,11 @@ const ManageJobIT: React.FC<Props> = () => {
                     arrayCat={arrayCat}
                     setDateBeginStrTo={setDateBeginStrTo}
                     setDateEndStrTo={setDateEndStrTo}
+                    graph={graph}
                 />
+                {!graph &&
                 <ViewAdmin setNameItAction={setNameItAction} />
+                }
             </Flex>
         </Flex>
     );

@@ -126,6 +126,7 @@ export type BrandItem =
     | "MICROSOFT"
     | "HUAWEI"
     | "LENOVO"
+    | "ASUS"
     | "ACER"
     | "DELL"
     | "MSI"
@@ -135,6 +136,7 @@ export const brandItemIt: BrandItem[] = [
     "MICROSOFT",
     "HUAWEI",
     "LENOVO",
+    "ASUS",
     "ACER",
     "DELL",
     "MSI",

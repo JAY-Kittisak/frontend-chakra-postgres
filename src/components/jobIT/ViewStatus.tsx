@@ -31,6 +31,7 @@ interface Props {
     arrayCat: (number | undefined)[];
     setDateBeginStrTo: (date: string) => void;
     setDateEndStrTo: (date: string) => void;
+    graph: boolean
 }
 
 const ViewStatus: React.FC<Props> = ({
@@ -39,6 +40,7 @@ const ViewStatus: React.FC<Props> = ({
     arrayCat,
     setDateBeginStrTo,
     setDateEndStrTo,
+    graph
 }) => {
     const [dateBegin, setDateBegin] = useState(new Date());
     const [dateEnd, setDateEnd] = useState(new Date());
@@ -88,11 +90,11 @@ const ViewStatus: React.FC<Props> = ({
         setDateEndStrTo(dateEnd.toDateString());
     };
     return (
-        <Flex flexDir="column" h="410px" boxShadow="md" ml="5" rounded="lg" p="3">
+        <Flex flexDir="column" h={graph ? "700px" : "410px"} boxShadow="md" ml="5" rounded="lg" p="3">
             <Text fontSize="2xl" fontWeight="bold" as="i" color="gray">
                 Job Status
             </Text>
-            <Box h="200px" ml="-10">
+            <Box h={graph ? "100%" : "200px"} ml="-10">
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                         width={500}
@@ -113,8 +115,9 @@ const ViewStatus: React.FC<Props> = ({
                     </BarChart>
                 </ResponsiveContainer>
             </Box>
-            <Flex flexDir="column">
-                <Flex flexDir="row" mb="3" justify="center" mx="2">
+            <Flex w="100%" flexDir="column">
+                <Flex flexDir="row" mb="3" mx="2" justify="center">
+                    <Flex>
                     <Flex
                         w="25%"
                         color="cyan.600"
@@ -197,6 +200,7 @@ const ViewStatus: React.FC<Props> = ({
                         <Text fontSize="xs" fontWeight="bold">
                             Impossible
                         </Text>
+                    </Flex>
                     </Flex>
                 </Flex>
                 <Flex justify="space-between">
