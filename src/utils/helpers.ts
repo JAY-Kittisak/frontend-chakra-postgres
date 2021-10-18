@@ -108,6 +108,7 @@ export type CategoryItemIt =
     | "Router"
     | "Mouse"
     | "UPS"
+    | "USB"
     | "PC"
     | "อื่นๆ"
 export const itemIt: CategoryItemIt[] = [
@@ -118,12 +119,14 @@ export const itemIt: CategoryItemIt[] = [
     "Router",
     "Mouse",
     "UPS",
+    "USB",
     "PC",
     "อื่นๆ"
 ];
 // ---------------------- Brand stock IT ----------------------
 export type BrandItem =
     | "MICROSOFT"
+    | "LOGITECH"
     | "HUAWEI"
     | "LENOVO"
     | "ASUS"
@@ -134,6 +137,7 @@ export type BrandItem =
     | "อื่นๆ"
 export const brandItemIt: BrandItem[] = [
     "MICROSOFT",
+    "LOGITECH",
     "HUAWEI",
     "LENOVO",
     "ASUS",
@@ -176,4 +180,12 @@ export const holdItem: Hold[] = [
     "ว่าง",
     "เบิก",
     "ยืม"
+];
+// ---------------------- Current Status ----------------------
+export type Current =
+    | "ว่าง"
+    | "ใช้งาน"
+export const crStatus: Current[] = [
+    "ว่าง",
+    "ใช้งาน"
 ];

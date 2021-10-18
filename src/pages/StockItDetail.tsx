@@ -87,28 +87,14 @@ const StockItDetail: React.FC<Props> = () => {
                                             )
                                         ))} */}
                                     </Flex>
-                                    {data.stockItById.inventory === 1 && (
                                         <Text
                                             as="i"
                                             fontWeight="bold"
                                             fontSize="xl"
                                             color="cyan.500"
                                         >
-                                            ว่าง
-                                        </Text>
-                                    )}
-                                    {data.stockItById.orders.map((value) => (
-                                        <Text
-                                            key={value.id}
-                                            as="i"
-                                            fontWeight="bold"
-                                            fontSize="xl"
-                                            color={!(value.holdStatus === "ยืม" || value.holdStatus === "เบิก") ? "cyan" : "orange"}
-                                        >
-                                            {value.holdStatus}
-                                        </Text>
-                                        // FIXME: หา Array ล่าสุดเพราะ holdStatus เป็น Array
-                                    ))}
+                                        {data.stockItById.currentStatus}
+                                    </Text>
                                 </Stack>
 
                                 <Stack isInline mt={3} justify="space-between">

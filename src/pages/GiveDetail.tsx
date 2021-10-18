@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import {
-    useColorModeValue,
     Flex,
     Text,
     Image,
     Stack,
     Button,
     Center,
-    IconButton,
     Divider,
+    NumberInput,
+    NumberInputField,
+    NumberInputStepper,
+    NumberIncrementStepper,
+    NumberDecrementStepper,
 } from "@chakra-ui/react";
-import { SmallAddIcon, MinusIcon } from "@chakra-ui/icons";
 
 import { useGiveByIdQuery } from "../generated/graphql";
 import Spinner from "../components/Spinner";
@@ -25,9 +27,6 @@ const GiveDetail: React.FC<Props> = () => {
     const [amount, setAmount] = useState(1);
     const { isOpen, setIsOpen } = useDialog();
 
-    const bg = useColorModeValue("white", "gray.700");
-    const bgButton = useColorModeValue("#0AB68B", "#4F80E2");
-
     const params = useParams<{ giveId: string }>();
     const gid = params.giveId;
 
@@ -36,6 +35,8 @@ const GiveDetail: React.FC<Props> = () => {
             id: +gid,
         },
     });
+
+    const handleChange = (value: any) => setAmount(+value)
 
     return (
         <>
@@ -67,8 +68,7 @@ const GiveDetail: React.FC<Props> = () => {
                 w={[null, null, "70%", "70%"]}
                 p={5}
                 rounded="7px"
-                boxShadow="md"
-                bg={bg}
+                            boxShadow="md"
             >
                 <Flex flexDir={["column", "column", "column", "row"]} align="center">
                     <Flex w={[null, null, null, "40%"]} justify="center" align="center">
@@ -135,13 +135,7 @@ const GiveDetail: React.FC<Props> = () => {
                             </Center>
                         ) : (
                             <>
-                                <Flex
-                                    flexDir="row"
-                                    h="40px"
-                                    bg="blackAlpha.100"
-                                    rounded="20px"
-                                >
-                                    <IconButton
+                                            {/* <IconButton
                                         aria-label=""
                                         icon={<MinusIcon />}
                                         style={{
@@ -153,39 +147,28 @@ const GiveDetail: React.FC<Props> = () => {
                                                 return prev - 1;
                                             })
                                         }
-                                    />
-                                    <Center>
-                                        <Flex ml={3} mr={3} mt="-1">
-                                            <Text fontWeight="semibold" fontSize="2xl">
-                                                {amount}
-                                            </Text>
-                                        </Flex>
-                                    </Center>
-                                    <IconButton
-                                        aria-label=""
-                                        icon={<SmallAddIcon />}
-                                        style={{
-                                            cursor:
-                                                amount === data.giveById.inventory
-                                                    ? "not-allowed"
-                                                    : undefined,
-                                        }}
-                                        onClick={() =>
-                                            setAmount((prev) => {
-                                                if (prev === data.giveById.inventory) return prev;
-                                                return prev + 1;
-                                            })
-                                        }
-                                    />
-                                </Flex>
+                                    /> */}
+                                            <Flex>
+                                                <NumberInput
+                                                    // defaultValue={1}
+                                                    min={1}
+                                                    max={data.giveById.inventory as number}
+                                                    value={amount}
+                                                    onChange={handleChange}
+                                                >
+                                                    <NumberInputField />
+                                                    <NumberInputStepper>
+                                                        <NumberIncrementStepper />
+                                                        <NumberDecrementStepper />
+                                                    </NumberInputStepper>
+                                                </NumberInput>
+                                            </Flex>
                                 <Flex flexDir="column" alignItems="center">
                                     <Button
                                         ml={3}
                                         mr={3}
-                                        bg={bgButton}
-                                        disabled={data.giveById.inventory === 0}
-                                        // disabled={data.giveById.inventory === 250 || addToCartLoading}
-                                        // loading={addToCartLoading}
+                                                    colorScheme="green"
+                                                    disabled={data.giveById.inventory === 0}
                                         onClick={() => {
                                             setIsOpen(true);
                                         }}
@@ -201,6 +184,7 @@ const GiveDetail: React.FC<Props> = () => {
                                         />
                                     )}
                                 </Flex>
+
                             </>
                         )}
                     </Center>

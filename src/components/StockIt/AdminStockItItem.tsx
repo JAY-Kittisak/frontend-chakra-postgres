@@ -53,21 +53,19 @@ const AdminStockItItem: React.FC<Props> = ({ item, setOpenEdit, setStockToEdit }
                 <Text>วันที่ create: {formatDate(+item.createdAt)}</Text>
             </Td>
             <Td>
-                {item.inventory === 1 && (
-                    <Center>
-                        ว่าง
+                <Center fontSize="xl" color={item.currentStatus === "ว่าง" ? "cyan.400" : "green"}>
+                    {item.currentStatus}
                     </Center>
-                )}
-                {item.orders.map((value) => (
-                    <Flex key={value.id} flexDir="column">
-                        <Flex justify="center">
-                            <Text fontWeight="bold">{value.holdStatus}</Text>
+                <Flex flexDir="column" border="1px" borderColor="gray.300" mt="1">
+                    {item.orders.map((value) => (
+                        <Flex key={value.id} flexDir="column" p="3">
+                            <Text fontWeight="bold">ประวัติการ {value.holdStatus}</Text>
+                            <Text fontSize="xs"> โดย : {value.creator.fullNameTH}</Text>
+                            <Text fontSize="xs">วันที่ : {formatDate(+value.updatedAt)}</Text>
+                            <Divider orientation="horizontal" />
                         </Flex>
-                        <Text fontSize="xs"> โดย : {value.creator.fullNameTH}</Text>
-                        <Text fontSize="xs">วันที่ : {formatDate(+value.updatedAt)}</Text>
-                        <Divider orientation="horizontal" />
-                    </Flex>
-                ))}
+                    ))}
+                </Flex>
             </Td>
             <Td>
                 <Center>{item.location}</Center>

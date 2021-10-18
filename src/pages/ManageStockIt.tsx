@@ -64,7 +64,7 @@ const ManageStockIt: React.FC<Props> = () => {
         <Flex flexDir={["column", "column", "column", "column", "row"]}>
             <Flex w={["100%", "100%", "100%", "100%", "80%"]} flexDir="column" mr="2">
                 <SelectBranch
-                    title="Manages Give"
+                    title="Manages Stock IT"
                     branch={branch}
                     setBranch={setBranch}
                 />
@@ -148,7 +148,7 @@ const ManageStockIt: React.FC<Props> = () => {
                                                 textAlign="center"
                                                 fontSize={["xs", "xs", "sm", "md"]}
                                                 color="white"
-                                                w="15%"
+                                                    w="20%"
                                             >
                                                 สถานะ Item
                                             </Th>
@@ -156,7 +156,7 @@ const ManageStockIt: React.FC<Props> = () => {
                                                 textAlign="center"
                                                 fontSize={["xs", "xs", "sm", "md"]}
                                                 color="white"
-                                                w="15%"
+                                                    w="10%"
                                             >
                                                     location
                                             </Th>

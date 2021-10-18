@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, Flex } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 
 import { brandItemIt } from "../../utils/helpers";
 

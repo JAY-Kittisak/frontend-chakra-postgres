@@ -64,6 +64,12 @@ const StockIt: React.FC<Props> = () => {
         );
     }
 
+    const unoccupied = item?.filter((val) => val.currentStatus === "ว่าง")
+        .filter((val) => catItem === "" ? val : val.category === catItem)
+        .filter((val) => brandItem === "" ? val : val.brand === brandItem)
+
+    console.log(brandItem)
+
     return (
         <Flex flexDir={["column", "column", "column", "column", "row"]}>
             <Flex w={["100%", "100%", "100%", "100%", "80%"]} flexDir="column" mr="2">
@@ -88,7 +94,7 @@ const StockIt: React.FC<Props> = () => {
                     </Flex>
                 ) : (
                         <Grid templateColumns={["repeat(4, 1fr)"]} gap={6}>
-                        {item?.map((value) => (
+                            {unoccupied?.map((value) => (
                             <StockItItem key={value.id} stockIt={value} />
                         ))}
                     </Grid>

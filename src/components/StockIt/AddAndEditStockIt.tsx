@@ -29,6 +29,7 @@ import {
     itemIt,
     brandItemIt,
     warrantyIt,
+    crStatus
 } from "../../utils/helpers";
 import { toErrorMap } from "../../utils/toErrorMap";
 import SelectControl from "../Selectfield";
@@ -69,6 +70,7 @@ const AddAndEditStockIt: React.FC<Props> = ({ Open, setOpen, stockToEdit }) => {
                     branch: stockToEdit ? stockToEdit.branch : "ลาดกระบัง",
                     brand: stockToEdit ? stockToEdit.brand : "MICROSOFT",
                     category: stockToEdit ? stockToEdit.category : "Battery UPS",
+                    currentStatus: stockToEdit ? stockToEdit.currentStatus : "ว่าง",
                 }}
                 onSubmit={async (values, { setErrors }) => {
                     if (!stockToEdit) {
@@ -77,7 +79,6 @@ const AddAndEditStockIt: React.FC<Props> = ({ Open, setOpen, stockToEdit }) => {
                         if (selectedFile.size >= 5000000) {
                             setErrorImage(true);
                         }
-                        console.table(values)
 
                         const response = await createStockIt({
                             input: values,
@@ -103,7 +104,8 @@ const AddAndEditStockIt: React.FC<Props> = ({ Open, setOpen, stockToEdit }) => {
                             stockToEdit.price === values.price &&
                             stockToEdit.branch === values.branch &&
                             stockToEdit.brand === values.brand &&
-                            stockToEdit.category === values.category
+                            stockToEdit.category === values.category &&
+                            stockToEdit.currentStatus === values.currentStatus
 
                         if (isNotEdited) return setOpen();
 
@@ -258,6 +260,21 @@ const AddAndEditStockIt: React.FC<Props> = ({ Open, setOpen, stockToEdit }) => {
                                                     ))}
                                                 </SelectControl>
                                             )}
+                                            <Text
+                                                fontWeight="semibold"
+                                                fontSize={["sm", "md"]}
+                                                mb="2"
+                                            >
+                                                Current Status
+                                            </Text>
+
+                                            <SelectControl name="currentStatus">
+                                                {crStatus.map((value, i) => (
+                                                    <option key={i} value={value}>
+                                                        {value}
+                                                    </option>
+                                                ))}
+                                            </SelectControl>
                                             {errorImage && (
                                                 <>
                                                     <Text color="yellow.400" p="3">
