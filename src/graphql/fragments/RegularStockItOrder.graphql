@@ -11,9 +11,12 @@ fragment RegularStockItOrder on StockItOrder {
       creator {
         id
         fullNameTH
+        roles
       }
       stockIt {
         id
         itemName
+        serialNum
+        imageUrl
       }
 }

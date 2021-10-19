@@ -1,5 +1,5 @@
-query StockItOrders {
-  stockItOrders {
+query StockItOrders($createBy: Boolean!) {
+  stockItOrders(createBy: $createBy) {
       ...RegularStockItOrder
   }
 }

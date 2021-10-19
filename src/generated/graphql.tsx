@@ -286,6 +286,7 @@ export type Mutation = {
   updateStockIt: UpdateStockItResponse;
   deleteStockIt: Scalars['Boolean'];
   createStockItOrder: StockItOrderResponse;
+  updateStockItOr: UpdateStockItOrResponse;
   deleteStockItOrder: Scalars['Boolean'];
 };
 
@@ -473,6 +474,12 @@ export type MutationCreateStockItOrderArgs = {
 };
 
 
+export type MutationUpdateStockItOrArgs = {
+  newStatus: Scalars['String'];
+  id: Scalars['Int'];
+};
+
+
 export type MutationDeleteStockItOrderArgs = {
   id: Scalars['Int'];
 };
@@ -593,6 +600,11 @@ export type QueryStockItByIdArgs = {
 };
 
 
+export type QueryStockItOrdersArgs = {
+  createBy: Scalars['Boolean'];
+};
+
+
 export type QueryStockItOrderByIdArgs = {
   id: Scalars['Int'];
 };
@@ -699,6 +711,12 @@ export type UpdateGiveResponse = {
   __typename?: 'UpdateGiveResponse';
   errors?: Maybe<Array<FieldErrorGive>>;
   give?: Maybe<Give>;
+};
+
+export type UpdateStockItOrResponse = {
+  __typename?: 'UpdateStockItOrResponse';
+  errors?: Maybe<Array<FieldErrorStockIt>>;
+  stockItOrder?: Maybe<StockItOrder>;
 };
 
 export type UpdateStockItResponse = {
@@ -822,10 +840,10 @@ export type RegularStockItOrderFragment = (
   & Pick<StockItOrder, 'id' | 'detail' | 'branch' | 'creatorId' | 'stockItId' | 'holdStatus' | 'status' | 'createdAt' | 'updatedAt'>
   & { creator: (
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'fullNameTH'>
+    & Pick<User, 'id' | 'fullNameTH' | 'roles'>
   ), stockIt: (
     { __typename?: 'StockIt' }
-    & Pick<StockIt, 'id' | 'itemName'>
+    & Pick<StockIt, 'id' | 'itemName' | 'serialNum' | 'imageUrl'>
   ) }
 );
 
@@ -1609,7 +1627,9 @@ export type StockItOrderByIdQuery = (
   ) }
 );
 
-export type StockItOrdersQueryVariables = Exact<{ [key: string]: never; }>;
+export type StockItOrdersQueryVariables = Exact<{
+  createBy: Scalars['Boolean'];
+}>;
 
 
 export type StockItOrdersQuery = (
@@ -1778,10 +1798,13 @@ export const RegularStockItOrderFragmentDoc = gql`
   creator {
     id
     fullNameTH
+    roles
   }
   stockIt {
     id
     itemName
+    serialNum
+    imageUrl
   }
 }
     `;
@@ -2557,8 +2580,8 @@ export function useStockItOrderByIdQuery(options: Omit<Urql.UseQueryArgs<StockIt
   return Urql.useQuery<StockItOrderByIdQuery>({ query: StockItOrderByIdDocument, ...options });
 };
 export const StockItOrdersDocument = gql`
-    query StockItOrders {
-  stockItOrders {
+    query StockItOrders($createBy: Boolean!) {
+  stockItOrders(createBy: $createBy) {
     ...RegularStockItOrder
   }
 }

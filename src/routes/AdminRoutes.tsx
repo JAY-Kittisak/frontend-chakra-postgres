@@ -12,6 +12,8 @@ import ManageGiveOrderDetail from '../pages/ManageGiveOrderDetail'
 import ManageGiveOrderDetailCdc from '../pages/ManageGiveOrderDetailCdc'
 import ManageJobITDetail from '../pages/ManageJobITDetail'
 import ManageJobIT from '../pages/ManageJobIT'
+import ManageStockItOrders from '../pages/ManageStockItOrders'
+import ManageStockItOrderDetail from '../pages/ManageStockItOrderDetail'
 import PageNotFound from '../pages/PageNotFound'
 
 interface Props { }
@@ -22,6 +24,12 @@ const AdminRoutes: React.FC<Props> = () => {
 
     return (
             <Switch>
+            <Route path="/admin/stock-it-orders/:id">
+                <ManageStockItOrderDetail />
+            </Route>
+            <Route path="/admin/stock-it-orders">
+                <ManageStockItOrders />
+            </Route>
             <Route path="/admin/manage-stock-it">
                 <ManageStockIt />
             </Route>

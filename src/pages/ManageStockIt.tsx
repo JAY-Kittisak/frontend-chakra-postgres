@@ -38,8 +38,8 @@ const ManageStockIt: React.FC<Props> = () => {
             setItem(data.stockIts);
         }
         if (branch === "ลาดกระบัง") {
-            const dataTest = data?.stockIts?.filter((val) => val.branch === branch);
-            setItem(dataTest);
+            const latKraBang = data?.stockIts?.filter((val) => val.branch === branch);
+            setItem(latKraBang);
         }
         if (branch === "ชลบุรี") {
             const dataTest = data?.stockIts?.filter((val) => val.branch === branch);
@@ -148,17 +148,17 @@ const ManageStockIt: React.FC<Props> = () => {
                                                 textAlign="center"
                                                 fontSize={["xs", "xs", "sm", "md"]}
                                                 color="white"
-                                                    w="20%"
+                                                    w="10%"
                                             >
-                                                สถานะ Item
+                                                    location
                                             </Th>
                                             <Th
                                                 textAlign="center"
                                                 fontSize={["xs", "xs", "sm", "md"]}
                                                 color="white"
-                                                    w="10%"
+                                                    w="20%"
                                             >
-                                                    location
+                                                    สถานะ Item
                                             </Th>
                                             <Th
                                                 textAlign="center"

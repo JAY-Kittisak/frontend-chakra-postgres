@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import {
     useColorModeValue,
     Flex,
@@ -13,7 +13,6 @@ import {
 } from "@chakra-ui/react";
 import { useReactToPrint } from "react-to-print";
 import { DeleteIcon } from '@chakra-ui/icons'
-import { useHistory } from 'react-router-dom'
 
 import Spinner from "../components/Spinner";
 import AdminStatusControl from "../components/AdminStatusControl";
