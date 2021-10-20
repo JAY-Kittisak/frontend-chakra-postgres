@@ -19,12 +19,6 @@ const menuItems = [
         iconClassName: "bi bi-speedometer2",
     },
     {
-        name: "ของแจกลูกค้า",
-        to: "/gives/gives-all",
-        iconClassName: "bi bi-gift-fill",
-        subMenus: [{ name: "ประวัติการเบิกของคุณ", to: "/order-give/my-orders" }],
-    },
-    {
         name: "Tier",
         to: "/tiers/factories",
         iconClassName: "bi bi-diagram-3",
@@ -40,10 +34,16 @@ const menuItems = [
         ],
     },
     {
+        name: "ของแจกลูกค้า",
+        to: "/gives/gives-all",
+        iconClassName: "bi bi-gift-fill",
+        subMenus: [{ name: "ประวัติการเบิกของคุณ", to: "/order-give/my-orders" }],
+    },
+    {
         name: "เบิก-ยืม อุปกรณ์ IT",
         to: "/stock-it/stock-all",
         iconClassName: "bi bi-basket",
-        subMenus: [{ name: "ประวัติการเบิกของคุณ", to: "/orderIT/IT" }],
+        subMenus: [{ name: "ประวัติการเบิกของคุณ", to: "/stock-it/my-order" }],
     },
     {
         name: "เบิก-ยืม Catalog",
@@ -55,30 +55,31 @@ const menuItems = [
 
 // let fruits = ['apple', 'banana', 'grapes', 'mango', 'orange']
 
-// 
+
 //  Filter array items based on search criteria (query)
-//  
+
 // function filterItems(arr: string[], query: string) {
 //     return arr.filter(function (el) {
 //         return el.toLowerCase().indexOf(query.toLowerCase()) !== -1
 //     })
 // }
 
-// console.log(filterItems(fruits, 'ban'))  // ['apple', 'grapes']
+// console.log(filterItems(fruits, 'ma'))  // ['apple', 'grapes']
 
 const menuItemsFooter = [
     {
         name: "Administrator",
         to: "/admin",
-        iconClassName: "bi bi-sliders",
+        iconClassName: "bi bi-sliders"
+    },
+    {
+        name: "Setting",
+        to: "/setting",
+        iconClassName: "bi bi-gear-fill",
         subMenus: [
             { name: "จัดการของแจกลูกค้า", to: "/admin/manage-gives" },
-            { name: "จัดการ Order ของแจกลูกค้า", to: "/admin/manage-give-orders" },
-            { name: "จัดการ Job IT", to: "/admin/manage-job-it" },
-            { name: "จัดการ Stock IT", to: "/admin/manage-stock-it" },
         ],
     },
-    { name: "Setting", to: "/setting", iconClassName: "bi bi-gear-fill" },
 ];
 
 const SideMenu: React.FC<Props> = ({ onCollapse }) => {

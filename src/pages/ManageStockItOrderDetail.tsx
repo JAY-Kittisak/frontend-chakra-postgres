@@ -14,15 +14,19 @@ import { useHistory, useParams } from 'react-router-dom'
 import Spinner from "../components/Spinner";
 import {
     useDeleteStockItOrderMutation,
+    useMeQuery,
     useStockItOrderByIdQuery
 } from "../generated/graphql";
 import { formatDate } from "../utils/helpers";
+import StockItStatusControl from '../components/StockIt/StockItStatusControl';
 
 interface Props { }
 
 const ManageStockItOrderDetail: React.FC<Props> = () => {
     const params = useParams<{ id: string }>();
     const history = useHistory()
+
+    const [{ data: user }] = useMeQuery();
 
     const [{ data, fetching }] = useStockItOrderByIdQuery({
         variables: {
@@ -40,7 +44,7 @@ const ManageStockItOrderDetail: React.FC<Props> = () => {
                 fontSize={["md", "md", "xl", "3xl"]}
                 color="gray.600"
             >
-                Admin manage order stock IT
+                {data?.stockItOrderById.stockIt.itemName}
             </Text>
             <Divider mt={1} mb={5} orientation="horizontal" />
 
@@ -74,6 +78,7 @@ const ManageStockItOrderDetail: React.FC<Props> = () => {
                             )}
                         </Flex>
                         <Flex p={5} flexDir="column" w={[null, null, null, "60%"]}>
+                                {(user?.me?.roles === "admin" || user?.me?.roles === "superAdmin") && (
                             <Flex justify="end">
                                 <Button colorScheme="red" variant="link" fontSize="xl" rightIcon={<DeleteIcon />}
                                     onClick={async () => {
@@ -88,10 +93,16 @@ const ManageStockItOrderDetail: React.FC<Props> = () => {
                                     Delete
                                 </Button>
                             </Flex>
+                                )}
                             <Stack isInline mt={3} justify="space-between">
-                                <Text fontSize="2xl" fontWeight="bold" align="center" mr="4">
-                                    {data.stockItOrderById.creator.fullNameTH} ต้องการ {data.stockItOrderById.holdStatus}
-                                </Text>
+                                    <Flex>
+                                        <Text fontSize="2xl" align="center" mr="4">
+                                            {data.stockItOrderById.creator.fullNameTH} :
+                                        </Text>
+                                        <Text fontSize="2xl" fontWeight="bold" as="u" align="center" mr="4">
+                                            {data.stockItOrderById.holdStatus}
+                                        </Text>
+                                    </Flex>
                                 <Text
                                     as="i"
                                     fontWeight="bold"
@@ -109,18 +120,6 @@ const ManageStockItOrderDetail: React.FC<Props> = () => {
                                     {data.stockItOrderById.status}
                                 </Text>
                             </Stack>
-
-                            <Stack isInline mt={3} justify="space-between">
-                                <Text fontSize={["sm", "sm", "md", "md"]}>ชื่อสินค้า : </Text>
-                                <Text
-                                    fontSize={["sm", "sm", "md", "md"]}
-                                    as="i"
-                                    fontWeight="semibold"
-                                >
-                                    {data.stockItOrderById.stockIt.itemName}
-                                </Text>
-                            </Stack>
-                            <Divider mt={3} orientation="horizontal" />
 
                             <Stack isInline mt={3} justify="space-between">
                                 <Text fontSize={["sm", "sm", "md", "md"]}>
@@ -181,13 +180,16 @@ const ManageStockItOrderDetail: React.FC<Props> = () => {
                             <Divider mt={3} orientation="horizontal" />
 
                             <Text fontSize={["sm", "sm", "md", "md"]} mt={3}>
-                                สถานะการจัดส่ง :{" "}
+                                    สถานะ Job :{" "}
                             </Text>
-                            {/* <AdminStatusControl
-                                    functionName="GiveOrder"
-                                    id={data.giveOrderById.id}
-                                    prevStatus={data.giveOrderById.status}
-                                /> */}
+                                {user?.me?.roles && (
+                                    <StockItStatusControl
+                                        id={data.stockItOrderById.id}
+                                        prevHold={data.stockItOrderById.holdStatus}
+                                        prevStatus={data.stockItOrderById.status}
+                                        roles={user.me.roles}
+                                    />
+                                )}
                         </Flex>
                     </Flex>
                 )}

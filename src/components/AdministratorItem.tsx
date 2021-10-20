@@ -33,7 +33,7 @@ const AdministratorItem: React.FC<Props> = ({
         <Flex
             flexDir="column"
             w="375px"
-            h="31vh"
+            h="290px"
             boxShadow="md"
             ml="5"
             rounded="lg"

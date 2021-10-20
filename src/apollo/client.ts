@@ -30,7 +30,15 @@ import {
     GiveOrderByCreatorIdDocument,
     CreateGiveOrderCdcMutation,
     GiveOrderByCreatorIdCdcQuery,
-    GiveOrderByCreatorIdCdcDocument
+    GiveOrderByCreatorIdCdcDocument,
+    StockItsQuery,
+    CreateStockItMutation,
+    StockItsDocument,
+    DeleteStockItMutationVariables,
+    DeleteStockItOrderMutationVariables,
+    CreateStockItOrderMutation,
+    StockItOrdersQuery,
+    StockItOrdersDocument
 } from "../generated/graphql";
 
 function betterUpdateQuery<Result, Query>(
@@ -228,6 +236,52 @@ export const client = createClient({
                                 } else {
                                     return {
                                         giveOrderByCreatorIdCdc: result.createGiveOrderCdc.giveOrder
+                                    }
+                                }
+                            }
+                        )
+                    },
+
+                    createStockIt: (_result, args, cache, info) => {
+                        betterUpdateQuery<CreateStockItMutation, StockItsQuery>(cache,
+                            { query: StockItsDocument },
+                            _result,
+                            (result, query) => {
+                                if (result.createStockIt.errors) {
+                                    return query
+                                } else {
+                                    return {
+                                        stockIts: result.createStockIt.stockIt
+                                    }
+                                }
+                            }
+                        )
+                    },
+
+                    deleteStockIt: (_result, args, cache, info) => {
+                        cache.invalidate({
+                            __typename: "StockIt",
+                            id: (args as DeleteStockItMutationVariables).id,
+                        });
+                    },
+
+                    deleteStockItOrder: (_result, args, cache, info) => {
+                        cache.invalidate({
+                            __typename: "StockItOrder",
+                            id: (args as DeleteStockItOrderMutationVariables).id,
+                        });
+                    },
+
+                    createStockItOrder: (_result, args, cache, info) => {
+                        betterUpdateQuery<CreateStockItOrderMutation, StockItOrdersQuery>(cache,
+                            { query: StockItOrdersDocument },
+                            _result,
+                            (result, query) => {
+                                if (result.createStockItOrder.errors) {
+                                    return query
+                                } else {
+                                    return {
+                                        stockItOrders: result.createStockItOrder.stockItOrder
                                     }
                                 }
                             }

@@ -476,6 +476,7 @@ export type MutationCreateStockItOrderArgs = {
 
 export type MutationUpdateStockItOrArgs = {
   newStatus: Scalars['String'];
+  holdStatus: Scalars['String'];
   id: Scalars['Int'];
 };
 
@@ -1278,6 +1279,27 @@ export type UpdateStockItMutation = (
     )>>, stockIt?: Maybe<(
       { __typename?: 'StockIt' }
       & RegularStockItFragment
+    )> }
+  ) }
+);
+
+export type UpdateStockItOrMutationVariables = Exact<{
+  id: Scalars['Int'];
+  holdStatus: Scalars['String'];
+  newStatus: Scalars['String'];
+}>;
+
+
+export type UpdateStockItOrMutation = (
+  { __typename?: 'Mutation' }
+  & { updateStockItOr: (
+    { __typename?: 'UpdateStockItOrResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorStockIt' }
+      & Pick<FieldErrorStockIt, 'field' | 'message'>
+    )>>, stockItOrder?: Maybe<(
+      { __typename?: 'StockItOrder' }
+      & RegularStockItOrderFragment
     )> }
   ) }
 );
@@ -2205,6 +2227,23 @@ export const UpdateStockItDocument = gql`
 
 export function useUpdateStockItMutation() {
   return Urql.useMutation<UpdateStockItMutation, UpdateStockItMutationVariables>(UpdateStockItDocument);
+};
+export const UpdateStockItOrDocument = gql`
+    mutation UpdateStockItOr($id: Int!, $holdStatus: String!, $newStatus: String!) {
+  updateStockItOr(id: $id, holdStatus: $holdStatus, newStatus: $newStatus) {
+    errors {
+      field
+      message
+    }
+    stockItOrder {
+      ...RegularStockItOrder
+    }
+  }
+}
+    ${RegularStockItOrderFragmentDoc}`;
+
+export function useUpdateStockItOrMutation() {
+  return Urql.useMutation<UpdateStockItOrMutation, UpdateStockItOrMutationVariables>(UpdateStockItOrDocument);
 };
 export const UpdateUserDocument = gql`
     mutation UpdateUser($options: updateUserInput!) {

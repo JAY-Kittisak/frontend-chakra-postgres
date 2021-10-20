@@ -189,7 +189,7 @@ const ManageJobITDetail: React.FC<Props> = () => {
                                 )}
 
                             <Text fontSize={["sm", "sm", "md", "md"]} mt={3}>
-                                สถานะการจัดส่ง :{" "}
+                                    สถานะ Job :{" "}
                             </Text>
                             <AdminStatusControl
                                 functionName="JobIT"

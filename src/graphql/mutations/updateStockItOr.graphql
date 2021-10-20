@@ -1,0 +1,11 @@
+mutation UpdateStockItOr($id: Int!, $holdStatus: String!, $newStatus: String!) {
+  updateStockItOr(id: $id, holdStatus: $holdStatus, newStatus: $newStatus) {
+    errors {
+      field
+      message
+    }
+    stockItOrder {
+      ...RegularStockItOrder
+    }
+  }
+}

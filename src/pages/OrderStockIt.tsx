@@ -1,48 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { Flex, Text } from "@chakra-ui/react";
+import React from 'react'
+import { Flex, Text, Divider } from "@chakra-ui/react";
 
-import SelectBranch from "../components/SelectBranch";
-import { Branch } from "../utils/helpers";
-import { RegularStockItOrderFragment, useStockItOrdersQuery } from "../generated/graphql";
-import Spinner from "../components/Spinner";
-import AdminStockOrItem from "../components/StockIt/AdminStockOrItem";
+import { useStockItOrdersQuery } from '../generated/graphql';
+import Spinner from '../components/Spinner';
+import AdminStockOrItem from '../components/StockIt/AdminStockOrItem';
 
 interface Props { }
 
-const ManageStockItOrders: React.FC<Props> = () => {
-    const [branch, setBranch] = useState<Branch>("All");
-    const [item, setItem] = useState<RegularStockItOrderFragment[] | undefined>(
-        undefined
-    );
-
+const OrderStockIt: React.FC<Props> = () => {
     const [{ data, fetching }] = useStockItOrdersQuery({
         variables: {
-            createBy: false,
+            createBy: true,
         },
     });
-
-    useEffect(() => {
-        if (branch === "All" && data?.stockItOrders) {
-            setItem(data.stockItOrders);
-        }
-        if (branch === "ลาดกระบัง") {
-            const latKraBang = data?.stockItOrders?.filter((val) => val.branch === branch);
-            setItem(latKraBang);
-        }
-        if (branch === "ชลบุรี") {
-            const cdc = data?.stockItOrders?.filter((val) => val.branch === branch);
-            setItem(cdc);
-        }
-    }, [branch, data]);
-
     return (
         <>
-            <SelectBranch
-                title="Manages Stock IT"
-                branch={branch}
-                setBranch={setBranch}
-            />
-
+            <Text
+                as="i"
+                fontWeight="semibold"
+                fontSize={["md", "md", "xl", "3xl"]}
+                color="gray.600"
+            >
+                Your order
+            </Text>
+            <Divider mt={1} mb={5} orientation="horizontal" />
             <Flex
                 flexDir="column"
                 p={9}
@@ -109,6 +90,7 @@ const ManageStockItOrders: React.FC<Props> = () => {
                         </Text>
                     </Flex>
 
+
                     <Flex flexDir="column">
                         {fetching || !data?.stockItOrders ? (
                             <Flex justify="center" mt="5">
@@ -118,15 +100,15 @@ const ManageStockItOrders: React.FC<Props> = () => {
                                 </Text>
                             </Flex>
                         ) : (
-                            item?.map((val) => (
-                                <AdminStockOrItem toUrl="/admin/stock-it-orders/" key={val.id} order={val} />
+                            data.stockItOrders.map((val) => (
+                                <AdminStockOrItem toUrl="/stock-it/my-order/" key={val.id} order={val} />
                             ))
                         )}
                     </Flex>
                 </Flex>
             </Flex>
         </>
-    );
-};
+    )
+}
 
-export default ManageStockItOrders;
+export default OrderStockIt

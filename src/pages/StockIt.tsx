@@ -68,8 +68,6 @@ const StockIt: React.FC<Props> = () => {
         .filter((val) => catItem === "" ? val : val.category === catItem)
         .filter((val) => brandItem === "" ? val : val.brand === brandItem)
 
-    console.log(brandItem)
-
     return (
         <Flex flexDir={["column", "column", "column", "column", "row"]}>
             <Flex w={["100%", "100%", "100%", "100%", "80%"]} flexDir="column" mr="2">

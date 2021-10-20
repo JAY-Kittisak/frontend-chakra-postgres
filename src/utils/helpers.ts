@@ -173,19 +173,21 @@ export const warrantyIt: Warranty[] = [
 ];
 // ---------------------- Hold Status ----------------------
 export type Hold =
-    | "ว่าง"
     | "เบิก"
     | "ยืม"
+    | "คืน"
 export const holdItem: Hold[] = [
-    "ว่าง",
     "เบิก",
-    "ยืม"
+    "ยืม",
+    "คืน"
 ];
 // ---------------------- Current Status ----------------------
 export type Current =
     | "ว่าง"
     | "ใช้งาน"
+    | "เลิกใช้แล้ว"
 export const crStatus: Current[] = [
     "ว่าง",
-    "ใช้งาน"
+    "ใช้งาน",
+    "เลิกใช้แล้ว"
 ];

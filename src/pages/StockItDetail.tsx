@@ -7,18 +7,21 @@ import {
     Image,
     Stack,
     Center,
-    // Button
+    Button
 } from "@chakra-ui/react";
 
-import { useStockItByIdQuery } from '../generated/graphql';
 import Spinner from "../components/Spinner";
+import CreateStockOrder from '../components/StockIt/CreateStockOrder';
+import { useDialog } from '../components/dialogs/useDialog';
+import { useStockItByIdQuery } from '../generated/graphql';
 import { formatAmount, formatDate } from "../utils/helpers"
 
 interface Props { }
 
 const StockItDetail: React.FC<Props> = () => {
-    const params = useParams<{ id: string }>();
+    const { isOpen, setIsOpen } = useDialog();
 
+    const params = useParams<{ id: string }>();
     const [{ data, fetching }] = useStockItByIdQuery({
         variables: {
             id: +params.id,
@@ -48,12 +51,13 @@ const StockItDetail: React.FC<Props> = () => {
                 {!data?.stockItById ? (
                     <Text>No data.</Text>
                 ) : (
-                        <Flex
-                            flexDir={["column", "column", "column", "row"]}
+                        <Flex flexDir="column"
                             w={[null, null, null, "70%"]}
                             p={1}
                             rounded="7px"
-                            boxShadow="md"
+                            boxShadow="md">
+                            <Flex
+                                flexDir={["column", "column", "column", "row"]}
                         >
                             <Flex
                                 w={[null, null, null, "40%"]}
@@ -75,17 +79,17 @@ const StockItDetail: React.FC<Props> = () => {
                                             ID : {data.stockItById.id}
                                         </Text>
                                         {/* {data.stockItById.orders.map(value => (
-                                            (value.holdStatus === "ยืม" || value.holdStatus === "เบิก") && (
-                                                <Button
-                                                    colorScheme="orange"
-                                                    mt="-1"
-                                                    // onClick={printInvoice}
-                                                    fontSize="xl"
-                                                >
-                                                    Print
-                                                </Button>
-                                            )
-                                        ))} */}
+                                                (value.holdStatus === "ยืม" || value.holdStatus === "เบิก") && (
+                                                    <Button
+                                                        colorScheme="orange"
+                                                        mt="-1"
+                                                        // onClick={printInvoice}
+                                                        fontSize="xl"
+                                                    >
+                                                        Print
+                                                    </Button>
+                                                )
+                                            ))} */}
                                     </Flex>
                                         <Text
                                             as="i"
@@ -95,8 +99,7 @@ const StockItDetail: React.FC<Props> = () => {
                                         >
                                         {data.stockItById.currentStatus}
                                     </Text>
-                                </Stack>
-
+                                    </Stack>
                                 <Stack isInline mt={3} justify="space-between">
                                     <Text fontSize={["sm", "sm", "md", "md"]}>ชื่อสินค้า : </Text>
                                     <Text
@@ -107,8 +110,7 @@ const StockItDetail: React.FC<Props> = () => {
                                         {data.stockItById.itemName}
                                     </Text>
                                 </Stack>
-                                <Divider mt={3} orientation="horizontal" />
-
+                                    <Divider mt={3} orientation="horizontal" />
                                 <Stack isInline mt={3} justify="space-between">
                                     <Text fontSize={["sm", "sm", "md", "md"]}>
                                         Serial Number :{" "}
@@ -121,8 +123,7 @@ const StockItDetail: React.FC<Props> = () => {
                                         {data.stockItById.serialNum}
                                     </Text>
                                     </Stack>
-                                <Divider mt={3} orientation="horizontal" />
-
+                                    <Divider mt={3} orientation="horizontal" />
                                     <Stack isInline mt={3} justify="space-between">
                                     <Text fontSize={["sm", "sm", "md", "md"]}>ราคารวม : </Text>
                                     <Text
@@ -136,7 +137,17 @@ const StockItDetail: React.FC<Props> = () => {
                                     </Text>
                                     </Stack>
                                 <Divider mt={3} orientation="horizontal" />
-
+                                    <Stack isInline mt={3} justify="space-between">
+                                        <Text fontSize={["sm", "sm", "md", "md"]}>สาขา : </Text>
+                                        <Text
+                                            fontSize={["sm", "sm", "md", "md"]}
+                                            as="i"
+                                            fontWeight="semibold"
+                                        >
+                                            {data.stockItById.branch}
+                                        </Text>
+                                    </Stack>
+                                    <Divider mt={3} orientation="horizontal" />
                                 <Stack isInline mt={3} justify="space-between">
                                     <Text fontSize={["sm", "sm", "md", "md"]}>Created Date : </Text>
                                     <Text
@@ -148,8 +159,7 @@ const StockItDetail: React.FC<Props> = () => {
                                             formatDate(+data.stockItById.createdAt)}
                                     </Text>
                                 </Stack>
-                                <Divider mt={3} orientation="horizontal" />
-
+                                    <Divider mt={3} orientation="horizontal" />
                                 <Stack isInline mt={3} justify="space-between">
                                     <Text fontSize={["sm", "sm", "md", "md"]} w="40vh">
                                         รายละเอียด :{" "}
@@ -161,16 +171,27 @@ const StockItDetail: React.FC<Props> = () => {
                                         {data.stockItById.detail}
                                     </Text>
                                 </Stack>
-                                <Divider mt={3} orientation="horizontal" />
-
-                                <Text fontSize={["sm", "sm", "md", "md"]} mt={3}>
-                                    สถานะการจัดส่ง :{" "}
-                                    </Text>
-                                {/* <AdminStatusControl
-                                        functionName="GiveOrder"
-                                        id={data.giveOrderById.id}
-                                        prevStatus={data.giveOrderById.status}
-                                    /> */}
+                                    <Divider mt={3} orientation="horizontal" />
+                                </Flex>
+                            </Flex>
+                            <Flex flexDir="column" alignItems="center" mb="3">
+                                <Button
+                                    ml={3}
+                                    mr={3}
+                                    colorScheme="green"
+                                    onClick={() => {
+                                        setIsOpen(true);
+                                    }}
+                                >
+                                    เบิก/ยืม
+                                </Button>
+                                {isOpen && (
+                                    <CreateStockOrder
+                                        stockItId={+params.id}
+                                        Open={true}
+                                        setOpen={() => setIsOpen(false)}
+                                    />
+                                )}
                             </Flex>
                         </Flex>
                 )}

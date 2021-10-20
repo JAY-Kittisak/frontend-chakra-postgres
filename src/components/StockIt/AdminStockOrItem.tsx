@@ -6,22 +6,23 @@ import { RegularStockItOrderFragment } from "../../generated/graphql";
 import { formatDate } from "../../utils/helpers";
 
 interface Props {
+    toUrl: string;
     order: RegularStockItOrderFragment;
 }
 
 const AdminStockOrItem: React.FC<Props> = ({
+    toUrl,
     order: {
         id,
         createdAt,
         holdStatus,
         status,
-        branch,
         stockIt: { itemName, serialNum, imageUrl },
         creator: { fullNameTH },
     },
 }) => {
     return (
-        <Link to={`/admin/stock-it-orders/${id}`}>
+        <Link to={`${toUrl}${id}`}>
             <Flex
                 className="orders-content orders-content--content"
                 _hover={{ bgColor: "#eee" }}

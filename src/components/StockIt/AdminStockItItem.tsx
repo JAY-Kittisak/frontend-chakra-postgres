@@ -81,12 +81,18 @@ const AdminStockItItem: React.FC<Props> = ({
             <Td>
                 <Center
                     fontSize="xl"
-                    color={item.currentStatus === "ว่าง" ? "cyan.400" : "green"}
-                >
-                    {item.currentStatus}
-                </Center>
-                <Flex flexDir="column" borderColor="gray.300">
-                    {item.orders.map((value) => (
+                  color={
+                      item.currentStatus === "ว่าง"
+                          ? "cyan.400"
+                          : item.currentStatus === "ใช้งาน"
+                              ? "green"
+                              : "red"
+                  }
+              >
+                  {item.currentStatus}
+              </Center>
+              <Flex flexDir="column" borderColor="gray.300">
+                  {item.orders.map((value) => (
                       <Flex
                           key={value.id}
                           flexDir="column"
@@ -105,74 +111,74 @@ const AdminStockItItem: React.FC<Props> = ({
                           </Link>
                       </Flex>
                   ))}
-                </Flex>
-            </Td>
-            <Td>
-                <Center>
-                    <IconButton
-                        aria-label=""
-                        icon={<EditIcon />}
-                        mr="3"
-                        colorScheme="green"
-                        onClick={() => {
-                            setOpenEdit(true);
-                            setStockToEdit(item);
-                        }}
-                    />
-                    <IconButton
-                        aria-label=""
-                        icon={<DeleteIcon />}
-                        color="red"
-                        colorScheme="green"
-                        onClick={() => setDeleteDialog(true)}
-                    />
-                    <AlertDialog
-                        isOpen={deleteDialog}
-                        leastDestructiveRef={cancelRef.current}
-                        onClose={onClose}
-                    >
-                        <AlertDialogOverlay>
-                            <AlertDialogContent>
-                                <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                                    <Flex bgColor="red" rounded="7px" boxShadow="md">
-                                        <Text fontWeight="bold" color="white" ml="5">
-                                            Delete Give
-                                        </Text>
-                                    </Flex>
-                                </AlertDialogHeader>
+              </Flex>
+          </Td>
+          <Td>
+              <Center>
+                  <IconButton
+                      aria-label=""
+                      icon={<EditIcon />}
+                      mr="3"
+                      colorScheme="green"
+                      onClick={() => {
+                          setOpenEdit(true);
+                          setStockToEdit(item);
+                      }}
+                  />
+                  <IconButton
+                      aria-label=""
+                      icon={<DeleteIcon />}
+                      color="red"
+                      colorScheme="green"
+                      onClick={() => setDeleteDialog(true)}
+                  />
+                  <AlertDialog
+                      isOpen={deleteDialog}
+                      leastDestructiveRef={cancelRef.current}
+                      onClose={onClose}
+                  >
+                      <AlertDialogOverlay>
+                          <AlertDialogContent>
+                              <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                                  <Flex bgColor="red" rounded="7px" boxShadow="md">
+                                      <Text fontWeight="bold" color="white" ml="5">
+                                          Delete Give
+                                      </Text>
+                                  </Flex>
+                              </AlertDialogHeader>
 
-                                <AlertDialogBody>
-                                    Are you sure? You can't undo this action afterwards. <br />
-                                    <Text>คุณต้องการลบ {item.itemName} ใช่หรือไม่</Text>
-                                </AlertDialogBody>
+                              <AlertDialogBody>
+                                  Are you sure? You can't undo this action afterwards. <br />
+                                  <Text>คุณต้องการลบ {item.itemName} ใช่หรือไม่</Text>
+                              </AlertDialogBody>
 
-                                <AlertDialogFooter>
-                                    <Button ref={cancelRef.current} onClick={onClose}>
-                                        Cancel
-                                    </Button>
-                                    <Button
-                                        color="white"
-                                        bgColor="red"
-                                        ml={3}
-                                        onClick={async () => {
+                              <AlertDialogFooter>
+                                  <Button ref={cancelRef.current} onClick={onClose}>
+                                      Cancel
+                                  </Button>
+                                  <Button
+                                      color="white"
+                                      bgColor="red"
+                                      ml={3}
+                                      onClick={async () => {
                                           const response = await deleteStockIt({ id: item.id });
                                           if (!response) {
-                            alert("Delete Error! โปรดติดต่อผู้ดูแล");
-                        } else if (response) {
-                                                setDeleteDialog(false);
-                                            }
-                                        }}
-                                    >
-                                        Delete
-                                    </Button>
-                                </AlertDialogFooter>
-                            </AlertDialogContent>
-                        </AlertDialogOverlay>
-                    </AlertDialog>
-                </Center>
-            </Td>
-        </Tr>
-    );
+                                              alert("Delete Error! โปรดติดต่อผู้ดูแล");
+                                          } else if (response) {
+                                              setDeleteDialog(false);
+                                          }
+                                      }}
+                                  >
+                                      Delete
+                                  </Button>
+                              </AlertDialogFooter>
+                          </AlertDialogContent>
+                      </AlertDialogOverlay>
+                  </AlertDialog>
+              </Center>
+          </Td>
+      </Tr>
+  );
 };
 
 export default AdminStockItItem;
