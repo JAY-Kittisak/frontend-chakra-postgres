@@ -14,8 +14,8 @@ import {
     GivesQuery,
     GivesDocument,
     CreateJobItMutation,
-    JobITsQuery,
-    JobITsDocument,
+    JobItByCreatorIdQuery,
+    JobItByCreatorIdDocument,
     DeleteGiveOrderMutationVariables,
     CreateGiveCdcMutation,
     GivesCdcQuery,
@@ -179,15 +179,15 @@ export const client = createClient({
                     },
 
                     createJobIT: (_result, args, cache, info) => {
-                        betterUpdateQuery<CreateJobItMutation, JobITsQuery>(cache,
-                            { query: JobITsDocument },
+                        betterUpdateQuery<CreateJobItMutation, JobItByCreatorIdQuery>(cache,
+                            { query: JobItByCreatorIdDocument },
                             _result,
                             (result, query) => {
                                 if (result.createJobIT.errors) {
                                     return query
                                 } else {
                                     return {
-                                        jobITs: result.createJobIT.jobIT
+                                        jobITByCreatorId: result.createJobIT.jobIT
                                     }
                                 }
                             }

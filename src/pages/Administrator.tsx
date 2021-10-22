@@ -6,18 +6,37 @@ import AdministratorItem from "../components/AdministratorItem";
 import {
     useGiveOrdersCdcQuery,
     useGiveOrdersQuery,
+    useJobITsQuery,
+    useStockItOrdersQuery,
 } from "../generated/graphql";
 
 interface Props { }
 
 const Administrator: React.FC<Props> = () => {
+    const [{ data: jobIt, fetching: fetchingJt }] = useJobITsQuery({
+        variables: {
+            input: {
+                nameItAction: "",
+                status: "",
+                dateBegin: "",
+                dateEnd: "",
+            },
+        },
+    });
     const [{ data, fetching }] = useGiveOrdersQuery();
     const [{ data: dataCdc, fetching: fetchingCdc }] = useGiveOrdersCdcQuery();
+    const [{ data: stockIto, fetching: fetchingSto }] = useStockItOrdersQuery({ variables: { createBy: false } });
 
-    if (fetching || fetchingCdc) {
-        return <Text fontSize="6xl">Loading...</Text>;
+    let body = null
+    if (fetchingJt || fetching || fetchingCdc || fetchingSto) {
+        body = (<Text fontSize="6xl">Loading...</Text>)
     }
-
+    //------------------------------------ JobITs ---------------------------------------------
+    const jobItNew = jobIt?.jobITs?.filter((val) => val.status === "New");
+    const jobItWait = jobIt?.jobITs?.filter((val) => val.status === "Wait Approve");
+    const jobItSuc = jobIt?.jobITs?.filter((val) => val.status === "Success");
+    const jobItImp = jobIt?.jobITs?.filter((val) => val.status === "Impossible");
+    //------------------------------------ GiveOrders ---------------------------------------------
     const giveNew = data?.giveOrders?.filter((give) => give.status === "New");
     const giveNewCdc = dataCdc?.giveOrdersCdc?.filter(
         (give) => give.status === "New"
@@ -34,9 +53,14 @@ const Administrator: React.FC<Props> = () => {
     const giveSuccessCdc = dataCdc?.giveOrdersCdc?.filter(
         (give) => give.status === "Success"
     );
+    //------------------------------------ stockIto ---------------------------------------------
+    const stockItoNew = stockIto?.stockItOrders?.filter((val) => val.status === "New");
+    const stockItoPr = stockIto?.stockItOrders?.filter((val) => val.status === "Preparing");
+    const stockItoSuc = stockIto?.stockItOrders?.filter((val) => val.status === "Success");
 
     const sumLength = {
         newNum: giveNew && giveNewCdc && giveNew.length + giveNewCdc.length,
+        waitApprove: undefined,
         preparingNum:
             givePreparing &&
             givePreparingCdc &&
@@ -45,8 +69,14 @@ const Administrator: React.FC<Props> = () => {
             giveSuccess &&
             giveSuccessCdc &&
             giveSuccess.length + giveSuccessCdc.length,
+        impossible: undefined
     };
 
+    const contentJobIt = {
+        main: "จัดการ Job-IT",
+        order: undefined,
+        addCategory: undefined,
+    };
     const contentGive = {
         main: "จัดการของแจก",
         order: "จัดการ Order ของแจก",
@@ -69,8 +99,22 @@ const Administrator: React.FC<Props> = () => {
                 ผู้ดูแลระบบ
             </Text>
             <Divider mt={1} mb={5} orientation="horizontal" />
-            <Flex>
-                <AdministratorItem
+            {body ? body : (
+                <Flex flexDir={["column", "column", "column", "column", "row"]}>
+                    <AdministratorItem
+                        title="ระบบแจ้ง Job IT"
+                        sumLength={{
+                            newNum: jobItNew?.length,
+                            waitApprove: jobItWait?.length,
+                            preparingNum: undefined,
+                            successNum: jobItSuc?.length,
+                            impossible: jobItImp?.length
+                        }}
+                        toMain="/admin/manage-job-it"
+                        toOrder={undefined}
+                        content={contentJobIt}
+                    />
+                    <AdministratorItem
                     title="ระบบเบิกของแจกลูกค้า"
                     sumLength={sumLength}
                     toMain="/admin/manage-gives"
@@ -80,19 +124,22 @@ const Administrator: React.FC<Props> = () => {
                 <AdministratorItem
                     title="ระบบเบิกอุปกรณ์ IT"
                     sumLength={{
-                        newNum: 5,
-                        preparingNum: 5,
-                        successNum: 5,
+                        newNum: stockItoNew?.length,
+                        waitApprove: undefined,
+                        preparingNum: stockItoPr?.length,
+                        successNum: stockItoSuc?.length,
+                        impossible: undefined
                     }}
                     toMain="/admin/manage-stock-it"
                     toOrder="/admin/stock-it-orders"
                     content={contentStockIt}
                 />
             </Flex>
-
+            )}
             <Flex justify="center" mt="6">
                 <Chart />
             </Flex>
+
         </>
     );
 };

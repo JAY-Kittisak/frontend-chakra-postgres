@@ -123,7 +123,7 @@ const ManageStockItOrderDetail: React.FC<Props> = () => {
 
                             <Stack isInline mt={3} justify="space-between">
                                 <Text fontSize={["sm", "sm", "md", "md"]}>
-                                    สาขา :{" "}
+                                        สาขาของ User :{" "}
                                 </Text>
                                 <Text
                                     fontSize={["sm", "sm", "md", "md"]}

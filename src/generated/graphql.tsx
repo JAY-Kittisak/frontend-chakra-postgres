@@ -533,7 +533,7 @@ export type Query = {
   manualADById: ManualAd;
   jobITs?: Maybe<Array<JobIt>>;
   jobITById: JobIt;
-  jobITByCreatorId: Array<JobIt>;
+  jobITByCreatorId?: Maybe<Array<JobIt>>;
   stockIts?: Maybe<Array<StockIt>>;
   stockItById: StockIt;
   stockItOrders?: Maybe<Array<StockItOrder>>;
@@ -1487,10 +1487,10 @@ export type JobItByCreatorIdQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type JobItByCreatorIdQuery = (
   { __typename?: 'Query' }
-  & { jobITByCreatorId: Array<(
+  & { jobITByCreatorId?: Maybe<Array<(
     { __typename?: 'JobIT' }
     & RegularJobItFragment
-  )> }
+  )>> }
 );
 
 export type JobItByIdQueryVariables = Exact<{
