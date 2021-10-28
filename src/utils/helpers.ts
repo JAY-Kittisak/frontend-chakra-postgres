@@ -191,3 +191,9 @@ export const crStatus: Current[] = [
     "ใช้งาน",
     "เลิกใช้แล้ว"
 ];
+
+export interface Todo {
+    id: number;
+    todo: string;
+    isDone: boolean;
+}

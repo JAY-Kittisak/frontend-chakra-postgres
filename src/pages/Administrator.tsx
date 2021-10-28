@@ -2,6 +2,7 @@ import React from "react";
 import { Text, Flex, Divider } from "@chakra-ui/react";
 
 import Chart from "../components/chart/Chart";
+import Spinner from "../components/Spinner"
 import AdministratorItem from "../components/AdministratorItem";
 import {
     useGiveOrdersCdcQuery,
@@ -29,7 +30,12 @@ const Administrator: React.FC<Props> = () => {
 
     let body = null
     if (fetchingJt || fetching || fetchingCdc || fetchingSto) {
-        body = (<Text fontSize="6xl">Loading...</Text>)
+        body = (
+            <Flex justify="center" align="center">
+                <Spinner color="grey" height={70} width={70} />
+                <Text ml="2" fontSize="6xl">Loading...</Text>
+            </Flex>
+        )
     }
     //------------------------------------ JobITs ---------------------------------------------
     const jobItNew = jobIt?.jobITs?.filter((val) => val.status === "New");
@@ -100,45 +106,47 @@ const Administrator: React.FC<Props> = () => {
             </Text>
             <Divider mt={1} mb={5} orientation="horizontal" />
             {body ? body : (
-                <Flex flexDir={["column", "column", "column", "column", "row"]}>
-                    <AdministratorItem
-                        title="ระบบแจ้ง Job IT"
-                        sumLength={{
-                            newNum: jobItNew?.length,
-                            waitApprove: jobItWait?.length,
-                            preparingNum: undefined,
-                            successNum: jobItSuc?.length,
-                            impossible: jobItImp?.length
-                        }}
-                        toMain="/admin/manage-job-it"
-                        toOrder={undefined}
-                        content={contentJobIt}
-                    />
-                    <AdministratorItem
-                    title="ระบบเบิกของแจกลูกค้า"
-                    sumLength={sumLength}
-                    toMain="/admin/manage-gives"
-                    toOrder="/admin/manage-give-orders"
-                    content={contentGive}
-                />
-                <AdministratorItem
-                    title="ระบบเบิกอุปกรณ์ IT"
-                    sumLength={{
-                        newNum: stockItoNew?.length,
-                        waitApprove: undefined,
-                        preparingNum: stockItoPr?.length,
-                        successNum: stockItoSuc?.length,
-                        impossible: undefined
-                    }}
-                    toMain="/admin/manage-stock-it"
-                    toOrder="/admin/stock-it-orders"
-                    content={contentStockIt}
-                />
-            </Flex>
+                <>
+                    <Flex flexDir={["column", "column", "column", "column", "row"]}>
+                        <AdministratorItem
+                            title="ระบบแจ้ง Job IT"
+                            sumLength={{
+                                newNum: jobItNew?.length,
+                                waitApprove: jobItWait?.length,
+                                preparingNum: undefined,
+                                successNum: jobItSuc?.length,
+                                impossible: jobItImp?.length
+                            }}
+                            toMain="/admin/manage-job-it"
+                            toOrder={undefined}
+                            content={contentJobIt}
+                        />
+                        <AdministratorItem
+                            title="ระบบเบิกของแจกลูกค้า"
+                            sumLength={sumLength}
+                            toMain="/admin/manage-gives"
+                            toOrder="/admin/manage-give-orders"
+                            content={contentGive}
+                        />
+                        <AdministratorItem
+                            title="ระบบเบิกอุปกรณ์ IT"
+                            sumLength={{
+                                newNum: stockItoNew?.length,
+                                waitApprove: undefined,
+                                preparingNum: stockItoPr?.length,
+                                successNum: stockItoSuc?.length,
+                                impossible: undefined
+                            }}
+                            toMain="/admin/manage-stock-it"
+                            toOrder="/admin/stock-it-orders"
+                            content={contentStockIt}
+                        />
+                    </Flex>
+                    <Flex justify="center" mt="6">
+                        <Chart />
+                    </Flex>
+                </>
             )}
-            <Flex justify="center" mt="6">
-                <Chart />
-            </Flex>
 
         </>
     );

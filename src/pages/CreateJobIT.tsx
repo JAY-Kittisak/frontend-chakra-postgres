@@ -88,6 +88,7 @@ const CreateJobIT: React.FC<Props> = () => {
                             >
                                 <Text fontSize="xl" mb="2">เลือกประเภท :</Text>
                                 <Grid
+                                    ml="10"
                                     templateColumns={["repeat(3, 1fr)"]}
                                     gap={6}
                                     role="group"

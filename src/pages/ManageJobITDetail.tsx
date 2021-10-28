@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import {
     useColorModeValue,
@@ -9,16 +9,66 @@ import {
     Divider,
     useColorMode,
 } from "@chakra-ui/react";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
 
 import Spinner from "../components/Spinner";
 import AdminStatusControl from "../components/AdminStatusControl";
 import { useJobItByIdQuery } from "../generated/graphql";
-import { formatDate, formatUpperCase } from "../utils/helpers";
+import { formatDate, formatUpperCase, Todo } from "../utils/helpers";
 import ITComment from "../components/jobIT/ITComment";
+import InputComment from "../components/DragDropTodo/InputComment";
+import ItCommentList from "../components/DragDropTodo/ItCommentList";
 
 interface Props { }
 
 const ManageJobITDetail: React.FC<Props> = () => {
+    const [todo, setTodo] = useState<string>("");
+    const [todos, setTodos] = useState<Array<Todo>>([]);
+    const [CompletedTodos, setCompletedTodos] = useState<Array<Todo>>([]);
+
+    const handleAdd = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (todo) {
+            setTodos([...todos, { id: Date.now(), todo, isDone: false }]);
+            setTodo("");
+        }
+    };
+
+    const onDragEnd = (result: DropResult) => {
+        const { destination, source } = result;
+        console.log(result);
+        if (!destination) {
+            return;
+        }
+        if (
+            destination.droppableId === source.droppableId &&
+            destination.index === source.index
+        ) {
+            return;
+        }
+        let add;
+        let active = todos;
+        let complete = CompletedTodos;
+        // Source Logic
+        if (source.droppableId === "TodosList") {
+            add = active[source.index];
+            active.splice(source.index, 1);
+        } else {
+            add = complete[source.index];
+            complete.splice(source.index, 1);
+        }
+        // Destination Logic
+        if (destination.droppableId === "TodosList") {
+            active.splice(destination.index, 0, add);
+        } else {
+            complete.splice(destination.index, 0, add);
+        }
+        setCompletedTodos(complete);
+        setTodos(active);
+    };
+
+    // -------------------- Before ---------------------
     const bg = useColorModeValue("white", "gray.700");
     const { colorMode } = useColorMode();
 
@@ -34,10 +84,9 @@ const ManageJobITDetail: React.FC<Props> = () => {
                 as="i"
                 fontWeight="semibold"
                 fontSize={["md", "md", "xl", "3xl"]}
-                bgGradient="linear(to-l, #7928CA,#FF0080)"
-                bgClip="text"
+                color="gray.600"
             >
-                Admin manage Job IT
+                Admin manage job it
             </Text>
             <Divider mt={1} mb={5} orientation="horizontal" />
 
@@ -199,6 +248,27 @@ const ManageJobITDetail: React.FC<Props> = () => {
                         </Flex>
                     </Flex>
                 )}
+                <DragDropContext onDragEnd={onDragEnd}>
+                    <Flex
+                        flexDir="column"
+                        w={["100%", "100%", "100%", "70%", "50%"]}
+                        h="666px"
+                        p={6}
+                        ml={5}
+                        bg={bg}
+                        rounded="7px"
+                        boxShadow="md"
+                    >
+                        <Text className="heading">IT Comment</Text>
+                        <InputComment todo={todo} setTodo={setTodo} handleAdd={handleAdd} />
+                        <ItCommentList
+                            todos={todos}
+                            setTodos={setTodos}
+                            CompletedTodos={CompletedTodos}
+                            setCompletedTodos={setCompletedTodos}
+                        />
+                    </Flex>
+                </DragDropContext>
             </Center>
         </>
     );
