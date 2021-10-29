@@ -2,7 +2,7 @@ import React from 'react'
 import { Droppable } from "react-beautiful-dnd";
 
 
-import SingleITComment from './SingleITComment';
+import SingleTodo from './SingleTodo';
 import { Todo } from "../../utils/helpers"
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
     CompletedTodos: Array<Todo>;
 }
 
-const ItCommentList: React.FC<Props> = ({
+const TodoList: React.FC<Props> = ({
     todos,
     setTodos,
     CompletedTodos,
@@ -29,7 +29,7 @@ const ItCommentList: React.FC<Props> = ({
                     >
                         <span className="todos__heading">Active Tasks</span>
                         {todos?.map((todo, index) => (
-                            <SingleITComment
+                            <SingleTodo
                                 index={index}
                                 todos={todos}
                                 todo={todo}
@@ -51,7 +51,7 @@ const ItCommentList: React.FC<Props> = ({
                     >
                         <span className="todos__heading">Completed Tasks</span>
                         {CompletedTodos?.map((todo, index) => (
-                            <SingleITComment
+                            <SingleTodo
                                 index={index}
                                 todos={CompletedTodos}
                                 todo={todo}
@@ -67,4 +67,4 @@ const ItCommentList: React.FC<Props> = ({
     )
 }
 
-export default ItCommentList
+export default TodoList

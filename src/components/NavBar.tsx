@@ -65,15 +65,14 @@ const NavBar: React.FC<Props> = () => {
                         logout()
                     }}
                     isLoading={logoutFetching}
-                    variant='link'
-                    as="u"
+                variant='link'
                 fontSize="xl"
-                    cursor="pointer"
-                bgGradient="linear(to-l, #0AB68B,#4F80E2)"
-                bgClip="text"
+                cursor="pointer"
+                color="white"
+                p="1"
             >
                 <i className="bi bi-door-open-fill"></i>
-                <Text>Log Out</Text>
+                <Text fontSize={["md", "md", "md", "xl"]}>Log Out</Text>
             </Button>
         )
     }
@@ -83,8 +82,9 @@ const NavBar: React.FC<Props> = () => {
             zIndex={1}
             position="sticky"
             top={0}
-            bg={colorMode === "light" ? "#fff" : "#3E54D3"}
+            bg={colorMode === "light" ? "#333" : "#3E54D3"}
             p={1}
+            mb={3}
         >
             <Menu>
                 <MenuButton

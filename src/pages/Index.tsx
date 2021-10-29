@@ -2,7 +2,7 @@ import React from "react";
 import { Text, Flex, Image, Button } from "@chakra-ui/react";
 import { Link } from "react-router-dom"
 
-import pjaray from "../pjaray.svg"
+import testsvg from "../testsvg.svg"
 
 interface Props { }
 
@@ -41,7 +41,7 @@ const Index: React.FC<Props> = () => {
                 <Flex w={["100%", "100%", "100%", "100%", "50%"]} justify="center">
                     <Image
                         boxSize="550px"
-                        src={pjaray}
+                        src={testsvg}
                         alt="Dan Abramov"
                     />
                 </Flex>

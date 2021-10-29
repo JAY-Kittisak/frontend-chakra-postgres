@@ -218,12 +218,15 @@ body{
     color: #fff;
 }
 
-.side-menu .main-menu-footer.top{
-    position: absolute;
-    bottom: 10%;
-    left: 0;
-    padding: 20px 20px;
-    box-sizing: border-box;
+.menu-admin{
+    font-size: 20px;
+    background: rgb(236, 24, 42);
+    font-weight: bold;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    color: #fff;
 }
 
 .side-menu .main-menu-footer .menu-item-footer{
@@ -446,4 +449,9 @@ body{
 .error {
     color: red
 }
-  
+
+
+.App-logo {
+    height: 40vmin;
+    pointer-events: none;
+  }

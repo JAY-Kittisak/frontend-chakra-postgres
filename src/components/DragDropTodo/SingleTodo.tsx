@@ -11,7 +11,7 @@ interface Props {
     setTodos: React.Dispatch<React.SetStateAction<Array<Todo>>>;
 }
 
-const SingleITComment: React.FC<Props> = ({ index, todo, todos, setTodos }) => {
+const SingleTodo: React.FC<Props> = ({ index, todo, todos, setTodos }) => {
     const [edit, setEdit] = useState<boolean>(false);
     const [editTodo, setEditTodo] = useState<string>(todo.todo);
 
@@ -85,4 +85,4 @@ const SingleITComment: React.FC<Props> = ({ index, todo, todos, setTodos }) => {
     );
 }
 
-export default SingleITComment
+export default SingleTodo

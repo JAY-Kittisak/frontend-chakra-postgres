@@ -74,11 +74,8 @@ const menuItemsFooter = [
     },
     {
         name: "Setting",
-        to: "/setting",
-        iconClassName: "bi bi-gear-fill",
-        subMenus: [
-            { name: "จัดการของแจกลูกค้า", to: "/admin/manage-gives" },
-        ],
+        to: "/todo",
+        iconClassName: "bi bi-gear-fill"
     },
 ];
 
@@ -120,6 +117,12 @@ const SideMenu: React.FC<Props> = ({ onCollapse }) => {
             </>
         );
     }
+
+    useEffect(() => {
+        if (document.body.offsetWidth < 900) {
+            setInactive(true)
+        }
+    }, [])
 
     return (
         // <div className="side-menu inactive">.
@@ -173,8 +176,14 @@ const SideMenu: React.FC<Props> = ({ onCollapse }) => {
 
             {/* {!data?.me || data.me.roles !== ("admin" || "superAdmin") ? null : ( */}
             {/* false-true */}
+
             {!data?.me || (data.me.roles !== "admin" && data.me.roles !== "superAdmin") ? null : (
-                <div className="main-menu-footer top">
+                <div className="main-menu-footer">
+                    {inactive ? (
+                        <p className="menu-admin">AM</p>
+                    ) : (
+                        <p className="menu-admin">Administrator</p>
+                    )}
                     <ul>
                         {menuItemsFooter.map((menuItemsFooter, index) => (
                             <MenuItemFooter
@@ -183,7 +192,7 @@ const SideMenu: React.FC<Props> = ({ onCollapse }) => {
                                 menuName={menuItemsFooter.name}
                                 to={menuItemsFooter.to}
                                 iconClassName={menuItemsFooter.iconClassName}
-                                subMenus={menuItemsFooter.subMenus || []}
+                                subMenus={[]}
                                 onClick={() => {
                                     if (inactive) {
                                         setInactive(false);

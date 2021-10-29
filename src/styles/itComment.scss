@@ -53,28 +53,30 @@
 }
 
 .todos {
+  min-height: 500px;
   border-radius: 5px;
   display: flex;
   flex-direction: column;
   width: 47.5%;
   padding: 15px;
-  background-color: rgb(50, 195, 205);
+  background-color: rgb(150, 150, 150);
 }
 
 .dragactive {
-  background-color: rgb(0, 221, 236);
+  background-color: rgba(150, 150, 150,0.7);
 }
 
 .dragcomplete {
-  background-color: rgb(255, 38, 0);
+  background-color: rgba(10, 182, 139,0.7);
 }
 
 .remove {
-  background-color: rgb(235, 103, 80);
+  background-color: rgb(10, 182, 139);
 }
 
 .todos__heading {
   font-size: 20px;
+  font-weight: bold;
   text-align: center;
   color: white;
 }

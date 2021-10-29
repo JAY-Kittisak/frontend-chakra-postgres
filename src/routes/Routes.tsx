@@ -7,6 +7,7 @@ import Login from "../pages/Login";
 import Profile from "../pages/Profile";
 import JobITByMe from "../pages/JobITByMe";
 import CreateJobIT from "../pages/CreateJobIT";
+import TodoPage from "../pages/TodoPage";
 import PageNotFound from "../pages/PageNotFound";
 import TierRoute from "./TierRoute";
 import GiveRoute from "./GiveRoute";
@@ -20,6 +21,9 @@ interface Props { }
 const Routes: React.FC<Props> = () => {
     return (
         <Switch>
+            <Route path="/todo">
+                <TodoPage />
+            </Route>
           <Route path="/stock-it">
               <StockItRoute />
           </Route>
