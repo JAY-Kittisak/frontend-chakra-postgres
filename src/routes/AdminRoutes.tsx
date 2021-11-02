@@ -14,6 +14,7 @@ import ManageJobITDetail from '../pages/ManageJobITDetail'
 import ManageJobIT from '../pages/ManageJobIT'
 import ManageStockItOrders from '../pages/ManageStockItOrders'
 import ManageStockItOrderDetail from '../pages/ManageStockItOrderDetail'
+import ManageUsers from '../pages/ManageUsers'
 import PageNotFound from '../pages/PageNotFound'
 
 interface Props { }
@@ -24,6 +25,9 @@ const AdminRoutes: React.FC<Props> = () => {
 
     return (
             <Switch>
+            <Route path="/admin/manage-users">
+                <ManageUsers />
+            </Route>
             <Route path="/admin/stock-it-orders/:id">
                 <ManageStockItOrderDetail />
             </Route>

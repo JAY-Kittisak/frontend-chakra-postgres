@@ -13,7 +13,7 @@ const TierRoute: React.FC<Props> = () => {
     useIsAuth()
     return (
         <Switch>
-            <Route path="/tiers/product-tier">
+            <Route path="/tiers/product-tier/:category">
                 <ProductTier />
             </Route>
             {/* FIXME: Dynamic page ต้องอยู่ข้างบนเพจหลัก */}

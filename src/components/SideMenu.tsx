@@ -22,7 +22,7 @@ const menuItems = [
         name: "Tier",
         to: "/tiers/factories",
         iconClassName: "bi bi-diagram-3",
-        subMenus: [{ name: "Product", to: "/tiers/product-tier" }],
+        subMenus: [{ name: "Product", to: "/tiers/product-tier/all" }],
     },
     { name: "คู่มือแผนก AD", to: "/manual-ad/factories", iconClassName: "bi bi-file-earmark-pdf" },
     {

@@ -16,6 +16,27 @@ export type Scalars = {
   Upload: any;
 };
 
+export type Amphures = {
+  __typename?: 'Amphures';
+  id: Scalars['Float'];
+  code: Scalars['String'];
+  name_th: Scalars['String'];
+  name_en: Scalars['String'];
+  province_id: Scalars['Float'];
+  province: Provinces;
+  districts: Array<Districts>;
+};
+
+export type Districts = {
+  __typename?: 'Districts';
+  id: Scalars['Float'];
+  zip_code: Scalars['Float'];
+  name_th: Scalars['String'];
+  name_en: Scalars['String'];
+  amphure_id: Scalars['Float'];
+  amphure: Amphures;
+};
+
 export type Factory = {
   __typename?: 'Factory';
   id: Scalars['Float'];
@@ -307,7 +328,8 @@ export type MutationUploadImageMeArgs = {
 
 
 export type MutationUpdateRolesArgs = {
-  id: Scalars['Float'];
+  id: Scalars['Int'];
+  newPosition: Scalars['String'];
   newRoles: Scalars['String'];
 };
 
@@ -507,6 +529,16 @@ export type ProductByTierInput = {
   creatorId: Scalars['Float'];
 };
 
+export type Provinces = {
+  __typename?: 'Provinces';
+  id: Scalars['Float'];
+  code: Scalars['String'];
+  name_th: Scalars['String'];
+  name_en: Scalars['String'];
+  geography_id: Scalars['Float'];
+  amphures: Array<Amphures>;
+};
+
 export type Query = {
   __typename?: 'Query';
   users: Array<User>;
@@ -538,6 +570,8 @@ export type Query = {
   stockItById: StockIt;
   stockItOrders?: Maybe<Array<StockItOrder>>;
   stockItOrderById: StockItOrder;
+  queryProvinces: Array<Provinces>;
+  amphuresPvId: Array<Amphures>;
 };
 
 
@@ -607,6 +641,11 @@ export type QueryStockItOrdersArgs = {
 
 
 export type QueryStockItOrderByIdArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryAmphuresPvIdArgs = {
   id: Scalars['Int'];
 };
 
@@ -733,6 +772,7 @@ export type User = {
   username: Scalars['String'];
   email: Scalars['String'];
   roles: Scalars['String'];
+  position: Scalars['String'];
   fullNameTH?: Maybe<Scalars['String']>;
   fullNameEN?: Maybe<Scalars['String']>;
   nickName?: Maybe<Scalars['String']>;
@@ -850,7 +890,7 @@ export type RegularStockItOrderFragment = (
 
 export type RegularUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'username' | 'email' | 'roles' | 'departments' | 'fullNameTH' | 'fullNameEN' | 'nickName' | 'imageUrl' | 'createdAt' | 'updatedAt'>
+  & Pick<User, 'id' | 'username' | 'email' | 'roles' | 'position' | 'departments' | 'fullNameTH' | 'fullNameEN' | 'nickName' | 'imageUrl' | 'createdAt' | 'updatedAt'>
 );
 
 export type CreateGiveMutationVariables = Exact<{
@@ -1263,6 +1303,27 @@ export type UpdateJobItMutation = (
   ) }
 );
 
+export type UpdateRolesMutationVariables = Exact<{
+  id: Scalars['Int'];
+  newRoles: Scalars['String'];
+  newPosition: Scalars['String'];
+}>;
+
+
+export type UpdateRolesMutation = (
+  { __typename?: 'Mutation' }
+  & { updateRoles: (
+    { __typename?: 'UserResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'field' | 'message'>
+    )>>, user?: Maybe<(
+      { __typename?: 'User' }
+      & RegularUserFragment
+    )> }
+  ) }
+);
+
 export type UpdateStockItMutationVariables = Exact<{
   id: Scalars['Int'];
   input: StockItInput;
@@ -1597,6 +1658,17 @@ export type UserAdminQuery = (
   )> }
 );
 
+export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UsersQuery = (
+  { __typename?: 'Query' }
+  & { users: Array<(
+    { __typename?: 'User' }
+    & RegularUserFragment
+  )> }
+);
+
 export type FactoryByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -1836,6 +1908,7 @@ export const RegularUserFragmentDoc = gql`
   username
   email
   roles
+  position
   departments
   fullNameTH
   fullNameEN
@@ -2211,6 +2284,23 @@ export const UpdateJobItDocument = gql`
 export function useUpdateJobItMutation() {
   return Urql.useMutation<UpdateJobItMutation, UpdateJobItMutationVariables>(UpdateJobItDocument);
 };
+export const UpdateRolesDocument = gql`
+    mutation UpdateRoles($id: Int!, $newRoles: String!, $newPosition: String!) {
+  updateRoles(id: $id, newRoles: $newRoles, newPosition: $newPosition) {
+    errors {
+      field
+      message
+    }
+    user {
+      ...RegularUser
+    }
+  }
+}
+    ${RegularUserFragmentDoc}`;
+
+export function useUpdateRolesMutation() {
+  return Urql.useMutation<UpdateRolesMutation, UpdateRolesMutationVariables>(UpdateRolesDocument);
+};
 export const UpdateStockItDocument = gql`
     mutation UpdateStockIt($id: Int!, $input: StockItInput!) {
   updateStockIt(id: $id, input: $input) {
@@ -2534,6 +2624,17 @@ export const UserAdminDocument = gql`
 
 export function useUserAdminQuery(options: Omit<Urql.UseQueryArgs<UserAdminQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<UserAdminQuery>({ query: UserAdminDocument, ...options });
+};
+export const UsersDocument = gql`
+    query Users {
+  users {
+    ...RegularUser
+  }
+}
+    ${RegularUserFragmentDoc}`;
+
+export function useUsersQuery(options: Omit<Urql.UseQueryArgs<UsersQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<UsersQuery>({ query: UsersDocument, ...options });
 };
 export const FactoryByIdDocument = gql`
     query FactoryById($id: Int!) {

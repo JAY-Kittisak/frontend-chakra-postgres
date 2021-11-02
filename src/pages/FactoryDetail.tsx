@@ -29,14 +29,15 @@ const FactoryDetail: React.FC<Props> = () => {
     const [creatorId, setCreatorId] = useState<number>(Number);
     const [creatorName, setCreatorName] = useState<string>("");
     const [openJoinForm, setOpenJoinForm] = useState(false);
+    const [productId, setProductId] = useState(0);
+
     const { isOpen, setIsOpen } = useDialog();
 
     const params = useParams<{ id: string }>();
 
-    const bg = useColorModeValue("gray.200", "gray.700");
+    const bg = useColorModeValue("gray.100", "gray.700");
     const color = useColorModeValue("green", "green");
     const colorW = useColorModeValue("white", "black.100");
-
 
     const paramsId = params.id;
     const [{ data, fetching }] = useFactoryByIdQuery({
@@ -64,7 +65,7 @@ const FactoryDetail: React.FC<Props> = () => {
                     <Flex>
                             <Box w="100%" p={5} rounded="7px" boxShadow="md" bg={bg}>
                                 <Stack isInline align="baseline" justify="space-between" mb={4}>
-                                    <Heading color="orange" fontSize={["xl", "2xl", "3xl", "4xl"]}>
+                                    <Heading fontSize={["xl", "2xl", "3xl", "4xl"]}>
                                         {data?.factoryById?.companyName}
                                     </Heading>
                                     <Text fontWeight="semibold" fontSize={["sm", "md", "lg", "xl"]}>
@@ -81,8 +82,8 @@ const FactoryDetail: React.FC<Props> = () => {
                                                 ml="1"
                                                 fontSize="0.8em"
                                                 variant="solid"
-                                                colorScheme="green"
-                                                rounded="full"
+                                                colorScheme="linkedin"
+                                                rounded="md"
                                                 px={2}
                                             >
                                                 {data?.factoryById?.industrialEstate}
@@ -91,8 +92,8 @@ const FactoryDetail: React.FC<Props> = () => {
                                                 ml="1"
                                                 fontSize="0.8em"
                                                 variant="solid"
-                                                colorScheme="pink"
-                                                rounded="full"
+                                                colorScheme="facebook"
+                                                rounded="md"
                                                 px={2}
                                             >
                                                 {data?.factoryById?.businessType}
@@ -103,7 +104,6 @@ const FactoryDetail: React.FC<Props> = () => {
                                         <Text
                                             textTransform="uppercase"
                                             fontSize={["xs", "md", "md", "md"]}
-                                            color="tomato"
                                             fontWeight="semibold"
                                             mr="1"
                                         >
@@ -119,7 +119,6 @@ const FactoryDetail: React.FC<Props> = () => {
                                         <Text
                                             textTransform="uppercase"
                                             fontSize={["xs", "sm", "md", "md"]}
-                                            color="tomato"
                                             fontWeight="semibold"
                                             mr="1"
                                         >
@@ -141,7 +140,6 @@ const FactoryDetail: React.FC<Props> = () => {
                                     <Text
                                         textTransform="uppercase"
                                         fontSize={["xs", "sm", "md", "md"]}
-                                        color="tomato"
                                         fontWeight="semibold"
                                     >
                                         description&bull;
@@ -159,7 +157,6 @@ const FactoryDetail: React.FC<Props> = () => {
                                     <Text
                                         textTransform="uppercase"
                                         fontSize={["xs", "sm", "md", "md"]}
-                                        color="tomato"
                                         fontWeight="semibold"
                                     >
                                         Address&bull;
@@ -181,8 +178,8 @@ const FactoryDetail: React.FC<Props> = () => {
                                         rightIcon={<AddIcon />}
                                         colorScheme={color}
                                         onClick={() => {
-                                            // setOpenProductForm(true);
-                                            setIsOpen(true)
+                                        // setOpenProductForm(true);
+                                            setIsOpen(true);
                                         }}
                                     >
                                         <Text color={colorW}>Add Product</Text>
@@ -209,7 +206,7 @@ const FactoryDetail: React.FC<Props> = () => {
                                 alignContent="center"
                                 p={8}
                             >
-                                <Heading mb={4}>Product ที่ผลิต</Heading>
+                                <Text fontSize="3xl" mb="2">Product ที่ผลิต</Text>
                                 {!data?.factoryById?.products.length ? (
                                     <Text p={1} color="red" fontSize="xl">
                                         ไม่ประวัติการบันทึกข้อมูล
@@ -224,7 +221,6 @@ const FactoryDetail: React.FC<Props> = () => {
                                             boxShadow="md"
                                             bg={bg}
                                             mb="8"
-                                            mt="5"
                                         >
                                             <Box p={5}>
                                                 <Stack isInline justify="space-between" mt={2}>
@@ -233,28 +229,37 @@ const FactoryDetail: React.FC<Props> = () => {
                                                         fontWeight="semibold"
                                                         fontSize={["lg", "lg", "xl", "2xl"]}
                                                     >
-                                                      {product.productName}
-                                                  </Text>
+                                                        {product.productName}
+                                                    </Text>
                                                     <Text
                                                         fontWeight="semibold"
                                                         fontSize={["lg", "lg", "xl", "2xl"]}
                                                     >
-                                                      Product ID : {product.id}
-                                                  </Text>
+                                                        Product ID : {product.id}
+                                                    </Text>
                                                 </Stack>
-                                                <Link to={`/tiers/product-tier`}>
+                                                <Link to={`/tiers/product-tier/${product.category}`}>
                                                     <Badge
-                                                      fontSize="0.8em"
-                                                      variant="solid"
-                                                      colorScheme="blue"
-                                                      rounded="full"
-                                                  >
-                                                      {product.category}
-                                                  </Badge>
+                                                        px="2"
+                                                        fontSize="0.8em"
+                                                        variant="outline"
+                                                        colorScheme={
+                                                            product.category === "อะไหล่รถยนต์"
+                                                                ? "purple"
+                                                                : product.category === "อาหาร"
+                                                                    ? "green"
+                                                                    : product.category === "อิเล็กทรอนิกส์"
+                                                                        ? "pink"
+                                                                        : ""
+                                                        }
+                                                        rounded="md"
+                                                    >
+                                                        {product.category}
+                                                    </Badge>
                                                 </Link>
                                                 <Text ml="7" fontSize={["sm", "sm", "lg", "xl"]}>
                                                     {product.description}
-                                              </Text>
+                                                </Text>
 
                                                 <Divider borderColor="gray.300" my="2" />
 
@@ -279,7 +284,7 @@ const FactoryDetail: React.FC<Props> = () => {
                                                                         fontSize={["sm", "sm", "sm", "lg"]}
                                                                         fontWeight="light"
                                                                         ml="7"
-                                                                        color="orange"
+                                                                        color="blue.600"
                                                                     >
                                                                         <Link
                                                                             to={`/tiers/factories/${factory.id}`}
@@ -290,33 +295,37 @@ const FactoryDetail: React.FC<Props> = () => {
                                                                         </Link>
                                                                     </Text>
                                                                 ))}
-                                                      </Box>
+                                                        </Box>
                                                     </Flex>
                                                     <Flex align="center">
                                                         <Box mt="4">
                                                             <Button
                                                                 rightIcon={<AddIcon />}
-                                                                colorScheme="orange"
+                                                                colorScheme="blue"
                                                                 variant="outline"
                                                                 size="md"
-                                                                onClick={() => setOpenJoinForm(true)}
+                                                                onClick={() => {
+                                                                    setProductId(product.id);
+                                                                    setOpenJoinForm(true);
+                                                                }}
                                                             >
                                                                 เพิ่มบริษัท
                                                             </Button>
-                                                            {openJoinForm && (
-                                                                <AddAndEditJoinTier
-                                                                    productId={product.id}
-                                                                    setOpenJoinForm={setOpenJoinForm}
-                                                                />
-                                                            )}
                                                         </Box>
                                                     </Flex>
                                                 </Flex>
-                                          </Box>
-                                      </Box>
-                                  ))
+                                            </Box>
+                                        </Box>
+                                    ))
                                 )}
                             </Box>
+                            {openJoinForm && (
+                                <AddAndEditJoinTier
+                                    productId={productId}
+                                    Open={openJoinForm}
+                                    setOpenJoinForm={setOpenJoinForm}
+                                />
+                            )}
 
                             {/* ---------------------------------Display------------------------------------*/}
                             <Box mt="10">
@@ -353,7 +362,7 @@ const FactoryDetail: React.FC<Props> = () => {
                                     alignContent="center"
                                     p={8}
                                 >
-                                    <Heading mb={4}>Product ที่ไปสั่งบริษัทอื่นผลิต</Heading>
+                                    <Text fontSize="3xl" mb="2">Product ที่ไปสั่งบริษัทอื่นผลิต</Text>
                                     {!data?.factoryById?.productReceives ? (
                                         <Text p={1} color="red" fontSize="xl">
                                             ไม่ประวัติการบันทึกข้อมูล
@@ -368,7 +377,6 @@ const FactoryDetail: React.FC<Props> = () => {
                                                 boxShadow="md"
                                                 bg={bg}
                                                 mb="8"
-                                                mt="5"
                                             >
                                                 <Box p={5}>
                                                     <Stack isInline justify="space-between" mt={2}>
@@ -386,12 +394,13 @@ const FactoryDetail: React.FC<Props> = () => {
                                                             Product ID : {productR.id}
                                                         </Text>
                                                     </Stack>
-                                                    <Link to={`/tiers/product-tier`}>
+                                                    <Link to={`/tiers/product-tier/${productR.category}`}>
                                                         <Badge
+                                                            px="2"
                                                             fontSize="0.8em"
-                                                            variant="solid"
-                                                            colorScheme="blue"
-                                                            rounded="full"
+                                                            variant="outline"
+                                                            colorScheme="purple"
+                                                            rounded="md"
                                                         >
                                                             {productR.category}
                                                         </Badge>
@@ -420,7 +429,7 @@ const FactoryDetail: React.FC<Props> = () => {
                                                                     fontSize={["sm", "sm", "sm", "lg"]}
                                                                     fontWeight="light"
                                                                     ml="7"
-                                                                    color="orange"
+                                                                    color="blue.600"
                                                                 >
                                                                     <Link
                                                                         to={`/tiers/factories/${productR.creatorId}`}

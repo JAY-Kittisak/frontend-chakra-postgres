@@ -13,7 +13,7 @@ const FactoryItem: React.FC<Props> = ({ factory: { id, companyName, industrialEs
         <Tr>
             <Td fontSize={["xs", "xs", "sm", "md"]}>{id}</Td>
             <Td>
-                <Text fontWeight="bold" display="inline-table" color="orange" fontSize={["xs", "xs", "sm", "md"]}>{companyName}</Text>
+                <Text fontWeight="bold" display="inline-table" fontSize={["xs", "xs", "sm", "md"]}>{companyName}</Text>
             </Td>
             <Td><Text fontWeight="bold" display="inline-table" fontSize={["xs", "xs", "sm", "md"]}>{industrialEstate}</Text></Td>
             <Td fontSize={["xs", "xs", "sm", "md"]}>{businessType}</Td>
@@ -22,7 +22,7 @@ const FactoryItem: React.FC<Props> = ({ factory: { id, companyName, industrialEs
                 <Link to={`/tiers/factories/${id}`}>
                     <Box textAlign="center">
                         <Button
-                            colorScheme="blue"
+                            colorScheme="green"
                             boxShadow="sm"
                             _hover={{ boxShadow: "md" }}
                             _active={{ boxShadow: "lg" }}

@@ -1,7 +1,6 @@
 import React from "react";
 import { Text, Flex, Divider } from "@chakra-ui/react";
 
-import Chart from "../components/chart/Chart";
 import Spinner from "../components/Spinner"
 import AdministratorItem from "../components/AdministratorItem";
 import {
@@ -93,6 +92,11 @@ const Administrator: React.FC<Props> = () => {
         order: "จัดการ Order Stock-IT",
         addCategory: undefined,
     };
+    const contentUser = {
+        main: "จัดการ Users",
+        order: undefined,
+        addCategory: undefined,
+    };
 
     return (
         <>
@@ -141,9 +145,19 @@ const Administrator: React.FC<Props> = () => {
                             toOrder="/admin/stock-it-orders"
                             content={contentStockIt}
                         />
-                    </Flex>
-                    <Flex justify="center" mt="6">
-                        <Chart />
+                        <AdministratorItem
+                            title="Users"
+                            sumLength={{
+                                newNum: jobItNew?.length,
+                                waitApprove: jobItWait?.length,
+                                preparingNum: undefined,
+                                successNum: jobItSuc?.length,
+                                impossible: jobItImp?.length
+                            }}
+                            toMain="/admin/manage-users"
+                            toOrder={undefined}
+                            content={contentUser}
+                        />
                     </Flex>
                 </>
             )}

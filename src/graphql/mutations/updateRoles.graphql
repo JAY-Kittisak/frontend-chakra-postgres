@@ -1,0 +1,11 @@
+mutation UpdateRoles($id: Int!,$newRoles: String!,$newPosition: String!){
+    updateRoles(id: $id,newRoles: $newRoles,newPosition: $newPosition){
+    errors{
+      field
+      message
+    }
+    user{
+      ...RegularUser
+    }
+  }
+}

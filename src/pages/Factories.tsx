@@ -1,5 +1,5 @@
 import {
-    Box, Divider, Flex, Heading, IconButton, Select, Stack, Table, Tbody, Text, Tfoot, Th, Thead,
+    Box, Divider, Flex, Heading, IconButton, Select, Stack, Table, Tbody, Text, Th, Thead,
     Tr, useColorModeValue
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
@@ -16,7 +16,7 @@ interface Props { }
 type Display = "none" | "hide" | "show";
 
 const Factories: React.FC<Props> = () => {
-    const bg = useColorModeValue("gray.200", "gray.700")
+    const bg = useColorModeValue("gray.100", "gray.700")
     const [display, changeDisplay] = useState<Display>("hide");
     const [{ data: factoryAll }] = useFactoriesQuery();
     const [industrialEstateSelect, setIndustrialEstateSelect] = useState("All");
@@ -157,7 +157,7 @@ const Factories: React.FC<Props> = () => {
                     </Flex>
                 ) : (
                         <Flex w="100%" overflowX="auto">
-                            <Table variant="striped" colorScheme="teal">
+                            <Table variant="striped" colorScheme="grey">
                                 <Thead>
                                     <Tr>
                                         <Th textAlign="center" fontSize="md" w="15%">เลขจดทะเบียน</Th>
@@ -177,16 +177,6 @@ const Factories: React.FC<Props> = () => {
                                         ))
                                     )}
                                 </Tbody>
-                                <Tfoot>
-                                    <Tr>
-                                        <Th textAlign="center" fontSize="md" w="15%">เลขจดทะเบียน</Th>
-                                        <Th textAlign="center" fontSize="md" w="15%">companyName</Th>
-                                        <Th textAlign="center" fontSize="md" w="15%">industrialEstate</Th>
-                                        <Th textAlign="center" fontSize="md" w="15%">businessType</Th>
-                                        <Th textAlign="center" fontSize="md" w="30%">description</Th>
-                                        <Th textAlign="center" fontSize="md" w="10%">ดูรายละเอียด</Th>
-                                    </Tr>
-                                </Tfoot>
                             </Table>
                         </Flex>
             )}

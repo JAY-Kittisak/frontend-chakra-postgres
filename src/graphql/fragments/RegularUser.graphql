@@ -3,6 +3,7 @@ fragment RegularUser on User {
     username
     email
     roles
+    position
     departments
     fullNameTH
     fullNameEN
