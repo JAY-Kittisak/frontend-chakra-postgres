@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { Text, Flex, Box, Button, Center, Divider } from "@chakra-ui/react";
-import { Form, Formik } from "formik";
 
 import {
     useMeQuery,
     RegularUserFragment,
     useGiveOrderByCreatorIdQuery,
     useJobItByCreatorIdQuery,
+    useStockItOrdersQuery
 } from "../generated/graphql";
-import InputField from "../components/InputField";
 import AddImageUser from "../components/manage-users/AddImageUser";
 import Card from "../components/chakra-ui/Card";
 import Spinner from "../components/Spinner";
@@ -27,6 +26,11 @@ const Profile: React.FC<Props> = () => {
     const [{ data, fetching }] = useMeQuery();
     const [{ data: giveOrder }] = useGiveOrderByCreatorIdQuery();
     const [{ data: jobIt }] = useJobItByCreatorIdQuery();
+    const [{ data: stockIt }] = useStockItOrdersQuery({
+        variables: {
+            createBy: true,
+        },
+    });
 
     const { isOpen, setIsOpen } = useDialog();
 
@@ -65,144 +69,165 @@ const Profile: React.FC<Props> = () => {
                   >
                       {data.me && <AddImageUser imagesUrl={data.me.imageUrl as string} />}
                       <Box w="100%" p="5" bg="#fff" rounded="10px" boxShadow="md">
-                          <Formik
-                              initialValues={{
-                                  fullNameTH: "",
-                                  fullNameEN: "",
-                                  nickName: "",
-                                  email: "",
-                              }}
-                                  onSubmit={async () => { }}
+                                <Text fontWeight="bold">ชื่อภาษาไทย</Text>
+                                <Box
+                                    h="30px"
+                                    boxShadow="base"
+                                    p="1"
+                                    ml="5"
+                                    rounded="md"
+                                    bg="white"
+                                    justify="center"
+                                >
+                                    <Text ml="2">{data.me.fullNameTH}</Text>
+                                </Box>
+                                <Text mt="3" fontWeight="bold">
+                                    ชื่อภาษาอังกฤษ
+                                </Text>
+                                <Box
+                                    h="30px"
+                                    boxShadow="base"
+                                    p="1"
+                                    ml="5"
+                                    rounded="md"
+                                    bg="white"
+                                    justify="center"
+                                >
+                                    <Text ml="2">{data.me.fullNameEN}</Text>
+                                </Box>
+                                <Text mt="3" fontWeight="bold">
+                                    ชื่อเล่น
+                                </Text>
+                                <Box
+                                    h="30px"
+                                    boxShadow="base"
+                                    p="1"
+                                    ml="5"
+                                    rounded="md"
+                                    bg="white"
+                                    justify="center"
+                                >
+                                    <Text ml="2">{data.me.nickName}</Text>
+                                </Box>
+                                <Text mt="3" fontWeight="bold">
+                                    Email
+                                </Text>
+                                <Box
+                                    h="30px"
+                                    boxShadow="base"
+                                    p="1"
+                                    ml="5"
+                                    rounded="md"
+                                    bg="white"
+                                    justify="center"
                               >
-                                  {({ isSubmitting }) => (
-                                      <Form>
-                                          <InputField
-                                              name="fullNameTH"
-                                              label="ชื่อภาษาไทย"
-                                              value={data.me?.fullNameTH ? data.me.fullNameTH : ""}
-                                          />
-                                          <InputField
-                                              name="fullNameEN"
-                                              label="ชื่อภาษาอังกฤษ"
-                                              value={data.me?.fullNameEN ? data.me.fullNameEN : ""}
-                                          />
-                                          <InputField
-                                              name="nickName"
-                                              label="ชื่อเล่น"
-                                              value={data.me?.nickName ? data.me.nickName : ""}
-                                          />
-                                          <InputField
-                                              name="email"
-                                              label="Email"
-                                              value={data.me?.email ? data.me.email : ""}
-                                          />
-                                          <Flex
-                                              direction={["column", "column", "row", "row"]}
-                                              justify="space-evenly"
-                                              mt="5"
-                                          >
-                                              <Flex>
-                                                  <Text
-                                                      fontWeight="semibold"
-                                                      fontSize={["sm", "md", "xl"]}
-                                                      p={3}
-                                                  >
-                                                      แผนก
-                                                  </Text>
-                                                  <Text
-                                                      fontWeight="semibold"
-                                                      fontSize={["xl", "xl", "2xl"]}
-                                                      as="u"
-                                                      p={2}
-                                                  >
-                                                      {data?.me?.departments}
-                                                  </Text>
-                                              </Flex>
-                                              <Flex>
-                                                  <Text
-                                                      fontWeight="semibold"
-                                                      fontSize={["sm", "md", "xl"]}
-                                                      p={3}
-                                                  >
-                                                      สาขา
-                                                  </Text>
-                                                  <Text
-                                                      fontWeight="semibold"
-                                                      fontSize={["xl", "xl", "2xl"]}
-                                                      as="u"
-                                                      p={2}
-                                                  >
-                                                        {data?.me?.roles === "client-LKB"
-                                                          ? "ลาดกระบัง"
-                                                            : data?.me?.roles === "client-CDC"
-                                                              ? "ชลบุรี"
-                                                              : "Admin"}
-                                                  </Text>
-                                              </Flex>
-                                          </Flex>
-                                          <Center>
-                                              <Button
-                                                  mt={4}
-                                                  type="submit"
-                                                  isLoading={isSubmitting}
-                                                  colorScheme="teal"
-                                                  onClick={() => {
-                                                      setIsOpen(true);
-                                                      if (data.me) {
-                                                          setUserToEdit(data.me);
-                                                      }
-                                                  }}
-                                              >
-                                                  แก้ไขข้อมูล
-                                              </Button>
-                                              {isOpen && (
-                                                  <AddAndEditProfile
-                                                      Open={true}
-                                                      userToEdit={userToEdit}
-                                                      setOpen={() => setIsOpen(false)}
-                                                  />
-                                              )}
-                                          </Center>
-                                      </Form>
-                                  )}
-                              </Formik>
-                          </Box>
-                      </Flex>
-                      {/* ---------------------------------------Column 2--------------------------------------- */}
-                      <Flex
-                          w={["100%", "100%", "100%", "30%"]}
-                          p="2"
-                          flexDir="column"
-                          alignItems="center"
-                          bg="#eee"
-                          rounded="10px"
-                          boxShadow="md"
-                          mt="5"
-                          mx={[null, null, null, "5"]}
-                      >
-                          <Text
-                              h="155px"
-                              fontWeight="semibold"
-                              fontSize={["sm", "md", "xl"]}
-                              p={3}
-                              isTruncated
-                          >
-                              ประวัติการแจ้ง JOB
-                          </Text>
-                          {jobIt?.jobITByCreatorId && (
-                              <Card
-                                  label="สถานะงาน IT"
-                                  content={jobIt.jobITByCreatorId.length}
-                              />
-                          )}
-                          <Card label="สถานะงาน Altas" content={10} />
-                          {giveOrder?.giveOrderByCreatorId && (
-                              <Card
-                                  label="สถานะงาน เบิกของแจกลูกค้า"
-                                  content={giveOrder.giveOrderByCreatorId.length}
-                              />
+                                    <Text ml="2">{data.me.email}</Text>
+                                </Box>
+                                <Flex
+                                    direction={["column", "column", "row", "row"]}
+                                    justify="space-evenly"
+                                    mt="5"
+                                >
+                                    <Flex>
+                                        <Text
+                                            fontWeight="semibold"
+                                            fontSize={["sm", "md", "xl"]}
+                                            p={3}
+                                        >
+                                            แผนก
+                                        </Text>
+                                        <Text
+                                            fontWeight="semibold"
+                                            fontSize={["xl", "xl", "2xl"]}
+                                            as="u"
+                                            p={2}
+                                        >
+                                            {data?.me?.departments}
+                                        </Text>
+                                    </Flex>
+                                    <Flex>
+                                        <Text
+                                            fontWeight="semibold"
+                                            fontSize={["sm", "md", "xl"]}
+                                            p={3}
+                                        >
+                                            สาขา
+                                        </Text>
+                                        <Text
+                                            fontWeight="semibold"
+                                            fontSize={["xl", "xl", "2xl"]}
+                                            as="u"
+                                            p={2}
+                                        >
+                                            {data?.me?.roles === "client-LKB"
+                                                ? "ลาดกระบัง"
+                                                : data?.me?.roles === "client-CDC"
+                                                    ? "ชลบุรี"
+                                                    : "Admin"}
+                                        </Text>
+                                    </Flex>
+                                </Flex>
+                                <Center>
+                                    <Button
+                                        mt={4}
+                                        type="submit"
+                                        colorScheme="teal"
+                                        onClick={() => {
+                                            setIsOpen(true);
+                                            if (data.me) {
+                                                setUserToEdit(data.me);
+                                            }
+                                        }}
+                                    >
+                                        แก้ไขข้อมูล
+                                    </Button>
+                                    {isOpen && (
+                                        <AddAndEditProfile
+                                            Open={true}
+                                            userToEdit={userToEdit}
+                                            setOpen={() => setIsOpen(false)}
+                                        />
+                                    )}
+                                </Center>
+                            </Box>
+                        </Flex>
+                        {/* ---------------------------------------Column 2--------------------------------------- */}
+                        <Flex
+                            w={["100%", "100%", "100%", "30%"]}
+                            p="2"
+                            flexDir="column"
+                            alignItems="center"
+                            bg="#eee"
+                            rounded="10px"
+                            boxShadow="md"
+                            mt="5"
+                            mx={[null, null, null, "5"]}
+                        >
+                            <Text
+                                h="155px"
+                                fontWeight="semibold"
+                                fontSize={["sm", "md", "xl"]}
+                                p={3}
+                                isTruncated
+                            >
+                                ประวัติการแจ้ง JOB
+                            </Text>
+                            {jobIt?.jobITByCreatorId && (
+                                <Card
+                                    label="สถานะงาน IT"
+                                    content={jobIt.jobITByCreatorId.length}
+                                />
+                            )}
+                            {stockIt?.stockItOrders && (
+                                <Card label="สถานะงาน เบิกยืมอุปกรณ์ IT" content={stockIt.stockItOrders?.length} />
+                            )}
+                            {giveOrder?.giveOrderByCreatorId && (
+                                <Card
+                                    label="สถานะงาน เบิกของแจกลูกค้า"
+                                    content={giveOrder.giveOrderByCreatorId.length}
+                                />
                       )}
-                      <Card label="สถานะงาน สั่งซื้อ" content={4} />
+                            <Card label="สถานะงาน สั่งซื้อ" content={0} />
                   </Flex>
                   {/* ---------------------------------------Column 2--------------------------------------- */}
                   <Flex
@@ -224,10 +249,10 @@ const Profile: React.FC<Props> = () => {
                       >
                           ประวัติการ ลา/หยุดงาน
                       </Text>
-                      <Card label="วันลาที่เหลือ" content={10} />
-                      <Card label="ลาป่วย" content={4} />
-                      <Card label="ลากิจ" content={8} />
-                      <Card label="หยุดงาน" content={1} />
+                            <Card label="วันลาที่เหลือ" content={0} />
+                            <Card label="ลาป่วย" content={0} />
+                            <Card label="ลากิจ" content={0} />
+                            <Card label="หยุดงาน" content={0} />
                   </Flex>
               </Flex>
           )}

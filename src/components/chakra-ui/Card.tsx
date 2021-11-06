@@ -4,7 +4,7 @@ import { Text, Box } from "@chakra-ui/react";
 
 type Label =
     | "สถานะงาน IT"
-    | "สถานะงาน Altas"
+    | "สถานะงาน เบิกยืมอุปกรณ์ IT"
     | "สถานะงาน เบิกของแจกลูกค้า"
     | "สถานะงาน สั่งซื้อ"
     | "วันลาที่เหลือ"
@@ -33,8 +33,8 @@ const Card: React.FC<Props> = ({ label, content }) => {
                     to={
                         label === "สถานะงาน IT"
                             ? "/job-it/me"
-                            : label === "สถานะงาน Altas"
-                                ? "/สถานะงาน Altas"
+                            : label === "สถานะงาน เบิกยืมอุปกรณ์ IT"
+                                ? "/stock-it/my-order"
                                 : label === "สถานะงาน เบิกของแจกลูกค้า"
                                     ? "/order-give/my-orders"
                                     : label === "สถานะงาน สั่งซื้อ"

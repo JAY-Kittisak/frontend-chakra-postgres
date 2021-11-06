@@ -51,6 +51,12 @@ const menuItems = [
         iconClassName: "bi bi-basket",
         subMenus: [{ name: "ประวัติการเบิกของคุณ", to: "/orderCat/Cat" }],
     },
+    {
+        name: "ลางานออนไลน์",
+        to: "/leave",
+        iconClassName: "bi bi-calendar2-x",
+        subMenus: [{ name: "ประวัติการลาของคุณ", to: "/ประวัติการลาของคุณ" }],
+    },
 ];
 
 // let fruits = ['apple', 'banana', 'grapes', 'mango', 'orange']

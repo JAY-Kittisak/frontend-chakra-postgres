@@ -8,6 +8,8 @@ import Profile from "../pages/Profile";
 import JobITByMe from "../pages/JobITByMe";
 import CreateJobIT from "../pages/CreateJobIT";
 import TodoPage from "../pages/TodoPage";
+import CreateLeave from "../pages/CreateLeave";
+import LeaveApproval from "../pages/LeaveApproval";
 import PageNotFound from "../pages/PageNotFound";
 import TierRoute from "./TierRoute";
 import GiveRoute from "./GiveRoute";
@@ -21,6 +23,12 @@ interface Props { }
 const Routes: React.FC<Props> = () => {
     return (
         <Switch>
+            <Route path="/leave/approval">
+                <LeaveApproval />
+            </Route>
+            <Route path="/leave">
+                <CreateLeave />
+            </Route>
             <Route path="/todo">
                 <TodoPage />
             </Route>

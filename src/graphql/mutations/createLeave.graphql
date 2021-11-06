@@ -1,0 +1,11 @@
+mutation CreateLeave($input: Leave_Input!){
+  createLeave(input:$input){
+    errors{
+      field
+      message
+    }
+    leave{
+      ...RegularLeave
+    }
+  }
+}

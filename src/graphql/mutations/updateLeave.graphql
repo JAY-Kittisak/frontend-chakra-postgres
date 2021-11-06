@@ -1,0 +1,5 @@
+mutation UpdateLeave($id: Int!, $newStatus: String!){
+  updateLeave(id: $id,newStatus: $newStatus){
+      ...RegularLeave
+  }
+}

@@ -218,7 +218,7 @@ const FactoryDetail: React.FC<Props> = () => {
                                             w="100%"
                                             rounded="20px"
                                             overflow="hidden"
-                                            boxShadow="md"
+                                            boxShadow="base"
                                             bg={bg}
                                             mb="8"
                                         >
@@ -374,7 +374,7 @@ const FactoryDetail: React.FC<Props> = () => {
                                                 w="100%"
                                                 rounded="20px"
                                                 overflow="hidden"
-                                                boxShadow="md"
+                                                boxShadow="base"
                                                 bg={bg}
                                                 mb="8"
                                             >

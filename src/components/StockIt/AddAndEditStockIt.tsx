@@ -188,6 +188,7 @@ const AddAndEditStockIt: React.FC<Props> = ({ Open, setOpen, stockToEdit }) => {
                                                 fontWeight="semibold"
                                                 fontSize={["sm", "md"]}
                                                 mb="2"
+                                                mt="1"
                                             >
                                                 Location
                                             </Text>
@@ -204,6 +205,7 @@ const AddAndEditStockIt: React.FC<Props> = ({ Open, setOpen, stockToEdit }) => {
                                                 fontWeight="semibold"
                                                 fontSize={["sm", "md"]}
                                                 mb="2"
+                                                mt="1"
                                             >
                                                 Warranty
                                             </Text>
@@ -219,6 +221,7 @@ const AddAndEditStockIt: React.FC<Props> = ({ Open, setOpen, stockToEdit }) => {
                                                 fontWeight="semibold"
                                                 fontSize={["sm", "md"]}
                                                 mb="2"
+                                                mt="1"
                                             >
                                                 Brand
                                             </Text>
@@ -235,6 +238,7 @@ const AddAndEditStockIt: React.FC<Props> = ({ Open, setOpen, stockToEdit }) => {
                                                 fontWeight="semibold"
                                                 fontSize={["sm", "md"]}
                                                 mb="2"
+                                                mt="1"
                                             >
                                                 Branch
                                             </Text>
@@ -248,6 +252,7 @@ const AddAndEditStockIt: React.FC<Props> = ({ Open, setOpen, stockToEdit }) => {
                                                 fontWeight="semibold"
                                                 fontSize={["sm", "md"]}
                                                 mb="2"
+                                                mt="1"
                                             >
                                                 Category
                                             </Text>
@@ -264,6 +269,7 @@ const AddAndEditStockIt: React.FC<Props> = ({ Open, setOpen, stockToEdit }) => {
                                                 fontWeight="semibold"
                                                 fontSize={["sm", "md"]}
                                                 mb="2"
+                                                mt="1"
                                             >
                                                 Current Status
                                             </Text>

@@ -17,7 +17,6 @@ export const factoryTab: FactoryTab[] = [
     "เหมราชอีสเทิร์นซีบอร์ด แห่งที่ 4",
 ];
 export const catProduct: CatProductV1[] = [
-    "*โปรดเลือก",
     "อะไหล่รถยนต์",
     "อาหาร",
     "อิเล็กทรอนิกส์",
@@ -197,3 +196,26 @@ export interface Todo {
     todo: string;
     isDone: boolean;
 }
+export type LeaveType =
+    | "ลากิจ"
+    | "ลาป่วย"
+    | "ลาพักร้อน"
+    | "ลาคลอดบุตร"
+    | "ลาอุปสมบทหรือลาประกอบพิธีฮัจย์"
+    | "ลาอื่นๆ"
+export const catLeave: LeaveType[] = [
+    "ลากิจ",
+    "ลาป่วย",
+    "ลาพักร้อน",
+    "ลาคลอดบุตร",
+    "ลาอุปสมบทหรือลาประกอบพิธีฮัจย์",
+    "ลาอื่นๆ",
+];
+
+export type Approve = "รออนุมัติ" | "อนุมัติแล้ว" | "ไม่อนุมัติ"
+export const catApprove: Approve[] = [
+    "รออนุมัติ",
+    "อนุมัติแล้ว",
+    "ไม่อนุมัติ"
+]
+

@@ -1,74 +1,60 @@
 import React, { useState, useEffect } from "react";
+import { useMeQuery, RegularLeaveFragment, useLeavesQuery } from "../generated/graphql";
 import {
     Flex,
     Text,
-    Button,
     Table,
     Tbody,
     Th,
     Thead,
     Tr,
     Center,
+    Divider
 } from "@chakra-ui/react";
 
 import Spinner from "../components/Spinner";
-import { Branch } from "../utils/helpers"
-import { useStockItsQuery, RegularStockItFragment } from "../generated/graphql";
-import AdminStockItItem from "../components/StockIt/AdminStockItItem";
-import { useDialog } from "../components/dialogs/useDialog";
-import SelectBranch from "../components/SelectBranch";
-import AddAndEditStockIt from "../components/StockIt/AddAndEditStockIt";
+import LeaveApprovalItem from "../components/leave/LeaveApprovalItem";
 
 interface Props { }
 
-const ManageStockIt: React.FC<Props> = () => {
-    const [branch, setBranch] = useState<Branch>("All");
-    const [item, setItem] = useState<RegularStockItFragment[] | undefined>(
+const LeaveApproval: React.FC<Props> = () => {
+    const [leave, setLeave] = useState<RegularLeaveFragment[] | undefined>(
         undefined
     );
-    const [stockToEdit, setStockToEdit] = useState<RegularStockItFragment | null>(
-        null
-    );
-    const { isOpen, setIsOpen } = useDialog();
 
-    const [{ data, fetching }] = useStockItsQuery();
+    const [{ data: me }] = useMeQuery()
+
+    const [{ data, fetching }] = useLeavesQuery();
+
+    // const dept = me?.me?.departments
+    const dept = "delivery"
+    // let branch = 0
+    // if (me?.me?.roles === "") {
+
+    // }
 
     useEffect(() => {
-        if (branch === "All" && data?.stockIts) {
-            setItem(data.stockIts);
-        }
-        if (branch === "ลาดกระบัง") {
-            const latKraBang = data?.stockIts?.filter((val) => val.branch === branch);
-            setItem(latKraBang);
-        }
-        if (branch === "ชลบุรี") {
-            const dataTest = data?.stockIts?.filter((val) => val.branch === branch);
-            setItem(dataTest);
-        }
-    }, [branch, data]);
-
-    if (!data && fetching) {
-        return (
-            <Flex>
-                <Flex flexDir="row" m="auto" h="90vh" align="center">
-                    <Spinner color="grey" height={50} width={50} />
-                    <Text fontWeight="bold" fontSize="2xl">
-                        &nbsp; Loading...
-                    </Text>
-                </Flex>
-            </Flex>
+        const leaveDept = data?.leaves?.filter(
+            (val) => val.creator.departments === dept && val.branch === 0
         );
-    }
+        setLeave(leaveDept);
+    }, [data, dept]);
 
+    console.log(leave?.map((val) => val.creator.departments));
+    console.log("me", me?.me?.departments);
     return (
         <Flex flexDir={["column", "column", "column", "column", "row"]}>
             <Flex w={["100%", "100%", "100%", "100%", "100%"]} flexDir="column" mr="2">
-                <SelectBranch
-                    title="Manages Stock IT"
-                    branch={branch}
-                    setBranch={setBranch}
-                />
-                <Flex flexDir="column">
+                <Text
+                    as="i"
+                    fontWeight="semibold"
+                    fontSize={["md", "md", "xl", "3xl"]}
+                    color="gray.600"
+                >
+                    ขออนุมัติลางาน
+                </Text>
+                <Divider orientation="horizontal" />
+                <Flex flexDir="column" mt="10">
                     {fetching ? (
                         <Center>
                             <Spinner color="grey" height={50} width={50} />
@@ -84,31 +70,10 @@ const ManageStockIt: React.FC<Props> = () => {
                         </Center>
                     ) : (
                         <>
-                            <Center mb="5">
-                                <Button
-                                    boxShadow="sm"
-                                    colorScheme="green"
-                                    onClick={() => {
-                                        setStockToEdit(null);
-                                        setIsOpen(true);
-                                    }}
-                                >
-                                    <Text color="white" as="u" ml="1">
-                                        เพิ่มอุปกรณ์ IT
-                                    </Text>
-                                </Button>
-                                {isOpen && (
-                                        <AddAndEditStockIt
-                                        Open={true}
-                                            setOpen={() => setIsOpen(false)}
-                                            stockToEdit={stockToEdit}
-                                        />
-                                    )}
-                            </Center>
                             <Flex w="100%" overflowX="auto" rounded="7px" boxShadow="md">
                                 <Table
-                                        variant="simple"
-                                        colorScheme="blackAlpha"
+                                    variant="simple"
+                                    colorScheme="blackAlpha"
                                 >
                                     <Thead>
                                         <Tr bg="#028174">
@@ -116,31 +81,7 @@ const ManageStockIt: React.FC<Props> = () => {
                                                 textAlign="center"
                                                 fontSize={["xs", "xs", "sm", "md"]}
                                                 color="white"
-                                                w="20%"
-                                            >
-                                                Details
-                                            </Th>
-                                            <Th
-                                                textAlign="center"
-                                                fontSize={["xs", "xs", "sm", "md"]}
-                                                color="white"
                                                 w="10%"
-                                            >
-                                                S/N
-                                            </Th>
-                                            <Th
-                                                textAlign="center"
-                                                fontSize={["xs", "xs", "sm", "md"]}
-                                                color="white"
-                                                w="10%"
-                                            >
-                                                category
-                                            </Th>
-                                            <Th
-                                                textAlign="center"
-                                                fontSize={["xs", "xs", "sm", "md"]}
-                                                color="white"
-                                                w="20%"
                                             >
                                                 วันที่
                                             </Th>
@@ -148,17 +89,9 @@ const ManageStockIt: React.FC<Props> = () => {
                                                 textAlign="center"
                                                 fontSize={["xs", "xs", "sm", "md"]}
                                                 color="white"
-                                                    w="10%"
+                                                w="10%"
                                             >
-                                                    location
-                                            </Th>
-                                            <Th
-                                                textAlign="center"
-                                                fontSize={["xs", "xs", "sm", "md"]}
-                                                color="white"
-                                                    w="20%"
-                                            >
-                                                    สถานะ Item
+                                                ผู้ขอ
                                             </Th>
                                             <Th
                                                 textAlign="center"
@@ -166,20 +99,56 @@ const ManageStockIt: React.FC<Props> = () => {
                                                 color="white"
                                                 w="10%"
                                             >
-                                                Manage
+                                                เรื่อง
+                                            </Th>
+                                            <Th
+                                                textAlign="center"
+                                                fontSize={["xs", "xs", "sm", "md"]}
+                                                color="white"
+                                                w="20%"
+                                            >
+                                                รายละเอียด
+                                            </Th>
+                                            <Th
+                                                textAlign="center"
+                                                fontSize={["xs", "xs", "sm", "md"]}
+                                                color="white"
+                                                w="10%"
+                                            >
+                                                จำนวนวัน
+                                            </Th>
+                                            <Th
+                                                textAlign="center"
+                                                fontSize={["xs", "xs", "sm", "md"]}
+                                                color="white"
+                                                w="10%"
+                                            >
+                                                ลาตั้งแต่วันที่
+                                            </Th>
+                                            <Th
+                                                textAlign="center"
+                                                fontSize={["xs", "xs", "sm", "md"]}
+                                                color="white"
+                                                w="10%"
+                                            >
+                                                ถึงวันที่
+                                            </Th>
+                                            <Th
+                                                textAlign="center"
+                                                fontSize={["xs", "xs", "sm", "md"]}
+                                                color="white"
+                                                w="20%"
+                                            >
+                                                สถานะ
                                             </Th>
                                         </Tr>
                                     </Thead>
                                     <Tbody>
-                                        {item &&
-                                            item.map((value) => (
-                                                <AdminStockItItem
-                                                    key={value.id}
-                                                    item={value}
-                                                    setOpenEdit={() => setIsOpen(true)}
-                                                    setStockToEdit={setStockToEdit}
-                                                />
-                                            ))}
+                                        {leave?.map((val) => (
+                                            <LeaveApprovalItem
+                                                item={val}
+                                            />
+                                        ))}
                                     </Tbody>
                                 </Table>
                             </Flex>
@@ -189,7 +158,7 @@ const ManageStockIt: React.FC<Props> = () => {
 
             </Flex>
         </Flex>
-    )
-}
+    );
+};
 
-export default ManageStockIt
+export default LeaveApproval;

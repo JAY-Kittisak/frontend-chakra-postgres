@@ -1,103 +1,10 @@
 import React from "react";
-import { Text, Flex, Divider } from "@chakra-ui/react";
-
-import Spinner from "../components/Spinner"
-import AdministratorItem from "../components/AdministratorItem";
-import {
-    useGiveOrdersCdcQuery,
-    useGiveOrdersQuery,
-    useJobITsQuery,
-    useStockItOrdersQuery,
-} from "../generated/graphql";
+import { Text, Flex, Divider, SimpleGrid } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 
 interface Props { }
 
 const Administrator: React.FC<Props> = () => {
-    const [{ data: jobIt, fetching: fetchingJt }] = useJobITsQuery({
-        variables: {
-            input: {
-                nameItAction: "",
-                status: "",
-                dateBegin: "",
-                dateEnd: "",
-            },
-        },
-    });
-    const [{ data, fetching }] = useGiveOrdersQuery();
-    const [{ data: dataCdc, fetching: fetchingCdc }] = useGiveOrdersCdcQuery();
-    const [{ data: stockIto, fetching: fetchingSto }] = useStockItOrdersQuery({ variables: { createBy: false } });
-
-    let body = null
-    if (fetchingJt || fetching || fetchingCdc || fetchingSto) {
-        body = (
-            <Flex justify="center" align="center">
-                <Spinner color="grey" height={70} width={70} />
-                <Text ml="2" fontSize="6xl">Loading...</Text>
-            </Flex>
-        )
-    }
-    //------------------------------------ JobITs ---------------------------------------------
-    const jobItNew = jobIt?.jobITs?.filter((val) => val.status === "New");
-    const jobItWait = jobIt?.jobITs?.filter((val) => val.status === "Wait Approve");
-    const jobItSuc = jobIt?.jobITs?.filter((val) => val.status === "Success");
-    const jobItImp = jobIt?.jobITs?.filter((val) => val.status === "Impossible");
-    //------------------------------------ GiveOrders ---------------------------------------------
-    const giveNew = data?.giveOrders?.filter((give) => give.status === "New");
-    const giveNewCdc = dataCdc?.giveOrdersCdc?.filter(
-        (give) => give.status === "New"
-    );
-    const givePreparing = data?.giveOrders?.filter(
-        (give) => give.status === "Preparing"
-    );
-    const givePreparingCdc = dataCdc?.giveOrdersCdc?.filter(
-        (give) => give.status === "Preparing"
-    );
-    const giveSuccess = data?.giveOrders?.filter(
-        (give) => give.status === "Success"
-    );
-    const giveSuccessCdc = dataCdc?.giveOrdersCdc?.filter(
-        (give) => give.status === "Success"
-    );
-    //------------------------------------ stockIto ---------------------------------------------
-    const stockItoNew = stockIto?.stockItOrders?.filter((val) => val.status === "New");
-    const stockItoPr = stockIto?.stockItOrders?.filter((val) => val.status === "Preparing");
-    const stockItoSuc = stockIto?.stockItOrders?.filter((val) => val.status === "Success");
-
-    const sumLength = {
-        newNum: giveNew && giveNewCdc && giveNew.length + giveNewCdc.length,
-        waitApprove: undefined,
-        preparingNum:
-            givePreparing &&
-            givePreparingCdc &&
-            givePreparing.length + givePreparingCdc.length,
-        successNum:
-            giveSuccess &&
-            giveSuccessCdc &&
-            giveSuccess.length + giveSuccessCdc.length,
-        impossible: undefined
-    };
-
-    const contentJobIt = {
-        main: "จัดการ Job-IT",
-        order: undefined,
-        addCategory: undefined,
-    };
-    const contentGive = {
-        main: "จัดการของแจก",
-        order: "จัดการ Order ของแจก",
-        addCategory: "เพิ่มกลุ่มสินค้าใหม่",
-    };
-    const contentStockIt = {
-        main: "จัดการ Stock-IT",
-        order: "จัดการ Order Stock-IT",
-        addCategory: undefined,
-    };
-    const contentUser = {
-        main: "จัดการ Users",
-        order: undefined,
-        addCategory: undefined,
-    };
-
     return (
         <>
             <Text
@@ -109,59 +16,103 @@ const Administrator: React.FC<Props> = () => {
                 ผู้ดูแลระบบ
             </Text>
             <Divider mt={1} mb={5} orientation="horizontal" />
-            {body ? body : (
-                <>
-                    <Flex flexDir={["column", "column", "column", "column", "row"]}>
-                        <AdministratorItem
-                            title="ระบบแจ้ง Job IT"
-                            sumLength={{
-                                newNum: jobItNew?.length,
-                                waitApprove: jobItWait?.length,
-                                preparingNum: undefined,
-                                successNum: jobItSuc?.length,
-                                impossible: jobItImp?.length
-                            }}
-                            toMain="/admin/manage-job-it"
-                            toOrder={undefined}
-                            content={contentJobIt}
-                        />
-                        <AdministratorItem
-                            title="ระบบเบิกของแจกลูกค้า"
-                            sumLength={sumLength}
-                            toMain="/admin/manage-gives"
-                            toOrder="/admin/manage-give-orders"
-                            content={contentGive}
-                        />
-                        <AdministratorItem
-                            title="ระบบเบิกอุปกรณ์ IT"
-                            sumLength={{
-                                newNum: stockItoNew?.length,
-                                waitApprove: undefined,
-                                preparingNum: stockItoPr?.length,
-                                successNum: stockItoSuc?.length,
-                                impossible: undefined
-                            }}
-                            toMain="/admin/manage-stock-it"
-                            toOrder="/admin/stock-it-orders"
-                            content={contentStockIt}
-                        />
-                        <AdministratorItem
-                            title="Users"
-                            sumLength={{
-                                newNum: jobItNew?.length,
-                                waitApprove: jobItWait?.length,
-                                preparingNum: undefined,
-                                successNum: jobItSuc?.length,
-                                impossible: jobItImp?.length
-                            }}
-                            toMain="/admin/manage-users"
-                            toOrder={undefined}
-                            content={contentUser}
-                        />
+            <SimpleGrid columns={[1, 1, 1, 2, 4]} spacing={10}>
+                <Flex
+                    flexDir="column"
+                    w="100%"
+                    h="150px"
+                    boxShadow="md"
+                    ml="5"
+                    rounded="lg"
+                    p="3"
+                >
+                    <Text fontSize="2xl" fontWeight="bold" as="i" color="gray">
+                        ระบบแจ้ง Job IT
+                    </Text>
+                    <Flex flexDir="column" ml="5">
+                        <Link to="/admin/manage-job-it">
+                            <Text as="u" fontSize="xl">
+                                จัดการ Job-IT
+                            </Text>
+                        </Link>
                     </Flex>
-                </>
-            )}
-
+                </Flex>
+                <Flex
+                    flexDir="column"
+                    w="100%"
+                    h="150px"
+                    boxShadow="md"
+                    ml="5"
+                    rounded="lg"
+                    p="3"
+                >
+                    <Text fontSize="2xl" fontWeight="bold" as="i" color="gray">
+                        ระบบเบิกของแจกลูกค้า
+                    </Text>
+                    <Flex flexDir="column" ml="5">
+                        <Link to="/admin/manage-gives">
+                            <Text as="u" fontSize="xl">
+                                จัดการของแจก
+                            </Text>
+                        </Link>
+                        <Link to="/admin/manage-give-orders">
+                            <Text as="u" fontSize="xl">
+                                จัดการ Order ของแจก
+                            </Text>
+                        </Link>
+                        <Link to="/admin/manage-give-category">
+                            <Text as="u" fontSize="xl">
+                                เพิ่มกลุ่มสินค้าใหม่
+                            </Text>
+                        </Link>
+                    </Flex>
+                </Flex>
+                <Flex
+                    flexDir="column"
+                    w="100%"
+                    h="150px"
+                    boxShadow="md"
+                    ml="5"
+                    rounded="lg"
+                    p="3"
+                >
+                    <Text fontSize="2xl" fontWeight="bold" as="i" color="gray">
+                        ระบบเบิกอุปกรณ์ IT
+                    </Text>
+                    <Flex flexDir="column" ml="5">
+                        <Link to="/admin/manage-stock-it">
+                            <Text as="u" fontSize="xl">
+                                จัดการ Stock-IT
+                            </Text>
+                        </Link>
+                        <Link to="/admin/stock-it-orders">
+                            <Text as="u" fontSize="xl">
+                                จัดการ Order Stock-IT
+                            </Text>
+                        </Link>
+                    </Flex>
+                </Flex>
+                <Flex
+                    flexDir="column"
+                    w="100%"
+                    h="150px"
+                    boxShadow="md"
+                    ml="5"
+                    rounded="lg"
+                    p="3"
+                >
+                    <Text fontSize="2xl" fontWeight="bold" as="i" color="gray">
+                        Users
+                    </Text>
+                    <Flex flexDir="column" ml="5">
+                        <Link to="/admin/manage-users">
+                            <Text as="u" fontSize="xl">
+                                จัดการ Users
+                            </Text>
+                        </Link>
+                    </Flex>
+                    </Flex>
+            </SimpleGrid>
         </>
     );
 };

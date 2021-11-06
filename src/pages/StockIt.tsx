@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
-    Grid,
+    SimpleGrid,
     Text,
     Flex,
     Button,
@@ -91,11 +91,11 @@ const StockIt: React.FC<Props> = () => {
                         </Text>
                     </Flex>
                 ) : (
-                        <Grid templateColumns={["repeat(4, 1fr)"]} gap={6}>
+                        <SimpleGrid columns={[1, 1, 2, 3, 4]} spacing={10}>
                             {unoccupied?.map((value) => (
                             <StockItItem key={value.id} stockIt={value} />
                         ))}
-                    </Grid>
+                        </SimpleGrid>
                 )}
             </Flex>
             <Flex w={["100%", "100%", "100%", "100%", "20%"]} minW="310px" h="94vh">

@@ -1,0 +1,23 @@
+fragment RegularLeave on Leave {
+    id
+    title
+    detail
+    sumDate
+    sumHour
+    dateBegin
+    dateEnd
+    status
+    BossActionName
+    creatorId
+    branch
+    pdfFile
+    createdAt
+    updatedAt
+    creator{
+        id
+        fullNameTH
+        departments
+        position
+        imageUrl
+    }
+}

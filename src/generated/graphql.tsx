@@ -81,6 +81,12 @@ export type FieldErrorJobIt = {
   message: Scalars['String'];
 };
 
+export type FieldErrorLeave = {
+  __typename?: 'FieldErrorLeave';
+  field: Scalars['String'];
+  message: Scalars['String'];
+};
+
 export type FieldErrorManualAd = {
   __typename?: 'FieldErrorManualAD';
   field: Scalars['String'];
@@ -231,6 +237,40 @@ export type JoinTierInput = {
   factoryId: Scalars['Float'];
 };
 
+export type Leave = {
+  __typename?: 'Leave';
+  id: Scalars['Float'];
+  title: Scalars['String'];
+  detail: Scalars['String'];
+  sumDate: Scalars['String'];
+  sumHour: Scalars['String'];
+  dateBegin: Scalars['String'];
+  dateEnd: Scalars['String'];
+  status: Scalars['String'];
+  BossActionName?: Maybe<Scalars['String']>;
+  creatorId: Scalars['Float'];
+  branch: Scalars['Float'];
+  pdfFile?: Maybe<Scalars['String']>;
+  creator: User;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type Leave_Input = {
+  title: Scalars['String'];
+  detail: Scalars['String'];
+  sumDate: Scalars['String'];
+  sumHour: Scalars['String'];
+  dateBegin: Scalars['String'];
+  dateEnd: Scalars['String'];
+};
+
+export type Leave_Response = {
+  __typename?: 'Leave_Response';
+  errors?: Maybe<Array<FieldErrorLeave>>;
+  leave?: Maybe<Array<Leave>>;
+};
+
 export type LoginInput = {
   username: Scalars['String'];
   password: Scalars['String'];
@@ -309,6 +349,8 @@ export type Mutation = {
   createStockItOrder: StockItOrderResponse;
   updateStockItOr: UpdateStockItOrResponse;
   deleteStockItOrder: Scalars['Boolean'];
+  createLeave: Leave_Response;
+  updateLeave: Leave;
 };
 
 
@@ -507,6 +549,17 @@ export type MutationDeleteStockItOrderArgs = {
   id: Scalars['Int'];
 };
 
+
+export type MutationCreateLeaveArgs = {
+  input: Leave_Input;
+};
+
+
+export type MutationUpdateLeaveArgs = {
+  newStatus: Scalars['String'];
+  id: Scalars['Int'];
+};
+
 export type ProductByTier = {
   __typename?: 'ProductByTier';
   id: Scalars['Float'];
@@ -572,6 +625,8 @@ export type Query = {
   stockItOrderById: StockItOrder;
   queryProvinces: Array<Provinces>;
   amphuresPvId: Array<Amphures>;
+  leaves?: Maybe<Array<Leave>>;
+  leaveById: Leave;
 };
 
 
@@ -646,6 +701,11 @@ export type QueryStockItOrderByIdArgs = {
 
 
 export type QueryAmphuresPvIdArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryLeaveByIdArgs = {
   id: Scalars['Int'];
 };
 
@@ -782,6 +842,7 @@ export type User = {
   giveOrdersCdc: Array<GiveOrderCdc>;
   jobITs: Array<JobIt>;
   stockItOrders: Array<StockItOrder>;
+  leaves: Array<Leave>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -851,6 +912,15 @@ export type RegularJobItFragment = (
   & { creator: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'roles' | 'departments' | 'fullNameTH'>
+  ) }
+);
+
+export type RegularLeaveFragment = (
+  { __typename?: 'Leave' }
+  & Pick<Leave, 'id' | 'title' | 'detail' | 'sumDate' | 'sumHour' | 'dateBegin' | 'dateEnd' | 'status' | 'BossActionName' | 'creatorId' | 'branch' | 'pdfFile' | 'createdAt' | 'updatedAt'>
+  & { creator: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'fullNameTH' | 'departments' | 'position' | 'imageUrl'>
   ) }
 );
 
@@ -1005,6 +1075,25 @@ export type CreateJobItMutation = (
     )>>, jobIT?: Maybe<Array<(
       { __typename?: 'JobIT' }
       & RegularJobItFragment
+    )>> }
+  ) }
+);
+
+export type CreateLeaveMutationVariables = Exact<{
+  input: Leave_Input;
+}>;
+
+
+export type CreateLeaveMutation = (
+  { __typename?: 'Mutation' }
+  & { createLeave: (
+    { __typename?: 'Leave_Response' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorLeave' }
+      & Pick<FieldErrorLeave, 'field' | 'message'>
+    )>>, leave?: Maybe<Array<(
+      { __typename?: 'Leave' }
+      & RegularLeaveFragment
     )>> }
   ) }
 );
@@ -1303,6 +1392,20 @@ export type UpdateJobItMutation = (
   ) }
 );
 
+export type UpdateLeaveMutationVariables = Exact<{
+  id: Scalars['Int'];
+  newStatus: Scalars['String'];
+}>;
+
+
+export type UpdateLeaveMutation = (
+  { __typename?: 'Mutation' }
+  & { updateLeave: (
+    { __typename?: 'Leave' }
+    & RegularLeaveFragment
+  ) }
+);
+
 export type UpdateRolesMutationVariables = Exact<{
   id: Scalars['Int'];
   newRoles: Scalars['String'];
@@ -1580,6 +1683,17 @@ export type JobITsQuery = (
   )>> }
 );
 
+export type LeavesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LeavesQuery = (
+  { __typename?: 'Query' }
+  & { leaves?: Maybe<Array<(
+    { __typename?: 'Leave' }
+    & RegularLeaveFragment
+  )>> }
+);
+
 export type ManualAdByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -1833,6 +1947,31 @@ export const RegularJobItFragmentDoc = gql`
   }
 }
     `;
+export const RegularLeaveFragmentDoc = gql`
+    fragment RegularLeave on Leave {
+  id
+  title
+  detail
+  sumDate
+  sumHour
+  dateBegin
+  dateEnd
+  status
+  BossActionName
+  creatorId
+  branch
+  pdfFile
+  createdAt
+  updatedAt
+  creator {
+    id
+    fullNameTH
+    departments
+    position
+    imageUrl
+  }
+}
+    `;
 export const RegularManualAdFragmentDoc = gql`
     fragment RegularManualAD on ManualAD {
   id
@@ -2019,6 +2158,23 @@ export const CreateJobItDocument = gql`
 
 export function useCreateJobItMutation() {
   return Urql.useMutation<CreateJobItMutation, CreateJobItMutationVariables>(CreateJobItDocument);
+};
+export const CreateLeaveDocument = gql`
+    mutation CreateLeave($input: Leave_Input!) {
+  createLeave(input: $input) {
+    errors {
+      field
+      message
+    }
+    leave {
+      ...RegularLeave
+    }
+  }
+}
+    ${RegularLeaveFragmentDoc}`;
+
+export function useCreateLeaveMutation() {
+  return Urql.useMutation<CreateLeaveMutation, CreateLeaveMutationVariables>(CreateLeaveDocument);
 };
 export const CreateProductByTierDocument = gql`
     mutation createProductByTier($input: ProductByTierInput!) {
@@ -2284,6 +2440,17 @@ export const UpdateJobItDocument = gql`
 export function useUpdateJobItMutation() {
   return Urql.useMutation<UpdateJobItMutation, UpdateJobItMutationVariables>(UpdateJobItDocument);
 };
+export const UpdateLeaveDocument = gql`
+    mutation UpdateLeave($id: Int!, $newStatus: String!) {
+  updateLeave(id: $id, newStatus: $newStatus) {
+    ...RegularLeave
+  }
+}
+    ${RegularLeaveFragmentDoc}`;
+
+export function useUpdateLeaveMutation() {
+  return Urql.useMutation<UpdateLeaveMutation, UpdateLeaveMutationVariables>(UpdateLeaveDocument);
+};
 export const UpdateRolesDocument = gql`
     mutation UpdateRoles($id: Int!, $newRoles: String!, $newPosition: String!) {
   updateRoles(id: $id, newRoles: $newRoles, newPosition: $newPosition) {
@@ -2541,6 +2708,17 @@ export const JobITsDocument = gql`
 
 export function useJobITsQuery(options: Omit<Urql.UseQueryArgs<JobITsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<JobITsQuery>({ query: JobITsDocument, ...options });
+};
+export const LeavesDocument = gql`
+    query Leaves {
+  leaves {
+    ...RegularLeave
+  }
+}
+    ${RegularLeaveFragmentDoc}`;
+
+export function useLeavesQuery(options: Omit<Urql.UseQueryArgs<LeavesQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<LeavesQuery>({ query: LeavesDocument, ...options });
 };
 export const ManualAdByIdDocument = gql`
     query ManualADById($id: Int!) {

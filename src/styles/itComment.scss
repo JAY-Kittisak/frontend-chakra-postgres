@@ -63,15 +63,15 @@
 }
 
 .dragactive {
-  background-color: rgba(150, 150, 150,0.7);
+  background-color: rgba(100, 100, 100,1);
 }
 
 .dragcomplete {
-  background-color: rgba(10, 182, 139,0.7);
+  background-color: rgb(10, 182, 139);
 }
 
 .remove {
-  background-color: rgb(10, 182, 139);
+  background-color: rgba(10, 182, 139,0.8);
 }
 
 .todos__heading {

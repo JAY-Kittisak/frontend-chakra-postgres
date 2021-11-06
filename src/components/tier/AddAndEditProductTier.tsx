@@ -50,7 +50,7 @@ const AddAndEditProductTier: React.FC<Props> = ({
                 creatorName,
                 productName: "",
                 description: "",
-                category: "",
+                    category: "อะไหล่รถยนต์",
             }}
             onSubmit={async (values) => {
             const { error } = await createProductByTier({ input: values });
