@@ -1,5 +1,5 @@
-mutation UpdateRoles($id: Int!,$newRoles: String!,$newPosition: String!){
-    updateRoles(id: $id,newRoles: $newRoles,newPosition: $newPosition){
+mutation UpdateRoles($id: Int!,$newRoles: String!,$newPosition: String!,$newBranch: String!){
+    updateRoles(id: $id,newRoles: $newRoles,newPosition: $newPosition,newBranch: $newBranch){
     errors{
       field
       message

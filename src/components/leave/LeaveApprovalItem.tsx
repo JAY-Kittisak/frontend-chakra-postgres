@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
     Tr,
     Td,
@@ -12,6 +12,7 @@ import {
 
 import {
     RegularLeaveFragment,
+    useMeQuery,
     useUpdateLeaveMutation,
 } from "../../generated/graphql";
 import { catApprove, formatDate } from "../../utils/helpers";
@@ -21,19 +22,28 @@ interface Props {
 }
 
 const LeaveApprovalItem: React.FC<Props> = ({ item }) => {
+    const [selectAp, setSelectAp] = useState(false)
+    const [{ data }] = useMeQuery()
     const [, updateLeave] = useUpdateLeaveMutation();
+
+    useEffect(() => {
+        if (item.BossActionName) {
+            setSelectAp(true)
+        }
+    }, [item.BossActionName])
+
     return (
-        <Tr key={item.id} _hover={{ bgColor: "#eee" }}>
+        <Tr _hover={{ bgColor: "#eee" }}>
             <Td>
                 <Text>{formatDate(+item.createdAt)}</Text>
             </Td>
-            <Td fontSize={["xs", "xs", "sm", "md"]}>
+            <Td fontSize={["xs", "xs", "sm", "md"]} p="8px">
                 <Flex align="center">
                     {item.creator.imageUrl && (
                         <Image
                             mr={2}
                             borderRadius="full"
-                            boxSize="60px"
+                            boxSize="70px"
                             objectFit="cover"
                             src={item.creator.imageUrl}
                         />
@@ -67,6 +77,7 @@ const LeaveApprovalItem: React.FC<Props> = ({ item }) => {
             </Td>
             <Td>
                 <Select
+                    disabled={selectAp || data?.me?.position === "พนังงานทั่วไป"}
                     fontWeight="semibold"
                     boxShadow="md"
                     bg={
@@ -96,6 +107,9 @@ const LeaveApprovalItem: React.FC<Props> = ({ item }) => {
                         </option>
                     ))}
                 </Select>
+                {item.BossActionName &&
+                    <Text mt="2" fontWeight="semibold">ลงชื่อ : {item.BossActionName}</Text>
+                }
             </Td>
         </Tr>
     );

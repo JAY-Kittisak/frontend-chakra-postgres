@@ -22,8 +22,9 @@ import { useHistory } from "react-router";
 import InputField from "../components/InputField";
 import SelectControl from "../components/Selectfield";
 import { catLeave, LeaveType } from "../utils/helpers";
+import { toErrorMap } from "../utils/toErrorMap";
 import ViewQuota from "../components/leave/ViewQuota";
-import { useMeQuery } from "../generated/graphql";
+import { useCreateLeaveMutation, useMeQuery, FieldError } from "../generated/graphql";
 
 const catDate = [
     "0 วัน", "0.5 วัน", "1 วัน", "2 วัน", "3 วัน", "4 วัน", "5 วัน", "6 วัน", "7 วัน", "8 วัน", "9 วัน",
@@ -47,6 +48,7 @@ const CreateLeave: React.FC<Props> = () => {
     const history = useHistory()
 
     const [{ data }] = useMeQuery()
+    const [, createLeave] = useCreateLeaveMutation()
 
     const onChangeBegin = (dateBegin: Date) => {
         setDateBegin(dateBegin);
@@ -92,26 +94,36 @@ const CreateLeave: React.FC<Props> = () => {
 
             <Formik
                 initialValues={{
-                    title: "ลากิจ",
                     detail: "",
                     sumDate: "0 วัน",
                     sumHour: "0 ช.ม.",
                 }}
-                onSubmit={async (values) => {
+                onSubmit={async (values, { setErrors }) => {
                     let valueDate = values.sumDate
                     let valueHour = values.sumHour
                     if (maternity) {
                         valueDate = maternity
                         valueHour = "0"
                     }
-                    console.log([
-                        title,
-                        values.detail,
-                        valueDate.split(" ")[0],
-                        valueHour.split(" ")[0],
-                        dateBeginStr,
-                        dateEndStr,
-                    ]);
+
+                    const response = await createLeave({
+                        input: {
+                            title: title,
+                            detail: values.detail,
+                            sumDate: valueDate.split(" ")[0],
+                            sumHour: valueHour.split(" ")[0],
+                            dateBegin: dateBeginStr,
+                            dateEnd: dateEndStr,
+                        }
+                    })
+
+                    if (response.data?.createLeave.errors) {
+                        setErrors(toErrorMap(response.data.createLeave.errors as FieldError[]));
+                    } else if (response.data?.createLeave.leave) {
+                        history.push("/leave/me")
+                    } else if (response.error) {
+                        alert(" Error! โปรดใส่ข้อมูลให้ครบถ้วน หรือ โปรดแจ้ง IT")
+                    }
                 }}
             >
                 {({ isSubmitting }) => (
@@ -128,7 +140,7 @@ const CreateLeave: React.FC<Props> = () => {
                                 bg="white"
                             >
                                 <Text fontSize="2xl" fontWeight="bold">
-                                    คำขออนุมัติลางาน
+                                    คำขอ อนุมัติลางาน
                                 </Text>
                                 <Flex flexDir="column" w="80%" mb="5">
 

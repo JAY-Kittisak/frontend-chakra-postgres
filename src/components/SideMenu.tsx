@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Search2Icon } from "@chakra-ui/icons";
 import { NavLink } from "react-router-dom";
-import { Avatar, AvatarBadge } from "@chakra-ui/react";
+import { Text, Avatar, AvatarBadge } from "@chakra-ui/react";
 
 import MenuItem from "./MenuItem";
 import MenuItemFooter from "./MenuItemFooter";
@@ -55,7 +55,7 @@ const menuItems = [
         name: "ลางานออนไลน์",
         to: "/leave",
         iconClassName: "bi bi-calendar2-x",
-        subMenus: [{ name: "ประวัติการลาของคุณ", to: "/ประวัติการลาของคุณ" }],
+        subMenus: [{ name: "ประวัติการลาของคุณ", to: "/leave/me" }],
     },
 ];
 
@@ -116,7 +116,7 @@ const SideMenu: React.FC<Props> = ({ onCollapse }) => {
                     <AvatarBadge boxSize="1em" bg="green.500" />
                 </Avatar>
                 <div className="user-info">
-                    <h5>{data.me.fullNameTH}</h5>
+                    <Text fontWeight="semibold" isTruncated>{data.me.fullNameTH}</Text>
                     <p>{data.me.email}</p>
                 </div>
                 <div className="divider"></div>

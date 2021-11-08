@@ -35,6 +35,17 @@ const UserItem: React.FC<Props> = ({
                     <Text
                         as="i"
                         fontWeight="semibold"
+                        color={user.branch === 1 ? "green" : "cyan.600"}
+                    >
+                        {user.branch === 1 ? "ชลบุรี" : "ลาดกระบัง"}
+                    </Text>
+                </Center>
+            </Td>
+            <Td>
+                <Center>
+                    <Text
+                        as="i"
+                        fontWeight="semibold"
                         color={
                             user.roles === "client-CDC"
                                 ? "green"

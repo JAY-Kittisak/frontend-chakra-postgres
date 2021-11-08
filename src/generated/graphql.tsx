@@ -371,6 +371,7 @@ export type MutationUploadImageMeArgs = {
 
 export type MutationUpdateRolesArgs = {
   id: Scalars['Int'];
+  newBranch: Scalars['String'];
   newPosition: Scalars['String'];
   newRoles: Scalars['String'];
 };
@@ -705,6 +706,11 @@ export type QueryAmphuresPvIdArgs = {
 };
 
 
+export type QueryLeavesArgs = {
+  createBy: Scalars['Boolean'];
+};
+
+
 export type QueryLeaveByIdArgs = {
   id: Scalars['Int'];
 };
@@ -833,6 +839,7 @@ export type User = {
   email: Scalars['String'];
   roles: Scalars['String'];
   position: Scalars['String'];
+  branch: Scalars['Float'];
   fullNameTH?: Maybe<Scalars['String']>;
   fullNameEN?: Maybe<Scalars['String']>;
   nickName?: Maybe<Scalars['String']>;
@@ -960,7 +967,7 @@ export type RegularStockItOrderFragment = (
 
 export type RegularUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'username' | 'email' | 'roles' | 'position' | 'departments' | 'fullNameTH' | 'fullNameEN' | 'nickName' | 'imageUrl' | 'createdAt' | 'updatedAt'>
+  & Pick<User, 'id' | 'username' | 'email' | 'roles' | 'position' | 'branch' | 'departments' | 'fullNameTH' | 'fullNameEN' | 'nickName' | 'imageUrl' | 'createdAt' | 'updatedAt'>
 );
 
 export type CreateGiveMutationVariables = Exact<{
@@ -1410,6 +1417,7 @@ export type UpdateRolesMutationVariables = Exact<{
   id: Scalars['Int'];
   newRoles: Scalars['String'];
   newPosition: Scalars['String'];
+  newBranch: Scalars['String'];
 }>;
 
 
@@ -1683,7 +1691,9 @@ export type JobITsQuery = (
   )>> }
 );
 
-export type LeavesQueryVariables = Exact<{ [key: string]: never; }>;
+export type LeavesQueryVariables = Exact<{
+  createBy: Scalars['Boolean'];
+}>;
 
 
 export type LeavesQuery = (
@@ -2048,6 +2058,7 @@ export const RegularUserFragmentDoc = gql`
   email
   roles
   position
+  branch
   departments
   fullNameTH
   fullNameEN
@@ -2452,8 +2463,13 @@ export function useUpdateLeaveMutation() {
   return Urql.useMutation<UpdateLeaveMutation, UpdateLeaveMutationVariables>(UpdateLeaveDocument);
 };
 export const UpdateRolesDocument = gql`
-    mutation UpdateRoles($id: Int!, $newRoles: String!, $newPosition: String!) {
-  updateRoles(id: $id, newRoles: $newRoles, newPosition: $newPosition) {
+    mutation UpdateRoles($id: Int!, $newRoles: String!, $newPosition: String!, $newBranch: String!) {
+  updateRoles(
+    id: $id
+    newRoles: $newRoles
+    newPosition: $newPosition
+    newBranch: $newBranch
+  ) {
     errors {
       field
       message
@@ -2710,8 +2726,8 @@ export function useJobITsQuery(options: Omit<Urql.UseQueryArgs<JobITsQueryVariab
   return Urql.useQuery<JobITsQuery>({ query: JobITsDocument, ...options });
 };
 export const LeavesDocument = gql`
-    query Leaves {
-  leaves {
+    query Leaves($createBy: Boolean!) {
+  leaves(createBy: $createBy) {
     ...RegularLeave
   }
 }

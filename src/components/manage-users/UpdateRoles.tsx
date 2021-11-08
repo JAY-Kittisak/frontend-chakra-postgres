@@ -28,6 +28,11 @@ const positionOptions = [
     { name: "พนังงานทั่วไป", value: "พนังงานทั่วไป" },
 ];
 
+const radioBranch = [
+    { name: "ลาดกระบัง", value: "0" },
+    { name: "ชลบุรี่", value: "1" },
+];
+
 const UpdateRoles: React.FC<Props> = ({ userId, userName, open, setOpen }) => {
     const cancelRef = useRef();
     const [, updateRoles] = useUpdateRolesMutation()
@@ -40,11 +45,18 @@ const UpdateRoles: React.FC<Props> = ({ userId, userName, open, setOpen }) => {
         >
             <Formik
                 initialValues={{
-                    roles: "",
-                    position: ""
+                    newRoles: "",
+                    newPosition: "",
+                    newBranch: "",
                 }}
                 onSubmit={async (values, { setErrors }) => {
-                    const response = await updateRoles({ id: userId, newRoles: values.roles, newPosition: values.position });
+                    console.log(values.newBranch)
+                    const response = await updateRoles({
+                        id: userId,
+                        newRoles: values.newRoles,
+                        newPosition: values.newPosition,
+                        newBranch: values.newBranch
+                    });
                     if (response.data?.updateRoles.errors) {
                         setErrors(toErrorMap(response.data.updateRoles.errors as FieldError[]));
                     } else if (response.data?.updateRoles.user) {
@@ -63,6 +75,26 @@ const UpdateRoles: React.FC<Props> = ({ userId, userName, open, setOpen }) => {
                             </AlertDialogHeader>
                             <Form>
                                 <AlertDialogBody>
+
+                                    <Text fontSize="xl" my="2">New Branch :</Text>
+                                    <Grid
+                                        templateColumns={["repeat(2, 1fr)"]}
+                                        gap={6}
+                                        role="group"
+                                        aria-labelledby="my-radio-group"
+                                        rounded="7px"
+                                        boxShadow="base"
+                                        p="6"
+                                        bg="white"
+                                    >
+                                        {radioBranch.map((radio, index) => (
+                                            <label key={index}>
+                                                <Field type="radio" name="newBranch" value={radio.value} />
+                                                &nbsp; {radio.name}
+                                            </label>
+                                        ))}
+                                    </Grid>
+
                                     <Text fontSize="xl" mb="2">New Roles :</Text>
                                     <Grid
                                         templateColumns={["repeat(2, 1fr)"]}
@@ -76,14 +108,11 @@ const UpdateRoles: React.FC<Props> = ({ userId, userName, open, setOpen }) => {
                                     >
                                         {radioOptions.map((radio, index) => (
                                             <label key={index}>
-                                                <Field type="radio" name="roles" value={radio.value} />
+                                                <Field type="radio" name="newRoles" value={radio.value} />
                                                 &nbsp; {radio.name}
                                             </label>
                                         ))}
                                     </Grid>
-                                    <Box align="center">
-                                        <ErrorMessage name="roles" component={TextError} />
-                                    </Box>
 
                                     <Text fontSize="xl" my="2">New Position :</Text>
                                     <Grid
@@ -98,13 +127,15 @@ const UpdateRoles: React.FC<Props> = ({ userId, userName, open, setOpen }) => {
                                     >
                                         {positionOptions.map((radio, index) => (
                                             <label key={index}>
-                                                <Field type="radio" name="position" value={radio.value} />
+                                                <Field type="radio" name="newPosition" value={radio.value} />
                                                 &nbsp; {radio.name}
                                             </label>
                                         ))}
                                     </Grid>
-                                    <Box align="center">
-                                        <ErrorMessage name="position" component={TextError} />
+                                    <Box align="center" mt="3">
+                                        <ErrorMessage name="newRoles" component={TextError} />
+                                        <ErrorMessage name="newPosition" component={TextError} />
+                                        <ErrorMessage name="newBranch" component={TextError} />
                                     </Box>
 
                                 </AlertDialogBody>

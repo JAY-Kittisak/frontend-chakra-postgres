@@ -1,5 +1,5 @@
-query Leaves{
-  leaves{
+query Leaves($createBy: Boolean!){
+  leaves(createBy: $createBy){
       ...RegularLeave
   }
 }

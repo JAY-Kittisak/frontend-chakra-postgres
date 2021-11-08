@@ -97,7 +97,15 @@ const ManageUsers: React.FC<Props> = () => {
                                         textAlign="center"
                                         fontSize={["xs", "xs", "sm", "md"]}
                                         color="white"
-                                        w="15%"
+                                            w="10%"
+                                        >
+                                            branch
+                                        </Th>
+                                        <Th
+                                            textAlign="center"
+                                            fontSize={["xs", "xs", "sm", "md"]}
+                                            color="white"
+                                            w="10%"
                                     >
                                         roles
                                     </Th>
@@ -105,7 +113,7 @@ const ManageUsers: React.FC<Props> = () => {
                                         textAlign="center"
                                         fontSize={["xs", "xs", "sm", "md"]}
                                         color="white"
-                                        w="15%"
+                                            w="10%"
                                     >
                                         position
                                     </Th>

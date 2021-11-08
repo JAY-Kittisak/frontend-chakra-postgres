@@ -4,6 +4,7 @@ fragment RegularUser on User {
     email
     roles
     position
+    branch
     departments
     fullNameTH
     fullNameEN
