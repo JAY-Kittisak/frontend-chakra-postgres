@@ -11,6 +11,7 @@ import {
     Divider,
 } from "@chakra-ui/react";
 
+import { useIsAuth } from '../utils/uselsAuth'
 import Spinner from "../components/Spinner";
 import { useLeavesQuery } from '../generated/graphql';
 import LeaveApprovalItem from '../components/leave/LeaveApprovalItem';
@@ -18,6 +19,7 @@ import LeaveApprovalItem from '../components/leave/LeaveApprovalItem';
 interface Props { }
 
 const LeaveByMe: React.FC<Props> = () => {
+    useIsAuth()
     const [{ data, fetching }] = useLeavesQuery({
         variables: {
             createBy: true,

@@ -16,12 +16,14 @@ import {
     Divider,
 } from "@chakra-ui/react";
 
+import { useIsAuth } from '../utils/uselsAuth'
 import Spinner from "../components/Spinner";
 import LeaveApprovalItem from "../components/leave/LeaveApprovalItem";
 
 interface Props { }
 
 const LeaveApproval: React.FC<Props> = () => {
+    useIsAuth()
     const [leave, setLeave] = useState<RegularLeaveFragment[] | undefined>(
         undefined
     );
