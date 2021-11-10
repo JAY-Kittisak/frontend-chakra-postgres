@@ -53,12 +53,16 @@ const FactoryDetail: React.FC<Props> = () => {
         }
     }, [data]);
 
-    if (!fetching && !data) {
-        return <div>you got query failed for some reason</div>;
+    if (data?.factoryById === null) {
+        return (
+            <Flex h="500px" align="center" justify="center">
+                <Text fontSize="2xl" fontWeight="bold">Sorry No Data!! you got query failed for some reason</Text>
+            </Flex>
+        );
     }
     return (
         <>
-            {!data && fetching ? (
+            {fetching ? (
                 <div>Loading...</div>
             ) : (
                 <Box>

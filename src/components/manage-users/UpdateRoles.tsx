@@ -26,6 +26,7 @@ const radioOptions = [
 const positionOptions = [
     { name: "หัวหน้างาน", value: "หัวหน้างาน" },
     { name: "พนังงานทั่วไป", value: "พนังงานทั่วไป" },
+    { name: "General Manager", value: "GM" },
 ];
 
 const radioBranch = [

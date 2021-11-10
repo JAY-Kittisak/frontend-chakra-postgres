@@ -11,6 +11,8 @@ import TodoPage from "../pages/TodoPage";
 import CreateLeave from "../pages/CreateLeave";
 import LeaveApproval from "../pages/LeaveApproval";
 import LeaveByMe from "../pages/LeaveByMe";
+import CreateResell from "../pages/CreateResell";
+import ResellReport from "../pages/ResellReport";
 import PageNotFound from "../pages/PageNotFound";
 import TierRoute from "./TierRoute";
 import GiveRoute from "./GiveRoute";
@@ -24,6 +26,12 @@ interface Props { }
 const Routes: React.FC<Props> = () => {
     return (
         <Switch>
+            <Route path="/resell/report">
+                <ResellReport />
+            </Route>
+            <Route path="/resell">
+                <CreateResell />
+            </Route>
             <Route path="/leave/me">
                 <LeaveByMe />
             </Route>

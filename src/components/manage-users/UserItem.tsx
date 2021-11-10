@@ -61,8 +61,20 @@ const UserItem: React.FC<Props> = ({
             <Td>
                 <Center>
                     <Text
-                        fontWeight={user.position === "หัวหน้างาน" ? "semibold" : "light"}
-                        color={user.position === "หัวหน้างาน" ? "orange.600" : ""}
+                        fontWeight={
+                            user.position === "หัวหน้างาน"
+                                ? "semibold"
+                                : user.position === "GM"
+                                    ? "semibold"
+                                    : "light"
+                        }
+                        color={
+                            user.position === "หัวหน้างาน"
+                                ? "orange.600"
+                                : user.position === "GM"
+                                    ? "orange.600"
+                                    : ""
+                        }
                     >
                         {user.position}
                     </Text>
