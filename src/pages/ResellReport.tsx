@@ -10,24 +10,10 @@ import {
 import { useIsGmAuth } from '../utils/useIsGmAuth'
 // import ResellItem from '../components/resell/ResellItem';
 
+interface Props { }
 
-type ValuesDemo = {
-    maker: string;
-    title: string;
-    detail: string;
-    orderById: number;
-    resellId: number;
-
-}
-
-interface Props {
-    myArray: ValuesDemo[]
-}
-
-const ResellReport: React.FC<Props> = ({ myArray }) => {
+const ResellReport: React.FC<Props> = () => {
     useIsGmAuth()
-
-    console.table(myArray)
 
     return (
         <Flex>

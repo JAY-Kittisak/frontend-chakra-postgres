@@ -1,0 +1,7 @@
+query DistrictsApId($id: Int!) {
+  districtsApId(id: $id) {
+    id
+    zip_code
+    name_th
+  }
+}

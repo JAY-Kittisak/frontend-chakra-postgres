@@ -1,0 +1,6 @@
+query QueryProvinces{
+  queryProvinces{
+    id
+    name_th
+  }
+}

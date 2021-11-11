@@ -8,10 +8,10 @@ import Profile from "../pages/Profile";
 import JobITByMe from "../pages/JobITByMe";
 import CreateJobIT from "../pages/CreateJobIT";
 import TodoPage from "../pages/TodoPage";
-import CreateLeave from "../pages/CreateLeave";
+import LeaveCreate from "../pages/LeaveCreate";
 import LeaveApproval from "../pages/LeaveApproval";
 import LeaveByMe from "../pages/LeaveByMe";
-import CreateResell from "../pages/CreateResell";
+import ResellCreate from "../pages/ResellCreate";
 import ResellReport from "../pages/ResellReport";
 import PageNotFound from "../pages/PageNotFound";
 import TierRoute from "./TierRoute";
@@ -30,7 +30,7 @@ const Routes: React.FC<Props> = () => {
                 <ResellReport />
             </Route>
             <Route path="/resell">
-                <CreateResell />
+                <ResellCreate />
             </Route>
             <Route path="/leave/me">
                 <LeaveByMe />
@@ -39,7 +39,7 @@ const Routes: React.FC<Props> = () => {
                 <LeaveApproval />
             </Route>
             <Route path="/leave">
-                <CreateLeave />
+                <LeaveCreate />
             </Route>
             <Route path="/todo">
                 <TodoPage />

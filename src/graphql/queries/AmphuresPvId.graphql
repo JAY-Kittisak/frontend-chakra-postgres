@@ -1,0 +1,6 @@
+query AmphuresPvId($id: Int!) {
+  amphuresPvId(id: $id) {
+    id
+    name_th
+  }
+}

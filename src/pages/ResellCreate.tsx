@@ -4,36 +4,33 @@ import {
     Flex,
     Button,
     Divider,
-    Table,
-    Tbody,
-    Th,
-    Thead,
-    Tr
 } from "@chakra-ui/react";
 import { useHistory } from "react-router";
 import { Form, Formik } from "formik";
 
 import { useIsAuth } from "../utils/uselsAuth";
 import { useMeQuery } from "../generated/graphql";
-import ResellItem from "../components/resell/ResellItem";
 import InputField from "../components/InputField";
-import SelectCompany from "../components/resell/SelectCompany";
-
+import SelectCustomer from "../components/resell/SelectCustomer";
+import SelectControl from "../components/Selectfield";
 
 interface Props { }
 
 type ValuesDemo = {
+    customerCode: string;
     maker: string;
     title: string;
     detail: string;
-    orderById: number;
-    resellId: number;
 }
 
-const CreateResell: React.FC<Props> = () => {
+type SelectMaker = "YAMAWA" | "MOLDINO"
+// SelectMaker[]
+const catMaker: Array<SelectMaker> = ["YAMAWA", "MOLDINO"]
+
+const ResellCreate: React.FC<Props> = () => {
     useIsAuth();
 
-    const [myArray, updateMyArray] = useState<ValuesDemo[]>([]);
+    const [, updateMyArray] = useState<ValuesDemo[]>([]);
 
     const history = useHistory();
 
@@ -66,21 +63,20 @@ const CreateResell: React.FC<Props> = () => {
             </Flex>
             <Divider orientation="horizontal" />
 
-
             <Formik
                 initialValues={{
-                    maker: "Yamawa หรือ moldino",
+                    maker: "YAMAWA",
                     title: "",
                     detail: "",
-                    orderById: 0,
-                    resellId: 0
+                    customerCode: "",
                 }}
                 onSubmit={async (
                     values,
                     // { setErrors }
                 ) => {
-                    console.log(values.maker)
+                    console.table(values)
                     updateMyArray(arr => [...arr, values]);
+                    history.push("/resell/report");
                 }}
             >
                 {({ isSubmitting }) => (
@@ -102,20 +98,32 @@ const CreateResell: React.FC<Props> = () => {
                                 </Text>
                                 <Flex flexDir="column" w="80%" mb="5" >
                                     <InputField
-                                        name="orderById"
-                                        placeholder="บริษัท.."
-                                        label="บริษัท :"
+                                        name="customerCode"
+                                        placeholder="Customer code..."
+                                        label="Customer Code :"
                                     />
-                                    <InputField
-                                        name="maker"
-                                        placeholder="YAMAWA"
-                                        label="Maker :"
-                                    />
+
+                                    <Text
+                                        fontWeight="semibold"
+                                        fontSize={["sm", "md"]}
+                                        mb="2"
+                                        mt="3"
+                                    >
+                                        Maker :
+                                    </Text>
+
+                                    <SelectControl name="maker">
+                                        {catMaker.map((value, i) => (
+                                            <option key={i} value={value}>
+                                                {value}
+                                            </option>
+                                        ))}
+                                    </SelectControl>
 
                                     <InputField
                                         name="title"
-                                        placeholder="ชื่อ Product..."
-                                        label="ชื่อ Product :"
+                                        placeholder="Title.."
+                                        label="Title :"
                                     />
 
                                     <InputField
@@ -124,7 +132,7 @@ const CreateResell: React.FC<Props> = () => {
                                         placeholder="รายละเอียด..."
                                         label="รายละเอียดการผลิต :"
                                     />
-
+                                    {/*
                                     <Flex w="50%">
                                         <InputField
                                             type="number"
@@ -139,7 +147,7 @@ const CreateResell: React.FC<Props> = () => {
                                         >
                                             + เพิ่ม
                                         </Button>
-                                    </Flex>
+                                    </Flex> */}
 
                                     <Button
                                         mt="5"
@@ -148,83 +156,18 @@ const CreateResell: React.FC<Props> = () => {
                                         isLoading={isSubmitting}
                                         type="submit"
                                     >
-                                        Save
+                                        Next
                                     </Button>
 
                                 </Flex>
                             </Flex>
-                            <SelectCompany />
+                            <SelectCustomer />
                         </Flex>
                     </Form>
                 )}
             </Formik>
-
-
-            <Table
-                borderRadius="md"
-                boxShadow="xl"
-                my="10"
-                variant="simple"
-                colorScheme="blackAlpha"
-            >
-                <Thead>
-                    <Tr bg="#028174">
-                        <Th
-                            textAlign="center"
-                            fontSize={["xs", "xs", "sm", "md"]}
-                            color="white"
-                        >
-                            ชื่อ maker
-                        </Th>
-                        <Th
-                            textAlign="center"
-                            fontSize={["xs", "xs", "sm", "md"]}
-                            color="white"
-                        >
-                            ชื่อ Product
-                        </Th>
-                        <Th
-                            textAlign="center"
-                            fontSize={["xs", "xs", "sm", "md"]}
-                            color="white"
-                        >
-                            รายละเอียดการผลิต
-                        </Th>
-                        <Th
-                            textAlign="center"
-                            fontSize={["xs", "xs", "sm", "md"]}
-                            color="white"
-                            w="10%"
-                        >
-                            สาขา
-                        </Th>
-                        <Th
-                            textAlign="center"
-                            fontSize={["xs", "xs", "sm", "md"]}
-                            color="white"
-                            w="20%"
-                        >
-                            บริษัทที่สั่งซื้อ
-                        </Th>
-                        <Th
-                            textAlign="center"
-                            fontSize={["xs", "xs", "sm", "md"]}
-                            color="white"
-                            w="20%"
-                        >
-                            ขายต่อให้กับ
-                        </Th>
-                    </Tr>
-                </Thead>
-
-                <Tbody>
-                    {myArray.map((item, i) => (
-                        <ResellItem key={i} item={item} />
-                    ))}
-                </Tbody>
-            </Table>
         </Flex>
     );
 };
 
-export default CreateResell;
+export default ResellCreate;

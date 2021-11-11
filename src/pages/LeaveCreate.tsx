@@ -37,7 +37,7 @@ const catHour = ["0 ช.ม.", "0.5 ช.ม.", "1 ช.ม.", "2 ช.ม.", "3 �
 
 interface Props { }
 
-const CreateLeave: React.FC<Props> = () => {
+const LeaveCreate: React.FC<Props> = () => {
     useIsAuth()
     const [dateBegin, setDateBegin] = useState(new Date());
     const [dateEnd, setDateEnd] = useState(new Date());
@@ -315,4 +315,4 @@ const CreateLeave: React.FC<Props> = () => {
     );
 };
 
-export default CreateLeave;
+export default LeaveCreate;

@@ -8,7 +8,7 @@ export const useIsGmAuth = () => {
 
     useEffect(() => {
         const locations = { pathname: '/' }
-        if (!fetching && (data?.me?.position !== "GM")) {
+        if (!fetching && ((data?.me?.position !== "GM") && (data?.me?.position !== "หัวหน้างาน"))) {
             history.replace(locations)
         }
     }, [fetching, data, history])

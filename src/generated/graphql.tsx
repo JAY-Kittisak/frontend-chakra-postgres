@@ -626,6 +626,7 @@ export type Query = {
   stockItOrderById: StockItOrder;
   queryProvinces: Array<Provinces>;
   amphuresPvId: Array<Amphures>;
+  districtsApId: Array<Districts>;
   leaves?: Maybe<Array<Leave>>;
   leaveById: Leave;
 };
@@ -702,6 +703,11 @@ export type QueryStockItOrderByIdArgs = {
 
 
 export type QueryAmphuresPvIdArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryDistrictsApIdArgs = {
   id: Scalars['Int'];
 };
 
@@ -1514,6 +1520,32 @@ export type UploadImageMeMutation = (
   ) }
 );
 
+export type AmphuresPvIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type AmphuresPvIdQuery = (
+  { __typename?: 'Query' }
+  & { amphuresPvId: Array<(
+    { __typename?: 'Amphures' }
+    & Pick<Amphures, 'id' | 'name_th'>
+  )> }
+);
+
+export type DistrictsApIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DistrictsApIdQuery = (
+  { __typename?: 'Query' }
+  & { districtsApId: Array<(
+    { __typename?: 'Districts' }
+    & Pick<Districts, 'id' | 'zip_code' | 'name_th'>
+  )> }
+);
+
 export type FactoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1745,6 +1777,17 @@ export type ProductByTiersQuery = (
       )> }
     )>> }
   )>> }
+);
+
+export type QueryProvincesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type QueryProvincesQuery = (
+  { __typename?: 'Query' }
+  & { queryProvinces: Array<(
+    { __typename?: 'Provinces' }
+    & Pick<Provinces, 'id' | 'name_th'>
+  )> }
 );
 
 export type StockItByIdQueryVariables = Exact<{
@@ -2552,6 +2595,31 @@ export const UploadImageMeDocument = gql`
 export function useUploadImageMeMutation() {
   return Urql.useMutation<UploadImageMeMutation, UploadImageMeMutationVariables>(UploadImageMeDocument);
 };
+export const AmphuresPvIdDocument = gql`
+    query AmphuresPvId($id: Int!) {
+  amphuresPvId(id: $id) {
+    id
+    name_th
+  }
+}
+    `;
+
+export function useAmphuresPvIdQuery(options: Omit<Urql.UseQueryArgs<AmphuresPvIdQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<AmphuresPvIdQuery>({ query: AmphuresPvIdDocument, ...options });
+};
+export const DistrictsApIdDocument = gql`
+    query DistrictsApId($id: Int!) {
+  districtsApId(id: $id) {
+    id
+    zip_code
+    name_th
+  }
+}
+    `;
+
+export function useDistrictsApIdQuery(options: Omit<Urql.UseQueryArgs<DistrictsApIdQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<DistrictsApIdQuery>({ query: DistrictsApIdDocument, ...options });
+};
 export const FactoriesDocument = gql`
     query Factories {
   factories {
@@ -2785,6 +2853,18 @@ export const ProductByTiersDocument = gql`
 
 export function useProductByTiersQuery(options: Omit<Urql.UseQueryArgs<ProductByTiersQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<ProductByTiersQuery>({ query: ProductByTiersDocument, ...options });
+};
+export const QueryProvincesDocument = gql`
+    query QueryProvinces {
+  queryProvinces {
+    id
+    name_th
+  }
+}
+    `;
+
+export function useQueryProvincesQuery(options: Omit<Urql.UseQueryArgs<QueryProvincesQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<QueryProvincesQuery>({ query: QueryProvincesDocument, ...options });
 };
 export const StockItByIdDocument = gql`
     query StockItById($id: Int!) {
