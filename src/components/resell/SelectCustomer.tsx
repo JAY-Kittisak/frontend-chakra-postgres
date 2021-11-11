@@ -76,8 +76,8 @@ const SelectCustomer: React.FC<Props> = () => {
 
             <Flex justify="space-between" mt="5">
                 <Flex>
-                    <Flex p="3">
-                        <Icon as={Search2Icon} />
+                    <Flex p="1">
+                        <Icon w="30px" h="30px" as={Search2Icon} color="green" />
                     </Flex>
                     <Input
                         w="150px"
@@ -148,7 +148,7 @@ const SelectCustomer: React.FC<Props> = () => {
                                         <Center>{val.customerCode}</Center>
                                     </Td>
                                     <Td w="60%">
-                                        <Center>{val.customerName}</Center>
+                                        {val.customerName}
                                     </Td>
                                 </Tr>
                             ))}

@@ -132,23 +132,6 @@ const ResellCreate: React.FC<Props> = () => {
                                         placeholder="รายละเอียด..."
                                         label="รายละเอียดการผลิต :"
                                     />
-                                    {/*
-                                    <Flex w="50%">
-                                        <InputField
-                                            type="number"
-                                            name="resellId"
-                                            placeholder="ขายให้กับบริษัท..."
-                                            label="ขายให้กับบริษัท :"
-                                        />
-                                        <Button
-                                            ml="5"
-                                            mt="10"
-                                            colorScheme="green"
-                                        >
-                                            + เพิ่ม
-                                        </Button>
-                                    </Flex> */}
-
                                     <Button
                                         mt="5"
                                         w="100%"

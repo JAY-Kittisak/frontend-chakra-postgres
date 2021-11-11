@@ -4,14 +4,18 @@ import {
     Text,
     Button,
     Select,
+    Box,
     AlertDialog,
     AlertDialogBody,
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogContent,
     AlertDialogOverlay,
-    ModalCloseButton,
+    Input,
+    InputGroup,
+    InputLeftElement
 } from "@chakra-ui/react";
+import { PhoneIcon, AtSignIcon } from "@chakra-ui/icons";
 import { Form, Formik } from "formik";
 import InputField from '../InputField';
 import {
@@ -28,8 +32,13 @@ interface Props {
 
 const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
     const [provinceId, setProvinceId] = useState(1)
-    const [amphureId, setAmphureId] = useState(1)
-    const [districtId, setDistrictId] = useState("พระบรมมหาราชวัง")
+    const [amphureId, setAmphureId] = useState(0)
+    const [item, setItem] = useState({
+        province: "กรุงเทพมหานคร",
+        amphure: "",
+        district: ""
+    })
+    const [districtIndex, setDistrictIndex] = useState<number | undefined>(undefined)
 
     const cancelRef = useRef();
 
@@ -45,10 +54,31 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
         },
     })
 
-    // const onChangeProvince = (id: number) => {
-    //     setProvinceId(id)
-    // }
-    console.log("งงควยไรสัส", districtId)
+    const onChangeProvince = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        // Error e.nativeEvent.target.selectedIndex
+        let index = e.target.selectedIndex
+        let label = (e.target[index] as HTMLOptionElement).text
+        setItem({ ...item, [e.target.name]: label })
+        setProvinceId(+e.target.value)
+    }
+    const onChangeAmphure = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        let index = e.target.selectedIndex
+        let label = (e.target[index] as HTMLOptionElement).text
+        setItem({ ...item, [e.target.name]: label })
+
+        setAmphureId(+e.target.value)
+    }
+
+    const onChangeDistrict = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        let index = e.target.selectedIndex
+        let label = (e.target[index] as HTMLOptionElement).text
+        setItem({ ...item, [e.target.name]: label })
+        setDistrictIndex(index)
+    }
+
+    console.log("districtIndex", districtIndex)
+
+    console.log("งงควยไรสัส", item)
     return (
         <AlertDialog
             size="xl"
@@ -69,10 +99,9 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
                 {({ isSubmitting }) => (
                     <AlertDialogOverlay>
                         <AlertDialogContent>
-                            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                            <AlertDialogHeader fontSize="xl" fontWeight="bold" align="center">
                                 Add New Customer
                             </AlertDialogHeader>
-                            <ModalCloseButton />
 
                             <Form>
                                 <AlertDialogBody>
@@ -85,61 +114,121 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
                                         </Flex>
                                     ) : (
                                         <>
-                                            <Flex flexDir="column">
+                                                <Flex flexDir="column" mt="-3">
                                                 <Flex>
                                                     <Flex mr="5">
                                                         <InputField
                                                             name="customerCode"
-                                                            placeholder="Code..."
+                                                                placeholder="Code"
                                                             label="Customer Code"
                                                         />
                                                     </Flex>
                                                     <InputField
                                                         name="customerName"
-                                                        placeholder="Name..."
+                                                            placeholder="Name"
                                                         label="Customer Name"
                                                     />
                                                 </Flex>
                                             </Flex>
+                                                <Flex>
+                                                    <Flex w="50%" flexDir="column">
+                                                        <Text mr="3" fontWeight="semibold" fontSize={["sm", "md"]} mb="1" mt="2">
+                                                            Phone
+                                                        </Text>
+                                                        <InputGroup>
+                                                            <InputLeftElement
+                                                                pointerEvents="none"
+                                                                children={<PhoneIcon color="green" />}
+                                                            />
+                                                            <Input type="tel" placeholder="Phone number" />
+                                                        </InputGroup>
+                                                    </Flex>
+                                                    <Flex ml="5" w="50%" flexDir="column">
+                                                        <Text mr="3" fontWeight="semibold" fontSize={["sm", "md"]} mb="1" mt="2">
+                                                            Email
+                                                        </Text>
+                                                        <InputGroup>
+                                                            <InputLeftElement
+                                                                pointerEvents="none"
+                                                                children={<AtSignIcon color="green.700" />}
+                                                            />
+                                                            <Input type="tel" placeholder="Email" />
+                                                        </InputGroup>
+                                                    </Flex>
+                                                </Flex>
 
-                                            <Text fontWeight="semibold" fontSize={["sm", "md"]} mb="1" mt="3">
-                                                Provinces
-                                            </Text>
-                                            <Select
-                                                onChange={(e) => setProvinceId(+e.target.value)}
-                                            >
-                                                {data?.queryProvinces.map((val) => (
-                                                    <option key={val.id} value={val.id}>
-                                                        {val.name_th}
-                                                    </option>
-                                                ))}
-                                            </Select>
+                                                <Flex>
+                                                    <Flex w="50%" flexDir="column">
+                                                        <Text mr="3" fontWeight="semibold" fontSize={["sm", "md"]} mb="1" mt="3">
+                                                            Provinces
+                                                        </Text>
+                                                        <Select
+                                                            mt="1"
+                                                            name="province"
+                                                            onChange={(e) => onChangeProvince(e)}
+                                                        >
+                                                            {data?.queryProvinces.map((val, i) => (
+                                                                <option key={i} value={val.id}>
+                                                                    {val.name_th}
+                                                                </option>
+                                                            ))}
+                                                        </Select>
+                                                    </Flex>
+                                                    <Flex ml="5" w="50%" flexDir="column">
+                                                        <Text mr="3" fontWeight="semibold" fontSize={["sm", "md"]} mb="1" mt="3">
+                                                            Amphures
+                                                        </Text>
+                                                        <Select
+                                                            mt="1"
+                                                            name="amphure"
+                                                            onChange={(e) => onChangeAmphure(e)}
+                                                        >
+                                                            {amphures?.amphuresPvId.map((val, i) => (
+                                                                <option key={i} value={val.id}>
+                                                                    {val.name_th}
+                                                                </option>
+                                                            ))}
+                                                        </Select>
+                                                    </Flex>
+                                                </Flex>
 
-                                            <Text fontWeight="semibold" fontSize={["sm", "md"]} mb="1" mt="3">
-                                                Amphures
-                                            </Text>
-                                            <Select
-                                                onChange={(e) => setAmphureId(+e.target.value)}
-                                            >
-                                                {amphures?.amphuresPvId.map((val) => (
-                                                    <option key={val.id} value={val.id}>
-                                                        {val.name_th}
-                                                    </option>
-                                                ))}
-                                            </Select>
-
-                                            <Text fontWeight="semibold" fontSize={["sm", "md"]} mb="1" mt="3">
-                                                Districts
-                                            </Text>
-                                            <Select
-                                                onChange={(e) => setDistrictId(e.target.value)}
-                                            >
-                                                {districts?.districtsApId.map((val) => (
-                                                    <option key={val.id} value={val.name_th}>
-                                                        {val.name_th}
-                                                    </option>
-                                                ))}
-                                            </Select>
+                                                <Flex>
+                                                    <Flex w="50%" flexDir="column">
+                                                        <Text mr="5" fontWeight="semibold" fontSize={["sm", "md"]} mb="1" mt="3">
+                                                            Districts
+                                                        </Text>
+                                                        <Select
+                                                            mt="1"
+                                                            name="district"
+                                                            onChange={(e) => onChangeDistrict(e)}
+                                                        >
+                                                            {districts?.districtsApId.map((val, i) => (
+                                                                <option key={i} value={val.id}>
+                                                                    {val.name_th}
+                                                                </option>
+                                                            ))}
+                                                        </Select>
+                                                    </Flex>
+                                                    {districtIndex &&
+                                                        <Flex ml="5" w="50%" flexDir="column">
+                                                            <Text fontWeight="semibold" fontSize={["sm", "md"]} mb="1" mt="3">
+                                                                รหัสไปรษณีย์
+                                                            </Text>
+                                                            <Box
+                                                                mt="2"
+                                                                w="100%"
+                                                                boxShadow="base"
+                                                                p="1"
+                                                                rounded="md"
+                                                                bg="white"
+                                                            >
+                                                                <Text ml="3" fontSize="lg">
+                                                                    {districts?.districtsApId[districtIndex].zip_code}
+                                                                </Text>
+                                                            </Box>
+                                                        </Flex>
+                                                    }
+                                                </Flex>
                                         </>
                                     )}
 
