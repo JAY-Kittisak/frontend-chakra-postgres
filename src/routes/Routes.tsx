@@ -12,6 +12,7 @@ import LeaveCreate from "../pages/LeaveCreate";
 import LeaveApproval from "../pages/LeaveApproval";
 import LeaveByMe from "../pages/LeaveByMe";
 import ResellCreate from "../pages/ResellCreate";
+import ResellCreateStep2 from "../pages/ResellCreateStep2";
 import ResellReport from "../pages/ResellReport";
 import PageNotFound from "../pages/PageNotFound";
 import TierRoute from "./TierRoute";
@@ -28,6 +29,9 @@ const Routes: React.FC<Props> = () => {
         <Switch>
             <Route path="/resell/report">
                 <ResellReport />
+            </Route>
+            <Route path="/resell/step2">
+                <ResellCreateStep2 />
             </Route>
             <Route path="/resell">
                 <ResellCreate />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
     Text,
     Flex,
@@ -16,13 +16,6 @@ import SelectControl from "../components/Selectfield";
 
 interface Props { }
 
-type ValuesDemo = {
-    customerCode: string;
-    maker: string;
-    title: string;
-    detail: string;
-}
-
 type SelectMaker = "YAMAWA" | "MOLDINO"
 // SelectMaker[]
 const catMaker: Array<SelectMaker> = ["YAMAWA", "MOLDINO"]
@@ -30,7 +23,7 @@ const catMaker: Array<SelectMaker> = ["YAMAWA", "MOLDINO"]
 const ResellCreate: React.FC<Props> = () => {
     useIsAuth();
 
-    const [, updateMyArray] = useState<ValuesDemo[]>([]);
+    // const [, updateMyArray] = useState<ValuesDemo[]>([]);
 
     const history = useHistory();
 
@@ -65,18 +58,19 @@ const ResellCreate: React.FC<Props> = () => {
 
             <Formik
                 initialValues={{
+                    customerCode: "",
                     maker: "YAMAWA",
                     title: "",
                     detail: "",
-                    customerCode: "",
+                    category: ""
                 }}
                 onSubmit={async (
                     values,
                     // { setErrors }
                 ) => {
+                    // updateMyArray(arr => [...arr, values]);
                     console.table(values)
-                    updateMyArray(arr => [...arr, values]);
-                    history.push("/resell/report");
+                    history.push("/resell/step2");
                 }}
             >
                 {({ isSubmitting }) => (
@@ -122,15 +116,19 @@ const ResellCreate: React.FC<Props> = () => {
 
                                     <InputField
                                         name="title"
-                                        placeholder="Title.."
-                                        label="Title :"
+                                        placeholder="หัวเรื่อง.."
+                                        label="หัวเรื่อง :"
                                     />
-
                                     <InputField
                                         textarea
                                         name="detail"
                                         placeholder="รายละเอียด..."
                                         label="รายละเอียดการผลิต :"
+                                    />
+                                    <InputField
+                                        name="category"
+                                        placeholder="ประเภท..."
+                                        label="ประเภท :"
                                     />
                                     <Button
                                         mt="5"

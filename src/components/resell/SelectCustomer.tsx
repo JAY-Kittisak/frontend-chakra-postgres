@@ -5,13 +5,14 @@ import {
     Button,
     Center,
     Input,
-    Icon,
     Table,
     Tbody,
     Th,
     Thead,
     Tr,
     Td,
+    InputLeftElement,
+    InputGroup,
 } from "@chakra-ui/react";
 import { Search2Icon, AddIcon } from "@chakra-ui/icons";
 
@@ -75,20 +76,19 @@ const SelectCustomer: React.FC<Props> = () => {
             )}
 
             <Flex justify="space-between" mt="5">
-                <Flex>
-                    <Flex p="1">
-                        <Icon w="30px" h="30px" as={Search2Icon} color="green" />
-                    </Flex>
-                    <Input
-                        w="150px"
-                        className="searchInput"
-                        type="text"
-                        placeholder="Search..."
-                        onChange={(event) => {
-                            setSearchCat(event.target.value);
-                        }}
+                <InputGroup>
+                    <InputLeftElement
+                        pointerEvents="none"
+                        children={<Search2Icon color="gray.600" />}
                     />
-                </Flex>
+                    <Input
+                        w="200px"
+                        errorBorderColor="crimson"
+                        type="text"
+                        placeholder="Search"
+                        onChange={(e) => setSearchCat(e.target.value)}
+                    />
+                </InputGroup>
                 <Button
                     ml="5"
                     colorScheme="green"

@@ -36,9 +36,13 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
     const [item, setItem] = useState({
         province: "กรุงเทพมหานคร",
         amphure: "",
-        district: ""
+        district: "",
+        phone: "",
+        email: ""
     })
-    const [districtIndex, setDistrictIndex] = useState<number | undefined>(undefined)
+    const [districtIndex, setDistrictIndex] = useState(0)
+    const [invalidPhone, setInvalidPhone] = useState(false)
+    const [invalidEmail, setInvalidEmail] = useState(false)
 
     const cancelRef = useRef();
 
@@ -54,8 +58,36 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
         },
     })
 
+
+    const onChangePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const REGEX_PHONE = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
+        if (REGEX_PHONE.test(e.target.value)) {
+            setItem({ ...item, [e.target.name]: e.target.value })
+            setInvalidPhone(false)
+        } else {
+            setInvalidPhone(true)
+        }
+        if (e.target.value.length === 1) {
+            if (+e.target.value !== 0) {
+                e.target.value = ""
+                return e.preventDefault()
+            }
+        }
+    }
+
+    const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const REGEX_EMAIL = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+        if (REGEX_EMAIL.test(e.target.value)) {
+            setItem({ ...item, [e.target.name]: e.target.value })
+            setInvalidEmail(false)
+        } else {
+            setInvalidEmail(true)
+        }
+    }
+
     const onChangeProvince = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        // Error e.nativeEvent.target.selectedIndex
+        //FIXME: Error e.nativeEvent.target.selectedIndex
         let index = e.target.selectedIndex
         let label = (e.target[index] as HTMLOptionElement).text
         setItem({ ...item, [e.target.name]: label })
@@ -65,7 +97,6 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
         let index = e.target.selectedIndex
         let label = (e.target[index] as HTMLOptionElement).text
         setItem({ ...item, [e.target.name]: label })
-
         setAmphureId(+e.target.value)
     }
 
@@ -76,9 +107,8 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
         setDistrictIndex(index)
     }
 
-    console.log("districtIndex", districtIndex)
+    console.log("item", item)
 
-    console.log("งงควยไรสัส", item)
     return (
         <AlertDialog
             size="xl"
@@ -92,7 +122,8 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
                     customerName: "",
                 }}
                 onSubmit={async (values) => {
-                    console.log("values", values)
+                    const subArr = [{ ...values, ...item }]
+                    console.log("values", subArr)
                     // console.log("provincesId", provincesId)
                 }}
             >
@@ -104,7 +135,7 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
                             </AlertDialogHeader>
 
                             <Form>
-                                <AlertDialogBody>
+                                <AlertDialogBody minH="250px">
                                     {fetching ? (
                                         <Flex justify="center" mt="5">
                                             <Spinner color="grey" height={30} width={30} />
@@ -114,7 +145,7 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
                                         </Flex>
                                     ) : (
                                         <>
-                                                <Flex flexDir="column" mt="-3">
+                                                <Flex flexDir="column" mt="-3" >
                                                 <Flex>
                                                     <Flex mr="5">
                                                         <InputField
@@ -126,33 +157,48 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
                                                     <InputField
                                                         name="customerName"
                                                             placeholder="Name"
-                                                        label="Customer Name"
+                                                            label="ชื่อบริษัท"
                                                     />
                                                 </Flex>
                                             </Flex>
                                                 <Flex>
                                                     <Flex w="50%" flexDir="column">
                                                         <Text mr="3" fontWeight="semibold" fontSize={["sm", "md"]} mb="1" mt="2">
-                                                            Phone
+                                                            เบอร์โทรศัพท์
                                                         </Text>
                                                         <InputGroup>
                                                             <InputLeftElement
                                                                 pointerEvents="none"
-                                                                children={<PhoneIcon color="green" />}
+                                                                children={<PhoneIcon color={invalidPhone ? "crimson" : "gray.400"} />}
                                                             />
-                                                            <Input type="tel" placeholder="Phone number" />
+                                                            <Input
+                                                                // maxLength="11"
+                                                                // isDisabled={!invalid}
+                                                                isInvalid={invalidPhone}
+                                                                errorBorderColor="crimson"
+                                                                type="number"
+                                                                name="phone"
+                                                                placeholder="Phone number"
+                                                                onChange={(e) => onChangePhone(e)}
+                                                            />
                                                         </InputGroup>
                                                     </Flex>
                                                     <Flex ml="5" w="50%" flexDir="column">
                                                         <Text mr="3" fontWeight="semibold" fontSize={["sm", "md"]} mb="1" mt="2">
-                                                            Email
+                                                            อีเมล์
                                                         </Text>
                                                         <InputGroup>
                                                             <InputLeftElement
                                                                 pointerEvents="none"
-                                                                children={<AtSignIcon color="green.700" />}
+                                                                children={<AtSignIcon color={invalidEmail ? "crimson" : "gray.400"} />}
                                                             />
-                                                            <Input type="tel" placeholder="Email" />
+                                                            <Input
+                                                                isInvalid={invalidEmail}
+                                                                errorBorderColor="crimson"
+                                                                name="email"
+                                                                placeholder="Email"
+                                                                onChange={(e) => onChangeEmail(e)}
+                                                            />
                                                         </InputGroup>
                                                     </Flex>
                                                 </Flex>
@@ -160,7 +206,7 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
                                                 <Flex>
                                                     <Flex w="50%" flexDir="column">
                                                         <Text mr="3" fontWeight="semibold" fontSize={["sm", "md"]} mb="1" mt="3">
-                                                            Provinces
+                                                            จังหวัด
                                                         </Text>
                                                         <Select
                                                             mt="1"
@@ -176,7 +222,7 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
                                                     </Flex>
                                                     <Flex ml="5" w="50%" flexDir="column">
                                                         <Text mr="3" fontWeight="semibold" fontSize={["sm", "md"]} mb="1" mt="3">
-                                                            Amphures
+                                                            อำเภอ
                                                         </Text>
                                                         <Select
                                                             mt="1"
@@ -192,10 +238,11 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
                                                     </Flex>
                                                 </Flex>
 
+                                                {(districts?.districtsApId.length !== 0) &&
                                                 <Flex>
                                                     <Flex w="50%" flexDir="column">
                                                         <Text mr="5" fontWeight="semibold" fontSize={["sm", "md"]} mb="1" mt="3">
-                                                            Districts
+                                                            ตำบล
                                                         </Text>
                                                         <Select
                                                             mt="1"
@@ -209,7 +256,6 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
                                                             ))}
                                                         </Select>
                                                     </Flex>
-                                                    {districtIndex &&
                                                         <Flex ml="5" w="50%" flexDir="column">
                                                             <Text fontWeight="semibold" fontSize={["sm", "md"]} mb="1" mt="3">
                                                                 รหัสไปรษณีย์
@@ -222,13 +268,14 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
                                                                 rounded="md"
                                                                 bg="white"
                                                             >
-                                                                <Text ml="3" fontSize="lg">
-                                                                    {districts?.districtsApId[districtIndex].zip_code}
-                                                                </Text>
+                                                            <Text ml="3" fontSize="lg">
+                                                                {districts?.districtsApId[districtIndex].zip_code}
+                                                            </Text>
                                                             </Box>
-                                                        </Flex>
-                                                    }
+                                                    </Flex>
                                                 </Flex>
+
+                                                }
                                         </>
                                     )}
 
