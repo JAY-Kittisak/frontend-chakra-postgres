@@ -1,18 +1,18 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
     Text,
     Flex,
     Button,
-    Divider,
+    Divider, Select
 } from "@chakra-ui/react";
 import { useHistory } from "react-router";
 import { Form, Formik } from "formik";
 
 import { useIsAuth } from "../utils/uselsAuth";
-import { useMeQuery } from "../generated/graphql";
+import { useCreateResellMutation, useMeQuery, FieldError } from "../generated/graphql";
 import InputField from "../components/InputField";
 import SelectCustomer from "../components/resell/SelectCustomer";
-import SelectControl from "../components/Selectfield";
+import { toErrorMap } from "../utils/toErrorMap";
 
 interface Props { }
 
@@ -20,14 +20,29 @@ type SelectMaker = "YAMAWA" | "MOLDINO"
 // SelectMaker[]
 const catMaker: Array<SelectMaker> = ["YAMAWA", "MOLDINO"]
 
+type TypeY = "ต๊าปประเภท A" | "ต๊าปประเภท B" | "ต๊าปประเภท C"
+const catYamawa: TypeY[] = ["ต๊าปประเภท A", "ต๊าปประเภท B", "ต๊าปประเภท C"]
+type TypeM = "หัวกัดประเภท D" | "หัวกัดประเภท E" | "หัวกัดประเภท F"
+const catMoldino: Array<TypeM> = ["หัวกัดประเภท D", "หัวกัดประเภท E", "หัวกัดประเภท F"]
+
 const ResellCreate: React.FC<Props> = () => {
     useIsAuth();
-
-    // const [, updateMyArray] = useState<ValuesDemo[]>([]);
+    const [maker, setMaker] = useState("YAMAWA")
+    const [category, setCategory] = useState("ต๊าปประเภท A")
+    const [categorySelect, setCategorySelect] = useState<TypeY[] | TypeM[]>(catYamawa)
 
     const history = useHistory();
 
     const [{ data }] = useMeQuery();
+    const [, createResell] = useCreateResellMutation()
+
+    useEffect(() => {
+        if (maker === "YAMAWA") {
+            setCategorySelect(catYamawa)
+        } else {
+            setCategorySelect(catMoldino)
+        }
+    }, [maker])
 
     return (
         <Flex flexDir="column">
@@ -58,19 +73,21 @@ const ResellCreate: React.FC<Props> = () => {
 
             <Formik
                 initialValues={{
-                    customerCode: "",
-                    maker: "YAMAWA",
+                    orderId: 0,
                     title: "",
                     detail: "",
-                    category: ""
                 }}
-                onSubmit={async (
-                    values,
-                    // { setErrors }
-                ) => {
-                    // updateMyArray(arr => [...arr, values]);
-                    console.table(values)
-                    history.push("/resell/step2");
+                onSubmit={async (values, { setErrors }) => {
+
+                    const sumArr = { ...values, maker: maker, category: category };
+                    console.table(sumArr)
+                    const response = await createResell({ input: sumArr })
+                    if (response.data?.createResell.errors) {
+                        setErrors(toErrorMap(response.data.createResell.errors as FieldError[]));
+                    } else if (response.data?.createResell.resell) {
+                        console.log(response.data.createResell.resell.id)
+                        history.push("/resell/step2/" + response.data.createResell.resell.id);
+                    }
                 }}
             >
                 {({ isSubmitting }) => (
@@ -92,11 +109,11 @@ const ResellCreate: React.FC<Props> = () => {
                                 </Text>
                                 <Flex flexDir="column" w="80%" mb="5" >
                                     <InputField
-                                        name="customerCode"
-                                        placeholder="Customer code..."
-                                        label="Customer Code :"
+                                        type="number"
+                                        name="orderId"
+                                        placeholder="ID Customer"
+                                        label="ID Customer :"
                                     />
-
                                     <Text
                                         fontWeight="semibold"
                                         fontSize={["sm", "md"]}
@@ -105,18 +122,32 @@ const ResellCreate: React.FC<Props> = () => {
                                     >
                                         Maker :
                                     </Text>
-
-                                    <SelectControl name="maker">
+                                    <Select onChange={(e) => setMaker(e.target.value)}>
                                         {catMaker.map((value, i) => (
                                             <option key={i} value={value}>
                                                 {value}
                                             </option>
                                         ))}
-                                    </SelectControl>
+                                    </Select>
+                                    <Text
+                                        fontWeight="semibold"
+                                        fontSize={["sm", "md"]}
+                                        mb="2"
+                                        mt="3"
+                                    >
+                                        ประเภทสินค้า :
+                                    </Text>
+                                    <Select onChange={(e) => setCategory(e.target.value)}>
+                                        {categorySelect.map((value, i) => (
+                                            <option key={i} value={value}>
+                                                {value}
+                                            </option>
+                                        ))}
+                                    </Select>
 
                                     <InputField
                                         name="title"
-                                        placeholder="หัวเรื่อง.."
+                                        placeholder="หัวเรื่อง..."
                                         label="หัวเรื่อง :"
                                     />
                                     <InputField
@@ -124,11 +155,6 @@ const ResellCreate: React.FC<Props> = () => {
                                         name="detail"
                                         placeholder="รายละเอียด..."
                                         label="รายละเอียดการผลิต :"
-                                    />
-                                    <InputField
-                                        name="category"
-                                        placeholder="ประเภท..."
-                                        label="ประเภท :"
                                     />
                                     <Button
                                         mt="5"

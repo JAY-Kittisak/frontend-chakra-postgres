@@ -1,10 +1,9 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from "react";
 import {
     Flex,
     Text,
     Button,
     Select,
-    Box,
     AlertDialog,
     AlertDialogBody,
     AlertDialogFooter,
@@ -13,17 +12,22 @@ import {
     AlertDialogOverlay,
     Input,
     InputGroup,
-    InputLeftElement
+    InputLeftElement,
+    FormLabel
 } from "@chakra-ui/react";
 import { PhoneIcon, AtSignIcon } from "@chakra-ui/icons";
 import { Form, Formik } from "formik";
-import InputField from '../InputField';
+
+import { toErrorMap } from "../../utils/toErrorMap";
+import InputField from "../InputField";
 import {
     useAmphuresPvIdQuery,
+    useCreateCustomerMutation,
     useDistrictsApIdQuery,
-    useQueryProvincesQuery
-} from '../../generated/graphql';
-import Spinner from '../Spinner';
+    useQueryProvincesQuery,
+    FieldError
+} from "../../generated/graphql";
+import Spinner from "../Spinner";
 
 interface Props {
     open: boolean;
@@ -31,83 +35,104 @@ interface Props {
 }
 
 const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
-    const [provinceId, setProvinceId] = useState(1)
-    const [amphureId, setAmphureId] = useState(0)
+    const [provinceId, setProvinceId] = useState(1);
+    const [amphureId, setAmphureId] = useState(0);
+
     const [item, setItem] = useState({
         province: "กรุงเทพมหานคร",
         amphure: "",
         district: "",
         phone: "",
-        email: ""
-    })
-    const [districtIndex, setDistrictIndex] = useState(0)
-    const [invalidPhone, setInvalidPhone] = useState(false)
-    const [invalidEmail, setInvalidEmail] = useState(false)
+        email: "",
+    });
+    const [zipCode, setZipCode] = useState({
+        zipCode: 0
+    });
+
+    const [districtIndex, setDistrictIndex] = useState(0);
+    const [invalidPhone, setInvalidPhone] = useState(false);
+    const [invalidEmail, setInvalidEmail] = useState(false);
+
+    const [err, setErr] = useState("");
 
     const cancelRef = useRef();
 
-    const [{ data, fetching }] = useQueryProvincesQuery()
+    const [{ data, fetching }] = useQueryProvincesQuery();
     const [{ data: amphures }] = useAmphuresPvIdQuery({
         variables: {
             id: provinceId,
         },
-    })
+    });
     const [{ data: districts }] = useDistrictsApIdQuery({
         variables: {
             id: amphureId,
         },
-    })
+    });
 
+    const [, createCustomer] = useCreateCustomerMutation()
 
     const onChangePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const REGEX_PHONE = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
+        const REGEX_PHONE = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
         if (REGEX_PHONE.test(e.target.value)) {
-            setItem({ ...item, [e.target.name]: e.target.value })
-            setInvalidPhone(false)
+            setItem({ ...item, [e.target.name]: e.target.value });
+            setInvalidPhone(false);
         } else {
-            setInvalidPhone(true)
+            setInvalidPhone(true);
         }
         if (e.target.value.length === 1) {
             if (+e.target.value !== 0) {
-                e.target.value = ""
-                return e.preventDefault()
+                e.target.value = "";
+                return e.preventDefault();
             }
         }
-    }
+    };
 
     const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const REGEX_EMAIL = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const REGEX_EMAIL =
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
         if (REGEX_EMAIL.test(e.target.value)) {
-            setItem({ ...item, [e.target.name]: e.target.value })
-            setInvalidEmail(false)
+            setItem({ ...item, [e.target.name]: e.target.value });
+            setInvalidEmail(false);
         } else {
-            setInvalidEmail(true)
+            setInvalidEmail(true);
         }
-    }
+    };
 
     const onChangeProvince = (e: React.ChangeEvent<HTMLSelectElement>) => {
         //FIXME: Error e.nativeEvent.target.selectedIndex
-        let index = e.target.selectedIndex
-        let label = (e.target[index] as HTMLOptionElement).text
-        setItem({ ...item, [e.target.name]: label })
-        setProvinceId(+e.target.value)
-    }
+        let index = e.target.selectedIndex;
+        let label = (e.target[index] as HTMLOptionElement).text;
+        setItem({ ...item, [e.target.name]: label });
+        setProvinceId(+e.target.value);
+    };
     const onChangeAmphure = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        let index = e.target.selectedIndex
-        let label = (e.target[index] as HTMLOptionElement).text
-        setItem({ ...item, [e.target.name]: label })
-        setAmphureId(+e.target.value)
-    }
+        let index = e.target.selectedIndex;
+        let label = (e.target[index] as HTMLOptionElement).text;
+        setItem({ ...item, [e.target.name]: label });
+        setAmphureId(+e.target.value);
+    };
 
     const onChangeDistrict = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        let index = e.target.selectedIndex
-        let label = (e.target[index] as HTMLOptionElement).text
-        setItem({ ...item, [e.target.name]: label })
-        setDistrictIndex(index)
-    }
+        let index = e.target.selectedIndex;
+        let label = (e.target[index] as HTMLOptionElement).text;
 
-    console.log("item", item)
+        setItem({ ...item, [e.target.name]: label });
+        setZipCode({
+            zipCode: districts?.districtsApId
+                ? districts.districtsApId[districtIndex].zip_code
+                : 0
+        })
+
+        setDistrictIndex(index);
+    };
+
+    useEffect(() => {
+        if (districts?.districtsApId.length === 0) {
+            setItem({ ...item, district: "" });
+            setZipCode({ zipCode: 0 })
+        }
+    }, [districts?.districtsApId, setItem]) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <AlertDialog
@@ -120,11 +145,18 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
                 initialValues={{
                     customerCode: "",
                     customerName: "",
+                    address: "",
                 }}
-                onSubmit={async (values) => {
-                    const subArr = [{ ...values, ...item }]
-                    console.log("values", subArr)
-                    // console.log("provincesId", provincesId)
+                onSubmit={async (values, { setErrors }) => {
+                    const sumArr = { ...values, ...item, ...zipCode };
+
+                    const response = await createCustomer({ input: sumArr })
+                    if (response.data?.createCustomer.errors) {
+                        setErr(response.data.createCustomer.errors[0].field)
+                        setErrors(toErrorMap(response.data.createCustomer.errors as FieldError[]));
+                    } else if (response.data?.createCustomer.customers) {
+                        setOpen()
+                    }
                 }}
             >
                 {({ isSubmitting }) => (
@@ -139,13 +171,11 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
                                     {fetching ? (
                                         <Flex justify="center" mt="5">
                                             <Spinner color="grey" height={30} width={30} />
-                                            <Text fontSize="xl">
-                                                &nbsp; Loading...
-                                            </Text>
+                                            <Text fontSize="xl">&nbsp; Loading...</Text>
                                         </Flex>
                                     ) : (
                                         <>
-                                                <Flex flexDir="column" mt="-3" >
+                                                <Flex flexDir="column" mt="-3">
                                                 <Flex>
                                                     <Flex mr="5">
                                                         <InputField
@@ -163,13 +193,23 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
                                             </Flex>
                                                 <Flex>
                                                     <Flex w="50%" flexDir="column">
-                                                        <Text mr="3" fontWeight="semibold" fontSize={["sm", "md"]} mb="1" mt="2">
+                                                        <Text
+                                                            mr="3"
+                                                            fontWeight="semibold"
+                                                            fontSize={["sm", "md"]}
+                                                            mb="1"
+                                                            mt="2"
+                                                        >
                                                             เบอร์โทรศัพท์
                                                         </Text>
                                                         <InputGroup>
                                                             <InputLeftElement
                                                                 pointerEvents="none"
-                                                                children={<PhoneIcon color={invalidPhone ? "crimson" : "gray.400"} />}
+                                                                children={
+                                                                    <PhoneIcon
+                                                                        color={invalidPhone ? "crimson" : "gray.400"}
+                                                                    />
+                                                                }
                                                             />
                                                             <Input
                                                                 // maxLength="11"
@@ -184,13 +224,23 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
                                                         </InputGroup>
                                                     </Flex>
                                                     <Flex ml="5" w="50%" flexDir="column">
-                                                        <Text mr="3" fontWeight="semibold" fontSize={["sm", "md"]} mb="1" mt="2">
+                                                        <Text
+                                                            mr="3"
+                                                            fontWeight="semibold"
+                                                            fontSize={["sm", "md"]}
+                                                            mb="1"
+                                                            mt="2"
+                                                        >
                                                             อีเมล์
                                                         </Text>
                                                         <InputGroup>
                                                             <InputLeftElement
                                                                 pointerEvents="none"
-                                                                children={<AtSignIcon color={invalidEmail ? "crimson" : "gray.400"} />}
+                                                                children={
+                                                                    <AtSignIcon
+                                                                        color={invalidEmail ? "crimson" : "gray.400"}
+                                                                    />
+                                                                }
                                                             />
                                                             <Input
                                                                 isInvalid={invalidEmail}
@@ -203,9 +253,31 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
                                                     </Flex>
                                                 </Flex>
 
+                                                <Flex flexDir="column">
+                                                    <Flex>
+                                                        <InputField
+                                                            name="address"
+                                                            placeholder="Address"
+                                                            label="ที่อยู่"
+                                                        />
+                                                        <Flex flexDir="column" ml="5" w="530px">
+                                                            <FormLabel fontWeight="semibold" mt="3">
+                                                                รหัสไปรษณีย์
+                                                            </FormLabel>
+                                                            <Input isDisabled={zipCode.zipCode === 0} placeholder="Zip code" value={zipCode.zipCode} />
+                                                        </Flex>
+                                                    </Flex>
+                                                </Flex>
+
                                                 <Flex>
                                                     <Flex w="50%" flexDir="column">
-                                                        <Text mr="3" fontWeight="semibold" fontSize={["sm", "md"]} mb="1" mt="3">
+                                                        <Text
+                                                            mr="3"
+                                                            fontWeight="semibold"
+                                                            fontSize={["sm", "md"]}
+                                                            mb="1"
+                                                            mt="3"
+                                                        >
                                                             จังหวัด
                                                         </Text>
                                                         <Select
@@ -221,7 +293,13 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
                                                         </Select>
                                                     </Flex>
                                                     <Flex ml="5" w="50%" flexDir="column">
-                                                        <Text mr="3" fontWeight="semibold" fontSize={["sm", "md"]} mb="1" mt="3">
+                                                        <Text
+                                                            mr="3"
+                                                            fontWeight="semibold"
+                                                            fontSize={["sm", "md"]}
+                                                            mb="1"
+                                                            mt="3"
+                                                        >
                                                             อำเภอ
                                                         </Text>
                                                         <Select
@@ -237,14 +315,19 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
                                                         </Select>
                                                     </Flex>
                                                 </Flex>
-
-                                                {(districts?.districtsApId.length !== 0) &&
-                                                <Flex>
-                                                    <Flex w="50%" flexDir="column">
-                                                        <Text mr="5" fontWeight="semibold" fontSize={["sm", "md"]} mb="1" mt="3">
+                                                <Flex justify="center">
+                                                    <Flex w="50%" flexDir="column" >
+                                                        <Text
+                                                            mr="5"
+                                                            fontWeight="semibold"
+                                                            fontSize={["sm", "md"]}
+                                                            mb="1"
+                                                            mt="3"
+                                                        >
                                                             ตำบล
                                                         </Text>
                                                         <Select
+                                                            isDisabled={districts?.districtsApId.length === 0}
                                                             mt="1"
                                                             name="district"
                                                             onChange={(e) => onChangeDistrict(e)}
@@ -255,9 +338,17 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
                                                                 </option>
                                                             ))}
                                                         </Select>
+                                                        <Text mt="3" color="red" align="center">
+                                                            {(err === "district" || err === "amphure") && "โปรดเลือก อำเภอและตำบล"}
+                                                        </Text>
                                                     </Flex>
-                                                        <Flex ml="5" w="50%" flexDir="column">
-                                                            <Text fontWeight="semibold" fontSize={["sm", "md"]} mb="1" mt="3">
+                                                    {/* <Flex ml="5" w="50%" flexDir="column">
+                                                            <Text
+                                                                fontWeight="semibold"
+                                                                fontSize={["sm", "md"]}
+                                                                mb="1"
+                                                                mt="3"
+                                                            >
                                                                 รหัสไปรษณีย์
                                                             </Text>
                                                             <Box
@@ -268,17 +359,17 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
                                                                 rounded="md"
                                                                 bg="white"
                                                             >
-                                                            <Text ml="3" fontSize="lg">
-                                                                {districts?.districtsApId[districtIndex].zip_code}
-                                                            </Text>
+                                                                <Text ml="3" fontSize="lg">
+                                                                    {
+                                                                        districts?.districtsApId[districtIndex]
+                                                                            .zip_code
+                                                                    }
+                                                                </Text>
                                                             </Box>
-                                                    </Flex>
+                                                        </Flex> */}
                                                 </Flex>
-
-                                                }
                                         </>
                                     )}
-
                                 </AlertDialogBody>
                                 <AlertDialogFooter>
                                     <Button ref={cancelRef.current} onClick={setOpen}>
@@ -297,11 +388,9 @@ const AddCustomer: React.FC<Props> = ({ open, setOpen }) => {
                         </AlertDialogContent>
                     </AlertDialogOverlay>
                 )}
-
             </Formik>
-
         </AlertDialog>
-    )
-}
+    );
+};
 
-export default AddCustomer
+export default AddCustomer;

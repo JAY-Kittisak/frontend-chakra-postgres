@@ -217,3 +217,10 @@ export const catApprove: Approve[] = [
     "ไม่อนุมัติ"
 ]
 
+export type TypeDemoData = {
+    id: number;
+    customerCode: string;
+    customerName: string;
+    isDone: boolean
+}
+

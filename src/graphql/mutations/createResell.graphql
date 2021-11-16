@@ -1,0 +1,11 @@
+mutation CreateResell($input: Resell_Input!) {
+    createResell(input: $input) {
+        errors {
+            field
+            message
+        }
+        resell {
+            ...RegularResell
+        }
+    }
+}

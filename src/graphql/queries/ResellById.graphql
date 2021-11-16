@@ -1,0 +1,5 @@
+query ResellById($id: Int!){
+  resellById(id: $id){
+    ...RegularResell
+  }
+}

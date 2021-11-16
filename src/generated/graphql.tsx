@@ -27,6 +27,43 @@ export type Amphures = {
   districts: Array<Districts>;
 };
 
+export type Customer = {
+  __typename?: 'Customer';
+  id: Scalars['Float'];
+  customerCode: Scalars['String'];
+  customerName: Scalars['String'];
+  address: Scalars['String'];
+  phone: Scalars['String'];
+  email: Scalars['String'];
+  province: Scalars['String'];
+  amphure: Scalars['String'];
+  district: Scalars['String'];
+  zipCode: Scalars['Float'];
+  creatorId: Scalars['Float'];
+  creator: User;
+  orderResell: Array<Resell>;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type Customer_Input = {
+  customerCode: Scalars['String'];
+  customerName: Scalars['String'];
+  address: Scalars['String'];
+  phone: Scalars['String'];
+  email: Scalars['String'];
+  province: Scalars['String'];
+  amphure: Scalars['String'];
+  district: Scalars['String'];
+  zipCode: Scalars['Float'];
+};
+
+export type Customer_Response = {
+  __typename?: 'Customer_Response';
+  errors?: Maybe<Array<FieldErrorResell>>;
+  customers?: Maybe<Array<Customer>>;
+};
+
 export type Districts = {
   __typename?: 'Districts';
   id: Scalars['Float'];
@@ -89,6 +126,12 @@ export type FieldErrorLeave = {
 
 export type FieldErrorManualAd = {
   __typename?: 'FieldErrorManualAD';
+  field: Scalars['String'];
+  message: Scalars['String'];
+};
+
+export type FieldErrorResell = {
+  __typename?: 'FieldErrorResell';
   field: Scalars['String'];
   message: Scalars['String'];
 };
@@ -351,6 +394,8 @@ export type Mutation = {
   deleteStockItOrder: Scalars['Boolean'];
   createLeave: Leave_Response;
   updateLeave: Leave;
+  createResell: Resell_Response;
+  createCustomer: Customer_Response;
 };
 
 
@@ -561,6 +606,16 @@ export type MutationUpdateLeaveArgs = {
   id: Scalars['Int'];
 };
 
+
+export type MutationCreateResellArgs = {
+  input: Resell_Input;
+};
+
+
+export type MutationCreateCustomerArgs = {
+  input: Customer_Input;
+};
+
 export type ProductByTier = {
   __typename?: 'ProductByTier';
   id: Scalars['Float'];
@@ -629,6 +684,10 @@ export type Query = {
   districtsApId: Array<Districts>;
   leaves?: Maybe<Array<Leave>>;
   leaveById: Leave;
+  resells?: Maybe<Array<Resell>>;
+  resellById: Resell;
+  customers?: Maybe<Array<Customer>>;
+  customerById: Customer;
 };
 
 
@@ -721,6 +780,21 @@ export type QueryLeaveByIdArgs = {
   id: Scalars['Int'];
 };
 
+
+export type QueryResellsArgs = {
+  createBy: Scalars['Boolean'];
+};
+
+
+export type QueryResellByIdArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryCustomerByIdArgs = {
+  id: Scalars['Int'];
+};
+
 export type QueryJobIt_Input = {
   nameItAction?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
@@ -734,6 +808,35 @@ export type RegisterInput = {
   email: Scalars['String'];
   roles: Scalars['String'];
   departments: Scalars['String'];
+};
+
+export type Resell = {
+  __typename?: 'Resell';
+  id: Scalars['Float'];
+  orderId: Scalars['Float'];
+  maker: Scalars['String'];
+  title: Scalars['String'];
+  detail: Scalars['String'];
+  category: Scalars['String'];
+  creatorId: Scalars['Float'];
+  creator: User;
+  orderCustomer: Customer;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type Resell_Input = {
+  orderId: Scalars['Float'];
+  maker: Scalars['String'];
+  title: Scalars['String'];
+  detail: Scalars['String'];
+  category: Scalars['String'];
+};
+
+export type Resell_Response = {
+  __typename?: 'Resell_Response';
+  errors?: Maybe<Array<FieldErrorResell>>;
+  resell?: Maybe<Resell>;
 };
 
 export type StockIt = {
@@ -856,6 +959,8 @@ export type User = {
   jobITs: Array<JobIt>;
   stockItOrders: Array<StockItOrder>;
   leaves: Array<Leave>;
+  resell: Array<Resell>;
+  customer: Array<Customer>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -879,6 +984,18 @@ export type UpdateUserInput = {
   nickName: Scalars['String'];
   email: Scalars['String'];
 };
+
+export type RegularCustomerFragment = (
+  { __typename?: 'Customer' }
+  & Pick<Customer, 'id' | 'customerCode' | 'customerName' | 'phone' | 'email' | 'province' | 'amphure' | 'district' | 'zipCode' | 'creatorId' | 'createdAt' | 'updatedAt'>
+  & { creator: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username'>
+  ), orderResell: Array<(
+    { __typename?: 'Resell' }
+    & Pick<Resell, 'id' | 'maker' | 'title'>
+  )> }
+);
 
 export type RegularGiveFragment = (
   { __typename?: 'Give' }
@@ -946,6 +1063,18 @@ export type RegularManualAdFragment = (
   )> }
 );
 
+export type RegularResellFragment = (
+  { __typename?: 'Resell' }
+  & Pick<Resell, 'id' | 'orderId' | 'maker' | 'title' | 'detail' | 'category' | 'creatorId' | 'createdAt' | 'updatedAt'>
+  & { creator: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username'>
+  ), orderCustomer: (
+    { __typename?: 'Customer' }
+    & Pick<Customer, 'id' | 'customerCode' | 'customerName'>
+  ) }
+);
+
 export type RegularStockItFragment = (
   { __typename?: 'StockIt' }
   & Pick<StockIt, 'id' | 'itemName' | 'detail' | 'location' | 'serialNum' | 'warranty' | 'price' | 'currentStatus' | 'branch' | 'brand' | 'category' | 'imageUrl' | 'createdAt' | 'updatedAt'>
@@ -974,6 +1103,25 @@ export type RegularStockItOrderFragment = (
 export type RegularUserFragment = (
   { __typename?: 'User' }
   & Pick<User, 'id' | 'username' | 'email' | 'roles' | 'position' | 'branch' | 'departments' | 'fullNameTH' | 'fullNameEN' | 'nickName' | 'imageUrl' | 'createdAt' | 'updatedAt'>
+);
+
+export type CreateCustomerMutationVariables = Exact<{
+  input: Customer_Input;
+}>;
+
+
+export type CreateCustomerMutation = (
+  { __typename?: 'Mutation' }
+  & { createCustomer: (
+    { __typename?: 'Customer_Response' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorResell' }
+      & Pick<FieldErrorResell, 'field' | 'message'>
+    )>>, customers?: Maybe<Array<(
+      { __typename?: 'Customer' }
+      & RegularCustomerFragment
+    )>> }
+  ) }
 );
 
 export type CreateGiveMutationVariables = Exact<{
@@ -1121,6 +1269,25 @@ export type CreateProductByTierMutation = (
   & { createProductByTier: (
     { __typename?: 'ProductByTier' }
     & Pick<ProductByTier, 'id' | 'productName' | 'description' | 'category' | 'creatorId' | 'creatorName' | 'createdAt' | 'updatedAt'>
+  ) }
+);
+
+export type CreateResellMutationVariables = Exact<{
+  input: Resell_Input;
+}>;
+
+
+export type CreateResellMutation = (
+  { __typename?: 'Mutation' }
+  & { createResell: (
+    { __typename?: 'Resell_Response' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorResell' }
+      & Pick<FieldErrorResell, 'field' | 'message'>
+    )>>, resell?: Maybe<(
+      { __typename?: 'Resell' }
+      & RegularResellFragment
+    )> }
   ) }
 );
 
@@ -1533,6 +1700,17 @@ export type AmphuresPvIdQuery = (
   )> }
 );
 
+export type CustomersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CustomersQuery = (
+  { __typename?: 'Query' }
+  & { customers?: Maybe<Array<(
+    { __typename?: 'Customer' }
+    & RegularCustomerFragment
+  )>> }
+);
+
 export type DistrictsApIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -1790,6 +1968,19 @@ export type QueryProvincesQuery = (
   )> }
 );
 
+export type ResellByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type ResellByIdQuery = (
+  { __typename?: 'Query' }
+  & { resellById: (
+    { __typename?: 'Resell' }
+    & RegularResellFragment
+  ) }
+);
+
 export type StockItByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -1901,6 +2092,31 @@ export type StockItOrdersQuery = (
   )>> }
 );
 
+export const RegularCustomerFragmentDoc = gql`
+    fragment RegularCustomer on Customer {
+  id
+  customerCode
+  customerName
+  phone
+  email
+  province
+  amphure
+  district
+  zipCode
+  creatorId
+  createdAt
+  updatedAt
+  creator {
+    id
+    username
+  }
+  orderResell {
+    id
+    maker
+    title
+  }
+}
+    `;
 export const RegularGiveCatFragmentDoc = gql`
     fragment RegularGiveCat on GiveCategory {
   id
@@ -2043,6 +2259,28 @@ export const RegularManualAdFragmentDoc = gql`
   }
 }
     `;
+export const RegularResellFragmentDoc = gql`
+    fragment RegularResell on Resell {
+  id
+  orderId
+  maker
+  title
+  detail
+  category
+  creatorId
+  createdAt
+  updatedAt
+  creator {
+    id
+    username
+  }
+  orderCustomer {
+    id
+    customerCode
+    customerName
+  }
+}
+    `;
 export const RegularStockItFragmentDoc = gql`
     fragment RegularStockIt on StockIt {
   id
@@ -2111,6 +2349,23 @@ export const RegularUserFragmentDoc = gql`
   updatedAt
 }
     `;
+export const CreateCustomerDocument = gql`
+    mutation CreateCustomer($input: Customer_Input!) {
+  createCustomer(input: $input) {
+    errors {
+      field
+      message
+    }
+    customers {
+      ...RegularCustomer
+    }
+  }
+}
+    ${RegularCustomerFragmentDoc}`;
+
+export function useCreateCustomerMutation() {
+  return Urql.useMutation<CreateCustomerMutation, CreateCustomerMutationVariables>(CreateCustomerDocument);
+};
 export const CreateGiveDocument = gql`
     mutation CreateGive($input: GiveInput!, $options: Upload!) {
   createGive(input: $input, options: $options) {
@@ -2247,6 +2502,23 @@ export const CreateProductByTierDocument = gql`
 
 export function useCreateProductByTierMutation() {
   return Urql.useMutation<CreateProductByTierMutation, CreateProductByTierMutationVariables>(CreateProductByTierDocument);
+};
+export const CreateResellDocument = gql`
+    mutation CreateResell($input: Resell_Input!) {
+  createResell(input: $input) {
+    errors {
+      field
+      message
+    }
+    resell {
+      ...RegularResell
+    }
+  }
+}
+    ${RegularResellFragmentDoc}`;
+
+export function useCreateResellMutation() {
+  return Urql.useMutation<CreateResellMutation, CreateResellMutationVariables>(CreateResellDocument);
 };
 export const CreateStockItDocument = gql`
     mutation CreateStockIt($input: StockItInput!, $options: Upload!) {
@@ -2607,6 +2879,17 @@ export const AmphuresPvIdDocument = gql`
 export function useAmphuresPvIdQuery(options: Omit<Urql.UseQueryArgs<AmphuresPvIdQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<AmphuresPvIdQuery>({ query: AmphuresPvIdDocument, ...options });
 };
+export const CustomersDocument = gql`
+    query Customers {
+  customers {
+    ...RegularCustomer
+  }
+}
+    ${RegularCustomerFragmentDoc}`;
+
+export function useCustomersQuery(options: Omit<Urql.UseQueryArgs<CustomersQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<CustomersQuery>({ query: CustomersDocument, ...options });
+};
 export const DistrictsApIdDocument = gql`
     query DistrictsApId($id: Int!) {
   districtsApId(id: $id) {
@@ -2865,6 +3148,17 @@ export const QueryProvincesDocument = gql`
 
 export function useQueryProvincesQuery(options: Omit<Urql.UseQueryArgs<QueryProvincesQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<QueryProvincesQuery>({ query: QueryProvincesDocument, ...options });
+};
+export const ResellByIdDocument = gql`
+    query ResellById($id: Int!) {
+  resellById(id: $id) {
+    ...RegularResell
+  }
+}
+    ${RegularResellFragmentDoc}`;
+
+export function useResellByIdQuery(options: Omit<Urql.UseQueryArgs<ResellByIdQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<ResellByIdQuery>({ query: ResellByIdDocument, ...options });
 };
 export const StockItByIdDocument = gql`
     query StockItById($id: Int!) {

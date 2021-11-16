@@ -38,7 +38,10 @@ import {
     DeleteStockItOrderMutationVariables,
     CreateStockItOrderMutation,
     StockItOrdersQuery,
-    StockItOrdersDocument
+    StockItOrdersDocument,
+    CreateCustomerMutation,
+    CustomersQuery,
+    CustomersDocument
 } from "../generated/graphql";
 
 function betterUpdateQuery<Result, Query>(
@@ -282,6 +285,22 @@ export const client = createClient({
                                 } else {
                                     return {
                                         stockItOrders: result.createStockItOrder.stockItOrder
+                                    }
+                                }
+                            }
+                        )
+                    },
+
+                    createCustomer: (_result, args, cache, info) => {
+                        betterUpdateQuery<CreateCustomerMutation, CustomersQuery>(cache,
+                            { query: CustomersDocument },
+                            _result,
+                            (result, query) => {
+                                if (result.createCustomer.errors) {
+                                    return query
+                                } else {
+                                    return {
+                                        customers: result.createCustomer.customers
                                     }
                                 }
                             }

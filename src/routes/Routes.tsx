@@ -30,7 +30,7 @@ const Routes: React.FC<Props> = () => {
             <Route path="/resell/report">
                 <ResellReport />
             </Route>
-            <Route path="/resell/step2">
+            <Route path="/resell/step2/:id">
                 <ResellCreateStep2 />
             </Route>
             <Route path="/resell">

@@ -1,0 +1,23 @@
+fragment RegularCustomer on Customer {
+    id
+    customerCode
+    customerName
+    phone
+    email
+    province
+    amphure
+    district
+    zipCode
+    creatorId
+    createdAt
+    updatedAt
+    creator {
+        id
+        username
+    }
+    orderResell {
+        id
+        maker
+        title
+    }
+}

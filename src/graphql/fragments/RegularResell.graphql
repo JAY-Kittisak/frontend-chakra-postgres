@@ -1,0 +1,20 @@
+fragment RegularResell on Resell  {
+        id
+        orderId
+        maker
+        title
+        detail
+        category
+        creatorId
+        createdAt
+        updatedAt
+        creator {
+            id
+            username
+        }
+        orderCustomer{
+            id
+            customerCode
+            customerName
+        }
+    }

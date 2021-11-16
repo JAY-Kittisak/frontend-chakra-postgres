@@ -19,35 +19,16 @@ import { Search2Icon, AddIcon } from "@chakra-ui/icons";
 import Spinner from "../Spinner";
 import { useDialog } from "../dialogs/useDialog";
 import AddCustomer from "./AddCustomer";
+import { useCustomersQuery } from "../../generated/graphql";
 
 interface Props { }
 
-const dateDemo = [
-    {
-        customerCode: "ร03-ส064",
-        customerName: "บริษัท สยามสมาร์ทโซลูชั่น จำกัด"
-    },
-    {
-        customerCode: "ค13-ว111",
-        customerName: "บริษัท วีพงศ์ ซัพพลาย จำกัด"
-    },
-    {
-        customerCode: "ร06-ส547",
-        customerName: "บริษัท สยามคาสติ้งโพรดักซ์  จำกัด"
-    },
-    {
-        customerCode: "ค06-ช022",
-        customerName: "บริษัท ชบาโฮลดิ้ง จำกัด"
-    },
-    {
-        customerCode: "ค02-ด006",
-        customerName: "บริษัท ดีบี เทรด แอนด์ คอนซัลท์ จำกัด"
-    },
-]
 const SelectCustomer: React.FC<Props> = () => {
     const [searchCat, setSearchCat] = useState("");
 
     const { isOpen, setIsOpen } = useDialog();
+
+    const [{ data, fetching }] = useCustomersQuery()
 
     return (
         <Flex
@@ -66,14 +47,6 @@ const SelectCustomer: React.FC<Props> = () => {
                     Select Customer
                 </Text>
             </Flex>
-            {false && (
-                <Flex justify="center" mt="5">
-                    <Spinner color="grey" height={30} width={30} />
-                    <Text fontWeight="bold" fontSize="xl">
-                        &nbsp; Loading...
-                    </Text>
-                </Flex>
-            )}
 
             <Flex justify="space-between" mt="5">
                 <InputGroup>
@@ -104,6 +77,14 @@ const SelectCustomer: React.FC<Props> = () => {
                 )}
             </Flex>
 
+            {fetching ? (
+                <Flex justify="center" mt="60px" >
+                    <Spinner color="grey" height={30} width={30} />
+                    <Text fontWeight="bold" fontSize="xl">
+                        &nbsp; Loading...
+                    </Text>
+                </Flex>
+            ) : (
             <Flex mt="5" overflowX="auto" rounded="5px" boxShadow="md">
                 <Table
                     boxShadow="base"
@@ -130,8 +111,7 @@ const SelectCustomer: React.FC<Props> = () => {
                     </Thead>
 
                     <Tbody>
-                        {dateDemo
-                            .filter((val) => {
+                                {data?.customers?.filter((val) => {
                                 if (searchCat === "") {
                                     return val;
                                 } else if (
@@ -143,7 +123,7 @@ const SelectCustomer: React.FC<Props> = () => {
                                 }
                                 return false;
                             }).map((val, i) => (
-                                <Tr key={i}>
+                                <Tr key={i} cursor="pointer" onClick={() => alert("รายละเอียด : " + val.customerName)}>
                                     <Td w="40%">
                                         <Center>{val.customerCode}</Center>
                                     </Td>
@@ -155,6 +135,7 @@ const SelectCustomer: React.FC<Props> = () => {
                     </Tbody>
                 </Table>
             </Flex>
+            )}
         </Flex>
     );
 };
