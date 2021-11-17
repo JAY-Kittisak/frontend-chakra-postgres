@@ -3,7 +3,8 @@ import {
     Text,
     Flex,
     Button,
-    Divider, Select
+    Divider,
+    Select,
 } from "@chakra-ui/react";
 import { useHistory } from "react-router";
 import { Form, Formik } from "formik";
@@ -30,6 +31,9 @@ const ResellCreate: React.FC<Props> = () => {
     const [maker, setMaker] = useState("YAMAWA")
     const [category, setCategory] = useState("ต๊าปประเภท A")
     const [categorySelect, setCategorySelect] = useState<TypeY[] | TypeM[]>(catYamawa)
+
+    const [customerID, setCustomerID] = useState<number | undefined>(undefined)
+    const [customerData, setCustomerData] = useState<{ code: string, name: string } | undefined>(undefined)
 
     const history = useHistory();
 
@@ -73,13 +77,15 @@ const ResellCreate: React.FC<Props> = () => {
 
             <Formik
                 initialValues={{
-                    orderId: 0,
                     title: "",
                     detail: "",
                 }}
                 onSubmit={async (values, { setErrors }) => {
+                    if (!customerID) {
+                        return alert("โปรดเลือก Customer")
+                    }
 
-                    const sumArr = { ...values, maker: maker, category: category };
+                    const sumArr = { ...values, orderId: customerID, maker, category };
                     console.table(sumArr)
                     const response = await createResell({ input: sumArr })
                     if (response.data?.createResell.errors) {
@@ -95,7 +101,7 @@ const ResellCreate: React.FC<Props> = () => {
                         <Flex>
                             <Flex
                                 flexDir="column"
-                                w="60%"
+                                w="50%"
                                 p="6"
                                 mt="8"
                                 boxShadow="xl"
@@ -108,12 +114,32 @@ const ResellCreate: React.FC<Props> = () => {
                                     บันทึกรายละเอียด
                                 </Text>
                                 <Flex flexDir="column" w="80%" mb="5" >
-                                    <InputField
-                                        type="number"
-                                        name="orderId"
-                                        placeholder="ID Customer"
-                                        label="ID Customer :"
-                                    />
+                                    <Flex>
+                                        <Text
+                                            fontWeight="semibold"
+                                            fontSize={["sm", "md"]}
+                                            mb="2"
+                                            mt="3"
+                                        >
+                                            Customer :
+                                        </Text>&nbsp;
+                                        <Text
+                                            fontWeight="semibold"
+                                            fontSize="md"
+                                            mb="2"
+                                            mt="3"
+                                        >
+                                            {customerData?.code}
+                                        </Text>&nbsp;
+                                        <Text
+                                            fontWeight="semibold"
+                                            fontSize="md"
+                                            mb="2"
+                                            mt="3"
+                                        >
+                                            {customerData?.name}
+                                        </Text>
+                                    </Flex>
                                     <Text
                                         fontWeight="semibold"
                                         fontSize={["sm", "md"]}
@@ -144,7 +170,6 @@ const ResellCreate: React.FC<Props> = () => {
                                             </option>
                                         ))}
                                     </Select>
-
                                     <InputField
                                         name="title"
                                         placeholder="หัวเรื่อง..."
@@ -165,10 +190,9 @@ const ResellCreate: React.FC<Props> = () => {
                                     >
                                         Next
                                     </Button>
-
                                 </Flex>
                             </Flex>
-                            <SelectCustomer />
+                            <SelectCustomer setCustomerID={setCustomerID} setCustomerData={setCustomerData} />
                         </Flex>
                     </Form>
                 )}

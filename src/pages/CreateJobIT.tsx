@@ -139,7 +139,6 @@ const CreateJobIT: React.FC<Props> = () => {
                                         </Flex>
                                         <Calendar onChange={onChange} value={date} />
                                     </Flex>
-
                                 </Box>
                             </Box>
 

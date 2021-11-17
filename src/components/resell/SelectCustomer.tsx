@@ -21,14 +21,27 @@ import { useDialog } from "../dialogs/useDialog";
 import AddCustomer from "./AddCustomer";
 import { useCustomersQuery } from "../../generated/graphql";
 
-interface Props { }
+interface Props {
+    setCustomerID: React.Dispatch<React.SetStateAction<number | undefined>>
+    setCustomerData: React.Dispatch<React.SetStateAction<{
+        code: string;
+        name: string;
+    } | undefined>>
+}
 
-const SelectCustomer: React.FC<Props> = () => {
+const SelectCustomer: React.FC<Props> = ({ setCustomerID, setCustomerData }) => {
     const [searchCat, setSearchCat] = useState("");
+    const [checkId, setCheckId] = useState(0);
 
     const { isOpen, setIsOpen } = useDialog();
 
     const [{ data, fetching }] = useCustomersQuery()
+
+    const handleSubmit = (id: number, code: string, name: string) => {
+        setCheckId(id)
+        setCustomerID(id)
+        setCustomerData({ code, name })
+    }
 
     return (
         <Flex
@@ -93,11 +106,11 @@ const SelectCustomer: React.FC<Props> = () => {
                 >
                     <Thead>
                         <Tr bg="#028174">
-                            <Th
-                                textAlign="center"
-                                fontSize={["xs", "xs", "sm", "md"]}
-                                color="white"
-                            >
+                                    <Th
+                                        textAlign="center"
+                                        fontSize={["xs", "xs", "sm", "md"]}
+                                        color="white"
+                                    >
                                 Customer Code
                             </Th>
                             <Th
@@ -123,9 +136,20 @@ const SelectCustomer: React.FC<Props> = () => {
                                 }
                                 return false;
                             }).map((val, i) => (
-                                <Tr key={i} cursor="pointer" onClick={() => alert("รายละเอียด : " + val.customerName)}>
+                                <Tr key={i} cursor="pointer" onClick={() => handleSubmit(val.id, val.customerCode, val.customerName)}>
                                     <Td w="40%">
-                                        <Center>{val.customerCode}</Center>
+                                        <Flex>
+                                            {checkId === val.id ? (
+                                                <Flex color="red">
+                                                    <i className="bi bi-check2-square"></i>
+                                                </Flex>
+                                            ) : (
+                                                <Flex>
+                                                    <i className="bi bi-square"></i>
+                                                </Flex>
+                                            )}
+                                            <Center ml="10">{val.customerCode}</Center>
+                                        </Flex>
                                     </Td>
                                     <Td w="60%">
                                         {val.customerName}

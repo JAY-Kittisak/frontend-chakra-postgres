@@ -1,82 +1,29 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useParams } from "react-router-dom";
 import {
     Text,
     Flex,
     Divider,
 } from "@chakra-ui/react";
-import { DragDropContext, DropResult } from "react-beautiful-dnd";
 
-import { useResellByIdQuery, useCustomersQuery } from '../generated/graphql'
+import { useResellByIdQuery } from '../generated/graphql'
 import { useIsAuth } from '../utils/uselsAuth'
 import Spinner from '../components/Spinner';
-
-import { TypeDemoData } from "../utils/helpers";
-import CustomerList from '../components/resell/CustomerList';
+import SelectCustomer from '../components/resell/SelectCustomer';
 
 interface Props { }
 
 const ResellCreateStep2: React.FC<Props> = () => {
     useIsAuth()
-
-    const [customers, setCustomers] = useState<Array<TypeDemoData>>([]);
-    const [CompletedCustomers, setCompletedCustomers] = useState<Array<TypeDemoData>>([]);
-    const [testCom, setTestCom] = useState<Array<TypeDemoData>>([]);
+    const [customerID, setCustomerID] = useState<number | undefined>(undefined)
+    const [customerData, setCustomerData] = useState<{ code: string, name: string } | undefined>(undefined)
 
     const params = useParams<{ id: string }>();
     const [{ data, fetching }] = useResellByIdQuery({
         variables: { id: +params.id }
     })
-    const [{ data: dataCustomer }] = useCustomersQuery()
 
-    const onDragEnd = (result: DropResult) => {
-        const { destination, source } = result;
-        console.log(result);
-        if (!destination) {
-            return;
-        }
-        if (
-            destination.droppableId === source.droppableId &&
-            destination.index === source.index
-        ) {
-            return;
-        }
-        let add;
-        let active = customers;
-        let complete = CompletedCustomers;
-        // Source Logic
-        if (source.droppableId === "TodosList") {
-            add = active[source.index];
-            active.splice(source.index, 1);
-        } else {
-            add = complete[source.index];
-            complete.splice(source.index, 1);
-        }
-        // Destination Logic
-        if (destination.droppableId === "TodosList") {
-            active.splice(destination.index, 0, add);
-        } else {
-            complete.splice(destination.index, 0, add);
-        }
-        setTestCom(complete)
-        setCompletedCustomers(complete);
-        setCustomers(active);
-    };
-
-    useEffect(() => {
-        if (dataCustomer?.customers && customers.length === 0) {
-            dataCustomer.customers.map(val => setCustomers(arr => [...arr, {
-                id: val.id,
-                customerCode: val.customerCode,
-                customerName: val.customerName,
-                isDone: false
-            }])
-            )
-        }
-    }, [dataCustomer, customers])
-
-    console.log(customers)
-    console.log("testCom", testCom)
+    console.log(customerID, customerData)
 
     return (
         <Flex flexDir="column">
@@ -89,7 +36,7 @@ const ResellCreateStep2: React.FC<Props> = () => {
                 Step 2 เพิ่มบริษัทที่มีการซื้อขาย
             </Text>
             <Divider orientation="horizontal" />
-            <Flex flexDir="column" align="center" fontSize="lg">
+            <Flex>
                 {fetching ? (
                     <>
                         <Spinner color="grey" height={30} width={30} />
@@ -99,11 +46,13 @@ const ResellCreateStep2: React.FC<Props> = () => {
                     </>
                 ) : (
                     <Flex
-                        flexDir="column"
+                            flexDir="column"
+                            w="50%"
                         p="6"
-                        mt="5"
-                        boxShadow="base"
+                            mt="8"
+                            boxShadow="xl"
                         borderRadius="md"
+                            h="80vh"
                     >
                         <Flex>
                             <Flex minW="500px">
@@ -129,28 +78,13 @@ const ResellCreateStep2: React.FC<Props> = () => {
                         <Text w="680px" ml="5">
                             {data?.resellById.detail}
                         </Text>
+                            <Text mt="1" fontWeight="bold">ขายต่อให้กับ :</Text>
+                            <Text w="680px" ml="5">
+                                {customerData?.name}
+                            </Text>
                     </Flex>
                 )}
-                <DragDropContext onDragEnd={onDragEnd}>
-                    <Flex
-                        mt="5"
-                        flexDir="column"
-                        w={["100%", "100%", "100%", "100%", "100%"]}
-                        minH="666px"
-                        p={6}
-                        ml={5}
-                        rounded="7px"
-                        boxShadow="md"
-                    >
-                        <CustomerList
-                            customers={customers}
-                            setCustomers={setCustomers}
-                            CompletedCustomers={CompletedCustomers}
-                            setCompletedCustomers={setCompletedCustomers}
-                            resellId={data?.resellById.id}
-                        />
-                    </Flex>
-                </DragDropContext>
+                <SelectCustomer setCustomerID={setCustomerID} setCustomerData={setCustomerData} />
             </Flex>
         </Flex>
     )

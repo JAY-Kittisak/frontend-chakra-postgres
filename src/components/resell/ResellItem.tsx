@@ -24,15 +24,12 @@ const ResellItem: React.FC<Props> = ({ item }) => {
         <Tr _hover={{ bgColor: "#eee" }}>
             <Td w="10%">
                 <Center>{item.maker}</Center>
-
             </Td>
             <Td w="10%">
                 <Center>{item.title}</Center>
-
             </Td>
             <Td w="50%">
                 <Center>{item.detail}</Center>
-
             </Td>
             <Td w="10%">
                 <Link to={`/tiers/factories/${item.orderById}`}>
