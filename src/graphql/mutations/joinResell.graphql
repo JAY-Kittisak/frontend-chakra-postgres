@@ -1,0 +1,5 @@
+mutation JoinResell($input: JoinResellInput!) {
+    joinResell(input: $input) {
+            ...RegularResell
+    }
+}

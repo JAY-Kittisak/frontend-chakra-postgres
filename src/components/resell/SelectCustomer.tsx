@@ -19,29 +19,58 @@ import { Search2Icon, AddIcon } from "@chakra-ui/icons";
 import Spinner from "../Spinner";
 import { useDialog } from "../dialogs/useDialog";
 import AddCustomer from "./AddCustomer";
-import { useCustomersQuery } from "../../generated/graphql";
+import {
+    useCustomersQuery,
+    useJoinResellMutation,
+} from "../../generated/graphql";
 
 interface Props {
-    setCustomerID: React.Dispatch<React.SetStateAction<number | undefined>>
-    setCustomerData: React.Dispatch<React.SetStateAction<{
-        code: string;
-        name: string;
-    } | undefined>>
+    setCustomerID: React.Dispatch<React.SetStateAction<number | undefined>>;
+    setCustomerData: React.Dispatch<
+        React.SetStateAction<
+            | {
+                code: string;
+                name: string;
+            }
+            | undefined
+        >
+    >;
+    orderCustomerId: number | undefined;
+    resellId: number | undefined;
+    addedId: number[] | undefined;
 }
 
-const SelectCustomer: React.FC<Props> = ({ setCustomerID, setCustomerData }) => {
+const SelectCustomer: React.FC<Props> = ({
+    setCustomerID,
+    setCustomerData,
+    orderCustomerId,
+    resellId,
+    addedId,
+}) => {
     const [searchCat, setSearchCat] = useState("");
     const [checkId, setCheckId] = useState(0);
 
     const { isOpen, setIsOpen } = useDialog();
 
-    const [{ data, fetching }] = useCustomersQuery()
+    const [{ data, fetching }] = useCustomersQuery();
 
     const handleSubmit = (id: number, code: string, name: string) => {
-        setCheckId(id)
-        setCustomerID(id)
-        setCustomerData({ code, name })
+        setCheckId(id);
+        setCustomerID(id);
+        setCustomerData({ code, name });
+    };
+
+    const [, joinResell] = useJoinResellMutation();
+
+    const joinData = async (resellId: number, customerId: number) => {
+        if (orderCustomerId === customerId) {
+            return alert("Error! ไม่สามารถขายให้ตัวเองได้");
     }
+        const response = await joinResell({ input: { resellId, customerId } });
+        if (response.error) {
+            return alert("Error! บริษัทที่คุณเลือกมีการเลือกไปแล้ว");
+        }
+    };
 
     return (
         <Flex
@@ -51,7 +80,6 @@ const SelectCustomer: React.FC<Props> = ({ setCustomerID, setCustomerData }) => 
             p="6"
             mt="8"
             ml="3"
-            bg="white"
             boxShadow="xl"
             borderRadius="md"
         >
@@ -71,94 +99,101 @@ const SelectCustomer: React.FC<Props> = ({ setCustomerID, setCustomerData }) => 
                         w="200px"
                         errorBorderColor="crimson"
                         type="text"
-                        placeholder="Search"
+                        placeholder="Customer code"
                         onChange={(e) => setSearchCat(e.target.value)}
                     />
                 </InputGroup>
                 <Button
                     ml="5"
                     colorScheme="green"
-                    rightIcon={<AddIcon />}
+                    leftIcon={<AddIcon />}
                     onClick={() => {
                         setIsOpen(true);
                     }}
                 >
                     Add
                 </Button>
-                {isOpen && (
-                    <AddCustomer open={true} setOpen={() => setIsOpen(false)} />
-                )}
+                {isOpen && <AddCustomer open={true} setOpen={() => setIsOpen(false)} />}
             </Flex>
 
             {fetching ? (
-                <Flex justify="center" mt="60px" >
+                <Flex justify="center" mt="60px">
                     <Spinner color="grey" height={30} width={30} />
                     <Text fontWeight="bold" fontSize="xl">
                         &nbsp; Loading...
                     </Text>
                 </Flex>
             ) : (
-            <Flex mt="5" overflowX="auto" rounded="5px" boxShadow="md">
-                <Table
-                    boxShadow="base"
-                    variant="striped"
-                    colorScheme="blackAlpha"
-                >
-                    <Thead>
-                        <Tr bg="#028174">
+                    <Flex mt="5" overflowX="auto" rounded="5px" boxShadow="md">
+                        <Table boxShadow="base" variant="striped" colorScheme="blackAlpha">
+                            <Thead>
+                                <Tr bg="#028174">
                                     <Th
                                         textAlign="center"
                                         fontSize={["xs", "xs", "sm", "md"]}
                                         color="white"
                                     >
-                                Customer Code
-                            </Th>
-                            <Th
-                                textAlign="center"
-                                fontSize={["xs", "xs", "sm", "md"]}
-                                color="white"
-                            >
-                                Customer Name
-                            </Th>
-                        </Tr>
-                    </Thead>
-
-                    <Tbody>
-                                {data?.customers?.filter((val) => {
-                                if (searchCat === "") {
-                                    return val;
-                                } else if (
-                                    val.customerCode
-                                        .toLowerCase()
-                                        .includes(searchCat.toLowerCase())
-                                ) {
-                                    return val;
-                                }
-                                return false;
-                            }).map((val, i) => (
-                                <Tr key={i} cursor="pointer" onClick={() => handleSubmit(val.id, val.customerCode, val.customerName)}>
-                                    <Td w="40%">
-                                        <Flex>
-                                            {checkId === val.id ? (
-                                                <Flex color="red">
-                                                    <i className="bi bi-check2-square"></i>
-                                                </Flex>
-                                            ) : (
-                                                <Flex>
-                                                    <i className="bi bi-square"></i>
-                                                </Flex>
-                                            )}
-                                            <Center ml="10">{val.customerCode}</Center>
-                                        </Flex>
-                                    </Td>
-                                    <Td w="60%">
-                                        {val.customerName}
-                                    </Td>
+                                        Customer Code
+                                    </Th>
+                                    <Th
+                                        textAlign="center"
+                                        fontSize={["xs", "xs", "sm", "md"]}
+                                        color="white"
+                                    >
+                                        Customer Name
+                                    </Th>
                                 </Tr>
-                            ))}
-                    </Tbody>
-                </Table>
-            </Flex>
+                            </Thead>
+
+                            <Tbody>
+                                {data?.customers
+                                    ?.filter((val) => {
+                                        if (searchCat === "") {
+                                            return val;
+                                        } else if (
+                                            val.customerCode
+                                                .toLowerCase()
+                                                .includes(searchCat.toLowerCase())
+                                        ) {
+                                            return val;
+                                        }
+                                        return false;
+                                    })
+                                    .map((val, i) => (
+                                        <Tr
+                                            key={i}
+                                            cursor={(val.id === orderCustomerId || addedId?.includes(val.id)) ? "not-allowed" : "pointer"}
+                                            onClick={() => {
+                                                handleSubmit(val.id, val.customerCode, val.customerName);
+                                                if (resellId) {
+                                                    joinData(resellId, val.id);
+                                                }
+                                            }}
+                                        >
+                                            <Td w="40%">
+                                                <Flex>
+                                                    {checkId === val.id || addedId?.includes(val.id) ? (
+                                                        <Flex color="green">
+                                                            <i className="bi bi-check-square"></i>
+                                                        </Flex>
+                                                    ) : val.id === orderCustomerId ? (
+                                                        <Flex color="red">
+                                                            <i className="bi bi-x-square"></i>
+                                                        </Flex>
+                                                    ) : (
+                                                        <Flex>
+                                                            <i className="bi bi-square"></i>
+                                                        </Flex>
+                                                    )}
+                                                    <Center ml="10">{val.customerCode}</Center>
+                                                </Flex>
+                                            </Td>
+                                            <Td w="60%">{val.customerName}</Td>
+                                        </Tr>
+                                    ))}
+                            </Tbody>
+                        </Table>
+                    </Flex>
             )}
         </Flex>
     );

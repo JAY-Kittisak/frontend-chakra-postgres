@@ -1,0 +1,5 @@
+mutation DeleteJoinResell($input: JoinResellInput!) {
+    deleteJoinResell(input: $input){
+        ...RegularResell
+    }
+}

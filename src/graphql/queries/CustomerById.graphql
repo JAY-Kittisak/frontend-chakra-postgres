@@ -1,0 +1,5 @@
+query CustomerById($id: Int!){
+    customerById(id:$id){
+        ...RegularCustomer
+    }
+}

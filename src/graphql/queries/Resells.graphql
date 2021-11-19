@@ -1,0 +1,5 @@
+query Resells($createBy: Boolean!){
+    resells(createBy : $createBy){
+        ...RegularResell
+    }
+}

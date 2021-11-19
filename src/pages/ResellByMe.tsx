@@ -10,10 +10,11 @@ import {
     Center,
     Select
 } from "@chakra-ui/react";
-import { useIsResellAuth } from '../utils/useIsResellAuth'
-import { useResellsQuery, RegularResellFragment } from '../generated/graphql';
-import ResellItem from '../components/resell/ResellItem';
+
+import { useResellsQuery, RegularResellFragment } from '../generated/graphql'
+import { useIsAuth } from '../utils/uselsAuth'
 import Spinner from '../components/Spinner';
+import ResellItem from '../components/resell/ResellItem';
 
 interface Props { }
 
@@ -22,8 +23,9 @@ const catYamawa: TypeY[] = ["ต๊าปประเภท A", "ต๊าปป
 type TypeM = "หัวกัดประเภท D" | "หัวกัดประเภท E" | "หัวกัดประเภท F"
 const catMoldino: Array<TypeM> = ["หัวกัดประเภท D", "หัวกัดประเภท E", "หัวกัดประเภท F"]
 
-const ResellReport: React.FC<Props> = () => {
-    useIsResellAuth()
+const ResellByMe: React.FC<Props> = () => {
+    useIsAuth()
+
 
     const [group, setGroup] = useState("All")
     const [item, setItem] = useState<RegularResellFragment[] | undefined>(
@@ -32,7 +34,7 @@ const ResellReport: React.FC<Props> = () => {
 
     const [{ data, fetching }] = useResellsQuery({
         variables: {
-            createBy: false,
+            createBy: true,
         },
     })
 
@@ -78,7 +80,7 @@ const ResellReport: React.FC<Props> = () => {
                     fontSize={["md", "md", "xl", "3xl"]}
                     color="green.600"
                 >
-                    Report
+                    ประวัติการบันทึก
                 </Text>
                 <Select
                     mt="1"
@@ -109,55 +111,55 @@ const ResellReport: React.FC<Props> = () => {
             ) : (
                 <Flex mt="2" overflowX="auto" rounded="5px" boxShadow="md">
                     <Table boxShadow="base" variant="simple" colorScheme="blackAlpha">
-                            <Thead>
-                                <Tr bg="#028174">
-                                    <Th
-                                        textAlign="center"
-                                        fontSize={["xs", "xs", "sm", "md"]}
-                                        color="white"
-                                    >
-                                        Make/Category
-                                    </Th>
-                                    <Th
-                                        textAlign="center"
-                                        fontSize={["xs", "xs", "sm", "md"]}
-                                        color="white"
-                                    >
-                                        Product
-                                    </Th>
-                                    <Th
-                                        textAlign="center"
-                                        fontSize={["xs", "xs", "sm", "md"]}
-                                        color="white"
-                                    >
-                                        รายละเอียด
-                                    </Th>
-                                    <Th
-                                        textAlign="center"
-                                        fontSize={["xs", "xs", "sm", "md"]}
-                                        color="white"
-                                    >
-                                        บริษัทที่สั่งซื้อ
-                                    </Th>
-                                    <Th
-                                        textAlign="center"
-                                        fontSize={["xs", "xs", "sm", "md"]}
-                                        color="white"
-                                    >
-                                        ขายต่อให้กับ
-                                    </Th>
-                                </Tr>
-                            </Thead>
-                            <Tbody>
-                                {item?.map((resell) => (
-                                    <ResellItem key={resell.id} resell={resell} />
-                                ))}
-                            </Tbody>
-                        </Table>
+                        <Thead>
+                            <Tr bg="#028174">
+                                <Th
+                                    textAlign="center"
+                                    fontSize={["xs", "xs", "sm", "md"]}
+                                    color="white"
+                                >
+                                    Make/Category
+                                </Th>
+                                <Th
+                                    textAlign="center"
+                                    fontSize={["xs", "xs", "sm", "md"]}
+                                    color="white"
+                                >
+                                    Product
+                                </Th>
+                                <Th
+                                    textAlign="center"
+                                    fontSize={["xs", "xs", "sm", "md"]}
+                                    color="white"
+                                >
+                                    รายละเอียด
+                                </Th>
+                                <Th
+                                    textAlign="center"
+                                    fontSize={["xs", "xs", "sm", "md"]}
+                                    color="white"
+                                >
+                                    บริษัทที่สั่งซื้อ
+                                </Th>
+                                <Th
+                                    textAlign="center"
+                                    fontSize={["xs", "xs", "sm", "md"]}
+                                    color="white"
+                                >
+                                    ขายต่อให้กับ
+                                </Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {item?.map((resell) => (
+                                <ResellItem key={resell.id} resell={resell} />
+                            ))}
+                        </Tbody>
+                    </Table>
                 </Flex>
             )}
         </Flex>
     )
 }
 
-export default ResellReport
+export default ResellByMe

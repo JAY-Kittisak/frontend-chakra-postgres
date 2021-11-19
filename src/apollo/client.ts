@@ -41,7 +41,10 @@ import {
     StockItOrdersDocument,
     CreateCustomerMutation,
     CustomersQuery,
-    CustomersDocument
+    CustomersDocument,
+    CreateResellMutation,
+    ResellsQuery,
+    ResellsDocument,
 } from "../generated/graphql";
 
 function betterUpdateQuery<Result, Query>(
@@ -301,6 +304,22 @@ export const client = createClient({
                                 } else {
                                     return {
                                         customers: result.createCustomer.customers
+                                    }
+                                }
+                            }
+                        )
+                    },
+
+                    createResell: (_result, args, cache, info) => {
+                        betterUpdateQuery<CreateResellMutation, ResellsQuery>(cache,
+                            { query: ResellsDocument },
+                            _result,
+                            (result, query) => {
+                                if (result.createResell.errors) {
+                                    return query
+                                } else {
+                                    return {
+                                        resells: result.createResell.resells
                                     }
                                 }
                             }

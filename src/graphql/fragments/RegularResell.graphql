@@ -10,11 +10,16 @@ fragment RegularResell on Resell  {
         updatedAt
         creator {
             id
-            username
+            fullNameTH
         }
         orderCustomer{
             id
             customerCode
             customerName
         }
-    }
+        customers{
+            id
+            customerCode
+            customerName
+        }
+}

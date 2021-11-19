@@ -4,7 +4,7 @@ mutation CreateResell($input: Resell_Input!) {
             field
             message
         }
-        resell {
+        resells {
             ...RegularResell
         }
     }

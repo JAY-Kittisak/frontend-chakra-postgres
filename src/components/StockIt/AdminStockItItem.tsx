@@ -142,7 +142,7 @@ const AdminStockItItem: React.FC<Props> = ({
                               <AlertDialogHeader fontSize="lg" fontWeight="bold">
                                   <Flex bgColor="red" rounded="7px" boxShadow="md">
                                       <Text fontWeight="bold" color="white" ml="5">
-                                          Delete Give
+                                            Delete Item
                                       </Text>
                                   </Flex>
                               </AlertDialogHeader>

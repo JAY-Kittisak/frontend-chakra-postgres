@@ -42,6 +42,7 @@ export type Customer = {
   creatorId: Scalars['Float'];
   creator: User;
   orderResell: Array<Resell>;
+  resellLoaders: Array<Resell>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -275,6 +276,11 @@ export type JobIt_Response = {
   jobIT?: Maybe<Array<JobIt>>;
 };
 
+export type JoinResellInput = {
+  resellId: Scalars['Float'];
+  customerId: Scalars['Float'];
+};
+
 export type JoinTierInput = {
   productId: Scalars['Float'];
   factoryId: Scalars['Float'];
@@ -396,6 +402,9 @@ export type Mutation = {
   updateLeave: Leave;
   createResell: Resell_Response;
   createCustomer: Customer_Response;
+  joinResell: Resell;
+  deleteResell: Scalars['Boolean'];
+  deleteJoinResell: Resell;
 };
 
 
@@ -616,6 +625,21 @@ export type MutationCreateCustomerArgs = {
   input: Customer_Input;
 };
 
+
+export type MutationJoinResellArgs = {
+  input: JoinResellInput;
+};
+
+
+export type MutationDeleteResellArgs = {
+  resellId: Scalars['Int'];
+};
+
+
+export type MutationDeleteJoinResellArgs = {
+  input: JoinResellInput;
+};
+
 export type ProductByTier = {
   __typename?: 'ProductByTier';
   id: Scalars['Float'];
@@ -821,6 +845,7 @@ export type Resell = {
   creatorId: Scalars['Float'];
   creator: User;
   orderCustomer: Customer;
+  customers?: Maybe<Array<Customer>>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -836,7 +861,7 @@ export type Resell_Input = {
 export type Resell_Response = {
   __typename?: 'Resell_Response';
   errors?: Maybe<Array<FieldErrorResell>>;
-  resell?: Maybe<Resell>;
+  resells?: Maybe<Array<Resell>>;
 };
 
 export type StockIt = {
@@ -1068,11 +1093,14 @@ export type RegularResellFragment = (
   & Pick<Resell, 'id' | 'orderId' | 'maker' | 'title' | 'detail' | 'category' | 'creatorId' | 'createdAt' | 'updatedAt'>
   & { creator: (
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'username'>
+    & Pick<User, 'id' | 'fullNameTH'>
   ), orderCustomer: (
     { __typename?: 'Customer' }
     & Pick<Customer, 'id' | 'customerCode' | 'customerName'>
-  ) }
+  ), customers?: Maybe<Array<(
+    { __typename?: 'Customer' }
+    & Pick<Customer, 'id' | 'customerCode' | 'customerName'>
+  )>> }
 );
 
 export type RegularStockItFragment = (
@@ -1284,10 +1312,10 @@ export type CreateResellMutation = (
     & { errors?: Maybe<Array<(
       { __typename?: 'FieldErrorResell' }
       & Pick<FieldErrorResell, 'field' | 'message'>
-    )>>, resell?: Maybe<(
+    )>>, resells?: Maybe<Array<(
       { __typename?: 'Resell' }
       & RegularResellFragment
-    )> }
+    )>> }
   ) }
 );
 
@@ -1388,6 +1416,19 @@ export type DeleteGiveOrderCdcMutation = (
   & Pick<Mutation, 'deleteGiveOrderCdc'>
 );
 
+export type DeleteJoinResellMutationVariables = Exact<{
+  input: JoinResellInput;
+}>;
+
+
+export type DeleteJoinResellMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteJoinResell: (
+    { __typename?: 'Resell' }
+    & RegularResellFragment
+  ) }
+);
+
 export type DeleteStockItMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -1430,6 +1471,19 @@ export type JoinFactoryMutationVariables = Exact<{
 export type JoinFactoryMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'joinFactory'>
+);
+
+export type JoinResellMutationVariables = Exact<{
+  input: JoinResellInput;
+}>;
+
+
+export type JoinResellMutation = (
+  { __typename?: 'Mutation' }
+  & { joinResell: (
+    { __typename?: 'Resell' }
+    & RegularResellFragment
+  ) }
 );
 
 export type LoginMutationVariables = Exact<{
@@ -1698,6 +1752,19 @@ export type AmphuresPvIdQuery = (
     { __typename?: 'Amphures' }
     & Pick<Amphures, 'id' | 'name_th'>
   )> }
+);
+
+export type CustomerByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type CustomerByIdQuery = (
+  { __typename?: 'Query' }
+  & { customerById: (
+    { __typename?: 'Customer' }
+    & RegularCustomerFragment
+  ) }
 );
 
 export type CustomersQueryVariables = Exact<{ [key: string]: never; }>;
@@ -1979,6 +2046,19 @@ export type ResellByIdQuery = (
     { __typename?: 'Resell' }
     & RegularResellFragment
   ) }
+);
+
+export type ResellsQueryVariables = Exact<{
+  createBy: Scalars['Boolean'];
+}>;
+
+
+export type ResellsQuery = (
+  { __typename?: 'Query' }
+  & { resells?: Maybe<Array<(
+    { __typename?: 'Resell' }
+    & RegularResellFragment
+  )>> }
 );
 
 export type StockItByIdQueryVariables = Exact<{
@@ -2272,9 +2352,14 @@ export const RegularResellFragmentDoc = gql`
   updatedAt
   creator {
     id
-    username
+    fullNameTH
   }
   orderCustomer {
+    id
+    customerCode
+    customerName
+  }
+  customers {
     id
     customerCode
     customerName
@@ -2510,7 +2595,7 @@ export const CreateResellDocument = gql`
       field
       message
     }
-    resell {
+    resells {
       ...RegularResell
     }
   }
@@ -2606,6 +2691,17 @@ export const DeleteGiveOrderCdcDocument = gql`
 export function useDeleteGiveOrderCdcMutation() {
   return Urql.useMutation<DeleteGiveOrderCdcMutation, DeleteGiveOrderCdcMutationVariables>(DeleteGiveOrderCdcDocument);
 };
+export const DeleteJoinResellDocument = gql`
+    mutation DeleteJoinResell($input: JoinResellInput!) {
+  deleteJoinResell(input: $input) {
+    ...RegularResell
+  }
+}
+    ${RegularResellFragmentDoc}`;
+
+export function useDeleteJoinResellMutation() {
+  return Urql.useMutation<DeleteJoinResellMutation, DeleteJoinResellMutationVariables>(DeleteJoinResellDocument);
+};
 export const DeleteStockItDocument = gql`
     mutation DeleteStockIt($id: Int!) {
   deleteStockIt(id: $id)
@@ -2643,6 +2739,17 @@ export const JoinFactoryDocument = gql`
 
 export function useJoinFactoryMutation() {
   return Urql.useMutation<JoinFactoryMutation, JoinFactoryMutationVariables>(JoinFactoryDocument);
+};
+export const JoinResellDocument = gql`
+    mutation JoinResell($input: JoinResellInput!) {
+  joinResell(input: $input) {
+    ...RegularResell
+  }
+}
+    ${RegularResellFragmentDoc}`;
+
+export function useJoinResellMutation() {
+  return Urql.useMutation<JoinResellMutation, JoinResellMutationVariables>(JoinResellDocument);
 };
 export const LoginDocument = gql`
     mutation Login($options: LoginInput!) {
@@ -2878,6 +2985,17 @@ export const AmphuresPvIdDocument = gql`
 
 export function useAmphuresPvIdQuery(options: Omit<Urql.UseQueryArgs<AmphuresPvIdQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<AmphuresPvIdQuery>({ query: AmphuresPvIdDocument, ...options });
+};
+export const CustomerByIdDocument = gql`
+    query CustomerById($id: Int!) {
+  customerById(id: $id) {
+    ...RegularCustomer
+  }
+}
+    ${RegularCustomerFragmentDoc}`;
+
+export function useCustomerByIdQuery(options: Omit<Urql.UseQueryArgs<CustomerByIdQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<CustomerByIdQuery>({ query: CustomerByIdDocument, ...options });
 };
 export const CustomersDocument = gql`
     query Customers {
@@ -3159,6 +3277,17 @@ export const ResellByIdDocument = gql`
 
 export function useResellByIdQuery(options: Omit<Urql.UseQueryArgs<ResellByIdQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<ResellByIdQuery>({ query: ResellByIdDocument, ...options });
+};
+export const ResellsDocument = gql`
+    query Resells($createBy: Boolean!) {
+  resells(createBy: $createBy) {
+    ...RegularResell
+  }
+}
+    ${RegularResellFragmentDoc}`;
+
+export function useResellsQuery(options: Omit<Urql.UseQueryArgs<ResellsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<ResellsQuery>({ query: ResellsDocument, ...options });
 };
 export const StockItByIdDocument = gql`
     query StockItById($id: Int!) {
