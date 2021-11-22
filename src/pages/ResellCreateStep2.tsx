@@ -15,7 +15,7 @@ import {
 import { useIsAuth } from "../utils/uselsAuth";
 import Spinner from "../components/Spinner";
 import SelectCustomer from "../components/resell/SelectCustomer";
-import { formatDate } from "../utils/helpers";
+import { formatDate, AlertNt } from "../utils/helpers";
 import AlertNotification from "../components/dialogs/AlertNotification";
 
 interface Props { }
@@ -31,7 +31,10 @@ const ResellCreateStep2: React.FC<Props> = () => {
     const [deleteName, setDeleteName] = useState("");
     const [deleteDialog, setDeleteDialog] = useState(false);
     const onClose = () => setDeleteDialog(false);
+
     const cancelRef = useRef();
+
+    const [warning, setWarning] = useState<AlertNt>("hide")
 
     const params = useParams<{ id: string }>();
     const [{ data, fetching }] = useResellByIdQuery({
@@ -54,7 +57,7 @@ const ResellCreateStep2: React.FC<Props> = () => {
                     เพิ่มบริษัทที่มีการซื้อขาย
                 </Text>
 
-                <AlertNotification />
+                <AlertNotification warning={warning} setWarning={setWarning} />
             </Flex>
             <Divider orientation="horizontal" />
             <Flex>
@@ -248,6 +251,7 @@ const ResellCreateStep2: React.FC<Props> = () => {
                     orderCustomerId={data?.resellById.orderCustomer.id as number}
                     resellId={+params.id}
                     addedId={addedId}
+                    setWarning={setWarning}
                 />
             </Flex>
         </Flex>

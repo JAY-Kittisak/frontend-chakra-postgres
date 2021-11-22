@@ -23,8 +23,7 @@ import {
     useCustomersQuery,
     useJoinResellMutation,
 } from "../../generated/graphql";
-
-type IsShow = "show" | "hide"
+import { AlertNt } from "../../utils/helpers";
 
 interface Props {
     setCustomerID: React.Dispatch<React.SetStateAction<number | undefined>>;
@@ -37,6 +36,7 @@ interface Props {
             | undefined
         >
     >;
+    setWarning: React.Dispatch<React.SetStateAction<AlertNt>>
     orderCustomerId: number | undefined;
     resellId: number | undefined;
     addedId: number[] | undefined;
@@ -45,13 +45,13 @@ interface Props {
 const SelectCustomer: React.FC<Props> = ({
     setCustomerID,
     setCustomerData,
+    setWarning,
     orderCustomerId,
     resellId,
     addedId,
 }) => {
     const [searchCat, setSearchCat] = useState("");
     const [checkId, setCheckId] = useState(0);
-    const [warning, setWarning] = useState<IsShow>("show")
 
     const { isOpen, setIsOpen } = useDialog();
 
@@ -67,11 +67,15 @@ const SelectCustomer: React.FC<Props> = ({
 
     const joinData = async (resellId: number, customerId: number) => {
         if (orderCustomerId === customerId) {
-            return alert("Error! บริษัทที่คุณเลือกมีการเลือกไปแล้ว");
+            return setWarning("waning")
+
         }
         const response = await joinResell({ input: { resellId, customerId } });
         if (response.error) {
-            return setWarning("show")
+            return setWarning("waning")
+
+        } else if (response.data?.joinResell) {
+            return setWarning("success")
         }
     };
 

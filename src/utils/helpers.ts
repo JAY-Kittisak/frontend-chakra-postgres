@@ -224,3 +224,6 @@ export type TypeDemoData = {
     isDone: boolean
 }
 
+export type AlertNt = "hide" | "success" | "waning"
+
+
