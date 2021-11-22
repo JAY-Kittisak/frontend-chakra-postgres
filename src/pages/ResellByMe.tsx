@@ -11,7 +11,7 @@ import {
     Select
 } from "@chakra-ui/react";
 
-import { useResellsQuery, RegularResellFragment } from '../generated/graphql'
+import { RegularResellFragment, useResellsByCreatorQuery } from '../generated/graphql'
 import { useIsAuth } from '../utils/uselsAuth'
 import Spinner from '../components/Spinner';
 import ResellItem from '../components/resell/ResellItem';
@@ -32,41 +32,43 @@ const ResellByMe: React.FC<Props> = () => {
         undefined
     );
 
-    const [{ data, fetching }] = useResellsQuery({
-        variables: {
-            createBy: true,
-        },
-    })
+    // const [{ data, fetching }] = useResellsQuery({
+    //     variables: {
+    //         createBy: true,
+    //     },
+    // })
+
+    const [{ data, fetching }] = useResellsByCreatorQuery()
 
     const sumArray = ["All", ...catYamawa, ...catMoldino]
 
 
     useEffect(() => {
-        if (group === "All" && data?.resells) {
-            setItem(data.resells);
+        if (group === "All" && data?.resellsByCreator) {
+            setItem(data.resellsByCreator);
         }
         if (group === "ต๊าปประเภท A") {
-            const filterData = data?.resells?.filter((val) => val.category === group);
+            const filterData = data?.resellsByCreator?.filter((val) => val.category === group);
             setItem(filterData);
         }
         if (group === "ต๊าปประเภท B") {
-            const filterData = data?.resells?.filter((val) => val.category === group);
+            const filterData = data?.resellsByCreator?.filter((val) => val.category === group);
             setItem(filterData);
         }
         if (group === "ต๊าปประเภท C") {
-            const filterData = data?.resells?.filter((val) => val.category === group);
+            const filterData = data?.resellsByCreator?.filter((val) => val.category === group);
             setItem(filterData);
         }
         if (group === "หัวกัดประเภท D") {
-            const filterData = data?.resells?.filter((val) => val.category === group);
+            const filterData = data?.resellsByCreator?.filter((val) => val.category === group);
             setItem(filterData);
         }
         if (group === "หัวกัดประเภท E") {
-            const filterData = data?.resells?.filter((val) => val.category === group);
+            const filterData = data?.resellsByCreator?.filter((val) => val.category === group);
             setItem(filterData);
         }
         if (group === "หัวกัดประเภท F") {
-            const filterData = data?.resells?.filter((val) => val.category === group);
+            const filterData = data?.resellsByCreator?.filter((val) => val.category === group);
             setItem(filterData);
         }
     }, [group, data]);

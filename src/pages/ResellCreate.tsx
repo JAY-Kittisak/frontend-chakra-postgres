@@ -31,6 +31,7 @@ const catMoldino: Array<TypeM> = [
 const ResellCreate: React.FC<Props> = () => {
     useIsAuth();
     const [maker, setMaker] = useState("YAMAWA");
+    const [catIndex, setCatIndex] = useState(0);
     const [category, setCategory] = useState("ต๊าปประเภท A");
     const [categorySelect, setCategorySelect] = useState<TypeY[] | TypeM[]>(
         catYamawa
@@ -49,10 +50,12 @@ const ResellCreate: React.FC<Props> = () => {
     useEffect(() => {
         if (maker === "YAMAWA") {
             setCategorySelect(catYamawa);
+            setCategory(catYamawa[catIndex])
         } else {
             setCategorySelect(catMoldino);
+            setCategory(catMoldino[catIndex])
         }
-    }, [maker]);
+    }, [maker, catIndex]);
 
     return (
         <Flex flexDir="column">
@@ -100,8 +103,7 @@ const ResellCreate: React.FC<Props> = () => {
                             toErrorMap(response.data.createResell.errors as FieldError[])
                         );
                     } else if (response.data?.createResell.resells) {
-                        const newId = response.data.createResell.resells[0].id;
-                        console.log("newId", newId);
+                      const newId = response.data.createResell.resells[0].id;
                         history.push("/resell/step2/" + newId);
                     }
                 }}
@@ -171,7 +173,10 @@ const ResellCreate: React.FC<Props> = () => {
                                     >
                                         ประเภทสินค้า :
                                     </Text>
-                                    <Select onChange={(e) => setCategory(e.target.value)}>
+                                    <Select onChange={(e) => {
+                                        setCategory(e.target.value)
+                                        setCatIndex(e.target.selectedIndex)
+                                    }}>
                                         {categorySelect.map((value, i) => (
                                             <option key={i} value={value}>
                                                 {value}

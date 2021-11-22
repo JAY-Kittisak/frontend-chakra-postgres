@@ -30,11 +30,12 @@ const ResellReport: React.FC<Props> = () => {
         undefined
     );
 
-    const [{ data, fetching }] = useResellsQuery({
-        variables: {
-            createBy: false,
-        },
-    })
+    // const [{ data, fetching }] = useResellsQuery({
+    //     variables: {
+    //         createBy: false,
+    //     },
+    // })
+    const [{ data, fetching }] = useResellsQuery()
 
     const sumArray = ["All", ...catYamawa, ...catMoldino]
 

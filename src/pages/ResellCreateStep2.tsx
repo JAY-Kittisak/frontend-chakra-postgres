@@ -1,24 +1,10 @@
 import React, { useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import {
-    Text,
-    Flex,
-    Divider,
-    Table,
-    Tbody,
-    Th,
-    Thead,
-    Tr,
-    Td,
-    Center,
-    IconButton,
-    Button,
-    AlertDialog,
-    AlertDialogBody,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogContent,
-    AlertDialogOverlay,
+    Text, Flex, Divider, Table, Tbody, Th, Thead, Tr, Td,
+    Center, IconButton, Button, AlertDialog, AlertDialogBody,
+    AlertDialogFooter, AlertDialogHeader, AlertDialogContent,
+    AlertDialogOverlay
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
 
@@ -30,6 +16,7 @@ import { useIsAuth } from "../utils/uselsAuth";
 import Spinner from "../components/Spinner";
 import SelectCustomer from "../components/resell/SelectCustomer";
 import { formatDate } from "../utils/helpers";
+import AlertNotification from "../components/dialogs/AlertNotification";
 
 interface Props { }
 
@@ -57,14 +44,18 @@ const ResellCreateStep2: React.FC<Props> = () => {
 
     return (
         <Flex flexDir="column" p="3">
-            <Text
-                as="i"
-                fontWeight="semibold"
-                fontSize={["md", "md", "xl", "3xl"]}
-                color="green.600"
-            >
-                เพิ่มบริษัทที่มีการซื้อขาย
-            </Text>
+            <Flex justify="space-between">
+                <Text
+                    as="i"
+                    fontWeight="semibold"
+                    fontSize={["md", "md", "xl", "3xl"]}
+                    color="green.600"
+                >
+                    เพิ่มบริษัทที่มีการซื้อขาย
+                </Text>
+
+                <AlertNotification />
+            </Flex>
             <Divider orientation="horizontal" />
             <Flex>
                 {fetching ? (
@@ -108,8 +99,6 @@ const ResellCreateStep2: React.FC<Props> = () => {
                                     ขายต่อให้กับ :
                                 </Text>
                                 <Flex
-                                    ml="100px"
-                                    w="558px"
                                     mt="5"
                                     overflowX="auto"
                                     rounded="5px"
@@ -149,16 +138,14 @@ const ResellCreateStep2: React.FC<Props> = () => {
                                             {data?.resellById.customers?.map((val) => (
                                                 <Tr key={val.id}>
                                                     <Td w="40%">
-                                                        <Flex>
-                                                            <Center ml="10">{val.customerCode}</Center>
-                                                        </Flex>
+                                                        <Center>{val.customerCode}</Center>
                                                     </Td>
                                                     <Td w="50%">{val.customerName}</Td>
                                                     <Td w="10%">
                                                         <IconButton
                                                             aria-label=""
                                                             icon={<DeleteIcon />}
-                                                            color="red"
+                                                            color="red.500"
                                                             colorScheme="white"
                                                             onClick={() => {
                                                                 setDeleteCmId(val.id);
@@ -175,7 +162,6 @@ const ResellCreateStep2: React.FC<Props> = () => {
                             </Flex>
                             <Flex
                                 p="1"
-                                mt="4"
                                 bg="#0AB68B"
                                 color="white"
                                 borderRadius="md"
@@ -208,7 +194,7 @@ const ResellCreateStep2: React.FC<Props> = () => {
                                 <AlertDialogOverlay>
                                     <AlertDialogContent>
                                         <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                                            <Flex bgColor="red" rounded="7px" boxShadow="md">
+                                            <Flex bgColor="red.600" rounded="7px" boxShadow="md">
                                                 <Text fontWeight="bold" color="white" ml="5">
                                                     Delete Customer
                                                 </Text>
@@ -232,7 +218,7 @@ const ResellCreateStep2: React.FC<Props> = () => {
                                             </Button>
                                             <Button
                                                 color="white"
-                                                bgColor="red"
+                                                colorScheme="red"
                                                 ml={3}
                                                 onClick={async () => {
                                                     const response = await deleteJoinResell({

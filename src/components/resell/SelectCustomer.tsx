@@ -24,6 +24,8 @@ import {
     useJoinResellMutation,
 } from "../../generated/graphql";
 
+type IsShow = "show" | "hide"
+
 interface Props {
     setCustomerID: React.Dispatch<React.SetStateAction<number | undefined>>;
     setCustomerData: React.Dispatch<
@@ -49,6 +51,7 @@ const SelectCustomer: React.FC<Props> = ({
 }) => {
     const [searchCat, setSearchCat] = useState("");
     const [checkId, setCheckId] = useState(0);
+    const [warning, setWarning] = useState<IsShow>("show")
 
     const { isOpen, setIsOpen } = useDialog();
 
@@ -64,11 +67,11 @@ const SelectCustomer: React.FC<Props> = ({
 
     const joinData = async (resellId: number, customerId: number) => {
         if (orderCustomerId === customerId) {
-            return alert("Error! ไม่สามารถขายให้ตัวเองได้");
-    }
+            return alert("Error! บริษัทที่คุณเลือกมีการเลือกไปแล้ว");
+        }
         const response = await joinResell({ input: { resellId, customerId } });
         if (response.error) {
-            return alert("Error! บริษัทที่คุณเลือกมีการเลือกไปแล้ว");
+            return setWarning("show")
         }
     };
 
@@ -85,7 +88,7 @@ const SelectCustomer: React.FC<Props> = ({
         >
             <Flex justify="center">
                 <Text fontSize="2xl" fontWeight="bold">
-                    Select Customer
+                    เลือกบริษัท
                 </Text>
             </Flex>
 
@@ -99,7 +102,7 @@ const SelectCustomer: React.FC<Props> = ({
                         w="200px"
                         errorBorderColor="crimson"
                         type="text"
-                        placeholder="Customer code"
+                        placeholder="โค้ด หรือ ชื่อบริษัท"
                         onChange={(e) => setSearchCat(e.target.value)}
                     />
                 </InputGroup>
@@ -111,7 +114,7 @@ const SelectCustomer: React.FC<Props> = ({
                         setIsOpen(true);
                     }}
                 >
-                    Add
+                    เพิ่ม
                 </Button>
                 {isOpen && <AddCustomer open={true} setOpen={() => setIsOpen(false)} />}
             </Flex>
@@ -151,6 +154,9 @@ const SelectCustomer: React.FC<Props> = ({
                                         if (searchCat === "") {
                                             return val;
                                         } else if (
+                                            val.customerName
+                                                .toLowerCase()
+                                                .includes(searchCat.toLowerCase()) ||
                                             val.customerCode
                                                 .toLowerCase()
                                                 .includes(searchCat.toLowerCase())
@@ -162,7 +168,11 @@ const SelectCustomer: React.FC<Props> = ({
                                     .map((val, i) => (
                                         <Tr
                                             key={i}
-                                            cursor={(val.id === orderCustomerId || addedId?.includes(val.id)) ? "not-allowed" : "pointer"}
+                                            cursor={
+                                                val.id === orderCustomerId || addedId?.includes(val.id)
+                                                    ? "not-allowed"
+                                                    : "pointer"
+                                            }
                                             onClick={() => {
                                                 handleSubmit(val.id, val.customerCode, val.customerName);
                                                 if (resellId) {
@@ -172,13 +182,13 @@ const SelectCustomer: React.FC<Props> = ({
                                         >
                                             <Td w="40%">
                                                 <Flex>
-                                                    {checkId === val.id || addedId?.includes(val.id) ? (
-                                                        <Flex color="green">
-                                                            <i className="bi bi-check-square"></i>
-                                                        </Flex>
-                                                    ) : val.id === orderCustomerId ? (
+                                                    {val.id === orderCustomerId ? (
                                                         <Flex color="red">
                                                             <i className="bi bi-x-square"></i>
+                                                        </Flex>
+                                                    ) : checkId === val.id || addedId?.includes(val.id) ? (
+                                                        <Flex>
+                                                            <i className="bi bi-check-square"></i>
                                                         </Flex>
                                                     ) : (
                                                         <Flex>

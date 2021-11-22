@@ -1,5 +1,5 @@
-query Resells($createBy: Boolean!){
-    resells(createBy : $createBy){
+query Resells {
+    resells {
         ...RegularResell
     }
 }

@@ -710,6 +710,7 @@ export type Query = {
   leaveById: Leave;
   resells?: Maybe<Array<Resell>>;
   resellById: Resell;
+  resellsByCreator?: Maybe<Array<Resell>>;
   customers?: Maybe<Array<Customer>>;
   customerById: Customer;
 };
@@ -802,11 +803,6 @@ export type QueryLeavesArgs = {
 
 export type QueryLeaveByIdArgs = {
   id: Scalars['Int'];
-};
-
-
-export type QueryResellsArgs = {
-  createBy: Scalars['Boolean'];
 };
 
 
@@ -2048,14 +2044,23 @@ export type ResellByIdQuery = (
   ) }
 );
 
-export type ResellsQueryVariables = Exact<{
-  createBy: Scalars['Boolean'];
-}>;
+export type ResellsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ResellsQuery = (
   { __typename?: 'Query' }
   & { resells?: Maybe<Array<(
+    { __typename?: 'Resell' }
+    & RegularResellFragment
+  )>> }
+);
+
+export type ResellsByCreatorQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ResellsByCreatorQuery = (
+  { __typename?: 'Query' }
+  & { resellsByCreator?: Maybe<Array<(
     { __typename?: 'Resell' }
     & RegularResellFragment
   )>> }
@@ -3279,8 +3284,8 @@ export function useResellByIdQuery(options: Omit<Urql.UseQueryArgs<ResellByIdQue
   return Urql.useQuery<ResellByIdQuery>({ query: ResellByIdDocument, ...options });
 };
 export const ResellsDocument = gql`
-    query Resells($createBy: Boolean!) {
-  resells(createBy: $createBy) {
+    query Resells {
+  resells {
     ...RegularResell
   }
 }
@@ -3288,6 +3293,17 @@ export const ResellsDocument = gql`
 
 export function useResellsQuery(options: Omit<Urql.UseQueryArgs<ResellsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<ResellsQuery>({ query: ResellsDocument, ...options });
+};
+export const ResellsByCreatorDocument = gql`
+    query ResellsByCreator {
+  resellsByCreator {
+    ...RegularResell
+  }
+}
+    ${RegularResellFragmentDoc}`;
+
+export function useResellsByCreatorQuery(options: Omit<Urql.UseQueryArgs<ResellsByCreatorQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<ResellsByCreatorQuery>({ query: ResellsByCreatorDocument, ...options });
 };
 export const StockItByIdDocument = gql`
     query StockItById($id: Int!) {
