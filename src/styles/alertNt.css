@@ -12,6 +12,13 @@ body{
     overflow: hidden;
     border-radius: 4px;
     border-left: 8px solid #ffa502;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.alert.showAlert{
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .alert.show{
@@ -84,14 +91,14 @@ body{
 .close-btn .bi-x-lg{
     color: #ce8500;
     font-size: 22px;
-    line-height: 40px;
+    line-height: 35px;
 }
 
 
 /* ----------------------------------success------------------------------------- */
 
 .alert-success{
-    background: #0ca32c;
+    background: #96eba7;
     padding: 15px 40px;
     min-width: 420px;
     position: absolute;
@@ -99,7 +106,14 @@ body{
     top: 52px;
     overflow: hidden;
     border-radius: 4px;
-    border-left: 8px solid #01610e;
+    border-left: 8px solid #2daf42;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.alert-success.showAlert{
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .alert-success.show{
@@ -140,37 +154,37 @@ body{
     }
 }
 
-.alert-success .bi-exclamation-triangle-fill{
+.alert-success .bi-check-circle-fill{
     position: absolute;
     left: 60px;
     top: 10%;
     transform: translate(-50px);
-    color: #01610e;
+    color: #2daf42;
     font-size: 30px;
 }
 
-.alert-success .msg{
+.alert-success .msg-success{
     padding: 0 20px;
     font-size: 18px;
-    color: #01610e;
+    color: #18a830;
 }
 
-.alert-success .close-btn{
+.alert-success .close-btn-success{
     position: absolute;
     right: 0px;
     top: 1%;
     transform: translateY(-1%);
-    background: #0ca32c;
+    background: #46ce61;
     padding: 11px 18px;
     cursor: pointer;
 }
 
 .close-btn-success:hover{
-    background: #0ca32c;
+    background: #33be4a;
 }
 
 .close-btn-success .bi-x-lg{
-    color: #01610e;
+    color: #067e1a;
     font-size: 22px;
-    line-height: 40px;
+    line-height: 35px;
 }

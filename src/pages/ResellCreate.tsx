@@ -127,11 +127,11 @@ const ResellCreate: React.FC<Props> = () => {
                                     <Flex>
                                         <Text
                                             fontWeight="semibold"
-                                            fontSize={["sm", "md"]}
+                                            fontSize="lg"
                                             mb="2"
                                             mt="3"
                                         >
-                                            Customer :
+                                            บริษัท :
                                         </Text>
                                         &nbsp;
                                         {customerData?.code ? (
@@ -211,6 +211,8 @@ const ResellCreate: React.FC<Props> = () => {
                                 orderCustomerId={undefined}
                                 resellId={undefined}
                                 addedId={undefined}
+                                setAlertSuccess={() => undefined}
+                                setAlertWarning={() => undefined}
                             />
                         </Flex>
                     </Form>

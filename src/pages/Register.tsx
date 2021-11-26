@@ -24,8 +24,8 @@ const Register: React.FC<Props> = () => {
                         username: "",
                         password: "",
                         email: "",
-                        departments: "",
-                        roles: "",
+                        departments: "client",
+                        roles: "ลาดกระบัง",
                     }}
                     onSubmit={async (values, { setErrors }) => {
                         if (values.roles === "ลาดกระบัง") {
@@ -34,10 +34,6 @@ const Register: React.FC<Props> = () => {
                         if (values.roles === "ชลบุรี") {
                             values.roles = "client-CDC";
                         }
-                        if (values.departments === "" || values.roles === "*โปรดเลือกแผนก")
-                            return alert("*โปรดเลือกแผนก ของคุณ");
-                        if (values.roles === "" || values.roles === "*โปรดเลือกสาขา")
-                            return alert("*โปรดเลือกสาขา ของคุณ");
 
                         const response = await register({ options: values })
                         if (response.data?.register.errors) {

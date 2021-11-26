@@ -1,54 +1,36 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import '../../styles/alertNt.css'
 import { AlertNt } from '../../utils/helpers'
 
 interface Props {
-    warning: string
-    setWarning: React.Dispatch<React.SetStateAction<AlertNt>>
+    alertWarning: string
+    setAlertWarning: React.Dispatch<React.SetStateAction<AlertNt>>
 }
 
-// type IsShow = "show" | "hide"
+const AlertNotification: React.FC<Props> = ({ alertWarning, setAlertWarning }) => {
 
-
-// export type AlertNt = "hide" | "success" | "waning"
-
-const AlertNotification: React.FC<Props> = ({ warning, setWarning }) => {
+    const [showAlert, setShowAlert] = useState("")
 
     useEffect(() => {
-        if (warning !== "hide") {
+        if (alertWarning !== "hide") {
+
+            setShowAlert("showAlert")
+
             setTimeout(() => {
-                setWarning("hide");
+                setAlertWarning("hide");
             }, 4000);
         }
-    }, [warning, setWarning])
+    }, [alertWarning, setAlertWarning, showAlert])
 
     return (
-        warning === "hide" ? (
-            <div className="alert hide">
-                <i className="bi bi-exclamation-triangle-fill"></i>
-                <span className="msg">แจ้งเตือน: ไม่สามารถเลือกตัวเลือกนี้ได้!</span>
-                <span className="close-btn" onClick={() => setWarning("hide")}>
-                    <i className="bi bi-x-lg"></i>
-                </span>
-            </div>
-        ) : warning === "waning" ? (
-            <div className="alert show">
+        <div className={`alert ${showAlert} ${alertWarning}`}>
             <i className="bi bi-exclamation-triangle-fill"></i>
             <span className="msg">แจ้งเตือน: ไม่สามารถเลือกตัวเลือกนี้ได้!</span>
-            <span className="close-btn" onClick={() => setWarning("hide")}>
+            <span className="close-btn" onClick={() => setAlertWarning("hide")}>
                 <i className="bi bi-x-lg"></i>
             </span>
         </div>
-            ) : (
-                <div className="alert-success show">
-                    <i className="bi bi-exclamation-triangle-fill"></i>
-                    <span className="msg-success">แจ้งเตือน: ไม่สามารถเลือกตัวเลือกนี้ได้!</span>
-                    <span className="close-btn-success" onClick={() => setWarning("hide")}>
-                        <i className="bi bi-x-lg"></i>
-                    </span>
-                </div>
-            )
     )
 }
 

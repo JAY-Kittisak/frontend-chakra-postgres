@@ -36,7 +36,8 @@ interface Props {
             | undefined
         >
     >;
-    setWarning: React.Dispatch<React.SetStateAction<AlertNt>>
+    setAlertWarning: (action: AlertNt) => void | undefined
+    setAlertSuccess: (action: AlertNt) => void | undefined
     orderCustomerId: number | undefined;
     resellId: number | undefined;
     addedId: number[] | undefined;
@@ -45,7 +46,8 @@ interface Props {
 const SelectCustomer: React.FC<Props> = ({
     setCustomerID,
     setCustomerData,
-    setWarning,
+    setAlertWarning,
+    setAlertSuccess,
     orderCustomerId,
     resellId,
     addedId,
@@ -67,15 +69,15 @@ const SelectCustomer: React.FC<Props> = ({
 
     const joinData = async (resellId: number, customerId: number) => {
         if (orderCustomerId === customerId) {
-            return setWarning("waning")
+            return setAlertSuccess("show")
 
         }
         const response = await joinResell({ input: { resellId, customerId } });
         if (response.error) {
-            return setWarning("waning")
+            return setAlertWarning("show")
 
         } else if (response.data?.joinResell) {
-            return setWarning("success")
+            return setAlertSuccess("show")
         }
     };
 

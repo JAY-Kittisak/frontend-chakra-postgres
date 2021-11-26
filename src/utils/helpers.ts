@@ -32,9 +32,8 @@ export const categories: FactoryIndustrialEstate[] = [
     "เหมราชอีสเทิร์นซีบอร์ด แห่งที่ 4",
 ];
 
-type CatUserRole = "ลาดกระบัง" | "ชลบุรี" | "*โปรดเลือกสาขา";
+export type CatUserRole = "ลาดกระบัง" | "ชลบุรี";
 export const catUserRole: CatUserRole[] = [
-    "*โปรดเลือกสาขา",
     "ลาดกระบัง",
     "ชลบุรี",
 ];
@@ -50,10 +49,8 @@ type CatDepartments =
     | "Purchasing"
     | "Quality"
     | "SaleCo"
-    | "Sales"
-    | "*โปรดเลือกแผนก";
+    | "Sales";
 export const catDepartments: CatDepartments[] = [
-    "*โปรดเลือกแผนก",
     "client",
     "account",
     "adminSale",
@@ -224,6 +221,6 @@ export type TypeDemoData = {
     isDone: boolean
 }
 
-export type AlertNt = "hide" | "success" | "waning"
+export type AlertNt = "show" | "hide"
 
 

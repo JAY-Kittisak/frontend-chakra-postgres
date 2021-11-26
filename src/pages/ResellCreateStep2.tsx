@@ -17,6 +17,7 @@ import Spinner from "../components/Spinner";
 import SelectCustomer from "../components/resell/SelectCustomer";
 import { formatDate, AlertNt } from "../utils/helpers";
 import AlertNotification from "../components/dialogs/AlertNotification";
+import AlertNtSuccess from "../components/dialogs/AlertNtSuccess";
 
 interface Props { }
 
@@ -34,7 +35,8 @@ const ResellCreateStep2: React.FC<Props> = () => {
 
     const cancelRef = useRef();
 
-    const [warning, setWarning] = useState<AlertNt>("hide")
+    const [alertSuccess, setAlertSuccess] = useState<AlertNt>("hide")
+    const [alertWarning, setAlertWarning] = useState<AlertNt>("hide")
 
     const params = useParams<{ id: string }>();
     const [{ data, fetching }] = useResellByIdQuery({
@@ -57,7 +59,9 @@ const ResellCreateStep2: React.FC<Props> = () => {
                     เพิ่มบริษัทที่มีการซื้อขาย
                 </Text>
 
-                <AlertNotification warning={warning} setWarning={setWarning} />
+                <AlertNtSuccess alertSuccess={alertSuccess} setAlertSuccess={setAlertSuccess} />
+                <AlertNotification alertWarning={alertWarning} setAlertWarning={setAlertWarning} />
+
             </Flex>
             <Divider orientation="horizontal" />
             <Flex>
@@ -71,7 +75,7 @@ const ResellCreateStep2: React.FC<Props> = () => {
                 ) : (
                     <Flex
                             flexDir="column"
-                            w="50%"
+                            minW="50%"
                             mt="8"
                             boxShadow="xl"
                             borderRadius="md"
@@ -251,7 +255,8 @@ const ResellCreateStep2: React.FC<Props> = () => {
                     orderCustomerId={data?.resellById.orderCustomer.id as number}
                     resellId={+params.id}
                     addedId={addedId}
-                    setWarning={setWarning}
+                    setAlertSuccess={setAlertSuccess}
+                    setAlertWarning={setAlertWarning}
                 />
             </Flex>
         </Flex>

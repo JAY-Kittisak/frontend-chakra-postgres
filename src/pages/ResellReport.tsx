@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
     Flex,
     Table,
@@ -8,67 +8,25 @@ import {
     Thead,
     Tr,
     Center,
-    Select
+    Input,
+    InputLeftElement,
+    InputGroup,
 } from "@chakra-ui/react";
+import { Search2Icon } from "@chakra-ui/icons";
+
 import { useIsResellAuth } from '../utils/useIsResellAuth'
-import { useResellsQuery, RegularResellFragment } from '../generated/graphql';
+import { useResellsQuery } from '../generated/graphql';
 import ResellItem from '../components/resell/ResellItem';
 import Spinner from '../components/Spinner';
 
 interface Props { }
 
-type TypeY = "ต๊าปประเภท A" | "ต๊าปประเภท B" | "ต๊าปประเภท C"
-const catYamawa: TypeY[] = ["ต๊าปประเภท A", "ต๊าปประเภท B", "ต๊าปประเภท C"]
-type TypeM = "หัวกัดประเภท D" | "หัวกัดประเภท E" | "หัวกัดประเภท F"
-const catMoldino: Array<TypeM> = ["หัวกัดประเภท D", "หัวกัดประเภท E", "หัวกัดประเภท F"]
-
 const ResellReport: React.FC<Props> = () => {
     useIsResellAuth()
 
-    const [group, setGroup] = useState("All")
-    const [item, setItem] = useState<RegularResellFragment[] | undefined>(
-        undefined
-    );
+    const [searchName, setSearchName] = useState("")
 
-    // const [{ data, fetching }] = useResellsQuery({
-    //     variables: {
-    //         createBy: false,
-    //     },
-    // })
     const [{ data, fetching }] = useResellsQuery()
-
-    const sumArray = ["All", ...catYamawa, ...catMoldino]
-
-
-    useEffect(() => {
-        if (group === "All" && data?.resells) {
-            setItem(data.resells);
-        }
-        if (group === "ต๊าปประเภท A") {
-            const filterData = data?.resells?.filter((val) => val.category === group);
-            setItem(filterData);
-        }
-        if (group === "ต๊าปประเภท B") {
-            const filterData = data?.resells?.filter((val) => val.category === group);
-            setItem(filterData);
-        }
-        if (group === "ต๊าปประเภท C") {
-            const filterData = data?.resells?.filter((val) => val.category === group);
-            setItem(filterData);
-        }
-        if (group === "หัวกัดประเภท D") {
-            const filterData = data?.resells?.filter((val) => val.category === group);
-            setItem(filterData);
-        }
-        if (group === "หัวกัดประเภท E") {
-            const filterData = data?.resells?.filter((val) => val.category === group);
-            setItem(filterData);
-        }
-        if (group === "หัวกัดประเภท F") {
-            const filterData = data?.resells?.filter((val) => val.category === group);
-            setItem(filterData);
-        }
-    }, [group, data]);
 
     return (
         <Flex flexDir="column" h="90vh">
@@ -81,18 +39,21 @@ const ResellReport: React.FC<Props> = () => {
                 >
                     Report
                 </Text>
-                <Select
-                    mt="1"
-                    w="200px"
-                    boxShadow="md"
-                    onChange={(e) => setGroup(e.target.value)}
-                >
-                    {sumArray.map((val, i) => (
-                        <option key={i} value={val}>
-                            {val}
-                        </option>
-                    ))}
-                </Select>
+                <Flex>
+                    <InputGroup>
+                        <InputLeftElement
+                            pointerEvents="none"
+                            children={<Search2Icon color="gray.600" />}
+                        />
+                        <Input
+                            w="200px"
+                            errorBorderColor="crimson"
+                            type="text"
+                            placeholder="ชื่อบริษัท..."
+                            onChange={(e) => setSearchName(e.target.value)}
+                        />
+                    </InputGroup>
+                </Flex>
             </Flex>
             {(fetching) ? (
                 <Center>
@@ -150,7 +111,18 @@ const ResellReport: React.FC<Props> = () => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {item?.map((resell) => (
+                                {data?.resells?.filter((val) => {
+                                    if (searchName === "") {
+                                        return val
+                                    } else if (
+                                        val.orderCustomer.customerName
+                                            .toLowerCase()
+                                            .includes(searchName.toLowerCase())
+                                    ) {
+                                        return val
+                                    }
+                                    return false;
+                                }).map((resell) => (
                                     <ResellItem key={resell.id} resell={resell} />
                                 ))}
                             </Tbody>

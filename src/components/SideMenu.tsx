@@ -19,6 +19,11 @@ const menuItems = [
         iconClassName: "bi bi-speedometer2",
     },
     {
+        name: "Sales Report",
+        to: "/sales-report",
+        iconClassName: "bi bi-bar-chart-fill"
+    },
+    {
         name: "Tier",
         to: "/tiers/factories",
         iconClassName: "bi bi-diagram-3",
