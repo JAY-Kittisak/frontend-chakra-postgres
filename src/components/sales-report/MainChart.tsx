@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import {
     Bar,
     Line,
@@ -73,16 +73,19 @@ const MainChart: React.FC<Props> = ({ colorBranch, colorBranchPass, setTeam }) =
             action: projectDate,
         },
     ];
+    const Channel = dataCh[activeIndex].name
 
     const handleClick = useCallback(
         (_, index: number) => {
-            setTeam(dataCh[index].name)
             setActiveIndex(index);
         },
-        [setActiveIndex, setTeam]
+        [setActiveIndex]
     );
 
     useEffect(() => {
+        if (activeIndex >= 0) {
+            setTeam(Channel)
+        }
         if (cuttingOneDate >= cuttingOneQuota) {
             setColorIndexCuttingOne(0);
         } else {
@@ -123,18 +126,21 @@ const MainChart: React.FC<Props> = ({ colorBranch, colorBranchPass, setTeam }) =
         regionDate,
         projectQuota,
         projectDate,
+        activeIndex,
+        Channel,
+        setTeam
     ]);
 
     return (
         <Box
-            ml="5"
+            mx="2"
             p="5"
             w="40%"
-            h="200px"
+            h="230px"
             rounded="7px"
             boxShadow="md"
         >
-            {/* <Box w="90%" h="80%" mt="10"> */}
+            <Text align="center" mt="-3" mb="1" fontWeight="bold" fontSize="xl">Channel All</Text>
             <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart
                     width={500}
@@ -147,18 +153,16 @@ const MainChart: React.FC<Props> = ({ colorBranch, colorBranchPass, setTeam }) =
                         bottom: 5,
                     }}
                 >
-                    <CartesianGrid strokeDasharray="2 8" />
+                    <CartesianGrid strokeDasharray="0 1" />
                     <XAxis dataKey="name" />
-                    {/* <YAxis /> */}
                     <Tooltip />
 
-                    <Bar dataKey="action" onClick={handleClick}>
+                    <Bar dataKey="action" fill={colorBranch} onClick={handleClick}>
                         {dataCh.map((_, index) => (
                             <Cell
                                 stroke={index === activeIndex ? "#ff0000" : colorBranch}
                                 cursor="pointer"
-                                fill={
-                                    index === colorIndexCuttingTwo
+                                fill={index === colorIndexCuttingTwo
                                         ? colorBranchPass
                                         : index === colorIndexCuttingOne
                                             ? colorBranchPass

@@ -6,9 +6,10 @@ import { AlertNt } from '../../utils/helpers'
 interface Props {
     alertWarning: string
     setAlertWarning: React.Dispatch<React.SetStateAction<AlertNt>>
+    label: string
 }
 
-const AlertNotification: React.FC<Props> = ({ alertWarning, setAlertWarning }) => {
+const AlertNotification: React.FC<Props> = ({ alertWarning, setAlertWarning, label }) => {
 
     const [showAlert, setShowAlert] = useState("")
 
@@ -26,7 +27,7 @@ const AlertNotification: React.FC<Props> = ({ alertWarning, setAlertWarning }) =
     return (
         <div className={`alert ${showAlert} ${alertWarning}`}>
             <i className="bi bi-exclamation-triangle-fill"></i>
-            <span className="msg">แจ้งเตือน: ไม่สามารถเลือกตัวเลือกนี้ได้!</span>
+            <span className="msg">แจ้งเตือน: {label}</span>
             <span className="close-btn" onClick={() => setAlertWarning("hide")}>
                 <i className="bi bi-x-lg"></i>
             </span>

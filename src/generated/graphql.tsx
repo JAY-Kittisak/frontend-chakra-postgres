@@ -675,6 +675,7 @@ export type Provinces = {
 export type Query = {
   __typename?: 'Query';
   users: Array<User>;
+  userById: User;
   userAdmin: Array<User>;
   me?: Maybe<User>;
   factories: Array<Factory>;
@@ -713,6 +714,11 @@ export type Query = {
   resellsByCreator?: Maybe<Array<Resell>>;
   customers?: Maybe<Array<Customer>>;
   customerById: Customer;
+};
+
+
+export type QueryUserByIdArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -2101,6 +2107,19 @@ export type UserAdminQuery = (
   )> }
 );
 
+export type UserByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type UserByIdQuery = (
+  { __typename?: 'Query' }
+  & { userById: (
+    { __typename?: 'User' }
+    & RegularUserFragment
+  ) }
+);
+
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -3337,6 +3356,17 @@ export const UserAdminDocument = gql`
 
 export function useUserAdminQuery(options: Omit<Urql.UseQueryArgs<UserAdminQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<UserAdminQuery>({ query: UserAdminDocument, ...options });
+};
+export const UserByIdDocument = gql`
+    query UserById($id: Int!) {
+  userById(id: $id) {
+    ...RegularUser
+  }
+}
+    ${RegularUserFragmentDoc}`;
+
+export function useUserByIdQuery(options: Omit<Urql.UseQueryArgs<UserByIdQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<UserByIdQuery>({ query: UserByIdDocument, ...options });
 };
 export const UsersDocument = gql`
     query Users {

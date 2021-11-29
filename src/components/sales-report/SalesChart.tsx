@@ -15,10 +15,11 @@ import {
 interface Props {
     colorBranch: string;
     colorBranchPass: string;
+    colorOnMouse: string;
     team: string
 }
 
-const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, team }) => {
+const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, colorOnMouse, team }) => {
     const [colorIndexCuttingOne, setColorIndexCuttingOne] = useState<
         number | undefined
     >(undefined);
@@ -34,6 +35,8 @@ const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, team }) => 
     const [colorIndexProject, setColorIndexProject] = useState<
         number | undefined
     >(undefined);
+
+    const [onMouseIndex, setOnMouseIndex] = useState<number | undefined>(undefined);
 
     const cuttingOneQuota = 20_000;
     const cuttingOneDate = 20_000;
@@ -172,16 +175,18 @@ const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, team }) => 
         projectDate,
     ]);
 
+    const onMouseOver = (_: any, index: number) => setOnMouseIndex(index)
+
     return (
         <Box
-            my="2"
+            mb="2"
             ml="3"
             p="5"
             h={["250px", "250px", "250px", "250px", "250px", "330px"]}
             align="center"
         >
             <Text fontSize="2xl" fontWeight="semibold">
-                {team}
+                ทีม {team}
             </Text>
             <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart
@@ -195,16 +200,18 @@ const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, team }) => 
                         bottom: 5,
                     }}
                 >
-                    <CartesianGrid strokeDasharray="2 8" />
+                    <CartesianGrid strokeDasharray="1 1" />
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
 
-                    <Bar dataKey="action">
+                    <Bar dataKey="action" fill={colorBranch} onMouseOver={onMouseOver}>
                         {dataCh.map((_, index) => (
                             <Cell
                                 fill={
-                                    index === colorIndexCuttingTwo
+                                    index === onMouseIndex
+                                        ? colorOnMouse
+                                        : index === colorIndexCuttingTwo
                                         ? colorBranchPass
                                         : index === colorIndexCuttingOne
                                             ? colorBranchPass

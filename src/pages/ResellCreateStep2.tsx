@@ -60,7 +60,7 @@ const ResellCreateStep2: React.FC<Props> = () => {
                 </Text>
 
                 <AlertNtSuccess alertSuccess={alertSuccess} setAlertSuccess={setAlertSuccess} />
-                <AlertNotification alertWarning={alertWarning} setAlertWarning={setAlertWarning} />
+                <AlertNotification alertWarning={alertWarning} setAlertWarning={setAlertWarning} label="ไม่สามารถเลือกตัวเลือกนี้ได้!" />
 
             </Flex>
             <Divider orientation="horizontal" />

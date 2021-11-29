@@ -16,6 +16,7 @@ import ResellCreateStep2 from "../pages/ResellCreateStep2";
 import ResellReport from "../pages/ResellReport";
 import ResellByMe from "../pages/ResellByMe";
 import SalesReport from "../pages/SalesReport";
+import UserDetail from "../pages/UserDetail";
 import PageNotFound from "../pages/PageNotFound";
 import TierRoute from "./TierRoute";
 import GiveRoute from "./GiveRoute";
@@ -29,6 +30,9 @@ interface Props { }
 const Routes: React.FC<Props> = () => {
     return (
         <Switch>
+            <Route path="/user-id/:id">
+                <UserDetail />
+            </Route>
             <Route path="/sales-report">
                 <SalesReport />
             </Route>

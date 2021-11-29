@@ -4,9 +4,11 @@
     justify-content: space-between;
 
     border-radius: 8px;
-    box-shadow: -1rem 0 2rem rgb(0, 0, 0);
+    box-shadow: -1rem 0 2rem rgba(0, 0, 0,0.7);
     padding: 5px;
     cursor: pointer;
+
+    transition: .2s;
 }
 
 .bg-card-cdc{
@@ -14,7 +16,7 @@
 }
 
 .bg-card-lkb{
-    background: #2670c4;
+    background: #1379ec;
 }
 
 .card img{
@@ -39,14 +41,21 @@
 
 .card:focus-within ~ .card,
 .card:hover ~ .card {
-    transform: translateX(50px);
+    /* transform: translateX(130px); */
+    transform: translateX(60px);
 }
 
 .card:hover {
-    transform: translateX(-1rem) rotate(2deg);
+    transform: translateY(-1rem);
+    /* transform: translateX(-1rem) rotate(2deg); */
+}
+
+.card:first-child{
+    box-shadow: -1rem 0 2rem rgb(253, 252, 252);
 }
 
 .card:not(:first-child){
+    /* margin-left: -130px; */
     margin-left: -70px;
 }
 
@@ -55,3 +64,29 @@
     margin:6px;
     color: #fff;
 }
+
+.card-btn-sales{
+    display: flex;
+    justify-content: space-between;
+    
+    margin: 10px;
+    cursor: pointer;
+    border-radius: 18px;
+    background: rgb(46,46,46);
+    box-shadow: 5px 5px 15px rgba(0,0,0,.7);
+    transition: all .2s ease-in-out;
+}
+
+.card-btn-sales:hover{
+    transform: scale(1.05);
+}
+
+.card-btn__img{
+    width: 100%;
+    height: 110px;
+    border-radius: 18px;
+    background: url('../assets/images/card-btn-test.jpg');
+    background-size: cover;
+}
+
+

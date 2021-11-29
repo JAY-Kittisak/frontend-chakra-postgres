@@ -69,7 +69,7 @@ const SelectCustomer: React.FC<Props> = ({
 
     const joinData = async (resellId: number, customerId: number) => {
         if (orderCustomerId === customerId) {
-            return setAlertSuccess("show")
+            return setAlertWarning("show")
 
         }
         const response = await joinResell({ input: { resellId, customerId } });
