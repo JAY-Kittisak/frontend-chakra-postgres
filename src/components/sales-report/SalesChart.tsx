@@ -179,9 +179,9 @@ const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, colorOnMous
 
     return (
         <Box
-            mb="2"
-            ml="3"
-            p="5"
+            mr="3"
+            p="2"
+            paddingBottom="8"
             h={["250px", "250px", "250px", "250px", "250px", "330px"]}
             align="center"
         >

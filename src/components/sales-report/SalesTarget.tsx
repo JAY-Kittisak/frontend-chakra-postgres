@@ -1,6 +1,6 @@
 import React from "react";
-import { AreaChart, Area, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { Flex, Text } from "@chakra-ui/react";
+import { AreaChart, Area, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import CountUp from 'react-countup';
 
 import "../../styles/_chart-sales-target.scss";
@@ -68,12 +68,16 @@ const SalesTarget: React.FC<Props> = ({ colorBranch, colorBranchPass }) => {
                 justify="space-between"
             >
                 <Flex flexDir="column" w="100%">
-                    <Text ml="6" fontWeight="bold" fontSize="xl">
-                        1.25 B
-                    </Text>
-                    <Text ml="6" fontSize="sm" color="gray">
-                        เป้ายอดขายปี 2022
-                    </Text>
+                    <Flex justify="space-between">
+                        <Flex flexDir="column">
+                            <Text ml="6" fontWeight="bold" fontSize="xl">
+                                1.25 B
+                            </Text>
+                            <Text ml="6" fontSize="sm" color="gray">
+                                เป้ายอดขายปี 2022
+                            </Text>
+                        </Flex>
+                    </Flex>
                     <div className="revenue">
                         <div className="graph">
                             <ResponsiveContainer width="100%" height="100%">

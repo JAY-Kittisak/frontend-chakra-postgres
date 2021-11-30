@@ -11,14 +11,29 @@ import {
     ComposedChart,
 } from "recharts";
 
+// FIXME:
+type TgDemo = {
+    id: number;
+    year: number;
+    branch: string;
+    c1: number;
+    c2: number;
+    are: number;
+    reg: number;
+    pro: number;
+}
+
 interface Props {
     colorBranch: string;
     colorBranchPass: string;
+    chooseMonth: string
     setTeam: React.Dispatch<React.SetStateAction<string>>
+    targetYear: TgDemo
 }
 
-const MainChart: React.FC<Props> = ({ colorBranch, colorBranchPass, setTeam }) => {
+const MainChart: React.FC<Props> = ({ colorBranch, colorBranchPass, chooseMonth, setTeam, targetYear }) => {
     const [activeIndex, setActiveIndex] = useState(0);
+
     const [colorIndexCuttingOne, setColorIndexCuttingOne] = useState<
         number | undefined
     >(undefined);
@@ -35,21 +50,23 @@ const MainChart: React.FC<Props> = ({ colorBranch, colorBranchPass, setTeam }) =
         number | undefined
     >(undefined);
 
-    const cuttingOneQuota = 100_000;
-    const cuttingOneDate = 80_000;
-    const cuttingTwoQuota = 120_000;
-    const cuttingTwoDate = 180_000;
-    const areaQuota = 200_000;
-    const areaDate = 150_000;
-    const regionQuota = 180_000;
-    const regionDate = 190_000;
-    const projectQuota = 160_000;
-    const projectDate = 100_000;
+    const [divideMonth, setDivideMonth] = useState(targetYear.c1)
+
+    // const cuttingOneQuota = 100_000_000;
+    const cuttingOneDate = 360_000_000;
+    const cuttingTwoQuota = 120_000_000;
+    const cuttingTwoDate = 180_000_000;
+    const areaQuota = 200_000_000;
+    const areaDate = 150_000_000;
+    const regionQuota = 180_000_000;
+    const regionDate = 190_000_000;
+    const projectQuota = 160_000_000;
+    const projectDate = 100_000_000;
 
     const dataCh = [
         {
             name: "Cutting 1",
-            quota: cuttingOneQuota,
+            quota: divideMonth,
             action: cuttingOneDate,
         },
         {
@@ -86,7 +103,8 @@ const MainChart: React.FC<Props> = ({ colorBranch, colorBranchPass, setTeam }) =
         if (activeIndex >= 0) {
             setTeam(Channel)
         }
-        if (cuttingOneDate >= cuttingOneQuota) {
+
+        if (cuttingOneDate >= divideMonth) {
             setColorIndexCuttingOne(0);
         } else {
             setColorIndexCuttingOne(undefined);
@@ -115,8 +133,15 @@ const MainChart: React.FC<Props> = ({ colorBranch, colorBranchPass, setTeam }) =
         } else {
             setColorIndexProject(undefined);
         }
+
+        if (chooseMonth !== "เดือนทั้งหมด") {
+            const response = targetYear.c1 / 12
+            setDivideMonth(response)
+        } else if (chooseMonth === "เดือนทั้งหมด") {
+            setDivideMonth(targetYear.c1)
+        }
     }, [
-        cuttingOneQuota,
+        targetYear.c1,
         cuttingOneDate,
         cuttingTwoQuota,
         cuttingTwoDate,
@@ -128,7 +153,10 @@ const MainChart: React.FC<Props> = ({ colorBranch, colorBranchPass, setTeam }) =
         projectDate,
         activeIndex,
         Channel,
-        setTeam
+        chooseMonth,
+        divideMonth,
+        setTeam,
+        setDivideMonth
     ]);
 
     return (

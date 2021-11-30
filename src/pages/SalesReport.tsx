@@ -6,10 +6,11 @@ import {
     Button,
     Divider,
     SimpleGrid,
+    Select
 } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 
-import { CatUserRole, catUserRole, AlertNt } from "../utils/helpers";
+import { CatUserRole, catUserRole, AlertNt, selectMonth } from "../utils/helpers";
 import { useMeQuery, useUsersQuery } from "../generated/graphql";
 import Spinner from "../components/Spinner";
 import SalesTarget from "../components/sales-report/SalesTarget";
@@ -22,6 +23,72 @@ import "../styles/card-sales.css";
 
 interface Props { }
 
+// FIXME:
+type TgDemo = {
+    id: number;
+    year: number;
+    branch: string;
+    c1: number;
+    c2: number;
+    are: number;
+    reg: number;
+    pro: number;
+}
+
+const targetDemoLkb = [
+    {
+        id: 1,
+        year: 2022,
+        branch: "ลาดกระบัง",
+        c1: 350_000_000,
+        c2: 350_000_000,
+        are: 350_000_000,
+        reg: 350_000_000,
+        pro: 350_000_000,
+    },
+    {
+        id: 2,
+        year: 2021,
+        branch: "ลาดกระบัง",
+        c1: 250_000_000,
+        c2: 250_000_000,
+        are: 250_000_000,
+        reg: 250_000_000,
+        pro: 250_000_000,
+    },
+]
+
+// const salesRole = [
+//     {
+//         id: 1,
+//         salesRole: "Sales01",
+//         branch: "ลาดกระบัง",
+//         channel: "cutting1",
+//         status: "Active",
+//         userId: 24,
+//         targetId: 1,
+//     },
+//     {
+//         id: 2,
+//         salesRole: "Sales02",
+//         branch: "ลาดกระบัง",
+//         channel: "Area",
+//         status: "Active",
+//         userId: 25,
+//         targetId: 1,
+//     }
+// ]
+
+// const saveTarget = [
+//     {
+//         id:1,
+//         value: 35000,
+//         salesByUserId: 24,
+//         createAt: "30/11/2021",
+//         salesRoleId: 1
+//     },
+// ]
+
 const SalesReport: React.FC<Props> = () => {
     useIsAuth();
 
@@ -33,6 +100,10 @@ const SalesReport: React.FC<Props> = () => {
     const [colorOnMouse, setColorOnMouse] = useState("#0a7988");
 
     const [alertWarning, setAlertWarning] = useState<AlertNt>("hide");
+
+    const [chooseMonth, setChooseMonth] = useState("เดือนทั้งหมด")
+    const [chooseYear, setChooseYear] = useState("2022")
+    const [targetYear, setTargetYear] = useState<TgDemo>(targetDemoLkb[0])
 
     const [{ data, fetching }] = useUsersQuery();
 
@@ -52,6 +123,14 @@ const SalesReport: React.FC<Props> = () => {
         }
     };
 
+    const onChangeMonth = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setChooseMonth(e.target.value);
+    };
+
+    const onChangeYear = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setChooseYear(e.target.value);
+    };
+
     useEffect(() => {
         if (branch === "ชลบุรี") {
             setColorBranch("#7be4ca");
@@ -62,7 +141,14 @@ const SalesReport: React.FC<Props> = () => {
             setColorBranchPass("#1379ec");
             setColorOnMouse("#0a7988");
         }
-    }, [branch]);
+
+        if (chooseYear) {
+            const response = targetDemoLkb.filter(val => val.year === +chooseYear)
+            setTargetYear(response[0])
+        }
+    }, [branch, chooseYear]);
+
+    console.log(chooseMonth, chooseYear)
 
     return (
         <Flex flexDir={["column", "column", "column", "column", "row"]}>
@@ -103,7 +189,7 @@ const SalesReport: React.FC<Props> = () => {
                     label="คุณไม่สามารถเข้าถึงข้อมูลนี้ได้!"
                 />
                 {fetching ? (
-                    <Flex justify="center">
+                    <Flex h="225px" justify="center" align="center">
                         <Spinner color="grey" height={50} width={50} />
                         <Text
                             as="i"
@@ -168,14 +254,49 @@ const SalesReport: React.FC<Props> = () => {
                                     rounded="7px"
                                     boxShadow="md"
                                 >
-                                    <Text
-                                        ml="3"
-                                        fontWeight="semibold"
-                                        fontSize={["md", "md", "xl", "3xl"]}
-                                        color={colorBranchPass}
-                                    >
-                                        {branch}
-                                    </Text>
+                                    <Flex justify="space-between">
+                                        <Text
+                                            ml="3"
+                                            fontWeight="semibold"
+                                            fontSize={["md", "md", "xl", "3xl"]}
+                                            color={colorBranchPass}
+                                        >
+                                            {branch}
+                                        </Text>
+
+
+                                        <Flex>
+                                            <Select
+                                                w="150px"
+                                                mr="5"
+                                                mt="1"
+                                                fontWeight="semibold"
+                                                name="selectYear"
+                                                onChange={(e) => onChangeYear(e)}
+                                            >
+                                                <option value="2022">
+                                                    2022
+                                                </option>
+                                                <option value="2021">
+                                                    2021
+                                                </option>
+                                            </Select>
+                                            <Select
+                                                w="150px"
+                                                mr="5"
+                                                mt="1"
+                                                fontWeight="semibold"
+                                                name="selectMonth"
+                                                onChange={(e) => onChangeMonth(e)}
+                                            >
+                                                {selectMonth.map((val, i) => (
+                                                    <option key={i} value={val}>
+                                                        {val}
+                                                    </option>
+                                                ))}
+                                            </Select>
+                                        </Flex>
+                                    </Flex>
                                     <Flex mt="-2">
                                         <SalesTarget
                                             colorBranch={colorBranch}
@@ -185,6 +306,8 @@ const SalesReport: React.FC<Props> = () => {
                                             colorBranch={colorBranch}
                                             colorBranchPass={colorBranchPass}
                                             setTeam={setTeam}
+                                            targetYear={targetYear}
+                                            chooseMonth={chooseMonth}
                                         />
                                     </Flex>
                                     <SalesChart
@@ -254,7 +377,8 @@ const SalesReport: React.FC<Props> = () => {
                                     </Flex>
                                 </Flex>
                             </Flex>
-                    </>
+                        </>
+
                 )}
             </Flex>
         </Flex>
