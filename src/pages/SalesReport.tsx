@@ -6,11 +6,16 @@ import {
     Button,
     Divider,
     SimpleGrid,
-    Select
+    Select,
 } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 
-import { CatUserRole, catUserRole, AlertNt, selectMonth } from "../utils/helpers";
+import {
+    CatUserRole,
+    catUserRole,
+    AlertNt,
+    selectMonth,
+} from "../utils/helpers";
 import { useMeQuery, useUsersQuery } from "../generated/graphql";
 import Spinner from "../components/Spinner";
 import SalesTarget from "../components/sales-report/SalesTarget";
@@ -33,7 +38,7 @@ type TgDemo = {
     are: number;
     reg: number;
     pro: number;
-}
+};
 
 const targetDemoLkb = [
     {
@@ -56,7 +61,7 @@ const targetDemoLkb = [
         reg: 250_000_000,
         pro: 250_000_000,
     },
-]
+];
 
 // const salesRole = [
 //     {
@@ -101,9 +106,9 @@ const SalesReport: React.FC<Props> = () => {
 
     const [alertWarning, setAlertWarning] = useState<AlertNt>("hide");
 
-    const [chooseMonth, setChooseMonth] = useState("เดือนทั้งหมด")
-    const [chooseYear, setChooseYear] = useState("2022")
-    const [targetYear, setTargetYear] = useState<TgDemo>(targetDemoLkb[0])
+    const [chooseMonth, setChooseMonth] = useState("เดือนทั้งหมด");
+    const [chooseYear, setChooseYear] = useState("2022");
+    const [targetYear, setTargetYear] = useState<TgDemo>(targetDemoLkb[0]);
 
     const [{ data, fetching }] = useUsersQuery();
 
@@ -143,12 +148,12 @@ const SalesReport: React.FC<Props> = () => {
         }
 
         if (chooseYear) {
-            const response = targetDemoLkb.filter(val => val.year === +chooseYear)
-            setTargetYear(response[0])
+            const response = targetDemoLkb.filter((val) => val.year === +chooseYear);
+            setTargetYear(response[0]);
         }
     }, [branch, chooseYear]);
 
-    console.log(chooseMonth, chooseYear)
+    console.log(chooseMonth, chooseYear);
 
     return (
         <Flex flexDir={["column", "column", "column", "column", "row"]}>
@@ -202,26 +207,48 @@ const SalesReport: React.FC<Props> = () => {
                         </Text>
                     </Flex>
                 ) : (
-                        <>
-                            <Flex
-                                borderRadius="8px"
-                                overflowY="hidden"
-                                overflowX="auto"
-                                justify="center"
-                                sx={{
-                                    "&::-webkit-scrollbar": {
-                                        width: "8px",
-                                    },
-                                    "&::-webkit-scrollbar-track": {
-                                        width: "8px",
-                                    },
-                                    "&::-webkit-scrollbar-thumb": {
-                                        width: "1em",
-                                        backgroundColor: `#666`,
-                                        borderRadius: "24px",
-                                    },
-                                }}
+                    <>
+                        <Flex
+                            borderRadius="8px"
+                            overflowY="hidden"
+                            overflowX="auto"
+                            justify="center"
+                            sx={{
+                                "&::-webkit-scrollbar": {
+                                    width: "8px",
+                                },
+                                "&::-webkit-scrollbar-track": {
+                                    width: "8px",
+                                },
+                                "&::-webkit-scrollbar-thumb": {
+                                    width: "1em",
+                                    backgroundColor: `#666`,
+                                    borderRadius: "24px",
+                                },
+                            }}
                             >
+                                {data?.users
+                                    .filter((item) => item.departments === "Marketing")
+                                    .map(
+                                        (val, i) =>
+                                            val.imageUrl && (
+                                                <div
+                                                    className={`card ${branch === "ลาดกระบัง" ? "bg-card-lkb" : "bg-card-cdc"
+                                                        }`}
+                                                    key={val.id}
+                                                    onClick={() => userHandle(val.id)}
+                            >
+                                              <p>Sales{i}</p>
+                                              <Image
+                                                  objectFit="cover"
+                                                  src={val.imageUrl}
+                                                  alt={val.username}
+                                                  borderRadius="lg"
+                                              />
+                                              <h4>{val.fullNameTH}</h4>
+                                          </div>
+                                      )
+                              )}
                                 {data?.users
                                     .filter((item) => item.departments === "Marketing")
                                     .map(
@@ -264,7 +291,6 @@ const SalesReport: React.FC<Props> = () => {
                                             {branch}
                                         </Text>
 
-
                                         <Flex>
                                             <Select
                                                 w="150px"
@@ -274,12 +300,8 @@ const SalesReport: React.FC<Props> = () => {
                                                 name="selectYear"
                                                 onChange={(e) => onChangeYear(e)}
                                             >
-                                                <option value="2022">
-                                                    2022
-                                                </option>
-                                                <option value="2021">
-                                                    2021
-                                                </option>
+                                                <option value="2022">2022</option>
+                                                <option value="2021">2021</option>
                                             </Select>
                                             <Select
                                                 w="150px"
@@ -365,10 +387,17 @@ const SalesReport: React.FC<Props> = () => {
                                         >
                                             Menu
                                         </Text>
-                                        <div className="card-btn-sales">
+                                        <div
+                                            className="card-btn-sales"
+                                            onClick={() => history.push("/sales-report/actual-create")}
+                                        >
                                             <div className="card-btn__img"></div>
                                         </div>
-                                        <div className="card-btn-sales">
+                                        <div
+                                            className="card-btn-sales"
+                                            onClick={() => history.push("/sales-report/role-manage")}
+                                        >
+
                                             <div className="card-btn__img"></div>
                                         </div>
                                         <div className="card-btn-sales">
@@ -378,7 +407,6 @@ const SalesReport: React.FC<Props> = () => {
                                 </Flex>
                             </Flex>
                         </>
-
                 )}
             </Flex>
         </Flex>

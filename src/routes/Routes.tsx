@@ -16,6 +16,8 @@ import ResellCreateStep2 from "../pages/ResellCreateStep2";
 import ResellReport from "../pages/ResellReport";
 import ResellByMe from "../pages/ResellByMe";
 import SalesReport from "../pages/SalesReport";
+import SalesActualCreate from "../pages/SalesActualCreate";
+import SalesRoleManage from "../pages/SalesRoleManage";
 import UserDetail from "../pages/UserDetail";
 import PageNotFound from "../pages/PageNotFound";
 import TierRoute from "./TierRoute";
@@ -32,6 +34,12 @@ const Routes: React.FC<Props> = () => {
         <Switch>
             <Route path="/user-id/:id">
                 <UserDetail />
+            </Route>
+            <Route path="/sales-report/role-manage">
+                <SalesRoleManage />
+            </Route>
+            <Route path="/sales-report/actual-create">
+                <SalesActualCreate />
             </Route>
             <Route path="/sales-report">
                 <SalesReport />
