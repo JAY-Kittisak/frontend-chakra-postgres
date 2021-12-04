@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Flex,
     Table,
@@ -11,8 +11,10 @@ import {
     Input,
     InputLeftElement,
     InputGroup,
+    Button
 } from "@chakra-ui/react";
 import { Search2Icon } from "@chakra-ui/icons";
+import { CSVLink } from "react-csv"
 
 import { useIsResellAuth } from '../utils/useIsResellAuth'
 import { useResellsQuery } from '../generated/graphql';
@@ -21,12 +23,92 @@ import Spinner from '../components/Spinner';
 
 interface Props { }
 
+
 const ResellReport: React.FC<Props> = () => {
     useIsResellAuth()
 
     const [searchName, setSearchName] = useState("")
 
+    // const [item, setItem] = useState([{
+    //     maker: "",
+    //     title: "",
+    //     detail: "",
+    //     category: "",
+    //     orderCustomerName: "",
+    //     // customersName: "",
+    //     createdAt: "",
+    // }]);
+
+
     const [{ data, fetching }] = useResellsQuery()
+
+    const dataSearch = data?.resells?.filter((val) => {
+        if (searchName === "") {
+            return val
+        } else if (
+            val.orderCustomer.customerName
+                .toLowerCase()
+                .includes(searchName.toLowerCase())
+        ) {
+            return val
+        }
+        return false;
+    })
+
+    let headers = []
+    // let dataCsv = []
+
+    headers = [
+        { label: "Maker", key: "maker" },
+        { label: "Title", key: "title" },
+        { label: "Detail", key: "detail" },
+        { label: "Category", key: "category" },
+        { label: "OrderCustomer Name", key: "orderCustomerName" },
+        { label: "Created At", key: "createdAt" }
+    ];
+    // headers = [
+    //     { label: "First Name", key: "firstname" },
+    //     { label: "Last Name", key: "lastname" },
+    //     { label: "Email", key: "email" }
+    // ];
+
+    const dataCsv = [
+        { firstname: "Ahmed", lastname: "Tomi", email: "ah@smthing.co.com" },
+        { firstname: "Raed", lastname: "Labes", email: "rl@smthing.co.com" },
+        { firstname: "Yezzi", lastname: "Min l3b", email: "ymin@cocococo.com" }
+    ];
+
+
+
+    const csvReport = {
+        filename: "SalesReport.csv",
+        headers: headers,
+        data: dataCsv
+    }
+
+    useEffect(() => {
+        if (dataSearch) {
+            const response = dataSearch.map(value => value.maker)
+            console.log("response", response)
+            // setItem([
+            //     ...item, {
+            //         maker: value.maker,
+            //         title: value.title,
+            //         detail: value.detail,
+            //         category: value.category,
+            //         orderCustomerName: value.orderCustomer.customerName,
+            //         createdAt: value.createdAt,
+            //     }
+            // ])
+        }
+    }, [
+        dataSearch,
+        // setItem
+    ]);
+
+    console.log("dataSearch", dataSearch?.map(val => val.title))
+    console.log("dataCsv", dataCsv)
+    // console.log("stateOptions", item)
 
     return (
         <Flex flexDir="column" h="90vh">
@@ -40,7 +122,12 @@ const ResellReport: React.FC<Props> = () => {
                     Report
                 </Text>
                 <Flex>
-                    <InputGroup>
+                    <CSVLink {...csvReport}>
+                        <Button colorScheme='teal' variant='outline'>
+                            Export to CSV
+                        </Button>
+                    </CSVLink>
+                    <InputGroup ml="5">
                         <InputLeftElement
                             pointerEvents="none"
                             children={<Search2Icon color="gray.600" />}
@@ -111,18 +198,7 @@ const ResellReport: React.FC<Props> = () => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {data?.resells?.filter((val) => {
-                                    if (searchName === "") {
-                                        return val
-                                    } else if (
-                                        val.orderCustomer.customerName
-                                            .toLowerCase()
-                                            .includes(searchName.toLowerCase())
-                                    ) {
-                                        return val
-                                    }
-                                    return false;
-                                }).map((resell) => (
+                                {dataSearch?.map((resell) => (
                                     <ResellItem key={resell.id} resell={resell} />
                                 ))}
                             </Tbody>

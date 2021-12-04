@@ -116,13 +116,13 @@ const SalesReport: React.FC<Props> = () => {
 
     const history = useHistory();
 
-    const userHandle = (userId: number) => {
+    const userHandle = (salesId: number) => {
         if (me?.me?.position.includes("หัวหน้างาน")) {
-            return history.push(`/user-id/${userId}`);
+            return history.push(`/sales-report/role-manage/${salesId}`);
         } else if (me?.me?.position.includes("GM")) {
-            return history.push(`/user-id/${userId}`);
-        } else if (me?.me?.id === userId) {
-            return history.push(`/user-id/${userId}`);
+            return history.push(`/sales-report/role-manage/${salesId}`);
+        } else if (me?.me?.id === salesId) {
+            return history.push(`/sales-report/role-manage/${salesId}`);
         } else {
             return setAlertWarning("show");
         }
@@ -227,28 +227,6 @@ const SalesReport: React.FC<Props> = () => {
                                 },
                             }}
                             >
-                                {data?.users
-                                    .filter((item) => item.departments === "Marketing")
-                                    .map(
-                                        (val, i) =>
-                                            val.imageUrl && (
-                                                <div
-                                                    className={`card ${branch === "ลาดกระบัง" ? "bg-card-lkb" : "bg-card-cdc"
-                                                        }`}
-                                                    key={val.id}
-                                                    onClick={() => userHandle(val.id)}
-                            >
-                                              <p>Sales{i}</p>
-                                              <Image
-                                                  objectFit="cover"
-                                                  src={val.imageUrl}
-                                                  alt={val.username}
-                                                  borderRadius="lg"
-                                              />
-                                              <h4>{val.fullNameTH}</h4>
-                                          </div>
-                                      )
-                              )}
                                 {data?.users
                                     .filter((item) => item.departments === "Marketing")
                                     .map(
@@ -398,9 +376,6 @@ const SalesReport: React.FC<Props> = () => {
                                             onClick={() => history.push("/sales-report/role-manage")}
                                         >
 
-                                            <div className="card-btn__img"></div>
-                                        </div>
-                                        <div className="card-btn-sales">
                                             <div className="card-btn__img"></div>
                                         </div>
                                     </Flex>

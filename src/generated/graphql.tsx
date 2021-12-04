@@ -43,6 +43,7 @@ export type Customer = {
   creator: User;
   orderResell: Array<Resell>;
   resellLoaders: Array<Resell>;
+  salesActual: Array<SalesActual>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -133,6 +134,12 @@ export type FieldErrorManualAd = {
 
 export type FieldErrorResell = {
   __typename?: 'FieldErrorResell';
+  field: Scalars['String'];
+  message: Scalars['String'];
+};
+
+export type FieldErrorSalesRole = {
+  __typename?: 'FieldErrorSalesRole';
   field: Scalars['String'];
   message: Scalars['String'];
 };
@@ -405,6 +412,8 @@ export type Mutation = {
   joinResell: Resell;
   deleteResell: Scalars['Boolean'];
   deleteJoinResell: Resell;
+  createSalesRole: SalesRole_Response;
+  createSalesActual: SalesActual_Response;
 };
 
 
@@ -640,6 +649,16 @@ export type MutationDeleteJoinResellArgs = {
   input: JoinResellInput;
 };
 
+
+export type MutationCreateSalesRoleArgs = {
+  input: SalesRole_Input;
+};
+
+
+export type MutationCreateSalesActualArgs = {
+  input: SalesActual_Input;
+};
+
 export type ProductByTier = {
   __typename?: 'ProductByTier';
   id: Scalars['Float'];
@@ -714,6 +733,9 @@ export type Query = {
   resellsByCreator?: Maybe<Array<Resell>>;
   customers?: Maybe<Array<Customer>>;
   customerById: Customer;
+  salesRoles?: Maybe<Array<SalesRole>>;
+  salesRoleById: SalesRole;
+  salesActuals?: Maybe<Array<SalesActual>>;
 };
 
 
@@ -821,6 +843,11 @@ export type QueryCustomerByIdArgs = {
   id: Scalars['Int'];
 };
 
+
+export type QuerySalesRoleByIdArgs = {
+  id: Scalars['Int'];
+};
+
 export type QueryJobIt_Input = {
   nameItAction?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
@@ -864,6 +891,67 @@ export type Resell_Response = {
   __typename?: 'Resell_Response';
   errors?: Maybe<Array<FieldErrorResell>>;
   resells?: Maybe<Array<Resell>>;
+};
+
+export type SalesActual = {
+  __typename?: 'SalesActual';
+  id: Scalars['Float'];
+  title: Scalars['String'];
+  detail: Scalars['String'];
+  actual: Scalars['Float'];
+  branch: Scalars['String'];
+  customerId: Scalars['Float'];
+  userId: Scalars['Float'];
+  salesRoleId: Scalars['Float'];
+  customer: Customer;
+  user: User;
+  salesRole: SalesRole;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type SalesActual_Input = {
+  title: Scalars['String'];
+  detail: Scalars['String'];
+  actual: Scalars['Float'];
+  branch: Scalars['String'];
+  customerId: Scalars['Float'];
+  userId: Scalars['Float'];
+  salesRoleId: Scalars['Float'];
+};
+
+export type SalesActual_Response = {
+  __typename?: 'SalesActual_Response';
+  errors?: Maybe<Array<FieldErrorSalesRole>>;
+  salesActual?: Maybe<Array<SalesActual>>;
+};
+
+export type SalesRole = {
+  __typename?: 'SalesRole';
+  id: Scalars['Float'];
+  salesRole: Scalars['String'];
+  targetId: Scalars['Float'];
+  channel: Scalars['String'];
+  branch: Scalars['String'];
+  status: Scalars['String'];
+  userId: Scalars['Float'];
+  user: User;
+  salesActual: Array<SalesActual>;
+};
+
+export type SalesRole_Input = {
+  salesRole: Scalars['String'];
+  channel: Scalars['String'];
+  targetId: Scalars['Float'];
+  branch: Scalars['String'];
+  status: Scalars['String'];
+  userId: Scalars['Float'];
+};
+
+export type SalesRole_Response = {
+  __typename?: 'SalesRole_Response';
+  errors?: Maybe<Array<FieldErrorSalesRole>>;
+  salesRole?: Maybe<Array<SalesRole>>;
 };
 
 export type StockIt = {
@@ -988,6 +1076,8 @@ export type User = {
   leaves: Array<Leave>;
   resell: Array<Resell>;
   customer: Array<Customer>;
+  salesRole: SalesRole;
+  salesActual: Array<SalesActual>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -2069,6 +2159,48 @@ export type ResellsByCreatorQuery = (
   & { resellsByCreator?: Maybe<Array<(
     { __typename?: 'Resell' }
     & RegularResellFragment
+  )>> }
+);
+
+export type SalesRoleByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type SalesRoleByIdQuery = (
+  { __typename?: 'Query' }
+  & { salesRoleById: (
+    { __typename?: 'SalesRole' }
+    & Pick<SalesRole, 'id' | 'salesRole' | 'targetId' | 'channel' | 'branch' | 'status' | 'userId'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'fullNameTH' | 'imageUrl'>
+    ), salesActual: Array<(
+      { __typename?: 'SalesActual' }
+      & Pick<SalesActual, 'id' | 'title' | 'detail' | 'actual' | 'branch' | 'customerId' | 'userId' | 'salesRoleId' | 'createdAt' | 'updatedAt'>
+      & { customer: (
+        { __typename?: 'Customer' }
+        & Pick<Customer, 'id' | 'customerName'>
+      ), user: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'fullNameTH'>
+      ) }
+    )> }
+  ) }
+);
+
+export type SalesRolesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SalesRolesQuery = (
+  { __typename?: 'Query' }
+  & { salesRoles?: Maybe<Array<(
+    { __typename?: 'SalesRole' }
+    & Pick<SalesRole, 'id' | 'salesRole' | 'targetId' | 'channel' | 'branch' | 'status' | 'userId'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'fullNameTH' | 'imageUrl'>
+    ) }
   )>> }
 );
 
@@ -3323,6 +3455,70 @@ export const ResellsByCreatorDocument = gql`
 
 export function useResellsByCreatorQuery(options: Omit<Urql.UseQueryArgs<ResellsByCreatorQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<ResellsByCreatorQuery>({ query: ResellsByCreatorDocument, ...options });
+};
+export const SalesRoleByIdDocument = gql`
+    query SalesRoleById($id: Int!) {
+  salesRoleById(id: $id) {
+    id
+    salesRole
+    targetId
+    channel
+    branch
+    status
+    userId
+    user {
+      id
+      fullNameTH
+      imageUrl
+    }
+    salesActual {
+      id
+      title
+      detail
+      actual
+      branch
+      customerId
+      customer {
+        id
+        customerName
+      }
+      userId
+      user {
+        id
+        fullNameTH
+      }
+      salesRoleId
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+
+export function useSalesRoleByIdQuery(options: Omit<Urql.UseQueryArgs<SalesRoleByIdQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<SalesRoleByIdQuery>({ query: SalesRoleByIdDocument, ...options });
+};
+export const SalesRolesDocument = gql`
+    query SalesRoles {
+  salesRoles {
+    id
+    salesRole
+    targetId
+    channel
+    branch
+    status
+    userId
+    user {
+      id
+      fullNameTH
+      imageUrl
+    }
+  }
+}
+    `;
+
+export function useSalesRolesQuery(options: Omit<Urql.UseQueryArgs<SalesRolesQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<SalesRolesQuery>({ query: SalesRolesDocument, ...options });
 };
 export const StockItByIdDocument = gql`
     query StockItById($id: Int!) {

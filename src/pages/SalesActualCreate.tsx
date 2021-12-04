@@ -60,7 +60,7 @@ const SalesActualCreate: React.FC<Props> = () => {
                     // , { setErrors }
                 ) => {
                     console.log(values, customerID, selectBranch)
-                    history.push("/sales-report/role-manage/1");
+                    history.push(`/sales-report/role-manage/${1}`);
                 }}
             >{({ isSubmitting }) => (
                 <Form>

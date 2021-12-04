@@ -10,6 +10,7 @@ import { useHistory } from "react-router";
 
 import { RegularResellFragment } from "../../generated/graphql";
 import CustomerDetail from "./CustomerDetail";
+import { formatDate } from "../../utils/helpers";
 
 interface Props {
     resell: RegularResellFragment
@@ -21,17 +22,38 @@ const ResellItem: React.FC<Props> = ({ resell }) => {
 
     const history = useHistory();
 
+    const transformDate = formatDate(+resell.createdAt)
+    const getDateEnd = new Date("5/12/2022")
+    const getDateStart = new Date()
+    const differenceInTime = getDateEnd.getTime() - getDateStart.getTime()
+
+    const sumDateAll = differenceInTime / (1000 * 3600 * 24);
+    const sumYear = sumDateAll / 365
+
+    const dateDifference = new Date(differenceInTime)
+
+    const dayDiff = dateDifference.getUTCDate() - 1
+    const monthDiff = dateDifference.getUTCMonth()
+
     return (
         <>
             <Tr _hover={{ bgColor: "#eee" }}>
-                <Td w="15%">
+                <Td w="20%">
                     <Text fontWeight="bold" color={resell.maker === "YAMAWA" ? "blue.600" : "red"}>{resell.maker}</Text>
                     <Text>{resell.category}</Text>
+                    <Text>วันที่ลงทะเบียน : {transformDate}</Text>
+                    <Text>กำหนดอายุถึง : {formatDate(+getDateEnd)}</Text>
+
+                    {sumDateAll <= 0 ? (
+                        <Text fontWeight="bold" as="u" color="red">Register นี้หมดอายุแล้ว</Text>
+                    ) : (
+                        <Text color="green">เลือกเวลาอยู่ : {dayDiff} วัน {monthDiff} เดือน {sumYear.toFixed()} ปี</Text>
+                    )}
                 </Td>
                 <Td w="15%">
                     <Text>{resell.title}</Text>
                 </Td>
-                <Td w="30%">
+                <Td w="25%">
                     <p>{resell.detail}</p>
                     <Flex justify="end">
                         <Button
@@ -57,11 +79,7 @@ const ResellItem: React.FC<Props> = ({ resell }) => {
                     </Text>
                 </Td>
                 <Td w="20%">
-                    {/* <Link to={`/tiers/factories/${resell.resellId}`}>
-                </Link> */}
                     {resell.customers?.map(val => (
-                        // <Link to={`/tiers/factories/${val.id}`}>
-                        // </Link>
                         <Text
                             _hover={{ fontWeight: "bold" }}
                             key={val.id}
@@ -81,6 +99,7 @@ const ResellItem: React.FC<Props> = ({ resell }) => {
                 isOpen={isOpen}
                 setIsOpen={setIsOpen}
             />
+
         </>
     )
 }

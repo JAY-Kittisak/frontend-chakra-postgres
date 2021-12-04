@@ -1,0 +1,36 @@
+query SalesRoleById($id: Int!) {
+    salesRoleById(id: $id) {
+        id
+        salesRole
+        targetId
+        channel
+        branch
+        status
+        userId
+        user {
+            id
+            fullNameTH
+            imageUrl
+        }
+        salesActual {
+            id
+            title
+            detail
+            actual
+            branch
+            customerId
+            customer {
+                id
+                customerName
+            }
+            userId
+            user {
+                id
+                fullNameTH
+            }
+            salesRoleId
+            createdAt
+            updatedAt
+        }
+    }
+}

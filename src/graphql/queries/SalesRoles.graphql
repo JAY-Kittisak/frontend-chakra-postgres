@@ -1,0 +1,16 @@
+query SalesRoles {
+    salesRoles {
+        id
+        salesRole
+        targetId
+        channel
+        branch
+        status
+        userId
+        user {
+            id
+            fullNameTH
+            imageUrl
+        }
+    }
+}
