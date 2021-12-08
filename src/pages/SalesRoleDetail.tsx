@@ -89,7 +89,8 @@ const SalesRoleDetail: React.FC<Props> = () => {
                     <Flex justify="space-between">
                         <Flex
                             flexDir="column"
-                            mx="2"
+                                    ml="2"
+                                    mb="5"
                             p="5"
                             rounded="7px"
                             boxShadow="md"

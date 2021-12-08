@@ -74,7 +74,7 @@ const ResellCreate: React.FC<Props> = () => {
                     data?.me?.position === "GM") && (
                         <Button
                             ml="10"
-                            colorScheme="blue"
+                        colorScheme="orange"
                             color="white"
                             onClick={() => {
                                 history.push("/resell/report");

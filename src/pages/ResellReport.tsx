@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 import {
     Flex,
     Table,
@@ -11,104 +11,101 @@ import {
     Input,
     InputLeftElement,
     InputGroup,
-    Button
+    Button,
 } from "@chakra-ui/react";
 import { Search2Icon } from "@chakra-ui/icons";
-import { CSVLink } from "react-csv"
+import { CSVLink } from "react-csv";
 
-import { useIsResellAuth } from '../utils/useIsResellAuth'
-import { useResellsQuery } from '../generated/graphql';
-import ResellItem from '../components/resell/ResellItem';
-import Spinner from '../components/Spinner';
+import { useIsResellAuth } from "../utils/useIsResellAuth";
+import { useResellsQuery } from "../generated/graphql";
+import ResellItem from "../components/resell/ResellItem";
+import Spinner from "../components/Spinner";
+import { formatDate } from "../utils/helpers";
 
 interface Props { }
 
+type ExportItemCSV = {
+    maker: string;
+    title: string;
+    detail: string;
+    category: string;
+    orderCustomerName: string;
+    createdAt: string;
+    customersResell: string;
+}[];
 
 const ResellReport: React.FC<Props> = () => {
-    useIsResellAuth()
+    useIsResellAuth();
 
-    const [searchName, setSearchName] = useState("")
+    const [searchName, setSearchName] = useState("");
 
-    // const [item, setItem] = useState([{
-    //     maker: "",
-    //     title: "",
-    //     detail: "",
-    //     category: "",
-    //     orderCustomerName: "",
-    //     // customersName: "",
-    //     createdAt: "",
-    // }]);
+    const [item, setItem] = useState<ExportItemCSV>([]);
+    const [timeNow, setTimeNow] = useState("");
 
-
-    const [{ data, fetching }] = useResellsQuery()
+    const [{ data, fetching }] = useResellsQuery();
 
     const dataSearch = data?.resells?.filter((val) => {
         if (searchName === "") {
-            return val
+            return val;
         } else if (
             val.orderCustomer.customerName
                 .toLowerCase()
                 .includes(searchName.toLowerCase())
         ) {
-            return val
+            return val;
         }
         return false;
-    })
+    });
 
-    let headers = []
-    // let dataCsv = []
-
-    headers = [
+    const headers = [
         { label: "Maker", key: "maker" },
         { label: "Title", key: "title" },
         { label: "Detail", key: "detail" },
         { label: "Category", key: "category" },
         { label: "OrderCustomer Name", key: "orderCustomerName" },
-        { label: "Created At", key: "createdAt" }
-    ];
-    // headers = [
-    //     { label: "First Name", key: "firstname" },
-    //     { label: "Last Name", key: "lastname" },
-    //     { label: "Email", key: "email" }
-    // ];
-
-    const dataCsv = [
-        { firstname: "Ahmed", lastname: "Tomi", email: "ah@smthing.co.com" },
-        { firstname: "Raed", lastname: "Labes", email: "rl@smthing.co.com" },
-        { firstname: "Yezzi", lastname: "Min l3b", email: "ymin@cocococo.com" }
+        { label: "Created At", key: "createdAt" },
+        { label: "Customers Resell", key: "customersResell" },
     ];
 
-
-
-    const csvReport = {
-        filename: "SalesReport.csv",
-        headers: headers,
-        data: dataCsv
+    const setTimeOnClick = () => {
+        const dateNow = new Date()
+        const hours = dateNow.getHours()
+        const minutes = dateNow.getMinutes()
+        const seconds = dateNow.getSeconds()
+        setTimeNow(`_วันที่_${dateNow.toLocaleDateString()}_เวลา_${hours}_${minutes}_${seconds}`)
     }
+    const csvReport = {
+        filename: `Resell_Report${timeNow}.csv`,
+        headers: headers,
+        data: item,
+    };
+
+    const testPrint = () => {
+        console.log("Did new Print it again?")
+    }
+    testPrint()
 
     useEffect(() => {
-        if (dataSearch) {
-            const response = dataSearch.map(value => value.maker)
-            console.log("response", response)
-            // setItem([
-            //     ...item, {
-            //         maker: value.maker,
-            //         title: value.title,
-            //         detail: value.detail,
-            //         category: value.category,
-            //         orderCustomerName: value.orderCustomer.customerName,
-            //         createdAt: value.createdAt,
-            //     }
-            // ])
+        if (data) {
+            setItem([]);
+            data.resells?.map((value) =>
+                setItem((arr) => [
+                    ...arr,
+                    {
+                        maker: value.maker,
+                        title: value.title,
+                        detail: value.detail,
+                        category: value.category,
+                        orderCustomerName: value.orderCustomer.customerName,
+                        createdAt: formatDate(+value.createdAt),
+                        customersResell: value.customers
+                            ? value.customers.map((val) => val.customerName).toString()
+                            : "",
+                    },
+                ])
+            );
         }
-    }, [
-        dataSearch,
-        // setItem
-    ]);
-
-    console.log("dataSearch", dataSearch?.map(val => val.title))
-    console.log("dataCsv", dataCsv)
-    // console.log("stateOptions", item)
+    }, [data, setItem]);
 
     return (
         <Flex flexDir="column" h="90vh">
@@ -123,7 +120,7 @@ const ResellReport: React.FC<Props> = () => {
                 </Text>
                 <Flex>
                     <CSVLink {...csvReport}>
-                        <Button colorScheme='teal' variant='outline'>
+                        <Button colorScheme="teal" variant="outline" isLoading={fetching} onClick={setTimeOnClick}>
                             Export to CSV
                         </Button>
                     </CSVLink>
@@ -142,7 +139,7 @@ const ResellReport: React.FC<Props> = () => {
                     </InputGroup>
                 </Flex>
             </Flex>
-            {(fetching) ? (
+            {fetching ? (
                 <Center>
                     <Spinner color="grey" height={50} width={50} />
                     <Text
@@ -206,7 +203,7 @@ const ResellReport: React.FC<Props> = () => {
                 </Flex>
             )}
         </Flex>
-    )
-}
+    );
+};
 
-export default ResellReport
+export default ResellReport;

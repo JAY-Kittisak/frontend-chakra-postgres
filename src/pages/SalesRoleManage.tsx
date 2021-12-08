@@ -17,7 +17,6 @@ const SalesRoleManage: React.FC<Props> = () => {
     const history = useHistory()
     const [{ data, fetching }] = useSalesRolesQuery()
 
-
     return (
         <Flex flexDir="column">
             <Text
