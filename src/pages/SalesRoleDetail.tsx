@@ -170,7 +170,7 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                     <Text ml="6" fontWeight="bold" fontSize="xl">ยังไม่มีข้อมูล</Text>
                                 ) : (
                                     <Flex>
-                                        <Text ml="6" fontWeight="bold" fontSize="xl"> ประวัติการกรอก Actual ของทั้งหมด</Text>
+                                                    <Text ml="6" fontWeight="bold" fontSize="xl"> ประวัติการกรอก Issue ของทั้งหมด</Text>
                                         <Text ml="2" fontWeight="bold" fontSize="xl" color="blue.500">{formatAmount(actualSum.reduce(reducer))}</Text>
                                     </Flex>
                                 )}
@@ -183,14 +183,14 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                                 fontSize={["xs", "xs", "sm", "md"]}
                                                 color="white"
                                             >
-                                                วันที่ขาย
+                                                        วันที่ไปพบลูกค้า
                                             </Th>
                                             <Th
                                                 textAlign="center"
                                                 fontSize={["xs", "xs", "sm", "md"]}
                                                 color="white"
                                             >
-                                                user ผู้ขาย
+                                                        user
                                             </Th>
                                             <Th
                                                 textAlign="center"

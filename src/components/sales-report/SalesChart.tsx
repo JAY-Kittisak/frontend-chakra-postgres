@@ -6,7 +6,6 @@ import {
     Cell,
     XAxis,
     YAxis,
-    CartesianGrid,
     Tooltip,
     ResponsiveContainer,
     ComposedChart,
@@ -200,7 +199,6 @@ const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, colorOnMous
                         bottom: 5,
                     }}
                 >
-                    <CartesianGrid strokeDasharray="1 1" />
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />

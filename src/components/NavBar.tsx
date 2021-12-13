@@ -47,6 +47,7 @@ const NavBar: React.FC<Props> = () => {
                     login
                 </Button>
                 <Button
+                    mr="2"
                     size="sm"
                     bg={colorMode === "light" ? "#0AB68B" : "#4F80E2"}
                     color="white"
@@ -81,10 +82,7 @@ const NavBar: React.FC<Props> = () => {
         <Flex
             zIndex={1}
             position="sticky"
-            top={0}
-            bg={colorMode === "light" ? "#333" : "#3E54D3"}
-            p={1}
-            mb={3}
+            bg={colorMode === "light" ? "#333" : "#333"}
         >
             <Menu>
                 <MenuButton

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Search2Icon } from "@chakra-ui/icons";
 import { NavLink } from "react-router-dom";
-import { Text, Avatar, AvatarBadge } from "@chakra-ui/react";
+import { Text, Avatar, AvatarBadge, Flex } from "@chakra-ui/react";
 
 import MenuItem from "./MenuItem";
 import MenuItemFooter from "./MenuItemFooter";
@@ -29,7 +29,6 @@ const menuItems = [
         iconClassName: "bi bi-diagram-3",
         subMenus: [{ name: "Product", to: "/tiers/product-tier/all" }],
     },
-    { name: "คู่มือแผนก AD", to: "/manual-ad/factories", iconClassName: "bi bi-file-earmark-pdf" },
     {
         name: "แจ้งงาน IT",
         to: "/job-it",
@@ -94,6 +93,7 @@ const menuItemsFooter = [
         to: "/todo",
         iconClassName: "bi bi-gear-fill"
     },
+    { name: "คู่มือแผนก AD", to: "/manual-ad/factories", iconClassName: "bi bi-file-earmark-pdf" },
 ];
 
 const SideMenu: React.FC<Props> = ({ onCollapse }) => {
@@ -142,7 +142,7 @@ const SideMenu: React.FC<Props> = ({ onCollapse }) => {
     }, [])
 
     return (
-        // <div className="side-menu inactive">.
+        <Flex>
         <div className={`side-menu ${inactive ? "inactive" : ""}`}>
             <div className="top-section">
                 <NavLink to="/">
@@ -237,6 +237,7 @@ const SideMenu: React.FC<Props> = ({ onCollapse }) => {
                 </div>
             </div>
         </div>
+        </Flex>
     );
 };
 

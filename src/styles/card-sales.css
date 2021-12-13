@@ -5,10 +5,9 @@
 
     height: 225px;
     border-radius: 8px;
-    box-shadow: -1rem 0 2rem rgba(0, 0, 0,0.7);
+    box-shadow: -1rem 0px 12px -5px rgba(0, 0, 0,0.8);
     padding: 5px;
     cursor: pointer;
-
     transition: .2s;
 }
 
@@ -23,12 +22,18 @@
 .card img{
     margin-bottom: 5px;
     width: 150px;
+    height: 150px;
 }
 
 .card h4{
     font-weight: bold;
     color: #fff;
     width: 150px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .card:hover h4{

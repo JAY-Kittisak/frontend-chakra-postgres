@@ -35,7 +35,7 @@ const Profile: React.FC<Props> = () => {
     const { isOpen, setIsOpen } = useDialog();
 
     return (
-        <>
+        <Flex flexDir="column" overflowY="auto" px="5" h="100vh">
             <Text
                 as="i"
                 fontWeight="semibold"
@@ -55,13 +55,12 @@ const Profile: React.FC<Props> = () => {
                   </Text>
               </Flex>
           ) : (
-              <Flex flexDir={["column", "column", "column", "row"]} overflow="hidden">
+                    <Flex flexDir={["column", "column", "column", "row"]} mb="51">
                   {/* ---------------------------------------Column 1--------------------------------------- */}
                   <Flex
                       w={["100%", "100%", "100%", "40%"]}
                       direction={["column", "column", "column", "column"]}
-                      justify="center"
-                      mt="5"
+                            justify="center"
                       p="10"
                       bg="#eee"
                       rounded="10px"
@@ -200,7 +199,6 @@ const Profile: React.FC<Props> = () => {
                             bg="#eee"
                             rounded="10px"
                             boxShadow="md"
-                            mt="5"
                             mx={[null, null, null, "5"]}
                         >
                             <Text
@@ -237,8 +235,7 @@ const Profile: React.FC<Props> = () => {
                       alignItems="center"
                       bg="#eee"
                       rounded="10px"
-                      boxShadow="md"
-                      mt="5"
+                            boxShadow="md"
                   >
                       <Text
                           h="155px"
@@ -256,7 +253,7 @@ const Profile: React.FC<Props> = () => {
                   </Flex>
               </Flex>
           )}
-      </>
+        </Flex>
   );
 };
 

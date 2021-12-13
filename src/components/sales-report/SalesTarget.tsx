@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Flex, Text } from "@chakra-ui/react";
 import { AreaChart, Area, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import CountUp from 'react-countup';
@@ -11,6 +11,7 @@ interface Props {
 }
 
 const SalesTarget: React.FC<Props> = ({ colorBranch, colorBranchPass }) => {
+    const [percentNum, setPercentNum] = useState(0)
     const dataTarget = [
         {
             name: "มกราคม",
@@ -45,7 +46,6 @@ const SalesTarget: React.FC<Props> = ({ colorBranch, colorBranchPass }) => {
     let remaining = 0
     const percent = 90.99
     const percentSplit = percent.toString().split(".")
-    const percentNum = +percentSplit[0]
     remaining = 100 - percentNum
     if (remaining < 0) {
         remaining = 0
@@ -56,6 +56,12 @@ const SalesTarget: React.FC<Props> = ({ colorBranch, colorBranchPass }) => {
     ];
 
     const COLORS = ['#d8d8d8', colorBranch];
+
+    useEffect(() => {
+        if (percentSplit) {
+            setPercentNum(+percentSplit[0])
+        }
+    }, [percentSplit])
 
     return (
         <>
@@ -147,7 +153,7 @@ const SalesTarget: React.FC<Props> = ({ colorBranch, colorBranchPass }) => {
                     </Flex>
                 </Flex>
 
-                <Flex flexDir="column" justify="center" mt="-70px">
+                <Flex flexDir="column" justify="center" align="center" mt="-70px">
                     <PieChart width={360} height={130}>
                         <Pie
                             data={data}

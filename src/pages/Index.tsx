@@ -8,7 +8,7 @@ interface Props { }
 
 const Index: React.FC<Props> = () => {
     return (
-        <>
+        <Flex flexDir="column" overflowY="auto" h="100vh" p="50">
             {/* -------------------------------------- Title --------------------------------------*/}
             <Flex
                 w="100%"
@@ -40,7 +40,7 @@ const Index: React.FC<Props> = () => {
                 </Flex>
                 <Flex w={["100%", "100%", "100%", "100%", "50%"]} justify="center">
                     <Image
-                        boxSize="550px"
+                        boxSize="400px"
                         src={testsvg}
                         alt="Dan Abramov"
                     />
@@ -136,7 +136,7 @@ const Index: React.FC<Props> = () => {
                 </Flex>
 
             </Flex>
-        </>
+        </Flex>
     );
 };
 

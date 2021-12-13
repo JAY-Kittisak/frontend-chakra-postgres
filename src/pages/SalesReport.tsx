@@ -156,9 +156,9 @@ const SalesReport: React.FC<Props> = () => {
     console.log(chooseMonth, chooseYear);
 
     return (
-        <Flex flexDir={["column", "column", "column", "column", "row"]}>
+        <Flex flexDir={["column", "column", "column", "column", "row"]} overflowY="auto" px="5" h="97vh">
             <Flex
-                w={["100%", "100%", "100%", "100%", "100%"]}
+                w="100%"
                 flexDir="column"
                 mr="2"
             >
@@ -207,12 +207,13 @@ const SalesReport: React.FC<Props> = () => {
                         </Text>
                     </Flex>
                 ) : (
-                    <>
-                        <Flex
-                            borderRadius="8px"
-                            overflowY="hidden"
-                            overflowX="auto"
-                            justify="center"
+                        <Flex flexDir="column">
+                            <Flex
+                                borderRadius="8px"
+                                w="100%"
+                                h="250px"
+                                overflowX="auto"
+                                overflowY="hidden"
                             sx={{
                                 "&::-webkit-scrollbar": {
                                     width: "8px",
@@ -222,16 +223,17 @@ const SalesReport: React.FC<Props> = () => {
                                 },
                                 "&::-webkit-scrollbar-thumb": {
                                     width: "1em",
-                                    backgroundColor: `#666`,
+                                    backgroundColor: colorBranchPass,
                                     borderRadius: "24px",
                                 },
                             }}
                             >
                                 {data?.users
-                                    .filter((item) => item.departments === "Marketing")
+                                    // .filter((item) => item.departments === "Marketing")
                                     .map(
                                         (val, i) =>
-                                            val.imageUrl && (
+                                            val.imageUrl &&
+                                            (
                                                 <div
                                                     className={`card ${branch === "ลาดกระบัง" ? "bg-card-lkb" : "bg-card-cdc"
                                                         }`}
@@ -241,6 +243,7 @@ const SalesReport: React.FC<Props> = () => {
                                                     <p>Sales{i}</p>
                                                     <Image
                                                         objectFit="cover"
+                                                        // src="https://bit.ly/sage-adebayo"
                                                         src={val.imageUrl}
                                                         alt={val.username}
                                                         borderRadius="lg"
@@ -255,7 +258,6 @@ const SalesReport: React.FC<Props> = () => {
                                     flexDir="column"
                                     mr="5"
                                     w="80%"
-                                    h="100%"
                                     rounded="7px"
                                     boxShadow="md"
                                 >
@@ -297,6 +299,7 @@ const SalesReport: React.FC<Props> = () => {
                                             </Select>
                                         </Flex>
                                     </Flex>
+
                                     <Flex mt="-2">
                                         <SalesTarget
                                             colorBranch={colorBranch}
@@ -381,7 +384,7 @@ const SalesReport: React.FC<Props> = () => {
                                     </Flex>
                                 </Flex>
                             </Flex>
-                        </>
+                        </Flex>
                 )}
             </Flex>
         </Flex>
