@@ -38,6 +38,8 @@ const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, colorOnMous
     const [onMouseIndex, setOnMouseIndex] = useState<number | undefined>(undefined);
 
     const cuttingOneQuota = 20_000;
+    const cuttingOneQuotaLine2 = 25_000;
+    const cuttingOneQuotaLine3 = 30_000;
     const cuttingOneDate = 20_000;
     const cuttingTwoQuota = 20_000;
     const cuttingTwoDate = 13_000;
@@ -50,85 +52,89 @@ const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, colorOnMous
 
     const dataCh = [
         {
-            name: "Sales1",
+            name: "มกราคม",
             quota: cuttingOneQuota,
+            quotaLine2: cuttingOneQuotaLine2,
+            quotaLine3: cuttingOneQuotaLine3,
             action: cuttingOneDate,
         },
         {
-            name: "Sales2",
+            name: "กุมภาพันธ์",
             quota: cuttingTwoQuota,
+            quotaLine2: cuttingOneQuotaLine2,
+            quotaLine3: cuttingOneQuotaLine3,
             action: cuttingTwoDate,
         },
         {
-            name: "Sales3",
+            name: "มีนาคม",
             quota: areaQuota,
+            quotaLine2: cuttingOneQuotaLine2,
+            quotaLine3: cuttingOneQuotaLine3,
             action: areaDate,
         },
         {
-            name: "Sales4",
+            name: "เมษายน",
             quota: regionQuota,
+            quotaLine2: cuttingOneQuotaLine2,
+            quotaLine3: cuttingOneQuotaLine3,
             action: regionDate,
         },
         {
-            name: "Sales5",
+            name: "พฤษภาคม",
             quota: projectQuota,
+            quotaLine2: cuttingOneQuotaLine2,
+            quotaLine3: cuttingOneQuotaLine3,
             action: 8_000,
         },
         {
-            name: "Sales6",
+            name: "มิถุนายน",
             quota: projectQuota,
+            quotaLine2: cuttingOneQuotaLine2,
+            quotaLine3: cuttingOneQuotaLine3,
             action: 11_000,
         },
         {
-            name: "Sales7",
+            name: "กรกฎาคม",
             quota: projectQuota,
+            quotaLine2: cuttingOneQuotaLine2,
+            quotaLine3: cuttingOneQuotaLine3,
             action: 15_000,
         },
         {
-            name: "Sales8",
+            name: "สิงหาคม",
             quota: projectQuota,
+            quotaLine2: cuttingOneQuotaLine2,
+            quotaLine3: cuttingOneQuotaLine3,
             action: 18_000,
         },
         {
-            name: "Sales1",
+            name: "กันยายน",
             quota: cuttingOneQuota,
+            quotaLine2: cuttingOneQuotaLine2,
+            quotaLine3: cuttingOneQuotaLine3,
             action: cuttingOneDate,
         },
         {
-            name: "Sales2",
+            name: "ตุลาคม",
             quota: cuttingTwoQuota,
+            quotaLine2: cuttingOneQuotaLine2,
+            quotaLine3: cuttingOneQuotaLine3,
             action: cuttingTwoDate,
         },
         {
-            name: "Sales3",
+            name: "พฤศจิกายน",
             quota: areaQuota,
+            quotaLine2: cuttingOneQuotaLine2,
+            quotaLine3: cuttingOneQuotaLine3,
             action: areaDate,
         },
         {
-            name: "Sales4",
-            quota: regionQuota,
-            action: regionDate,
-        },
-        {
-            name: "Sales5",
-            quota: projectQuota,
-            action: 8_000,
-        },
-        {
-            name: "Sales6",
-            quota: projectQuota,
-            action: 11_000,
-        },
-        {
-            name: "Sales7",
-            quota: projectQuota,
-            action: 15_000,
-        },
-        {
-            name: "Sales8",
-            quota: projectQuota,
+            name: "ธันวาคม",
+            quota: areaQuota,
+            quotaLine2: cuttingOneQuotaLine2,
+            quotaLine3: cuttingOneQuotaLine3,
             action: 18_000,
-        },
+        }
     ];
 
     useEffect(() => {
@@ -226,6 +232,8 @@ const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, colorOnMous
                         ))}
                     </Bar>
                     <Line type="monotone" dataKey="quota" stroke="#bd1717" />
+                    <Line type="monotone" dataKey="quotaLine2" stroke="#d8d516" />
+                    <Line type="monotone" dataKey="quotaLine3" stroke="#3ae723" />
                 </ComposedChart>
             </ResponsiveContainer>
         </Box>

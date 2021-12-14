@@ -42,7 +42,7 @@ export type Customer = {
   creatorId: Scalars['Float'];
   creator: User;
   orderResell: Array<Resell>;
-  resellLoaders: Array<Resell>;
+  resellLoaders?: Maybe<Array<Resell>>;
   salesActual: Array<SalesActual>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
@@ -414,6 +414,10 @@ export type Mutation = {
   deleteJoinResell: Resell;
   createSalesRole: SalesRole_Response;
   createSalesActual: SalesActual_Response;
+  deleteSalesActual: Scalars['Boolean'];
+  deleteSalesRole: Scalars['Boolean'];
+  createSalesTarget: SalesTarget_Response;
+  createSalesIssue: SalesIssue_Response;
 };
 
 
@@ -659,6 +663,26 @@ export type MutationCreateSalesActualArgs = {
   input: SalesActual_Input;
 };
 
+
+export type MutationDeleteSalesActualArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeleteSalesRoleArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationCreateSalesTargetArgs = {
+  input: SalesTarget_Input;
+};
+
+
+export type MutationCreateSalesIssueArgs = {
+  input: SalesIssue_Input;
+};
+
 export type ProductByTier = {
   __typename?: 'ProductByTier';
   id: Scalars['Float'];
@@ -736,6 +760,8 @@ export type Query = {
   salesRoles?: Maybe<Array<SalesRole>>;
   salesRoleById: SalesRole;
   salesActuals?: Maybe<Array<SalesActual>>;
+  targetByRoleId?: Maybe<Array<SalesTarget>>;
+  issueByRoleId?: Maybe<Array<SalesIssue>>;
 };
 
 
@@ -848,6 +874,16 @@ export type QuerySalesRoleByIdArgs = {
   id: Scalars['Int'];
 };
 
+
+export type QueryTargetByRoleIdArgs = {
+  salesRoleId: Scalars['Int'];
+};
+
+
+export type QueryIssueByRoleIdArgs = {
+  salesRoleId: Scalars['Int'];
+};
+
 export type QueryJobIt_Input = {
   nameItAction?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
@@ -926,23 +962,60 @@ export type SalesActual_Response = {
   salesActual?: Maybe<Array<SalesActual>>;
 };
 
+export type SalesIssue = {
+  __typename?: 'SalesIssue';
+  id: Scalars['Float'];
+  title: Scalars['String'];
+  detail: Scalars['String'];
+  brand: Scalars['String'];
+  size: Scalars['String'];
+  model: Scalars['String'];
+  value: Scalars['Float'];
+  branch: Scalars['String'];
+  status: Scalars['String'];
+  contact: Scalars['String'];
+  salesRoleId: Scalars['Float'];
+  sale: SalesRole;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type SalesIssue_Input = {
+  title: Scalars['String'];
+  detail: Scalars['String'];
+  brand: Scalars['String'];
+  size: Scalars['String'];
+  model: Scalars['String'];
+  value: Scalars['Float'];
+  branch: Scalars['String'];
+  status: Scalars['String'];
+  contact: Scalars['String'];
+  salesRoleId: Scalars['Float'];
+};
+
+export type SalesIssue_Response = {
+  __typename?: 'SalesIssue_Response';
+  errors?: Maybe<Array<FieldErrorSalesRole>>;
+  salesIssues?: Maybe<Array<SalesIssue>>;
+};
+
 export type SalesRole = {
   __typename?: 'SalesRole';
   id: Scalars['Float'];
   salesRole: Scalars['String'];
-  targetId: Scalars['Float'];
   channel: Scalars['String'];
   branch: Scalars['String'];
   status: Scalars['String'];
   userId: Scalars['Float'];
   user: User;
   salesActual: Array<SalesActual>;
+  targets: Array<SalesTarget>;
+  issues: Array<SalesIssue>;
 };
 
 export type SalesRole_Input = {
   salesRole: Scalars['String'];
   channel: Scalars['String'];
-  targetId: Scalars['Float'];
   branch: Scalars['String'];
   status: Scalars['String'];
   userId: Scalars['Float'];
@@ -951,7 +1024,32 @@ export type SalesRole_Input = {
 export type SalesRole_Response = {
   __typename?: 'SalesRole_Response';
   errors?: Maybe<Array<FieldErrorSalesRole>>;
-  salesRole?: Maybe<Array<SalesRole>>;
+  salesRoles?: Maybe<Array<SalesRole>>;
+};
+
+export type SalesTarget = {
+  __typename?: 'SalesTarget';
+  id: Scalars['Float'];
+  year: Scalars['Float'];
+  value: Scalars['Float'];
+  branch: Scalars['String'];
+  salesRoleId: Scalars['Float'];
+  sale: SalesRole;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type SalesTarget_Input = {
+  year: Scalars['Float'];
+  value: Scalars['Float'];
+  branch: Scalars['String'];
+  salesRoleId: Scalars['Float'];
+};
+
+export type SalesTarget_Response = {
+  __typename?: 'SalesTarget_Response';
+  errors?: Maybe<Array<FieldErrorSalesRole>>;
+  salesTargets?: Maybe<Array<SalesTarget>>;
 };
 
 export type StockIt = {
@@ -2171,8 +2269,14 @@ export type SalesRoleByIdQuery = (
   { __typename?: 'Query' }
   & { salesRoleById: (
     { __typename?: 'SalesRole' }
-    & Pick<SalesRole, 'id' | 'salesRole' | 'targetId' | 'channel' | 'branch' | 'status' | 'userId'>
-    & { user: (
+    & Pick<SalesRole, 'id' | 'salesRole' | 'channel' | 'branch' | 'status' | 'userId'>
+    & { targets: Array<(
+      { __typename?: 'SalesTarget' }
+      & Pick<SalesTarget, 'id' | 'year' | 'value' | 'branch'>
+    )>, issues: Array<(
+      { __typename?: 'SalesIssue' }
+      & Pick<SalesIssue, 'id' | 'title' | 'detail' | 'brand' | 'size' | 'model' | 'value' | 'branch' | 'status' | 'contact' | 'createdAt' | 'updatedAt'>
+    )>, user: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'fullNameTH' | 'imageUrl'>
     ), salesActual: Array<(
@@ -2196,7 +2300,7 @@ export type SalesRolesQuery = (
   { __typename?: 'Query' }
   & { salesRoles?: Maybe<Array<(
     { __typename?: 'SalesRole' }
-    & Pick<SalesRole, 'id' | 'salesRole' | 'targetId' | 'channel' | 'branch' | 'status' | 'userId'>
+    & Pick<SalesRole, 'id' | 'salesRole' | 'channel' | 'branch' | 'status' | 'userId'>
     & { user: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'fullNameTH' | 'imageUrl'>
@@ -3461,11 +3565,30 @@ export const SalesRoleByIdDocument = gql`
   salesRoleById(id: $id) {
     id
     salesRole
-    targetId
     channel
     branch
     status
     userId
+    targets {
+      id
+      year
+      value
+      branch
+    }
+    issues {
+      id
+      title
+      detail
+      brand
+      size
+      model
+      value
+      branch
+      status
+      contact
+      createdAt
+      updatedAt
+    }
     user {
       id
       fullNameTH
@@ -3503,7 +3626,6 @@ export const SalesRolesDocument = gql`
   salesRoles {
     id
     salesRole
-    targetId
     channel
     branch
     status

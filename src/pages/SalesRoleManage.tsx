@@ -133,7 +133,7 @@ const SalesRoleManage: React.FC<Props> = () => {
                                                     <Center>{val.channel}</Center>
                                                 </Td>
                                                 <Td w="10%">
-                                                    <Center>{formatAmount(val.targetId)}</Center>
+                                                    <Center>{formatAmount(val.userId)}</Center>
                                                 </Td>
                                             </Tr>
                                         ))}

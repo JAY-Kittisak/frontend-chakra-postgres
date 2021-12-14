@@ -2,11 +2,30 @@ query SalesRoleById($id: Int!) {
     salesRoleById(id: $id) {
         id
         salesRole
-        targetId
         channel
         branch
         status
         userId
+        targets {
+            id
+            year
+            value
+            branch
+        }
+        issues {
+            id
+            title
+            detail
+            brand
+            size
+            model
+            value
+            branch
+            status
+            contact
+            createdAt
+            updatedAt
+        }
         user {
             id
             fullNameTH
