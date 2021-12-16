@@ -3,7 +3,11 @@ import { FactoryTab, FactoryIndustrialEstate } from "../types";
 export const formatAmount = (amount: number) =>
     amount.toLocaleString("en", { minimumFractionDigits: 0 });
 export const formatDate = (date: number) => new Date(date).toLocaleDateString();
+export const formatGetMonth = (date: number) => new Date(date).getMonth();
+export const formatGetYear = (date: number) => new Date(date).getFullYear();
 export const formatUpperCase = (category: string) => category.toUpperCase();
+export const reducer = (previousValue: number, currentValue: number) =>
+    previousValue + currentValue;
 
 type CatProductV1 = "อะไหล่รถยนต์" | "อาหาร" | "อิเล็กทรอนิกส์" | "*โปรดเลือก";
 
@@ -223,7 +227,7 @@ export type TypeDemoData = {
 
 export type AlertNt = "show" | "hide"
 
-type SelectMonth = "เดือนทั้งหมด" |
+type SelectMonth = "เดือน" |
     "มกราคม" |
     "กุมภาพันธ์" |
     "มีนาคม" |
@@ -238,7 +242,7 @@ type SelectMonth = "เดือนทั้งหมด" |
     "ธันวาคม"
 
 export const selectMonth: SelectMonth[] = [
-    "เดือนทั้งหมด",
+    "เดือน",
     "มกราคม",
     "กุมภาพันธ์",
     "มีนาคม",

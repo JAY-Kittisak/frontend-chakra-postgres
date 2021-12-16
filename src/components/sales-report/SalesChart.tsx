@@ -53,86 +53,86 @@ const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, colorOnMous
     const dataCh = [
         {
             name: "มกราคม",
-            quota: cuttingOneQuota,
-            quotaLine2: cuttingOneQuotaLine2,
-            quotaLine3: cuttingOneQuotaLine3,
+            safety_line: cuttingOneQuota,
+            Target_กลยุทธ์: cuttingOneQuotaLine2,
+            Target_KPI: cuttingOneQuotaLine3,
             action: cuttingOneDate,
         },
         {
             name: "กุมภาพันธ์",
-            quota: cuttingTwoQuota,
-            quotaLine2: cuttingOneQuotaLine2,
-            quotaLine3: cuttingOneQuotaLine3,
+            safety_line: cuttingTwoQuota,
+            Target_กลยุทธ์: cuttingOneQuotaLine2,
+            Target_KPI: cuttingOneQuotaLine3,
             action: cuttingTwoDate,
         },
         {
             name: "มีนาคม",
-            quota: areaQuota,
-            quotaLine2: cuttingOneQuotaLine2,
-            quotaLine3: cuttingOneQuotaLine3,
+            safety_line: areaQuota,
+            Target_กลยุทธ์: cuttingOneQuotaLine2,
+            Target_KPI: cuttingOneQuotaLine3,
             action: areaDate,
         },
         {
             name: "เมษายน",
-            quota: regionQuota,
-            quotaLine2: cuttingOneQuotaLine2,
-            quotaLine3: cuttingOneQuotaLine3,
+            safety_line: regionQuota,
+            Target_กลยุทธ์: cuttingOneQuotaLine2,
+            Target_KPI: cuttingOneQuotaLine3,
             action: regionDate,
         },
         {
             name: "พฤษภาคม",
-            quota: projectQuota,
-            quotaLine2: cuttingOneQuotaLine2,
-            quotaLine3: cuttingOneQuotaLine3,
+            safety_line: projectQuota,
+            Target_กลยุทธ์: cuttingOneQuotaLine2,
+            Target_KPI: cuttingOneQuotaLine3,
             action: 8_000,
         },
         {
             name: "มิถุนายน",
-            quota: projectQuota,
-            quotaLine2: cuttingOneQuotaLine2,
-            quotaLine3: cuttingOneQuotaLine3,
+            safety_line: projectQuota,
+            Target_กลยุทธ์: cuttingOneQuotaLine2,
+            Target_KPI: cuttingOneQuotaLine3,
             action: 11_000,
         },
         {
             name: "กรกฎาคม",
-            quota: projectQuota,
-            quotaLine2: cuttingOneQuotaLine2,
-            quotaLine3: cuttingOneQuotaLine3,
+            safety_line: projectQuota,
+            Target_กลยุทธ์: cuttingOneQuotaLine2,
+            Target_KPI: cuttingOneQuotaLine3,
             action: 15_000,
         },
         {
             name: "สิงหาคม",
-            quota: projectQuota,
-            quotaLine2: cuttingOneQuotaLine2,
-            quotaLine3: cuttingOneQuotaLine3,
+            safety_line: projectQuota,
+            Target_กลยุทธ์: cuttingOneQuotaLine2,
+            Target_KPI: cuttingOneQuotaLine3,
             action: 18_000,
         },
         {
             name: "กันยายน",
-            quota: cuttingOneQuota,
-            quotaLine2: cuttingOneQuotaLine2,
-            quotaLine3: cuttingOneQuotaLine3,
+            safety_line: cuttingOneQuota,
+            Target_กลยุทธ์: cuttingOneQuotaLine2,
+            Target_KPI: cuttingOneQuotaLine3,
             action: cuttingOneDate,
         },
         {
             name: "ตุลาคม",
-            quota: cuttingTwoQuota,
-            quotaLine2: cuttingOneQuotaLine2,
-            quotaLine3: cuttingOneQuotaLine3,
+            safety_line: cuttingTwoQuota,
+            Target_กลยุทธ์: cuttingOneQuotaLine2,
+            Target_KPI: cuttingOneQuotaLine3,
             action: cuttingTwoDate,
         },
         {
             name: "พฤศจิกายน",
-            quota: areaQuota,
-            quotaLine2: cuttingOneQuotaLine2,
-            quotaLine3: cuttingOneQuotaLine3,
+            safety_line: areaQuota,
+            Target_กลยุทธ์: cuttingOneQuotaLine2,
+            Target_KPI: cuttingOneQuotaLine3,
             action: areaDate,
         },
         {
             name: "ธันวาคม",
-            quota: areaQuota,
-            quotaLine2: cuttingOneQuotaLine2,
-            quotaLine3: cuttingOneQuotaLine3,
+            safety_line: areaQuota,
+            Target_กลยุทธ์: cuttingOneQuotaLine2,
+            Target_KPI: cuttingOneQuotaLine3,
             action: 18_000,
         }
     ];
@@ -191,7 +191,7 @@ const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, colorOnMous
             align="center"
         >
             <Text fontSize="2xl" fontWeight="semibold">
-                ทีม {team}
+                {team}
             </Text>
             <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart
@@ -202,7 +202,7 @@ const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, colorOnMous
                         top: 5,
                         right: 0,
                         left: 0,
-                        bottom: 5,
+                        bottom: 0,
                     }}
                 >
                     <XAxis dataKey="name" />
@@ -231,9 +231,9 @@ const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, colorOnMous
                             />
                         ))}
                     </Bar>
-                    <Line type="monotone" dataKey="quota" stroke="#bd1717" />
-                    <Line type="monotone" dataKey="quotaLine2" stroke="#d8d516" />
-                    <Line type="monotone" dataKey="quotaLine3" stroke="#3ae723" />
+                    <Line type="monotone" dataKey="safety_line" stroke="#bd1717" />
+                    <Line type="monotone" dataKey="Target_กลยุทธ์" stroke="#d8d516" />
+                    <Line type="monotone" dataKey="Target_KPI" stroke="#3ae723" />
                 </ComposedChart>
             </ResponsiveContainer>
         </Box>

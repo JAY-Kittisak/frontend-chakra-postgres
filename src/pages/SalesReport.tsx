@@ -16,11 +16,11 @@ import {
     AlertNt,
     selectMonth,
 } from "../utils/helpers";
-import { useMeQuery, useUsersQuery } from "../generated/graphql";
+import { useMeQuery, useSalesRolesQuery, useUsersQuery } from "../generated/graphql";
 import Spinner from "../components/Spinner";
 import SalesTarget from "../components/sales-report/SalesTarget";
 import MainChart from "../components/sales-report/MainChart";
-import SalesChart from "../components/sales-report/SalesChart";
+// import SalesChart from "../components/sales-report/SalesChart";
 import { useIsAuth } from "../utils/uselsAuth";
 import AlertNotification from "../components/dialogs/AlertNotification";
 
@@ -98,15 +98,18 @@ const SalesReport: React.FC<Props> = () => {
     useIsAuth();
 
     const [branch, setBranch] = useState<CatUserRole>("ลาดกระบัง");
-    const [team, setTeam] = useState("");
+    const [
+        // team
+        ,
+        setTeam] = useState("");
 
     const [colorBranch, setColorBranch] = useState("#64c9e2");
     const [colorBranchPass, setColorBranchPass] = useState("#1379ec");
-    const [colorOnMouse, setColorOnMouse] = useState("#0a7988");
+    // const [colorOnMouse, setColorOnMouse] = useState("#0a7988");
 
     const [alertWarning, setAlertWarning] = useState<AlertNt>("hide");
 
-    const [chooseMonth, setChooseMonth] = useState("เดือนทั้งหมด");
+    const [chooseMonth, setChooseMonth] = useState("เดือน");
     const [chooseYear, setChooseYear] = useState("2022");
     const [targetYear, setTargetYear] = useState<TgDemo>(targetDemoLkb[0]);
 
@@ -114,15 +117,17 @@ const SalesReport: React.FC<Props> = () => {
 
     const [{ data: me }] = useMeQuery();
 
+    const [{ data: salesRole }] = useSalesRolesQuery()
+
     const history = useHistory();
 
-    const userHandle = (salesId: number) => {
+    const userHandle = (roleId: number, userId: number) => {
         if (me?.me?.position.includes("หัวหน้างาน")) {
-            return history.push(`/sales-report/role-manage/${salesId}`);
+            return history.push(`/sales-report/role-manage/${roleId}`);
         } else if (me?.me?.position.includes("GM")) {
-            return history.push(`/sales-report/role-manage/${salesId}`);
-        } else if (me?.me?.id === salesId) {
-            return history.push(`/sales-report/role-manage/${salesId}`);
+            return history.push(`/sales-report/role-manage/${roleId}`);
+        } else if (me?.me?.id === userId) {
+            return history.push(`/sales-report/role-manage/${roleId}`);
         } else {
             return setAlertWarning("show");
         }
@@ -140,11 +145,11 @@ const SalesReport: React.FC<Props> = () => {
         if (branch === "ชลบุรี") {
             setColorBranch("#7be4ca");
             setColorBranchPass("#0AB68B");
-            setColorOnMouse("#0d4e3e");
+            // setColorOnMouse("#0d4e3e");
         } else {
             setColorBranch("#64c9e2");
             setColorBranchPass("#1379ec");
-            setColorOnMouse("#0a7988");
+            // setColorOnMouse("#0a7988");
         }
 
         if (chooseYear) {
@@ -228,27 +233,25 @@ const SalesReport: React.FC<Props> = () => {
                                 },
                             }}
                             >
-                                {data?.users
-                                    // .filter((item) => item.departments === "Marketing")
-                                    .map(
-                                        (val, i) =>
-                                            val.imageUrl &&
+                                {salesRole?.salesRoles && salesRole.salesRoles.map(
+                                    (val) =>
+                                        val.user.imageUrl &&
                                             (
                                                 <div
                                                     className={`card ${branch === "ลาดกระบัง" ? "bg-card-lkb" : "bg-card-cdc"
                                                         }`}
                                                     key={val.id}
-                                                    onClick={() => userHandle(val.id)}
+                                                onClick={() => userHandle(val.id, val.userId)}
                                                 >
-                                                    <p>Sales{i}</p>
+                                                <p>{val.salesRole}</p>
                                                     <Image
                                                         objectFit="cover"
                                                         // src="https://bit.ly/sage-adebayo"
-                                                        src={val.imageUrl}
-                                                        alt={val.username}
+                                                    src={val.user.imageUrl}
+                                                    alt={val.user.fullNameTH ? val.user.fullNameTH : "User ไม่ได้ทำการใส่ข้อมูล"}
                                                         borderRadius="lg"
                                                     />
-                                                    <h4>{val.fullNameTH}</h4>
+                                                <h4>{val.user.fullNameTH}</h4>
                                                 </div>
                                             )
                                     )}
@@ -313,12 +316,12 @@ const SalesReport: React.FC<Props> = () => {
                                             chooseMonth={chooseMonth}
                                         />
                                     </Flex>
-                                    <SalesChart
+                                    {/* <SalesChart
                                         colorBranch={colorBranch}
                                         colorBranchPass={colorBranchPass}
                                         colorOnMouse={colorOnMouse}
                                         team={team}
-                                    />
+                                    /> */}
                                 </Flex>
 
                                 <Flex flexDir="column" w="20%" rounded="7px" boxShadow="md">
