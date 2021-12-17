@@ -134,10 +134,10 @@ const MainChart: React.FC<Props> = ({ colorBranch, colorBranchPass, chooseMonth,
             setColorIndexProject(undefined);
         }
 
-        if (chooseMonth !== "เดือนทั้งหมด") {
+        if (chooseMonth !== "เดือน") {
             const response = targetYear.c1 / 12
             setDivideMonth(response)
-        } else if (chooseMonth === "เดือนทั้งหมด") {
+        } else if (chooseMonth === "เดือน") {
             setDivideMonth(targetYear.c1)
         }
     }, [

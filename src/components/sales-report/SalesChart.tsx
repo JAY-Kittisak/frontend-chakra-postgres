@@ -11,174 +11,234 @@ import {
     ComposedChart,
 } from "recharts";
 
+type MonthValue = {
+    มกราคม: number;
+    กุมภาพันธ์: number;
+    มีนาคม: number;
+    เมษายน: number;
+    พฤษภาคม: number;
+    มิถุนายน: number;
+    กรกฎาคม: number;
+    สิงหาคม: number;
+    กันยายน: number;
+    ตุลาคม: number;
+    พฤศจิกายน: number;
+    ธันวาคม: number;
+}
+
 interface Props {
     colorBranch: string;
     colorBranchPass: string;
     colorOnMouse: string;
     team: string
+    monthValue: MonthValue
 }
 
-const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, colorOnMouse, team }) => {
-    const [colorIndexCuttingOne, setColorIndexCuttingOne] = useState<
+const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, colorOnMouse, team, monthValue }) => {
+    const [colorIndexZero, setColorIndexZero] = useState<
         number | undefined
     >(undefined);
-    const [colorIndexCuttingTwo, setColorIndexCuttingTwo] = useState<
+    const [colorIndexOne, setColorIndexOne] = useState<
         number | undefined
     >(undefined);
-    const [colorIndexArea, setColorIndexArea] = useState<
+    const [colorIndexTwo, setColorIndexTwo] = useState<
         number | undefined
     >(undefined);
-    const [colorIndexRegion, setColorIndexRegion] = useState<
+    const [colorIndexThree, setColorIndexThree] = useState<
         number | undefined
     >(undefined);
-    const [colorIndexProject, setColorIndexProject] = useState<
+    const [colorIndexFour, setColorIndexFour] = useState<
+        number | undefined
+    >(undefined);
+    const [colorIndexFive, setColorIndexFive] = useState<
+        number | undefined
+    >(undefined);
+    const [colorIndexSix, setColorIndexSix] = useState<
+        number | undefined
+    >(undefined);
+    const [colorIndexSeven, setColorIndexSeven] = useState<
+        number | undefined
+    >(undefined);
+    const [colorIndexEight, setColorIndexEight] = useState<
+        number | undefined
+    >(undefined);
+    const [colorIndexNine, setColorIndexNine] = useState<
+        number | undefined
+    >(undefined);
+    const [colorIndexTen, setColorIndexTen] = useState<
+        number | undefined
+    >(undefined);
+    const [colorIndexEleven, setColorIndexEleven] = useState<
         number | undefined
     >(undefined);
 
     const [onMouseIndex, setOnMouseIndex] = useState<number | undefined>(undefined);
 
-    const cuttingOneQuota = 20_000;
-    const cuttingOneQuotaLine2 = 25_000;
-    const cuttingOneQuotaLine3 = 30_000;
-    const cuttingOneDate = 20_000;
-    const cuttingTwoQuota = 20_000;
-    const cuttingTwoDate = 13_000;
-    const areaQuota = 20_000;
-    const areaDate = 25_000;
-    const regionQuota = 20_000;
-    const regionDate = 15_000;
-    const projectQuota = 20_000;
-    const projectDate = 10_000;
+    const targetKpi = 5500;
+    const strategyLine = 6000;
+    const safetyLine = 6500;
 
     const dataCh = [
         {
             name: "มกราคม",
-            safety_line: cuttingOneQuota,
-            Target_กลยุทธ์: cuttingOneQuotaLine2,
-            Target_KPI: cuttingOneQuotaLine3,
-            action: cuttingOneDate,
+            safety_line: safetyLine,
+            Target_กลยุทธ์: strategyLine,
+            Target_KPI: targetKpi,
+            action: monthValue.มกราคม,
         },
         {
             name: "กุมภาพันธ์",
-            safety_line: cuttingTwoQuota,
-            Target_กลยุทธ์: cuttingOneQuotaLine2,
-            Target_KPI: cuttingOneQuotaLine3,
-            action: cuttingTwoDate,
+            safety_line: safetyLine,
+            Target_กลยุทธ์: strategyLine,
+            Target_KPI: targetKpi,
+            action: monthValue.กุมภาพันธ์,
         },
         {
             name: "มีนาคม",
-            safety_line: areaQuota,
-            Target_กลยุทธ์: cuttingOneQuotaLine2,
-            Target_KPI: cuttingOneQuotaLine3,
-            action: areaDate,
+            safety_line: safetyLine,
+            Target_กลยุทธ์: strategyLine,
+            Target_KPI: targetKpi,
+            action: monthValue.มีนาคม,
         },
         {
             name: "เมษายน",
-            safety_line: regionQuota,
-            Target_กลยุทธ์: cuttingOneQuotaLine2,
-            Target_KPI: cuttingOneQuotaLine3,
-            action: regionDate,
+            safety_line: safetyLine,
+            Target_กลยุทธ์: strategyLine,
+            Target_KPI: targetKpi,
+            action: monthValue.เมษายน,
         },
         {
             name: "พฤษภาคม",
-            safety_line: projectQuota,
-            Target_กลยุทธ์: cuttingOneQuotaLine2,
-            Target_KPI: cuttingOneQuotaLine3,
-            action: 8_000,
+            safety_line: safetyLine,
+            Target_กลยุทธ์: strategyLine,
+            Target_KPI: targetKpi,
+            action: monthValue.พฤษภาคม,
         },
         {
             name: "มิถุนายน",
-            safety_line: projectQuota,
-            Target_กลยุทธ์: cuttingOneQuotaLine2,
-            Target_KPI: cuttingOneQuotaLine3,
-            action: 11_000,
+            safety_line: safetyLine,
+            Target_กลยุทธ์: strategyLine,
+            Target_KPI: targetKpi,
+            action: monthValue.มิถุนายน,
         },
         {
             name: "กรกฎาคม",
-            safety_line: projectQuota,
-            Target_กลยุทธ์: cuttingOneQuotaLine2,
-            Target_KPI: cuttingOneQuotaLine3,
-            action: 15_000,
+            safety_line: safetyLine,
+            Target_กลยุทธ์: strategyLine,
+            Target_KPI: targetKpi,
+            action: monthValue.กรกฎาคม,
         },
         {
             name: "สิงหาคม",
-            safety_line: projectQuota,
-            Target_กลยุทธ์: cuttingOneQuotaLine2,
-            Target_KPI: cuttingOneQuotaLine3,
-            action: 18_000,
+            safety_line: safetyLine,
+            Target_กลยุทธ์: strategyLine,
+            Target_KPI: targetKpi,
+            action: monthValue.สิงหาคม,
         },
         {
             name: "กันยายน",
-            safety_line: cuttingOneQuota,
-            Target_กลยุทธ์: cuttingOneQuotaLine2,
-            Target_KPI: cuttingOneQuotaLine3,
-            action: cuttingOneDate,
+            safety_line: safetyLine,
+            Target_กลยุทธ์: strategyLine,
+            Target_KPI: targetKpi,
+            action: monthValue.กันยายน,
         },
         {
             name: "ตุลาคม",
-            safety_line: cuttingTwoQuota,
-            Target_กลยุทธ์: cuttingOneQuotaLine2,
-            Target_KPI: cuttingOneQuotaLine3,
-            action: cuttingTwoDate,
+            safety_line: safetyLine,
+            Target_กลยุทธ์: strategyLine,
+            Target_KPI: targetKpi,
+            action: monthValue.ตุลาคม,
         },
         {
             name: "พฤศจิกายน",
-            safety_line: areaQuota,
-            Target_กลยุทธ์: cuttingOneQuotaLine2,
-            Target_KPI: cuttingOneQuotaLine3,
-            action: areaDate,
+            safety_line: safetyLine,
+            Target_กลยุทธ์: strategyLine,
+            Target_KPI: targetKpi,
+            action: monthValue.พฤศจิกายน,
         },
         {
             name: "ธันวาคม",
-            safety_line: areaQuota,
-            Target_กลยุทธ์: cuttingOneQuotaLine2,
-            Target_KPI: cuttingOneQuotaLine3,
-            action: 18_000,
+            safety_line: safetyLine,
+            Target_กลยุทธ์: strategyLine,
+            Target_KPI: targetKpi,
+            action: monthValue.ธันวาคม,
         }
     ];
 
     useEffect(() => {
-        if (cuttingOneDate >= cuttingOneQuota) {
-            setColorIndexCuttingOne(0);
+        if (monthValue.มกราคม >= targetKpi) {
+            setColorIndexZero(0);
         } else {
-            setColorIndexCuttingOne(undefined);
+            setColorIndexZero(undefined);
         }
 
-        if (cuttingTwoDate >= cuttingTwoQuota) {
-            setColorIndexCuttingTwo(1);
+        if (monthValue.กุมภาพันธ์ >= targetKpi) {
+            setColorIndexOne(1);
         } else {
-            setColorIndexCuttingTwo(undefined);
+            setColorIndexOne(undefined);
         }
 
-        if (areaDate >= areaQuota) {
-            setColorIndexArea(2);
+        if (monthValue.มีนาคม >= targetKpi) {
+            setColorIndexTwo(2);
         } else {
-            setColorIndexArea(undefined);
+            setColorIndexTwo(undefined);
         }
 
-        if (regionDate >= regionQuota) {
-            setColorIndexRegion(3);
+        if (monthValue.เมษายน >= targetKpi) {
+            setColorIndexThree(3);
         } else {
-            setColorIndexRegion(undefined);
+            setColorIndexThree(undefined);
         }
 
-        if (projectDate >= projectQuota) {
-            setColorIndexProject(4);
+        if (monthValue.พฤษภาคม >= targetKpi) {
+            setColorIndexFour(4);
         } else {
-            setColorIndexProject(undefined);
+            setColorIndexFour(undefined);
         }
-    }, [
-        cuttingOneQuota,
-        cuttingOneDate,
-        cuttingTwoQuota,
-        cuttingTwoDate,
-        areaQuota,
-        areaDate,
-        regionQuota,
-        regionDate,
-        projectQuota,
-        projectDate,
-    ]);
+
+        if (monthValue.มิถุนายน >= targetKpi) {
+            setColorIndexFive(5);
+        } else {
+            setColorIndexFive(undefined);
+        }
+
+        if (monthValue.กรกฎาคม >= targetKpi) {
+            setColorIndexSix(6);
+        } else {
+            setColorIndexSix(undefined);
+        }
+
+        if (monthValue.สิงหาคม >= targetKpi) {
+            setColorIndexSeven(7);
+        } else {
+            setColorIndexSeven(undefined);
+        }
+
+        if (monthValue.กันยายน >= targetKpi) {
+            setColorIndexEight(8);
+        } else {
+            setColorIndexEight(undefined);
+        }
+
+        if (monthValue.ตุลาคม >= targetKpi) {
+            setColorIndexNine(9);
+        } else {
+            setColorIndexNine(undefined);
+        }
+
+        if (monthValue.พฤศจิกายน >= targetKpi) {
+            setColorIndexTen(10);
+        } else {
+            setColorIndexTen(undefined);
+        }
+
+        if (monthValue.ธันวาคม >= targetKpi) {
+            setColorIndexEleven(11);
+        } else {
+            setColorIndexEleven(undefined);
+        }
+
+    }, [targetKpi, monthValue]);
 
     const onMouseOver = (_: any, index: number) => setOnMouseIndex(index)
 
@@ -215,25 +275,39 @@ const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, colorOnMous
                                 fill={
                                     index === onMouseIndex
                                         ? colorOnMouse
-                                        : index === colorIndexCuttingTwo
-                                        ? colorBranchPass
-                                        : index === colorIndexCuttingOne
+                                        : index === colorIndexZero
                                             ? colorBranchPass
-                                            : index === colorIndexArea
-                                                ? colorBranchPass
-                                                : index === colorIndexRegion
+                                            : index === colorIndexOne
+                                            ? colorBranchPass
+                                                : index === colorIndexTwo
                                                     ? colorBranchPass
-                                                    : index === colorIndexProject
-                                                        ? colorBranchPass
-                                                        : colorBranch
+                                                    : index === colorIndexThree
+                                                    ? colorBranchPass
+                                                        : index === colorIndexFour
+                                                            ? colorBranchPass
+                                                            : index === colorIndexFive
+                                                                ? colorBranchPass
+                                                                : index === colorIndexSix
+                                                                    ? colorBranchPass
+                                                                    : index === colorIndexSeven
+                                                                        ? colorBranchPass
+                                                                        : index === colorIndexEight
+                                                                            ? colorBranchPass
+                                                                            : index === colorIndexNine
+                                                                                ? colorBranchPass
+                                                                                : index === colorIndexTen
+                                                                                    ? colorBranchPass
+                                                                                    : index === colorIndexEleven
+                                                                                        ? colorBranchPass
+                                                                                        : colorBranch
                                 }
                                 key={`cell-${index}`}
                             />
                         ))}
                     </Bar>
-                    <Line type="monotone" dataKey="safety_line" stroke="#bd1717" />
+                    <Line type="monotone" dataKey="Target_KPI" stroke="#bd1717" />
                     <Line type="monotone" dataKey="Target_กลยุทธ์" stroke="#d8d516" />
-                    <Line type="monotone" dataKey="Target_KPI" stroke="#3ae723" />
+                    <Line type="monotone" dataKey="safety_line" stroke="#3ae723" />
                 </ComposedChart>
             </ResponsiveContainer>
         </Box>

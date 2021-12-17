@@ -1,7 +1,23 @@
 import React, { useEffect, useState } from "react";
 import {
-    Flex, Text, Divider, Image, Table, Tbody, Th, Thead, Tr,
-    Td, Center, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Select
+    Flex,
+    Text,
+    Divider,
+    Image,
+    Table,
+    Tbody,
+    Th,
+    Thead,
+    Tr,
+    Td,
+    Center,
+    Button,
+    Tabs,
+    TabList,
+    TabPanels,
+    Tab,
+    TabPanel,
+    Select,
 } from "@chakra-ui/react";
 import { useParams, useHistory } from "react-router-dom";
 import { AddIcon } from "@chakra-ui/icons";
@@ -16,7 +32,8 @@ import {
     formatGetMonth,
     formatGetYear,
     selectMonth,
-    reducer
+    reducer,
+    demoData
 } from "../utils/helpers";
 import AlertNotification from "../components/dialogs/AlertNotification";
 
@@ -26,23 +43,29 @@ interface Props { }
 
 const SalesRoleDetail: React.FC<Props> = () => {
     useIsAuth();
-
-    const today = new Date().getFullYear().toString()
+    const today = new Date().getFullYear().toString();
 
     const [alertWarning, setAlertWarning] = useState<AlertNt>("hide");
 
-    const [item, setItem] = useState(0)
+    const [monthValue, setMonthValue] = useState({
+        มกราคม: 0,
+        กุมภาพันธ์: 0,
+        มีนาคม: 0,
+        เมษายน: 0,
+        พฤษภาคม: 0,
+        มิถุนายน: 0,
+        กรกฎาคม: 0,
+        สิงหาคม: 0,
+        กันยายน: 0,
+        ตุลาคม: 0,
+        พฤศจิกายน: 0,
+        ธันวาคม: 0,
+    })
+
+    const [item, setItem] = useState(0);
 
     const [chooseMonth, setChooseMonth] = useState("เดือน");
     const [chooseYear, setChooseYear] = useState(today);
-
-    const [monthlyValue, setMonthlyValue] = useState([{
-        เดือน: "",
-        safety_line: 5000,
-        target_กลยุทธ์: 4500,
-        target_KPI: 4000,
-        value: 0,
-    }])
 
     const history = useHistory();
     const params = useParams<{ id: string }>();
@@ -76,56 +99,174 @@ const SalesRoleDetail: React.FC<Props> = () => {
     };
     //----------------------------------------------------- FILTER -------------------------------------------------------------------
     useEffect(() => {
-        setItem(0)
-        const issueFilterYear = data?.salesRoleById.issues.filter(
-            (y) => formatGetYear(+y.createdAt) === (+chooseYear)
+        setItem(0);
+
+        let januaryResult = 0
+        let februaryResult = 0
+        let marchResult = 0
+        let aprilResult = 0
+        let mayResult = 0
+        let juneResult = 0
+        let julyResult = 0
+        let augustResult = 0
+        let septemberResult = 0
+        let octoberResult = 0
+        let novemberResult = 0
+        let decemberResult = 0
+
+        // const issueFilterYear = data?.salesRoleById.issues.filter(
+        const issueFilterYear = demoData?.filter(
+            (y) => formatGetYear(+y.createdAt) === +chooseYear
         );
+        console.log("issueFilterYear", issueFilterYear)
         const issueFilterMonth = issueFilterYear?.filter(
-            (m) => (selectMonth[formatGetMonth(+m.createdAt) + 1]) === chooseMonth
+            (m) => selectMonth[formatGetMonth(+m.createdAt) + 1] === chooseMonth
         );
-        // const actualSum = data?.salesRoleById.salesActual.map((val) => val.actual);
-
+    // const actualSum = data?.salesRoleById.salesActual.map((val) => val.actual);
         const issueFilterSum = issueFilterMonth?.map((val) => val.value);
-        if (chooseMonth === "เดือน") {
-            setMonthlyValue([])
-            const queryValue = issueFilterYear?.map(val => val.value)
-            let result = 0
-            if ((queryValue?.length !== 0) && queryValue) {
-                result = queryValue.reduce(reducer)
+
+        if (issueFilterYear && chooseMonth === "เดือน") {
+            const queryValue = issueFilterYear.map((val) => val.value);
+            let result = 0;
+            if (queryValue.length !== 0) {
+                result = queryValue.reduce(reducer);
             }
-            setItem(result)
+            setItem(result);
 
-            // const groupBy = (key: number,arr:[]) => arr
-            //     .reduce(
-            //         (cache, product) => {
-            //             const property = product[key]
-            //             if (property in cache) {
-            //                 return {...cache, [property]: cache[property].concat(product)
-            //                 }
-            //             }
-            //             return {...cache, [property]: [product]}
-            //         },
-            //         {}
-            //     )
+            const januaryFilter = issueFilterYear
+                .filter(
+                    (m) => selectMonth[formatGetMonth(+m.createdAt) + 1] === "มกราคม"
+                )
+                .map((val) => val.value);
+            if (januaryFilter.length !== 0) {
+                januaryResult = januaryFilter.reduce(reducer);
+            }
 
-            issueFilterYear?.forEach(m => setMonthlyValue((arr) => [...arr, {
-                เดือน: selectMonth[formatGetMonth(+m.createdAt) + 1],
-                safety_line: 5000,
-                target_กลยุทธ์: 4500,
-                target_KPI: 4000,
-                value: 0,
-            }])
+            const februaryFilter = issueFilterYear
+                .filter(
+                    (m) => selectMonth[formatGetMonth(+m.createdAt) + 1] === "กุมภาพันธ์"
+                )
+                .map((val) => val.value);
+            if (februaryFilter.length !== 0) {
+                februaryResult = februaryFilter.reduce(reducer);
+            }
+
+            const marchFilter = issueFilterYear
+                .filter(
+                    (m) => selectMonth[formatGetMonth(+m.createdAt) + 1] === "มีนาคม"
+                )
+                .map((val) => val.value);
+            if (marchFilter.length !== 0) {
+                marchResult = marchFilter.reduce(reducer);
+            }
+
+            const aprilFilter = issueFilterYear
+                .filter(
+                    (m) => selectMonth[formatGetMonth(+m.createdAt) + 1] === "เมษายน"
+                )
+                .map((val) => val.value);
+            if (aprilFilter.length !== 0) {
+                aprilResult = aprilFilter.reduce(reducer);
+            }
+
+            const mayFilter = issueFilterYear
+                .filter(
+                    (m) => selectMonth[formatGetMonth(+m.createdAt) + 1] === "พฤษภาคม"
+                )
+                .map((val) => val.value);
+            if (mayFilter.length !== 0) {
+                mayResult = mayFilter.reduce(reducer);
+            }
+
+            const juneFilter = issueFilterYear
+                .filter(
+                    (m) => selectMonth[formatGetMonth(+m.createdAt) + 1] === "มิถุนายน"
+                )
+                .map((val) => val.value);
+            if (juneFilter.length !== 0) {
+                juneResult = juneFilter.reduce(reducer);
+            }
+
+            const julyFilter = issueFilterYear
+                .filter(
+                    (m) => selectMonth[formatGetMonth(+m.createdAt) + 1] === "กรกฎาคม"
+                )
+                .map((val) => val.value);
+            if (julyFilter.length !== 0) {
+                julyResult = julyFilter.reduce(reducer);
+            }
+
+            const augustFilter = issueFilterYear
+                .filter(
+                    (m) => selectMonth[formatGetMonth(+m.createdAt) + 1] === "สิงหาคม"
+                )
+                .map((val) => val.value);
+            if (augustFilter.length !== 0) {
+                augustResult = augustFilter.reduce(reducer);
+            }
+
+            const septemberFilter = issueFilterYear
+                .filter(
+                    (m) => selectMonth[formatGetMonth(+m.createdAt) + 1] === "กันยายน"
+                )
+                .map((val) => val.value);
+            if (septemberFilter.length !== 0) {
+                septemberResult = septemberFilter.reduce(reducer);
+            }
+
+            const octoberFilter = issueFilterYear
+                .filter(
+                    (m) => selectMonth[formatGetMonth(+m.createdAt) + 1] === "ตุลาคม"
+                )
+                .map((val) => val.value);
+            if (octoberFilter.length !== 0) {
+                octoberResult = octoberFilter.reduce(reducer);
+            }
+
+            const novemberFilter = issueFilterYear
+                .filter(
+                    (m) => selectMonth[formatGetMonth(+m.createdAt) + 1] === "พฤศจิกายน"
+                )
+                .map((val) => val.value);
+            if (novemberFilter.length !== 0) {
+                novemberResult = novemberFilter.reduce(reducer);
+            }
+
+            const decemberFilter = issueFilterYear
+                .filter(
+                    (m) => selectMonth[formatGetMonth(+m.createdAt) + 1] === "ธันวาคม"
             )
-        } else if ((chooseMonth !== "เดือน") && (issueFilterSum?.length !== 0)) {
-            const result = issueFilterSum?.reduce(reducer)
+                .map((val) => val.value);
+            if (decemberFilter.length !== 0) {
+                decemberResult = decemberFilter.reduce(reducer);
+            }
+
+            setMonthValue({
+                มกราคม: januaryResult,
+                กุมภาพันธ์: februaryResult,
+                มีนาคม: marchResult,
+                เมษายน: aprilResult,
+                พฤษภาคม: mayResult,
+                มิถุนายน: juneResult,
+                กรกฎาคม: julyResult,
+                สิงหาคม: augustResult,
+                กันยายน: septemberResult,
+                ตุลาคม: octoberResult,
+                พฤศจิกายน: novemberResult,
+                ธันวาคม: decemberResult,
+            });
+
+        } else if (chooseMonth !== "เดือน" && issueFilterSum?.length !== 0) {
+            const result = issueFilterSum?.reduce(reducer);
             if (result) {
-                setItem(result)
+                setItem(result);
             }
         } else {
-            setItem(0)
+            setItem(0);
         }
     }, [data, chooseMonth, chooseYear]);
-    console.log("monthlyValue", monthlyValue)
+
+    console.log("monthValue", monthValue)
 
     return (
         <Flex flexDir="column" p="5" pb="10" overflow="auto" h="95vh">
@@ -159,7 +300,9 @@ const SalesRoleDetail: React.FC<Props> = () => {
                         onChange={(e) => onChangeYear(e)}
                     >
                         {data?.salesRoleById.targets.map((val) => (
-                            <option key={val.id} value={val.year}>{val.year}</option>
+                            <option key={val.id} value={val.year}>
+                                {val.year}
+                            </option>
                         ))}
                     </Select>
                 </Flex>
@@ -204,6 +347,7 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                         colorBranchPass="#1379ec"
                                         colorOnMouse="#0a7988"
                                         team={chooseYear}
+                                        monthValue={monthValue}
                                     />
                                 </Flex>
                                 <Flex align="center">
@@ -217,9 +361,9 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                                 size="sm"
                                                 colorScheme="blue"
                                                 leftIcon={<AddIcon />}
-                                            // onClick={() => {
-                                            //     setIsOpen(true);
-                                            // }}
+                                                // onClick={() => {
+                                                //     lineNotifyToDevGroup();
+                                                // }}
                                             >
                                                 เพิ่ม
                                             </Button>
