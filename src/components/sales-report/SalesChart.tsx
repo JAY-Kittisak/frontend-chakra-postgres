@@ -250,7 +250,7 @@ const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, colorOnMous
             h={["250px", "250px", "250px", "250px", "250px", "330px"]}
             align="center"
         >
-            <Text fontSize="2xl" fontWeight="semibold">
+            <Text fontSize="2xl" fontWeight="semibold" mb="-5">
                 {team}
             </Text>
             <ResponsiveContainer width="100%" height="100%">

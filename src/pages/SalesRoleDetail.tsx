@@ -33,16 +33,19 @@ import {
     formatGetYear,
     selectMonth,
     reducer,
-    demoData
+    demoData,
 } from "../utils/helpers";
 import AlertNotification from "../components/dialogs/AlertNotification";
 
 import SalesChart from "../components/sales-report/SalesChart";
+import SalesPercent from "../components/sales-report/SalesPercent";
+import IssueChart from "../components/sales-report/IssueChart";
 
 interface Props { }
 
 const SalesRoleDetail: React.FC<Props> = () => {
     useIsAuth();
+
     const today = new Date().getFullYear().toString();
 
     const [alertWarning, setAlertWarning] = useState<AlertNt>("hide");
@@ -60,7 +63,7 @@ const SalesRoleDetail: React.FC<Props> = () => {
         ตุลาคม: 0,
         พฤศจิกายน: 0,
         ธันวาคม: 0,
-    })
+    });
 
     const [item, setItem] = useState(0);
 
@@ -101,24 +104,24 @@ const SalesRoleDetail: React.FC<Props> = () => {
     useEffect(() => {
         setItem(0);
 
-        let januaryResult = 0
-        let februaryResult = 0
-        let marchResult = 0
-        let aprilResult = 0
-        let mayResult = 0
-        let juneResult = 0
-        let julyResult = 0
-        let augustResult = 0
-        let septemberResult = 0
-        let octoberResult = 0
-        let novemberResult = 0
-        let decemberResult = 0
+        let januaryResult = 0;
+        let februaryResult = 0;
+        let marchResult = 0;
+        let aprilResult = 0;
+        let mayResult = 0;
+        let juneResult = 0;
+        let julyResult = 0;
+        let augustResult = 0;
+        let septemberResult = 0;
+        let octoberResult = 0;
+        let novemberResult = 0;
+        let decemberResult = 0;
 
         // const issueFilterYear = data?.salesRoleById.issues.filter(
         const issueFilterYear = demoData?.filter(
             (y) => formatGetYear(+y.createdAt) === +chooseYear
         );
-        console.log("issueFilterYear", issueFilterYear)
+        console.log("issueFilterYear", issueFilterYear);
         const issueFilterMonth = issueFilterYear?.filter(
             (m) => selectMonth[formatGetMonth(+m.createdAt) + 1] === chooseMonth
         );
@@ -255,7 +258,6 @@ const SalesRoleDetail: React.FC<Props> = () => {
                 พฤศจิกายน: novemberResult,
                 ธันวาคม: decemberResult,
             });
-
         } else if (chooseMonth !== "เดือน" && issueFilterSum?.length !== 0) {
             const result = issueFilterSum?.reduce(reducer);
             if (result) {
@@ -266,10 +268,10 @@ const SalesRoleDetail: React.FC<Props> = () => {
         }
     }, [data, chooseMonth, chooseYear]);
 
-    console.log("monthValue", monthValue)
+    console.log("monthValue", monthValue);
 
     return (
-        <Flex flexDir="column" p="5" pb="10" overflow="auto" h="95vh">
+        <Flex flexDir="column" p="5" pb="10" overflow="auto" h="96vh">
             <Flex justify="space-between">
                 <Text
                     as="i"
@@ -307,12 +309,15 @@ const SalesRoleDetail: React.FC<Props> = () => {
                     </Select>
                 </Flex>
             </Flex>
+
             <Divider mt={1} mb={2} orientation="horizontal" />
+
             <AlertNotification
                 alertWarning={alertWarning}
                 setAlertWarning={setAlertWarning}
                 label="คุณไม่สามารถเข้าถึงข้อมูลนี้ได้!"
             />
+
             {fetching ? (
                 <Flex justify="center">
                     <Spinner color="grey" height={50} width={50} />
@@ -340,103 +345,164 @@ const SalesRoleDetail: React.FC<Props> = () => {
                 </Flex>
             ) : (
                 <>
-                            <Flex justify="space-between" align="center" h="320px" w="100%">
-                                <Flex flexDir="column" w={["100%", "100%", "40%", "40%", "70%"]}>
-                                    <SalesChart
-                                        colorBranch="#64c9e2"
-                                        colorBranchPass="#1379ec"
-                                        colorOnMouse="#0a7988"
-                                        team={chooseYear}
-                                        monthValue={monthValue}
-                                    />
+                            <Flex justify="center" align="center" h="320px" w="100%">
+                                <Flex
+                                    mr="1"
+                                    h="230px"
+                                    w="230px"
+                                    cursor="pointer"
+                                    rounded="7px"
+                                    boxShadow="md"
+                                    _hover={{ fontWeight: "bold" }}
+                                    onClick={() => userHandle(data?.salesRoleById.user.id)}
+                                >
+                                    {data?.salesRoleById.user.imageUrl && (
+                                        <Image
+                                            borderRadius="lg"
+                                            boxSize="230"
+                                            src={data.salesRoleById.user.imageUrl}
+                                            alt="Dan Abramov"
+                                        />
+                                    )}
                                 </Flex>
-                                <Flex align="center">
-                                    <Flex flexDir="column" p="5" h="100%">
-                                        <Flex justify="space-between" mb="1" px="2">
-                                            <Text fontWeight="bold" fontSize="xl">
-                                                Target
-                                            </Text>
-                                            <Button
-                                                ml="5"
-                                                size="sm"
-                                                colorScheme="blue"
-                                                leftIcon={<AddIcon />}
-                                                // onClick={() => {
-                                                //     lineNotifyToDevGroup();
-                                                // }}
-                                            >
-                                                เพิ่ม
-                                            </Button>
-                                        </Flex>
 
-                                        <Table
-                                            boxShadow="base"
-                                            variant="striped"
-                                            colorScheme="blackAlpha"
+                                <Flex
+                                    flexDir="column"
+                                    fontSize="md"
+                                    h="230px"
+                                    w="280px"
+                                    p="5"
+                                    mr="1"
+                                    rounded="7px"
+                                    boxShadow="md"
+                                    background="#1379ec"
+                                    color="white"
+                                >
+                                    <Flex justify="space-between">
+                                        <Text fontWeight="semibold">Company</Text>
+                                        <Text>JSRI</Text>
+                                    </Flex>
+                                    <Flex justify="space-between">
+                                        <Text fontWeight="semibold">Name</Text>
+                                        <Text>{data.salesRoleById.user.fullNameTH}</Text>
+                                    </Flex>
+                                    <Flex justify="space-between">
+                                        <Text fontWeight="semibold">Code</Text>
+                                        <Text>Demo</Text>
+                                    </Flex>
+                                    <Flex justify="space-between">
+                                        <Text fontWeight="semibold">Team</Text>
+                                        <Text>Demo</Text>
+                                    </Flex>
+                                    <Flex justify="space-between">
+                                        <Text fontWeight="semibold">Area</Text>
+                                        <Text>Demo</Text>
+                                    </Flex>
+                                    <Flex justify="space-between">
+                                        <Text fontWeight="semibold">Area Code</Text>
+                                        <Text>Demo</Text>
+                                    </Flex>
+                                    <Flex justify="space-between">
+                                        <Text fontWeight="semibold">Date Start</Text>
+                                        <Text>1/01/2022</Text>
+                                    </Flex>
+                                    <Flex justify="space-between">
+                                        <Text fontWeight="semibold">อายุงาน</Text>
+                                        <Text>0 ปี 0 เดือน 0 วัน</Text>
+                                    </Flex>
+                                </Flex>
+
+                                <SalesPercent />
+
+                                <Flex flexDir="column" p="3" h="100%">
+                                    <Flex justify="space-between" mb="1" px="2">
+                                        <Text fontWeight="bold" fontSize="xl">
+                                            Target
+                                        </Text>
+                                        <Button
+                                            ml="5"
+                                            size="sm"
+                                            colorScheme="blue"
+                                            leftIcon={<AddIcon />}
+                                        // onClick={() => {
+                                        //     lineNotifyToDevGroup();
+                                        // }}
                                         >
-                                            <Thead>
-                                                <Tr bg="#1379ec">
-                                                    <Th
-                                                        textAlign="center"
-                                                        fontSize={["xs", "xs", "sm", "md"]}
-                                                        color="white"
-                                                    >
-                                                        Year
-                                                    </Th>
-                                                    <Th
-                                                        textAlign="center"
-                                                        fontSize={["xs", "xs", "sm", "md"]}
-                                                        color="white"
-                                                    >
-                                                        Value
-                                                    </Th>
-                                                </Tr>
-                                            </Thead>
-                                            <Tbody>
-                                                {data.salesRoleById.targets.map((val) => (
-                                                    <Tr key={val.id}>
-                                                        <Td>
-                                                            <Center>{val.year}</Center>
-                                                        </Td>
-                                                        <Td>
-                                                            <Center>{formatAmount(val.value)}</Center>
-                                                        </Td>
-                                                    </Tr>
-                                                ))}
-                                            </Tbody>
-                                        </Table>
+                                            เพิ่ม
+                                        </Button>
                                     </Flex>
-                                    <Flex
-                                        flexDir="column"
-                                        p="2"
-                                        mr="5"
-                                        h="300px"
-                                        w="220px"
-                                        cursor="pointer"
-                                        borderRadius="xl"
-                                        background="#1379ec"
-                                        color="white"
-                                        align="center"
-                                        _hover={{ fontWeight: "bold" }}
-                                        onClick={() => userHandle(data?.salesRoleById.user.id)}
+
+                                    <Table
+                                        boxShadow="base"
+                                        variant="striped"
+                                        colorScheme="blackAlpha"
                                     >
-                                        <Text fontSize="xl" mb="3" fontWeight="bold">
-                                            SALE REPORT
-                                        </Text>
-                                        {data?.salesRoleById.user.imageUrl && (
-                                            <Image
-                                                borderRadius="xl"
-                                                boxSize="200px"
-                                                src={data.salesRoleById.user.imageUrl}
-                                                alt="Dan Abramov"
-                                            />
-                                        )}
-                                        <Text fontSize="xl" mt="3">
-                                            {data?.salesRoleById.user.fullNameTH}
-                                        </Text>
-                                    </Flex>
+                                        <Thead>
+                                            <Tr bg="#1379ec">
+                                                <Th
+                                                    textAlign="center"
+                                                    fontSize={["xs", "xs", "sm", "md"]}
+                                                    color="white"
+                                                >
+                                                    Year
+                                                </Th>
+                                                <Th
+                                                    textAlign="center"
+                                                    fontSize={["xs", "xs", "sm", "md"]}
+                                                    color="white"
+                                                >
+                                                    Safety Line
+                                                </Th>
+                                                <Th
+                                                    textAlign="center"
+                                                    fontSize={["xs", "xs", "sm", "md"]}
+                                                    color="white"
+                                                >
+                                                    KPI
+                                                </Th>
+                                            </Tr>
+                                        </Thead>
+                                        <Tbody>
+                                            {data.salesRoleById.targets.map((val) => (
+                                                <Tr key={val.id}>
+                                                    <Td>
+                                                        <Center>{val.year}</Center>
+                                                    </Td>
+                                                    <Td>
+                                                        <Center>{formatAmount(val.value)}</Center>
+                                                    </Td>
+                                                    <Td>
+                                                        <Center>Demo</Center>
+                                                    </Td>
+                                                </Tr>
+                                            ))}
+                                        </Tbody>
+                                    </Table>
                                 </Flex>
                             </Flex>
+
+                            <Flex flexDir="column" w="100%" rounded="7px" boxShadow="md">
+                                <SalesChart
+                                    colorBranch="#64c9e2"
+                                    colorBranchPass="#1379ec"
+                                    colorOnMouse="#0a7988"
+                                    team={chooseYear}
+                                    monthValue={monthValue}
+                                />
+                            </Flex>
+
+                            <Flex mt="2" justify="space-between">
+                                <Flex flexDir="column" w="33%" rounded="7px" boxShadow="md">
+                                    <IssueChart label="สรุป Issue รายเดือน" monthValue={monthValue} />
+                                </Flex>
+                                <Flex flexDir="column" w="33%" rounded="7px" boxShadow="md">
+                                    <IssueChart label="สรุป WIP รายเดือน" monthValue={monthValue} />
+                                </Flex>
+                                <Flex flexDir="column" w="33%" rounded="7px" boxShadow="md">
+                                    <IssueChart label="สรุป Visit รายเดือน" monthValue={monthValue} />
+                                </Flex>
+                            </Flex>
+
                             <Flex p="3" rounded="7px" boxShadow="md">
                                 <Tabs align="end" variant="enclosed" w="100%">
                                     <TabList>

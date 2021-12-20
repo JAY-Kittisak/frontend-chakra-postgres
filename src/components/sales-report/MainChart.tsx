@@ -26,7 +26,7 @@ type TgDemo = {
 interface Props {
     colorBranch: string;
     colorBranchPass: string;
-    chooseMonth: string
+    chooseMonth: string;
     setTeam: React.Dispatch<React.SetStateAction<string>>
     targetYear: TgDemo
 }
