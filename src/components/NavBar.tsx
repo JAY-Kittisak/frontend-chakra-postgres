@@ -64,6 +64,7 @@ const NavBar: React.FC<Props> = () => {
                 <Button
                     onClick={() => {
                         logout()
+                    window.location.reload()
                     }}
                     isLoading={logoutFetching}
                 variant='link'

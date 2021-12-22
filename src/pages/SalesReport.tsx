@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {
-    Flex,
-    Image,
-    Text,
-    Button,
-    Divider,
-    SimpleGrid,
-    Select,
-} from "@chakra-ui/react";
+import { Flex, Image, Text, Button, Divider, Select } from "@chakra-ui/react";
+import { EditIcon, SettingsIcon } from "@chakra-ui/icons";
 import { useHistory } from "react-router-dom";
 
 import {
@@ -16,11 +9,11 @@ import {
     AlertNt,
     selectMonth,
 } from "../utils/helpers";
-import { useMeQuery, useSalesRolesQuery, useUsersQuery } from "../generated/graphql";
+import { useMeQuery, useSalesRolesQuery } from "../generated/graphql";
 import Spinner from "../components/Spinner";
 import SalesTarget from "../components/sales-report/SalesTarget";
 import MainChart from "../components/sales-report/MainChart";
-// import SalesChart from "../components/sales-report/SalesChart";
+import SalesChart from "../components/sales-report/SalesChart";
 import { useIsAuth } from "../utils/uselsAuth";
 import AlertNotification from "../components/dialogs/AlertNotification";
 
@@ -98,14 +91,12 @@ const SalesReport: React.FC<Props> = () => {
     useIsAuth();
 
     const [branch, setBranch] = useState<CatUserRole>("ลาดกระบัง");
-    const [
-        // team
-        ,
-        setTeam] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [team, setTeam] = useState("All");
 
     const [colorBranch, setColorBranch] = useState("#64c9e2");
     const [colorBranchPass, setColorBranchPass] = useState("#1379ec");
-    // const [colorOnMouse, setColorOnMouse] = useState("#0a7988");
+    const [colorOnMouse, setColorOnMouse] = useState("#0a7988");
 
     const [alertWarning, setAlertWarning] = useState<AlertNt>("hide");
 
@@ -113,11 +104,24 @@ const SalesReport: React.FC<Props> = () => {
     const [chooseYear, setChooseYear] = useState("2022");
     const [targetYear, setTargetYear] = useState<TgDemo>(targetDemoLkb[0]);
 
-    const [{ data, fetching }] = useUsersQuery();
+    const [monthValue, setMonthValue] = useState({
+        มกราคม: 0,
+        กุมภาพันธ์: 0,
+        มีนาคม: 0,
+        เมษายน: 0,
+        พฤษภาคม: 0,
+        มิถุนายน: 0,
+        กรกฎาคม: 0,
+        สิงหาคม: 0,
+        กันยายน: 0,
+        ตุลาคม: 0,
+        พฤศจิกายน: 0,
+        ธันวาคม: 0,
+    });
 
     const [{ data: me }] = useMeQuery();
 
-    const [{ data: salesRole }] = useSalesRolesQuery()
+    const [{ data: salesRole, fetching }] = useSalesRolesQuery();
 
     const history = useHistory();
 
@@ -142,31 +146,56 @@ const SalesReport: React.FC<Props> = () => {
     };
 
     useEffect(() => {
+        setLoading(true);
         if (branch === "ชลบุรี") {
             setColorBranch("#7be4ca");
             setColorBranchPass("#0AB68B");
-            // setColorOnMouse("#0d4e3e");
+            setColorOnMouse("#0d4e3e");
+
+            setTimeout(() => {
+                setLoading(false);
+            }, 500);
         } else {
             setColorBranch("#64c9e2");
             setColorBranchPass("#1379ec");
-            // setColorOnMouse("#0a7988");
+            setColorOnMouse("#0a7988");
+
+            setTimeout(() => {
+                setLoading(false);
+            }, 500);
         }
 
         if (chooseYear) {
             const response = targetDemoLkb.filter((val) => val.year === +chooseYear);
             setTargetYear(response[0]);
         }
+
+        setMonthValue({
+            มกราคม: 5000,
+            กุมภาพันธ์: 3000,
+            มีนาคม: 5000,
+            เมษายน: 4000,
+            พฤษภาคม: 4440,
+            มิถุนายน: 6000,
+            กรกฎาคม: 2500,
+            สิงหาคม: 1000,
+            กันยายน: 8000,
+            ตุลาคม: 4000,
+            พฤศจิกายน: 6000,
+            ธันวาคม: 5000,
+        });
     }, [branch, chooseYear]);
 
     console.log(chooseMonth, chooseYear);
 
     return (
-        <Flex flexDir={["column", "column", "column", "column", "row"]} overflowY="auto" px="5" h="97vh">
-            <Flex
-                w="100%"
-                flexDir="column"
-                mr="2"
-            >
+        <Flex
+            flexDir={["column", "column", "column", "column", "row"]}
+            overflowY="auto"
+            px="5"
+            h="97vh"
+        >
+            <Flex w="100%" flexDir="column" mr="2">
                 <Flex justify="space-between">
                     <Text
                         as="i"
@@ -198,7 +227,7 @@ const SalesReport: React.FC<Props> = () => {
                     setAlertWarning={setAlertWarning}
                     label="คุณไม่สามารถเข้าถึงข้อมูลนี้ได้!"
                 />
-                {fetching ? (
+                {(fetching || loading) ? (
                     <Flex h="225px" justify="center" align="center">
                         <Spinner color="grey" height={50} width={50} />
                         <Text
@@ -219,43 +248,55 @@ const SalesReport: React.FC<Props> = () => {
                                 h="250px"
                                 overflowX="auto"
                                 overflowY="hidden"
-                            sx={{
-                                "&::-webkit-scrollbar": {
-                                    width: "8px",
-                                },
-                                "&::-webkit-scrollbar-track": {
-                                    width: "8px",
-                                },
-                                "&::-webkit-scrollbar-thumb": {
-                                    width: "1em",
-                                    backgroundColor: colorBranchPass,
-                                    borderRadius: "24px",
-                                },
-                            }}
+                                sx={{
+                                    "&::-webkit-scrollbar": {
+                                        width: "8px",
+                                    },
+                                    "&::-webkit-scrollbar-track": {
+                                        width: "8px",
+                                    },
+                                    "&::-webkit-scrollbar-thumb": {
+                                        width: "1em",
+                                        backgroundColor: colorBranchPass,
+                                        borderRadius: "24px",
+                                    },
+                                }}
                             >
-                                {salesRole?.salesRoles && salesRole.salesRoles.map(
-                                    (val) =>
-                                        val.user.imageUrl &&
-                                            (
-                                                <div
-                                                    className={`card ${branch === "ลาดกระบัง" ? "bg-card-lkb" : "bg-card-cdc"
-                                                        }`}
-                                                    key={val.id}
-                                                onClick={() => userHandle(val.id, val.userId)}
-                                                >
-                                                <p>{val.salesRole}</p>
-                                                    <Image
-                                                        objectFit="cover"
-                                                        // src="https://bit.ly/sage-adebayo"
-                                                    src={val.user.imageUrl}
-                                                    alt={val.user.fullNameTH ? val.user.fullNameTH : "User ไม่ได้ทำการใส่ข้อมูล"}
-                                                        borderRadius="lg"
-                                                    />
-                                                <h4>{val.user.fullNameTH}</h4>
-                                                </div>
-                                            )
-                                    )}
+                                {salesRole?.salesRoles &&
+                                    salesRole.salesRoles
+                                        .filter((val) => val.branch === branch)
+                                        .filter((val) =>
+                                            team === "All" ? val : val.channel === team
+                                        )
+                                        .map(
+                                            (val) =>
+                                                val.user.imageUrl && (
+                                                    <div
+                                                        className={`card ${branch === "ลาดกระบัง"
+                                                            ? "bg-card-lkb"
+                                                            : "bg-card-cdc"
+                                                            }`}
+                                                        key={val.id}
+                                                        onClick={() => userHandle(val.id, val.userId)}
+                                                    >
+                                                        <p>{val.salesRole}</p>
+                                                        <Image
+                                                            objectFit="cover"
+                                                            // src="https://bit.ly/sage-adebayo"
+                                                            src={val.user.imageUrl}
+                                                            alt={
+                                                                val.user.fullNameTH
+                                                                    ? val.user.fullNameTH
+                                                                    : "User ไม่ได้ทำการใส่ข้อมูล"
+                                                            }
+                                                            borderRadius="lg"
+                                                        />
+                                                        <h4>{val.user.fullNameTH}</h4>
+                                                    </div>
+                                                )
+                                        )}
                             </Flex>
+
                             <Flex mt="3">
                                 <Flex
                                     flexDir="column"
@@ -309,60 +350,25 @@ const SalesReport: React.FC<Props> = () => {
                                             colorBranchPass={colorBranchPass}
                                         />
                                         <MainChart
+                                            setTeam={setTeam}
                                             colorBranch={colorBranch}
                                             colorBranchPass={colorBranchPass}
-                                            setTeam={setTeam}
                                             targetYear={targetYear}
                                             chooseMonth={chooseMonth}
                                         />
                                     </Flex>
-                                    {/* <SalesChart
+                                    <SalesChart
                                         colorBranch={colorBranch}
                                         colorBranchPass={colorBranchPass}
                                         colorOnMouse={colorOnMouse}
                                         team={team}
-                                    /> */}
+                                        monthValue={monthValue}
+                                        setMonthIndex={() => undefined}
+                                    />
                                 </Flex>
 
                                 <Flex flexDir="column" w="20%" rounded="7px" boxShadow="md">
-                                    <Text
-                                        ml="3"
-                                        fontWeight="semibold"
-                                        fontSize={["md", "md", "xl", "3xl"]}
-                                        color="gray.600"
-                                    >
-                                        Boss
-                                    </Text>
-                                    <Flex>
-                                        {data?.users
-                                            .filter(
-                                                (item) =>
-                                                    item.position === "หัวหน้างาน" || item.position === "GM"
-                                            )
-                                            .map(
-                                                (val) =>
-                                                    val.imageUrl && (
-                                                        <SimpleGrid
-                                                            w="100%"
-                                                            key={val.id}
-                                                            column={3}
-                                                            spacing="8px"
-                                                            align="center"
-                                                        >
-                                                            <Image
-                                                                ml="3"
-                                                                boxSize="70px"
-                                                                objectFit="cover"
-                                                                src={val.imageUrl}
-                                                                alt={val.username}
-                                                                borderRadius="lg"
-                                                            />
-                                                            <Text fontSize="xs">{val.fullNameTH}</Text>
-                                                        </SimpleGrid>
-                                                    )
-                                            )}
-                                    </Flex>
-                                    <Flex flexDir="column">
+                                    <Flex flexDir="column" p="2">
                                         <Text
                                             ml="3"
                                             fontWeight="semibold"
@@ -371,19 +377,56 @@ const SalesReport: React.FC<Props> = () => {
                                         >
                                             Menu
                                         </Text>
-                                        <div
-                                            className="card-btn-sales"
+
+                                        <Button
+                                            mt="3"
+                                            leftIcon={<EditIcon />}
+                                            colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}
+                                            variant='outline'
                                             onClick={() => history.push("/sales-report/actual-create")}
                                         >
-                                            <div className="card-btn__img"></div>
-                                        </div>
-                                        <div
-                                            className="card-btn-sales"
+                                            บันทึก Issue
+                                        </Button>
+                                        <Button
+                                            mt="3"
+                                            disabled={true}
+                                            leftIcon={<EditIcon />}
+                                            variant='outline'
+                                            colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}
+                                        >
+                                            บันทึก Actual
+                                        </Button>
+
+                                        <Text
+                                            ml="3"
+                                            disabled={false}
+                                            fontWeight="semibold"
+                                            fontSize={["md", "md", "xl", "3xl"]}
+                                            color="gray.600"
+                                        >
+                                            Setting
+                                        </Text>
+
+                                        <Button
+                                            mt="3"
+                                            disabled={false}
+                                            leftIcon={<SettingsIcon />}
+                                            variant='outline'
+                                            colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}
                                             onClick={() => history.push("/sales-report/role-manage")}
                                         >
+                                            Sales Role
+                                        </Button>
 
-                                            <div className="card-btn__img"></div>
-                                        </div>
+                                        <Button
+                                            mt="3"
+                                            disabled={true}
+                                            leftIcon={<SettingsIcon />}
+                                            variant='outline'
+                                            colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}
+                                        >
+                                            Sales Target
+                                        </Button>
                                     </Flex>
                                 </Flex>
                             </Flex>

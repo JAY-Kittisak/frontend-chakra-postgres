@@ -28,8 +28,6 @@ const CreateGiveOrderCdc: React.FC<Props> = ({ Open, setOpen, giveId, amount }) 
 
     const [, createGiveOrder] = useCreateGiveOrderCdcMutation()
 
-    console.log("amount", amount)
-
     return (
         <AlertDialog
             isOpen={Open}

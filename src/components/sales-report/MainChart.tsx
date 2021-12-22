@@ -27,12 +27,12 @@ interface Props {
     colorBranch: string;
     colorBranchPass: string;
     chooseMonth: string;
-    setTeam: React.Dispatch<React.SetStateAction<string>>
     targetYear: TgDemo
+    setTeam: React.Dispatch<React.SetStateAction<string>>
 }
 
 const MainChart: React.FC<Props> = ({ colorBranch, colorBranchPass, chooseMonth, setTeam, targetYear }) => {
-    const [activeIndex, setActiveIndex] = useState(0);
+    const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
     const [colorIndexCuttingOne, setColorIndexCuttingOne] = useState<
         number | undefined
@@ -90,17 +90,23 @@ const MainChart: React.FC<Props> = ({ colorBranch, colorBranchPass, chooseMonth,
             action: projectDate,
         },
     ];
-    const Channel = dataCh[activeIndex].name
+    const Channel = dataCh[activeIndex ? activeIndex : 0].name
 
     const handleClick = useCallback(
         (_, index: number) => {
-            setActiveIndex(index);
+            if (index === activeIndex) {
+                setActiveIndex(null);
+            } else {
+                setActiveIndex(index);
+            }
         },
-        [setActiveIndex]
+        [setActiveIndex, activeIndex]
     );
 
     useEffect(() => {
-        if (activeIndex >= 0) {
+        if (activeIndex === null) {
+            setTeam("All")
+        } else if (activeIndex >= 0) {
             setTeam(Channel)
         }
 

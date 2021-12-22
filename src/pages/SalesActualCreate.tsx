@@ -36,7 +36,7 @@ const SalesActualCreate: React.FC<Props> = () => {
     const history = useHistory();
 
     return (
-        <Flex flexDir="column">
+        <Flex flexDir="column" px="5">
             <Flex justify="space-between">
                 <Text
                     as="i"

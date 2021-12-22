@@ -65,10 +65,26 @@ const SalesRoleDetail: React.FC<Props> = () => {
         ธันวาคม: 0,
     });
 
+    const [monthVisit, setMonthVisit] = useState({
+        มกราคม: 0,
+        กุมภาพันธ์: 0,
+        มีนาคม: 0,
+        เมษายน: 0,
+        พฤษภาคม: 0,
+        มิถุนายน: 0,
+        กรกฎาคม: 0,
+        สิงหาคม: 0,
+        กันยายน: 0,
+        ตุลาคม: 0,
+        พฤศจิกายน: 0,
+        ธันวาคม: 0,
+    });
+
     const [item, setItem] = useState(0);
 
     const [chooseMonth, setChooseMonth] = useState("เดือน");
     const [chooseYear, setChooseYear] = useState(today);
+    const [monthIndex, setMonthIndex] = useState(0);
 
     const history = useHistory();
     const params = useParams<{ id: string }>();
@@ -76,10 +92,16 @@ const SalesRoleDetail: React.FC<Props> = () => {
     const [{ data, fetching }] = useSalesRoleByIdQuery({
         variables: {
             id: +params.id,
+            monthIndex
         },
     });
 
     const [{ data: me }] = useMeQuery();
+
+    const branch = data?.salesRoleById.branch
+    const colorBranch = branch === "ลาดกระบัง" ? "#64c9e2" : "#7be4ca"
+    const colorBranchPass = branch === "ลาดกระบัง" ? "#1379ec" : "#0AB68B"
+    const colorOnMouse = branch === "ลาดกระบัง" ? "#0a7988" : "#0d4e3e"
 
     const userHandle = (userId: number) => {
         if (me?.me?.position.includes("หัวหน้างาน")) {
@@ -258,6 +280,20 @@ const SalesRoleDetail: React.FC<Props> = () => {
                 พฤศจิกายน: novemberResult,
                 ธันวาคม: decemberResult,
             });
+            setMonthVisit({
+                มกราคม: januaryFilter.length,
+                กุมภาพันธ์: februaryFilter.length,
+                มีนาคม: marchFilter.length,
+                เมษายน: aprilFilter.length,
+                พฤษภาคม: mayFilter.length,
+                มิถุนายน: juneFilter.length,
+                กรกฎาคม: julyFilter.length,
+                สิงหาคม: augustFilter.length,
+                กันยายน: septemberFilter.length,
+                ตุลาคม: octoberFilter.length,
+                พฤศจิกายน: novemberFilter.length,
+                ธันวาคม: decemberFilter.length,
+            });
         } else if (chooseMonth !== "เดือน" && issueFilterSum?.length !== 0) {
             const result = issueFilterSum?.reduce(reducer);
             if (result) {
@@ -350,11 +386,8 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                     mr="1"
                                     h="230px"
                                     w="230px"
-                                    cursor="pointer"
                                     rounded="7px"
                                     boxShadow="md"
-                                    _hover={{ fontWeight: "bold" }}
-                                    onClick={() => userHandle(data?.salesRoleById.user.id)}
                                 >
                                     {data?.salesRoleById.user.imageUrl && (
                                         <Image
@@ -375,8 +408,11 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                     mr="1"
                                     rounded="7px"
                                     boxShadow="md"
-                                    background="#1379ec"
+                                    background={colorBranchPass}
                                     color="white"
+                                    cursor="pointer"
+                                    _hover={{ fontWeight: "bold" }}
+                                    onClick={() => userHandle(data?.salesRoleById.user.id)}
                                 >
                                     <Flex justify="space-between">
                                         <Text fontWeight="semibold">Company</Text>
@@ -412,7 +448,7 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                     </Flex>
                                 </Flex>
 
-                                <SalesPercent />
+                                <SalesPercent colorBranch={colorBranch} />
 
                                 <Flex flexDir="column" p="3" h="100%">
                                     <Flex justify="space-between" mb="1" px="2">
@@ -422,7 +458,8 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                         <Button
                                             ml="5"
                                             size="sm"
-                                            colorScheme="blue"
+                                            colorScheme={branch === "ลาดกระบัง" ? "blue" : "teal"}
+                                            color="white"
                                             leftIcon={<AddIcon />}
                                         // onClick={() => {
                                         //     lineNotifyToDevGroup();
@@ -438,7 +475,7 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                         colorScheme="blackAlpha"
                                     >
                                         <Thead>
-                                            <Tr bg="#1379ec">
+                                            <Tr bg={colorBranchPass}>
                                                 <Th
                                                     textAlign="center"
                                                     fontSize={["xs", "xs", "sm", "md"]}
@@ -483,23 +520,24 @@ const SalesRoleDetail: React.FC<Props> = () => {
 
                             <Flex flexDir="column" w="100%" rounded="7px" boxShadow="md">
                                 <SalesChart
-                                    colorBranch="#64c9e2"
-                                    colorBranchPass="#1379ec"
-                                    colorOnMouse="#0a7988"
+                                    colorBranch={colorBranch}
+                                    colorBranchPass={colorBranchPass}
+                                    colorOnMouse={colorOnMouse}
                                     team={chooseYear}
                                     monthValue={monthValue}
+                                    setMonthIndex={setMonthIndex}
                                 />
                             </Flex>
 
                             <Flex mt="2" justify="space-between">
                                 <Flex flexDir="column" w="33%" rounded="7px" boxShadow="md">
-                                    <IssueChart label="สรุป Issue รายเดือน" monthValue={monthValue} />
+                                    <IssueChart label="สรุป Issue รายเดือน" monthValue={monthValue} colorBranch={colorBranch} />
                                 </Flex>
                                 <Flex flexDir="column" w="33%" rounded="7px" boxShadow="md">
-                                    <IssueChart label="สรุป WIP รายเดือน" monthValue={monthValue} />
+                                    <IssueChart label="สรุป WIP รายเดือน" monthValue={monthValue} colorBranch={colorBranch} />
                                 </Flex>
                                 <Flex flexDir="column" w="33%" rounded="7px" boxShadow="md">
-                                    <IssueChart label="สรุป Visit รายเดือน" monthValue={monthValue} />
+                                    <IssueChart label="สรุป Visit รายเดือน" monthValue={monthVisit} colorBranch={colorBranch} />
                                 </Flex>
                             </Flex>
 
@@ -531,7 +569,7 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                                 colorScheme="blackAlpha"
                                             >
                                                 <Thead>
-                                                    <Tr bg="#1379ec">
+                                                    <Tr bg={colorBranchPass}>
                                                         <Th
                                                             textAlign="center"
                                                             fontSize={["xs", "xs", "sm", "md"]}
@@ -583,7 +621,7 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                                                 <Center>{formatDate(+val.createdAt)}</Center>
                                                             </Td>
                                                             <Td w="10%">
-                                                                <Center>val.user.fullNameTH</Center>
+                                                                <Center>demo</Center>
                                                             </Td>
                                                             <Td w="20%">{val.title}</Td>
                                                             <Td w="30%">{val.detail}</Td>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Box, Text } from "@chakra-ui/react";
 import {
     Bar,
@@ -32,9 +32,10 @@ interface Props {
     colorOnMouse: string;
     team: string
     monthValue: MonthValue
+    setMonthIndex: (index: number) => void | undefined
 }
 
-const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, colorOnMouse, team, monthValue }) => {
+const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, colorOnMouse, team, monthValue, setMonthIndex }) => {
     const [colorIndexZero, setColorIndexZero] = useState<
         number | undefined
     >(undefined);
@@ -165,6 +166,13 @@ const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, colorOnMous
         }
     ];
 
+    const handleClick = useCallback(
+        (_, index: number) => {
+            setMonthIndex(index + 1);
+        },
+        [setMonthIndex]
+    );
+
     useEffect(() => {
         if (monthValue.มกราคม >= targetKpi) {
             setColorIndexZero(0);
@@ -269,9 +277,10 @@ const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, colorOnMous
                     <YAxis />
                     <Tooltip />
 
-                    <Bar dataKey="action" fill={colorBranch} onMouseOver={onMouseOver}>
+                    <Bar dataKey="action" fill={colorBranch} onMouseOver={onMouseOver} onClick={handleClick}>
                         {dataCh.map((_, index) => (
                             <Cell
+                                cursor="pointer"
                                 fill={
                                     index === onMouseIndex
                                         ? colorOnMouse

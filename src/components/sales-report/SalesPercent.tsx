@@ -3,9 +3,11 @@ import { Flex, Text } from "@chakra-ui/react";
 import { PieChart, Pie, Cell } from "recharts";
 import CountUp from 'react-countup';
 
-interface Props { }
+interface Props {
+    colorBranch: string
+}
 
-const SalesPercent: React.FC<Props> = () => {
+const SalesPercent: React.FC<Props> = ({ colorBranch }) => {
     const [percentNum, setPercentNum] = useState(0)
 
     let remaining = 0
@@ -20,7 +22,7 @@ const SalesPercent: React.FC<Props> = () => {
         { name: 'Group B', value: percentNum },
     ];
 
-    const COLORS = ['#d8d8d8', "#64c9e2"];
+    const COLORS = ['#d8d8d8', colorBranch];
 
     useEffect(() => {
         if (percentSplit) {

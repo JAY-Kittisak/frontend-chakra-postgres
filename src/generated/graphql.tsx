@@ -871,6 +871,7 @@ export type QueryCustomerByIdArgs = {
 
 
 export type QuerySalesRoleByIdArgs = {
+  monthIndex: Scalars['Int'];
   id: Scalars['Int'];
 };
 
@@ -2262,6 +2263,7 @@ export type ResellsByCreatorQuery = (
 
 export type SalesRoleByIdQueryVariables = Exact<{
   id: Scalars['Int'];
+  monthIndex: Scalars['Int'];
 }>;
 
 
@@ -3561,8 +3563,8 @@ export function useResellsByCreatorQuery(options: Omit<Urql.UseQueryArgs<Resells
   return Urql.useQuery<ResellsByCreatorQuery>({ query: ResellsByCreatorDocument, ...options });
 };
 export const SalesRoleByIdDocument = gql`
-    query SalesRoleById($id: Int!) {
-  salesRoleById(id: $id) {
+    query SalesRoleById($id: Int!, $monthIndex: Int!) {
+  salesRoleById(id: $id, monthIndex: $monthIndex) {
     id
     salesRole
     channel

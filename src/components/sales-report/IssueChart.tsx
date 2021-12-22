@@ -23,9 +23,10 @@ type MonthValue = {
 interface Props {
     label: string
     monthValue: MonthValue
+    colorBranch: string
 }
 
-const IssueChart: React.FC<Props> = ({ label, monthValue }) => {
+const IssueChart: React.FC<Props> = ({ label, monthValue, colorBranch }) => {
 
 
     const targetKpi = 5500;
@@ -38,84 +39,84 @@ const IssueChart: React.FC<Props> = ({ label, monthValue }) => {
             safety_line: safetyLine,
             Target_กลยุทธ์: strategyLine,
             Target_KPI: targetKpi,
-            action: monthValue.มกราคม,
+            issue: monthValue.มกราคม,
         },
         {
             name: "2",
             safety_line: safetyLine,
             Target_กลยุทธ์: strategyLine,
             Target_KPI: targetKpi,
-            action: monthValue.กุมภาพันธ์,
+            issue: monthValue.กุมภาพันธ์,
         },
         {
             name: "3",
             safety_line: safetyLine,
             Target_กลยุทธ์: strategyLine,
             Target_KPI: targetKpi,
-            action: monthValue.มีนาคม,
+            issue: monthValue.มีนาคม,
         },
         {
             name: "4",
             safety_line: safetyLine,
             Target_กลยุทธ์: strategyLine,
             Target_KPI: targetKpi,
-            action: monthValue.เมษายน,
+            issue: monthValue.เมษายน,
         },
         {
             name: "5",
             safety_line: safetyLine,
             Target_กลยุทธ์: strategyLine,
             Target_KPI: targetKpi,
-            action: monthValue.พฤษภาคม,
+            issue: monthValue.พฤษภาคม,
         },
         {
             name: "6",
             safety_line: safetyLine,
             Target_กลยุทธ์: strategyLine,
             Target_KPI: targetKpi,
-            action: monthValue.มิถุนายน,
+            issue: monthValue.มิถุนายน,
         },
         {
             name: "7",
             safety_line: safetyLine,
             Target_กลยุทธ์: strategyLine,
             Target_KPI: targetKpi,
-            action: monthValue.กรกฎาคม,
+            issue: monthValue.กรกฎาคม,
         },
         {
             name: "8",
             safety_line: safetyLine,
             Target_กลยุทธ์: strategyLine,
             Target_KPI: targetKpi,
-            action: monthValue.สิงหาคม,
+            issue: monthValue.สิงหาคม,
         },
         {
             name: "9",
             safety_line: safetyLine,
             Target_กลยุทธ์: strategyLine,
             Target_KPI: targetKpi,
-            action: monthValue.กันยายน,
+            issue: monthValue.กันยายน,
         },
         {
             name: "10",
             safety_line: safetyLine,
             Target_กลยุทธ์: strategyLine,
             Target_KPI: targetKpi,
-            action: monthValue.ตุลาคม,
+            issue: monthValue.ตุลาคม,
         },
         {
             name: "11",
             safety_line: safetyLine,
             Target_กลยุทธ์: strategyLine,
             Target_KPI: targetKpi,
-            action: monthValue.พฤศจิกายน,
+            issue: monthValue.พฤศจิกายน,
         },
         {
             name: "12",
             safety_line: safetyLine,
             Target_กลยุทธ์: strategyLine,
             Target_KPI: targetKpi,
-            action: monthValue.ธันวาคม,
+            issue: monthValue.ธันวาคม,
         }
     ];
 
@@ -147,7 +148,7 @@ const IssueChart: React.FC<Props> = ({ label, monthValue }) => {
                     <YAxis yAxisId="left" orientation="left" />
                     <Tooltip />
                     <Legend />
-                    <Bar yAxisId="left" dataKey="action" fill="#64c9e2" />
+                    <Bar yAxisId="left" dataKey="issue" fill={colorBranch} />
                 </BarChart>
             </ResponsiveContainer>
         </Box>

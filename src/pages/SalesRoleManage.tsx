@@ -1,33 +1,63 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
     Flex, Text, Divider, Avatar, Table,
-    Tbody, Th, Thead, Tr, Td, Center
+    Tbody, Th, Thead, Tr, Td, Center, Button
 } from "@chakra-ui/react";
+import { AddIcon } from "@chakra-ui/icons";
 import { useHistory } from "react-router-dom";
 
 import { useIsAuth } from '../utils/uselsAuth';
 import { useSalesRolesQuery } from '../generated/graphql';
 import Spinner from '../components/Spinner';
-import { formatAmount } from '../utils/helpers';
+import { CatUserRole, catUserRole, formatAmount } from '../utils/helpers';
 
 interface Props { }
 
 const SalesRoleManage: React.FC<Props> = () => {
     useIsAuth();
+
+    const [branch, setBranch] = useState<CatUserRole>("ลาดกระบัง");
+
     const history = useHistory()
     const [{ data, fetching }] = useSalesRolesQuery()
 
     return (
-        <Flex flexDir="column">
-            <Text
+        <Flex flexDir="column" px="5">
+            {/* <Text
                 as="i"
                 fontWeight="semibold"
                 fontSize={["md", "md", "xl", "3xl"]}
                 color="gray.600"
             >
                 Sales Role Manage
-            </Text>
-            <Divider mt={1} mb={2} orientation="horizontal" />{fetching ? (
+            </Text> */}
+            <Flex justify="space-between">
+                <Text
+                    as="i"
+                    fontWeight="semibold"
+                    fontSize={["md", "md", "xl", "3xl"]}
+                    color="gray.600"
+                >
+                    Sales Report
+                </Text>
+                <Flex mt="1">
+                    {catUserRole.map((value, i) => (
+                        <Button
+                            key={i}
+                            size="md"
+                            colorScheme="teal"
+                            variant={branch === value ? "outline" : "link"}
+                            mr="3"
+                            onClick={() => setBranch(value)}
+                        >
+                            {value}
+                        </Button>
+                    ))}
+                </Flex>
+            </Flex>
+
+            <Divider mt={1} mb={2} orientation="horizontal" />
+            {fetching ? (
                 <Flex justify="center">
                     <Spinner color="grey" height={50} width={50} />
                     <Text
@@ -61,14 +91,14 @@ const SalesRoleManage: React.FC<Props> = () => {
                         boxShadow="md"
                     >
                         <Flex justify="space-between" w="100%">
-                            <Flex flexDir="column" w="100%" align="center">
-                                <Text ml="6" fontSize="xl" fontWeight="bold">
-                                    Add Sales
-                                </Text>
+                                    <Flex flexDir="column" w="100%" align="center">
+                                        <Button mb="5" leftIcon={<AddIcon />} colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "whatsapp"} variant='outline'>
+                                            Add Sales Role
+                                        </Button>
 
                                 <Table boxShadow="base" variant="striped" colorScheme="blackAlpha">
                                     <Thead>
-                                        <Tr bg="#1379ec">
+                                                <Tr bg={branch === "ลาดกระบัง" ? "#1379ec" : "#0AB68B"}>
                                             <Th
                                                 textAlign="center"
                                                 fontSize={["xs", "xs", "sm", "md"]}
@@ -107,7 +137,7 @@ const SalesRoleManage: React.FC<Props> = () => {
                                         </Tr>
                                     </Thead>
                                     <Tbody>
-                                        {data.salesRoles.map((val, i) => (
+                                                {data.salesRoles.filter(item => item.branch === branch).map((val, i) => (
                                             <Tr
                                                 key={i}
                                                 cursor="pointer"
