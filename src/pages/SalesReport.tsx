@@ -368,65 +368,73 @@ const SalesReport: React.FC<Props> = () => {
                                 </Flex>
 
                                 <Flex flexDir="column" w="20%" rounded="7px" boxShadow="md">
-                                    <Flex flexDir="column" p="2">
-                                        <Text
-                                            ml="3"
-                                            fontWeight="semibold"
-                                            fontSize={["md", "md", "xl", "3xl"]}
-                                            color="gray.600"
-                                        >
-                                            Menu
-                                        </Text>
+                                    <Flex flexDir="column" justify="space-between" p="3" h="100%">
+                                        <Flex flexDir="column">
+                                            <Text
+                                                fontWeight="semibold"
+                                                fontSize={["md", "md", "xl", "3xl"]}
+                                                color="gray.600"
+                                            >
+                                                Menu
+                                            </Text>
+                                            <Button
+                                                mt="3"
+                                                leftIcon={<EditIcon />}
+                                                colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}
+                                                variant='outline'
+                                                onClick={() => history.push("/sales-report/actual-create")}
+                                            >
+                                                บันทึกยอดขาย
+                                            </Button>
+                                            <Button
+                                                mt="3"
+                                                disabled={true}
+                                                leftIcon={<EditIcon />}
+                                                variant='outline'
+                                                colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}
+                                            >
+                                                บันทึก Issue
+                                            </Button>
+                                        </Flex>
 
-                                        <Button
-                                            mt="3"
-                                            leftIcon={<EditIcon />}
-                                            colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}
-                                            variant='outline'
-                                            onClick={() => history.push("/sales-report/actual-create")}
-                                        >
-                                            บันทึก Issue
-                                        </Button>
-                                        <Button
-                                            mt="3"
-                                            disabled={true}
-                                            leftIcon={<EditIcon />}
-                                            variant='outline'
-                                            colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}
-                                        >
-                                            บันทึก Actual
-                                        </Button>
-
-                                        <Text
-                                            ml="3"
-                                            disabled={false}
-                                            fontWeight="semibold"
-                                            fontSize={["md", "md", "xl", "3xl"]}
-                                            color="gray.600"
-                                        >
-                                            Setting
-                                        </Text>
-
-                                        <Button
-                                            mt="3"
-                                            disabled={false}
-                                            leftIcon={<SettingsIcon />}
-                                            variant='outline'
-                                            colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}
-                                            onClick={() => history.push("/sales-report/role-manage")}
-                                        >
-                                            Sales Role
-                                        </Button>
-
-                                        <Button
-                                            mt="3"
-                                            disabled={true}
-                                            leftIcon={<SettingsIcon />}
-                                            variant='outline'
-                                            colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}
-                                        >
-                                            Sales Target
-                                        </Button>
+                                        <Flex flexDir="column" mb="10">
+                                            <Text
+                                                disabled={false}
+                                                fontWeight="semibold"
+                                                fontSize={["md", "md", "xl", "3xl"]}
+                                                color="gray.600"
+                                            >
+                                                Setting
+                                            </Text>
+                                            <Button
+                                                mt="3"
+                                                disabled={false}
+                                                leftIcon={<SettingsIcon />}
+                                                variant='outline'
+                                                colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}
+                                                onClick={() => history.push("/sales-report/role-manage")}
+                                            >
+                                                Sales Role
+                                            </Button>
+                                            <Button
+                                                mt="3"
+                                                disabled={true}
+                                                leftIcon={<SettingsIcon />}
+                                                variant='outline'
+                                                colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}
+                                            >
+                                                Sales Target
+                                            </Button>
+                                            <Button
+                                                mt="3"
+                                                disabled={true}
+                                                leftIcon={<SettingsIcon />}
+                                                variant='outline'
+                                                colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}
+                                            >
+                                                Customer
+                                            </Button>
+                                        </Flex>
                                     </Flex>
                                 </Flex>
                             </Flex>

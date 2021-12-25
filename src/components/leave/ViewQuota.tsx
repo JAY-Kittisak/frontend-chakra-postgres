@@ -148,13 +148,13 @@ const ViewQuota: React.FC<Props> = () => {
             ) : (
                 <>
                     <Stack isInline mt={3} justify="space-between">
-                        <Text>ลากิจ : {personalQuota} วัน </Text>
+                            <Text>ลากิจ : {personalQuota} วันต่อปี </Text>
                         <Text>
-                            ใช้ไปแล้ว {personalDate} วัน {personalHour} ชั่วโมง
+                                ใช้ไปแล้ว {personalDate} วัน {personalHour} ชั่วโมง
                         </Text>
                     </Stack>
                     <Stack isInline mt={1} justify="space-between">
-                        <Text>ลาป่วย : {sickQuota} วัน </Text>
+                            <Text>ลาป่วย : {sickQuota} วันต่อปี </Text>
                         <Text>
                             ใช้ไปแล้ว {sickDate} วัน {sickHour} ชั่วโมง
                         </Text>

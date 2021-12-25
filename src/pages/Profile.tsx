@@ -68,60 +68,20 @@ const Profile: React.FC<Props> = () => {
                   >
                       {data.me && <AddImageUser imagesUrl={data.me.imageUrl as string} />}
                       <Box w="100%" p="5" bg="#fff" rounded="10px" boxShadow="md">
-                                <Text fontWeight="bold">ชื่อภาษาไทย</Text>
-                                <Box
-                                    h="30px"
-                                    boxShadow="base"
-                                    p="1"
-                                    ml="5"
-                                    rounded="md"
-                                    bg="white"
-                                    justify="center"
-                                >
-                                    <Text ml="2">{data.me.fullNameTH}</Text>
-                                </Box>
-                                <Text mt="3" fontWeight="bold">
+                                <Text fontWeight="bold" color="gray">ชื่อภาษาไทย</Text>
+                                <Text ml="5" fontSize="20px" fontWeight="bold">{data.me.fullNameTH ? data.me.fullNameTH : "โปรดบันทึกข้อมูล"}</Text>
+                                <Text mt="3" fontWeight="bold" color="gray">
                                     ชื่อภาษาอังกฤษ
                                 </Text>
-                                <Box
-                                    h="30px"
-                                    boxShadow="base"
-                                    p="1"
-                                    ml="5"
-                                    rounded="md"
-                                    bg="white"
-                                    justify="center"
-                                >
-                                    <Text ml="2">{data.me.fullNameEN}</Text>
-                                </Box>
-                                <Text mt="3" fontWeight="bold">
+                                <Text ml="5" fontSize="20px" fontWeight="bold">{data.me.fullNameEN ? data.me.fullNameEN : "โปรดบันทึกข้อมูล"}</Text>
+                                <Text mt="3" fontWeight="bold" color="gray">
                                     ชื่อเล่น
                                 </Text>
-                                <Box
-                                    h="30px"
-                                    boxShadow="base"
-                                    p="1"
-                                    ml="5"
-                                    rounded="md"
-                                    bg="white"
-                                    justify="center"
-                                >
-                                    <Text ml="2">{data.me.nickName}</Text>
-                                </Box>
-                                <Text mt="3" fontWeight="bold">
+                                <Text ml="5" fontSize="20px" fontWeight="bold">{data.me.nickName ? data.me.nickName : "โปรดบันทึกข้อมูล"}</Text>
+                                <Text mt="3" fontWeight="bold" color="gray">
                                     Email
                                 </Text>
-                                <Box
-                                    h="30px"
-                                    boxShadow="base"
-                                    p="1"
-                                    ml="5"
-                                    rounded="md"
-                                    bg="white"
-                                    justify="center"
-                              >
-                                    <Text ml="2">{data.me.email}</Text>
-                                </Box>
+                                <Text ml="5" fontSize="20px" fontWeight="bold">{data.me.email ? data.me.email : "โปรดบันทึกข้อมูล"}</Text>
                                 <Flex
                                     direction={["column", "column", "row", "row"]}
                                     justify="space-evenly"
@@ -132,6 +92,7 @@ const Profile: React.FC<Props> = () => {
                                             fontWeight="semibold"
                                             fontSize={["sm", "md", "xl"]}
                                             p={3}
+                                            color="gray"
                                         >
                                             แผนก
                                         </Text>
@@ -149,6 +110,7 @@ const Profile: React.FC<Props> = () => {
                                             fontWeight="semibold"
                                             fontSize={["sm", "md", "xl"]}
                                             p={3}
+                                            color="gray"
                                         >
                                             สาขา
                                         </Text>
@@ -178,7 +140,7 @@ const Profile: React.FC<Props> = () => {
                                             }
                                         }}
                                     >
-                                        แก้ไขข้อมูล
+                                        บันทึก/แก้ไข ข้อมูล
                                     </Button>
                                     {isOpen && (
                                         <AddAndEditProfile

@@ -48,7 +48,12 @@ const LeaveApproval: React.FC<Props> = () => {
     }, [data, me]);
 
     return (
-        <Flex flexDir={["column", "column", "column", "column", "row"]}>
+        <Flex
+            flexDir={["column", "column", "column", "column", "row"]}
+            px="5"
+            h="95vh"
+            overflowY="auto"
+        >
             <Flex
                 w={["100%", "100%", "100%", "100%", "100%"]}
                 flexDir="column"
@@ -63,7 +68,7 @@ const LeaveApproval: React.FC<Props> = () => {
                     อนุมัติลางาน
                 </Text>
                 <Divider orientation="horizontal" />
-                <Flex flexDir="column" mt="10">
+                <Flex flexDir="column" mt="5">
                     {(fetching || fetchMe) ? (
                         <Center>
                             <Spinner color="grey" height={50} width={50} />

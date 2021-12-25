@@ -1,23 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
-    Flex,
-    Text,
-    Divider,
-    Image,
-    Table,
-    Tbody,
-    Th,
-    Thead,
-    Tr,
-    Td,
-    Center,
-    Button,
-    Tabs,
-    TabList,
-    TabPanels,
-    Tab,
-    TabPanel,
-    Select,
+    Flex, Text, Divider, Image, Table, Tbody, Th, Thead, Tr, Td,
+    Center, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Select,
 } from "@chakra-ui/react";
 import { useParams, useHistory } from "react-router-dom";
 import { AddIcon } from "@chakra-ui/icons";
@@ -47,8 +31,8 @@ const SalesRoleDetail: React.FC<Props> = () => {
     useIsAuth();
 
     const today = new Date().getFullYear().toString();
-
     const [alertWarning, setAlertWarning] = useState<AlertNt>("hide");
+    const [loading, setLoading] = useState(false);
 
     const [monthValue, setMonthValue] = useState({
         มกราคม: 0,
@@ -103,6 +87,17 @@ const SalesRoleDetail: React.FC<Props> = () => {
     const colorBranchPass = branch === "ลาดกระบัง" ? "#1379ec" : "#0AB68B"
     const colorOnMouse = branch === "ลาดกระบัง" ? "#0a7988" : "#0d4e3e"
 
+    const dateStart = "01/01/2012"
+    // const dateStart = "2020/01/01"
+    const tody = new Date();
+    const getDateStart = new Date(dateStart);
+    const differenceInTime = tody.getTime() - getDateStart.getTime();
+    const sumDateAll = differenceInTime / (1000 * 3600 * 24);
+    const sumYear = sumDateAll / 365;
+    const dateDifference = new Date(differenceInTime);
+    const dayDiff = dateDifference.getUTCDate() - 1;
+    const monthDiff = dateDifference.getUTCMonth();
+
     const userHandle = (userId: number) => {
         if (me?.me?.position.includes("หัวหน้างาน")) {
             return history.push(`/user-id/${userId}`);
@@ -124,6 +119,7 @@ const SalesRoleDetail: React.FC<Props> = () => {
     };
     //----------------------------------------------------- FILTER -------------------------------------------------------------------
     useEffect(() => {
+        setLoading(true);
         setItem(0);
 
         let januaryResult = 0;
@@ -139,6 +135,20 @@ const SalesRoleDetail: React.FC<Props> = () => {
         let novemberResult = 0;
         let decemberResult = 0;
 
+        setMonthValue({
+            มกราคม: januaryResult,
+            กุมภาพันธ์: februaryResult,
+            มีนาคม: marchResult,
+            เมษายน: aprilResult,
+            พฤษภาคม: mayResult,
+            มิถุนายน: juneResult,
+            กรกฎาคม: julyResult,
+            สิงหาคม: augustResult,
+            กันยายน: septemberResult,
+            ตุลาคม: octoberResult,
+            พฤศจิกายน: novemberResult,
+            ธันวาคม: decemberResult,
+        });
         // const issueFilterYear = data?.salesRoleById.issues.filter(
         const issueFilterYear = demoData?.filter(
             (y) => formatGetYear(+y.createdAt) === +chooseYear
@@ -294,13 +304,23 @@ const SalesRoleDetail: React.FC<Props> = () => {
                 พฤศจิกายน: novemberFilter.length,
                 ธันวาคม: decemberFilter.length,
             });
+
+            setTimeout(() => {
+                setLoading(false);
+            }, 100);
         } else if (chooseMonth !== "เดือน" && issueFilterSum?.length !== 0) {
             const result = issueFilterSum?.reduce(reducer);
             if (result) {
                 setItem(result);
             }
+            setTimeout(() => {
+                setLoading(false);
+            }, 100);
         } else {
             setItem(0);
+            setTimeout(() => {
+                setLoading(false);
+            }, 100);
         }
     }, [data, chooseMonth, chooseYear]);
 
@@ -354,7 +374,7 @@ const SalesRoleDetail: React.FC<Props> = () => {
                 label="คุณไม่สามารถเข้าถึงข้อมูลนี้ได้!"
             />
 
-            {fetching ? (
+            {(fetching || loading) ? (
                 <Flex justify="center">
                     <Spinner color="grey" height={50} width={50} />
                     <Text
@@ -388,6 +408,9 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                     w="230px"
                                     rounded="7px"
                                     boxShadow="md"
+                                    cursor="pointer"
+                                    _hover={{ fontWeight: "bold" }}
+                                    onClick={() => userHandle(data?.salesRoleById.user.id)}
                                 >
                                     {data?.salesRoleById.user.imageUrl && (
                                         <Image
@@ -410,9 +433,6 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                     boxShadow="md"
                                     background={colorBranchPass}
                                     color="white"
-                                    cursor="pointer"
-                                    _hover={{ fontWeight: "bold" }}
-                                    onClick={() => userHandle(data?.salesRoleById.user.id)}
                                 >
                                     <Flex justify="space-between">
                                         <Text fontWeight="semibold">Company</Text>
@@ -440,11 +460,15 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                     </Flex>
                                     <Flex justify="space-between">
                                         <Text fontWeight="semibold">Date Start</Text>
-                                        <Text>1/01/2022</Text>
+                                        <Text>{dateStart}</Text>
                                     </Flex>
                                     <Flex justify="space-between">
                                         <Text fontWeight="semibold">อายุงาน</Text>
-                                        <Text>0 ปี 0 เดือน 0 วัน</Text>
+                                        {/* <Text>{data.salesRoleById.วันเริ่มตำแหน่ง หรือ อายุงาน}</Text> */}
+                                        <Text>
+                                            {sumYear >= 1 && sumYear.toString().split(".")[0] + " ปี"}{" "}
+                                            {monthDiff >= 1 && monthDiff + " เดือน"} {dayDiff} วัน
+                                        </Text>
                                     </Flex>
                                 </Flex>
 

@@ -49,7 +49,7 @@ const ResellItem: React.FC<Props> = ({ resell }) => {
                       </Text>
                   ) : (
                       <Text color="green">
-                          เลือกเวลาอยู่ : {sumYear >= 1 && sumYear.toFixed() + " ปี"}{" "}
+                                เหลือกเวลาอยู่ : {sumYear >= 1 && sumYear.toString().split(".")[0] + " ปี"}{" "}
                           {monthDiff >= 1 && monthDiff + " เดือน"} {dayDiff} วัน
                       </Text>
                   )}

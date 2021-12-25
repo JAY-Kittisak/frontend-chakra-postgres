@@ -70,7 +70,7 @@ const LeaveCreate: React.FC<Props> = () => {
     }, [title])
 
     return (
-        <Flex flexDir="column">
+        <Flex flexDir="column" px="5">
             <Flex>
                 <Text
                     as="i"
@@ -83,6 +83,7 @@ const LeaveCreate: React.FC<Props> = () => {
                 {data?.me?.position === "หัวหน้างาน" && (
                     <Button
                         ml="10"
+                        mt="1"
                         colorScheme="orange"
                         color="white"
                         onClick={() => {
