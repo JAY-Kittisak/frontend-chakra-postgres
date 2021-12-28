@@ -14,7 +14,7 @@ const OrderStockIt: React.FC<Props> = () => {
         },
     });
     return (
-        <>
+        <Flex px="5" flexDir="column">
             <Text
                 as="i"
                 fontWeight="semibold"
@@ -107,7 +107,7 @@ const OrderStockIt: React.FC<Props> = () => {
                     </Flex>
                 </Flex>
             </Flex>
-        </>
+        </Flex>
     )
 }
 

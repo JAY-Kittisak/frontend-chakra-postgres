@@ -24,6 +24,7 @@ const ManageUsers: React.FC<Props> = () => {
 
     const { isOpen, setIsOpen } = useDialog();
     const [{ data, fetching }] = useUsersQuery()
+    console.log(data?.users)
 
     useEffect(() => {
         if (branch === "All" && data?.users) {

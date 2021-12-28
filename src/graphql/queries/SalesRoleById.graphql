@@ -12,24 +12,27 @@ query SalesRoleById($id: Int!,$monthIndex: Int!) {
             value
             branch
         }
-        issues {
-            id
-            title
-            detail
-            brand
-            size
-            model
-            value
-            branch
-            status
-            contact
-            createdAt
-            updatedAt
-        }
         user {
             id
             fullNameTH
             imageUrl
+        }
+        issues{
+            id
+            saleRoleId
+            saleName
+            contact
+            customer
+            quotationNo
+            brandId
+            category
+            detail
+            prob
+            status
+            value
+            branch
+            createdAt
+            updatedAt
         }
         salesActual {
             id

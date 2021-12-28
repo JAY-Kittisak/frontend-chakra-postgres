@@ -27,6 +27,8 @@ import IssueChart from "../components/sales-report/IssueChart";
 
 interface Props { }
 
+const userPrev = ["ปัจจุบัน", "ก่อนหน้า"]
+
 const SalesRoleDetail: React.FC<Props> = () => {
     useIsAuth();
 
@@ -342,6 +344,18 @@ const SalesRoleDetail: React.FC<Props> = () => {
                         w="150px"
                         mr="5"
                         fontWeight="semibold"
+                        name="userPrev"
+                    >
+                        {userPrev.map((val, i) => (
+                            <option key={i} value={val}>
+                                {val}
+                            </option>
+                        ))}
+                    </Select>
+                    <Select
+                        w="150px"
+                        mr="5"
+                        fontWeight="semibold"
                         name="selectMonth"
                         onChange={(e) => onChangeMonth(e)}
                     >
@@ -606,53 +620,104 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                                             fontSize={["xs", "xs", "sm", "md"]}
                                                             color="white"
                                                         >
-                                                            user
+                                                            Sale Name
                                                         </Th>
                                                         <Th
                                                             textAlign="center"
                                                             fontSize={["xs", "xs", "sm", "md"]}
                                                             color="white"
                                                         >
-                                                            สินค้าที่ขาย
+                                                            Company
                                                         </Th>
                                                         <Th
                                                             textAlign="center"
                                                             fontSize={["xs", "xs", "sm", "md"]}
                                                             color="white"
                                                         >
-                                                            รายละเอียด
+                                                            Quotation No.
                                                         </Th>
                                                         <Th
                                                             textAlign="center"
                                                             fontSize={["xs", "xs", "sm", "md"]}
                                                             color="white"
                                                         >
-                                                            ราคา
+                                                            Brand
                                                         </Th>
                                                         <Th
                                                             textAlign="center"
                                                             fontSize={["xs", "xs", "sm", "md"]}
                                                             color="white"
                                                         >
-                                                            ขายให้กับบริษัท
+                                                            Category
+                                                        </Th>
+                                                        <Th
+                                                            textAlign="center"
+                                                            fontSize={["xs", "xs", "sm", "md"]}
+                                                            color="white"
+                                                        >
+                                                            Detail
+                                                        </Th>
+                                                        <Th
+                                                            textAlign="center"
+                                                            fontSize={["xs", "xs", "sm", "md"]}
+                                                            color="white"
+                                                        >
+                                                            Prob
+                                                        </Th>
+                                                        <Th
+                                                            textAlign="center"
+                                                            fontSize={["xs", "xs", "sm", "md"]}
+                                                            color="white"
+                                                        >
+                                                            Status
+                                                        </Th>
+                                                        <Th
+                                                            textAlign="center"
+                                                            fontSize={["xs", "xs", "sm", "md"]}
+                                                            color="white"
+                                                        >
+                                                            Value
+                                                        </Th>
+                                                        <Th
+                                                            textAlign="center"
+                                                            fontSize={["xs", "xs", "sm", "md"]}
+                                                            color="white"
+                                                        >
+                                                            Contact
                                                         </Th>
                                                     </Tr>
                                                 </Thead>
                                                 <Tbody>
                                                     {data.salesRoleById.issues.map((val, i) => (
-                                                        <Tr key={i}>
+                                                        <Tr key={i} cursor="pointer" onClick={() => history.push(`/sales-report/issue/${val.id}`)}>
                                                             <Td w="10%">
-                                                                <Center>{formatDate(+val.createdAt)}</Center>
+                                                                <Flex flexDir="column">
+                                                                    <Center>{formatDate(+val.createdAt)}</Center>
+                                                                    <Center>เดือน {new Date(+val.createdAt).getMonth() + 1}</Center>
+                                                                </Flex>
                                                             </Td>
                                                             <Td w="10%">
-                                                                <Center>demo</Center>
+                                                                <Center>{val.saleName}</Center>
                                                             </Td>
-                                                            <Td w="20%">{val.title}</Td>
+                                                            <Td w="10%">
+                                                                <Center color="red">{val.customer}</Center>
+                                                            </Td>
+                                                            <Td w="10%">
+                                                                <Center>{val.quotationNo}</Center>
+                                                            </Td>
+                                                            <Td w="10%">
+                                                                <Center color="red">{val.brandId} ดึง Value มาใช้</Center>
+                                                            </Td>
+                                                            <Td w="10%">
+                                                                <Center>{val.category}</Center>
+                                                            </Td>
                                                             <Td w="30%">{val.detail}</Td>
+                                                            <Td w="5%">{val.prob}</Td>
+                                                            <Td w="5%" color="red">{val.status}</Td>
                                                             <Td w="10%">
                                                                 <Center>{formatAmount(val.value)}</Center>
                                                             </Td>
-                                                            <Td w="20%">{val.contact}</Td>
+                                                            <Td w="10%">{val.contact}</Td>
                                                         </Tr>
                                                     ))}
                                                 </Tbody>

@@ -17,6 +17,8 @@ import ResellReport from "../pages/ResellReport";
 import ResellByMe from "../pages/ResellByMe";
 import SalesReport from "../pages/SalesReport";
 import SalesActualCreate from "../pages/SalesActualCreate";
+import SalesIssueCreate from "../pages/SalesIssueCreate";
+import SalesIssueDetail from "../pages/SalesIssueDetail";
 import SalesRoleManage from "../pages/SalesRoleManage";
 import SalesRoleDetail from "../pages/SalesRoleDetail";
 import UserDetail from "../pages/UserDetail";
@@ -36,11 +38,17 @@ const Routes: React.FC<Props> = () => {
             <Route path="/user-id/:id">
                 <UserDetail />
             </Route>
+            <Route path="/sales-report/issue/:id">
+                <SalesIssueDetail />
+            </Route>
             <Route path="/sales-report/role-manage/:id">
                 <SalesRoleDetail />
             </Route>
             <Route path="/sales-report/role-manage">
                 <SalesRoleManage />
+            </Route>
+            <Route path="/sales-report/issue-create">
+                <SalesIssueCreate />
             </Route>
             <Route path="/sales-report/actual-create">
                 <SalesActualCreate />

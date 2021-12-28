@@ -1,0 +1,11 @@
+mutation CreateSalesIssue($input: SalesIssue_Input!){
+    createSalesIssue(input: $input){
+        errors {
+            field
+            message 
+        }
+        salesIssues {
+            ...RegularSalesIssue
+        }
+    }
+}

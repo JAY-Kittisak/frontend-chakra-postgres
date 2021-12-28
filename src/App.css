@@ -459,3 +459,7 @@ body{
 .font-w-bold {
     font-weight: bold;
 }
+
+.flex-div div{
+    margin-right: 10px;
+}

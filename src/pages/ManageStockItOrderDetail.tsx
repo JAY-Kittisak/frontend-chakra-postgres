@@ -19,10 +19,13 @@ import {
 } from "../generated/graphql";
 import { formatDate } from "../utils/helpers";
 import StockItStatusControl from '../components/StockIt/StockItStatusControl';
+import { useIsAuth } from '../utils/uselsAuth';
 
 interface Props { }
 
 const ManageStockItOrderDetail: React.FC<Props> = () => {
+    useIsAuth();
+
     const params = useParams<{ id: string }>();
     const history = useHistory()
 
@@ -37,7 +40,7 @@ const ManageStockItOrderDetail: React.FC<Props> = () => {
     const [, deleteStockItOrder] = useDeleteStockItOrderMutation()
 
     return (
-        <>
+        <Flex px="5" flexDir="column">
             <Text
                 as="i"
                 fontWeight="semibold"
@@ -194,7 +197,7 @@ const ManageStockItOrderDetail: React.FC<Props> = () => {
                     </Flex>
                 )}
             </Center>
-        </>
+        </Flex>
     )
 }
 

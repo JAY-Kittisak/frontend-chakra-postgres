@@ -1,0 +1,22 @@
+fragment RegularSalesIssue on SalesIssue {
+    id
+    saleRoleId
+    saleName
+    contact
+    customer
+    quotationNo
+    brandId
+    category
+    detail
+    prob
+    status
+    value
+    branch
+    createdAt
+    updatedAt
+    saleRole {
+      id
+      salesRole
+      channel
+    }
+  }

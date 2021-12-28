@@ -1,20 +1,7 @@
 import React, { useState } from "react";
 import {
-    Flex,
-    Table,
-    Tbody,
-    Text,
-    Th,
-    Thead,
-    Tr,
-    useColorMode,
-    Button,
-    Center,
-    Tabs,
-    TabList,
-    Tab,
-    TabPanels,
-    TabPanel,
+    Flex, Table, Tbody, Text, Th, Thead, Tr, useColorMode,
+    Button, Center, Tabs, TabList, Tab, TabPanels, TabPanel,
 } from "@chakra-ui/react";
 
 import Spinner from "../components/Spinner";

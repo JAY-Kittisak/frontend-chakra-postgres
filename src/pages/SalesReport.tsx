@@ -388,10 +388,10 @@ const SalesReport: React.FC<Props> = () => {
                                             </Button>
                                             <Button
                                                 mt="3"
-                                                disabled={true}
                                                 leftIcon={<EditIcon />}
                                                 variant='outline'
                                                 colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}
+                                                onClick={() => history.push("/sales-report/issue-create")}
                                             >
                                                 บันทึก Issue
                                             </Button>
