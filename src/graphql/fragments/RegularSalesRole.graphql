@@ -1,0 +1,8 @@
+fragment RegularSalesRole on SalesRole {
+    id
+    salesRole
+    channel
+    userId
+    branch
+    status
+}

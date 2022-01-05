@@ -24,7 +24,6 @@ const ManageUsers: React.FC<Props> = () => {
 
     const { isOpen, setIsOpen } = useDialog();
     const [{ data, fetching }] = useUsersQuery()
-    console.log(data?.users)
 
     useEffect(() => {
         if (branch === "All" && data?.users) {
@@ -74,8 +73,16 @@ const ManageUsers: React.FC<Props> = () => {
                                         textAlign="center"
                                         fontSize={["xs", "xs", "sm", "md"]}
                                         color="white"
-                                        w="15%"
-                                    >
+                                            w="5%"
+                                        >
+                                            id
+                                        </Th>
+                                        <Th
+                                            textAlign="center"
+                                            fontSize={["xs", "xs", "sm", "md"]}
+                                            color="white"
+                                            w="20%"
+                                        >
                                         username
                                     </Th>
                                     <Th
@@ -84,13 +91,13 @@ const ManageUsers: React.FC<Props> = () => {
                                         color="white"
                                         w="15%"
                                     >
-                                        full-name
+                                            Position
                                     </Th>
                                     <Th
                                         textAlign="center"
                                         fontSize={["xs", "xs", "sm", "md"]}
                                         color="white"
-                                        w="15%"
+                                            w="10%"
                                     >
                                         departments
                                     </Th>
@@ -122,7 +129,7 @@ const ManageUsers: React.FC<Props> = () => {
                                         textAlign="center"
                                         fontSize={["xs", "xs", "sm", "md"]}
                                         color="white"
-                                        w="15%"
+                                            w="10%"
                                     >
                                         Manage
                                     </Th>

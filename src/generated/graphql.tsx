@@ -763,6 +763,7 @@ export type Query = {
   targetByRoleId?: Maybe<Array<SalesTarget>>;
   issueByRoleId?: Maybe<Array<SalesIssue>>;
   issueById?: Maybe<SalesIssue>;
+  salesBrands?: Maybe<Array<SalesBrand>>;
 };
 
 
@@ -969,6 +970,12 @@ export type SalesActual_Response = {
   salesActual?: Maybe<Array<SalesActual>>;
 };
 
+export type SalesBrand = {
+  __typename?: 'SalesBrand';
+  id: Scalars['Float'];
+  brand: Scalars['String'];
+};
+
 export type SalesIssue = {
   __typename?: 'SalesIssue';
   id: Scalars['Float'];
@@ -977,7 +984,7 @@ export type SalesIssue = {
   contact: Scalars['String'];
   customer: Scalars['String'];
   quotationNo: Scalars['String'];
-  brandId: Scalars['Float'];
+  brand: Scalars['String'];
   category: Scalars['String'];
   detail: Scalars['String'];
   prob: Scalars['String'];
@@ -992,7 +999,7 @@ export type SalesIssue = {
 export type SalesIssue_Input = {
   customer: Scalars['String'];
   quotationNo: Scalars['String'];
-  brandId: Scalars['Float'];
+  brand: Scalars['String'];
   category: Scalars['String'];
   detail: Scalars['String'];
   prob: Scalars['String'];
@@ -1303,11 +1310,16 @@ export type RegularResellFragment = (
 
 export type RegularSalesIssueFragment = (
   { __typename?: 'SalesIssue' }
-  & Pick<SalesIssue, 'id' | 'saleRoleId' | 'saleName' | 'contact' | 'customer' | 'quotationNo' | 'brandId' | 'category' | 'detail' | 'prob' | 'status' | 'value' | 'branch' | 'createdAt' | 'updatedAt'>
+  & Pick<SalesIssue, 'id' | 'saleRoleId' | 'saleName' | 'contact' | 'customer' | 'quotationNo' | 'category' | 'detail' | 'prob' | 'status' | 'value' | 'branch' | 'createdAt' | 'updatedAt' | 'brand'>
   & { saleRole: (
     { __typename?: 'SalesRole' }
     & Pick<SalesRole, 'id' | 'salesRole' | 'channel'>
   ) }
+);
+
+export type RegularSalesRoleFragment = (
+  { __typename?: 'SalesRole' }
+  & Pick<SalesRole, 'id' | 'salesRole' | 'channel' | 'userId' | 'branch' | 'status'>
 );
 
 export type RegularStockItFragment = (
@@ -1541,6 +1553,25 @@ export type CreateSalesIssueMutation = (
     )>>, salesIssues?: Maybe<Array<(
       { __typename?: 'SalesIssue' }
       & RegularSalesIssueFragment
+    )>> }
+  ) }
+);
+
+export type CreateSalesRoleMutationVariables = Exact<{
+  input: SalesRole_Input;
+}>;
+
+
+export type CreateSalesRoleMutation = (
+  { __typename?: 'Mutation' }
+  & { createSalesRole: (
+    { __typename?: 'SalesRole_Response' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorSalesRole' }
+      & Pick<FieldErrorSalesRole, 'field' | 'message'>
+    )>>, salesRoles?: Maybe<Array<(
+      { __typename?: 'SalesRole' }
+      & RegularSalesRoleFragment
     )>> }
   ) }
 );
@@ -2309,6 +2340,17 @@ export type ResellsByCreatorQuery = (
   )>> }
 );
 
+export type SalesBrandsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SalesBrandsQuery = (
+  { __typename?: 'Query' }
+  & { salesBrands?: Maybe<Array<(
+    { __typename?: 'SalesBrand' }
+    & Pick<SalesBrand, 'id' | 'brand'>
+  )>> }
+);
+
 export type SalesRoleByIdQueryVariables = Exact<{
   id: Scalars['Int'];
   monthIndex: Scalars['Int'];
@@ -2328,7 +2370,7 @@ export type SalesRoleByIdQuery = (
       & Pick<User, 'id' | 'fullNameTH' | 'imageUrl'>
     ), issues: Array<(
       { __typename?: 'SalesIssue' }
-      & Pick<SalesIssue, 'id' | 'saleRoleId' | 'saleName' | 'contact' | 'customer' | 'quotationNo' | 'brandId' | 'category' | 'detail' | 'prob' | 'status' | 'value' | 'branch' | 'createdAt' | 'updatedAt'>
+      & Pick<SalesIssue, 'id' | 'saleRoleId' | 'saleName' | 'contact' | 'customer' | 'quotationNo' | 'brand' | 'category' | 'detail' | 'prob' | 'status' | 'value' | 'branch' | 'createdAt' | 'updatedAt'>
     )>, salesActual: Array<(
       { __typename?: 'SalesActual' }
       & Pick<SalesActual, 'id' | 'title' | 'detail' | 'actual' | 'branch' | 'customerId' | 'userId' | 'salesRoleId' | 'createdAt' | 'updatedAt'>
@@ -2684,7 +2726,6 @@ export const RegularSalesIssueFragmentDoc = gql`
   contact
   customer
   quotationNo
-  brandId
   category
   detail
   prob
@@ -2693,11 +2734,22 @@ export const RegularSalesIssueFragmentDoc = gql`
   branch
   createdAt
   updatedAt
+  brand
   saleRole {
     id
     salesRole
     channel
   }
+}
+    `;
+export const RegularSalesRoleFragmentDoc = gql`
+    fragment RegularSalesRole on SalesRole {
+  id
+  salesRole
+  channel
+  userId
+  branch
+  status
 }
     `;
 export const RegularStockItFragmentDoc = gql`
@@ -2955,6 +3007,23 @@ export const CreateSalesIssueDocument = gql`
 
 export function useCreateSalesIssueMutation() {
   return Urql.useMutation<CreateSalesIssueMutation, CreateSalesIssueMutationVariables>(CreateSalesIssueDocument);
+};
+export const CreateSalesRoleDocument = gql`
+    mutation CreateSalesRole($input: SalesRole_Input!) {
+  createSalesRole(input: $input) {
+    errors {
+      field
+      message
+    }
+    salesRoles {
+      ...RegularSalesRole
+    }
+  }
+}
+    ${RegularSalesRoleFragmentDoc}`;
+
+export function useCreateSalesRoleMutation() {
+  return Urql.useMutation<CreateSalesRoleMutation, CreateSalesRoleMutationVariables>(CreateSalesRoleDocument);
 };
 export const CreateStockItDocument = gql`
     mutation CreateStockIt($input: StockItInput!, $options: Upload!) {
@@ -3662,6 +3731,18 @@ export const ResellsByCreatorDocument = gql`
 export function useResellsByCreatorQuery(options: Omit<Urql.UseQueryArgs<ResellsByCreatorQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<ResellsByCreatorQuery>({ query: ResellsByCreatorDocument, ...options });
 };
+export const SalesBrandsDocument = gql`
+    query SalesBrands {
+  salesBrands {
+    id
+    brand
+  }
+}
+    `;
+
+export function useSalesBrandsQuery(options: Omit<Urql.UseQueryArgs<SalesBrandsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<SalesBrandsQuery>({ query: SalesBrandsDocument, ...options });
+};
 export const SalesRoleByIdDocument = gql`
     query SalesRoleById($id: Int!, $monthIndex: Int!) {
   salesRoleById(id: $id, monthIndex: $monthIndex) {
@@ -3689,7 +3770,7 @@ export const SalesRoleByIdDocument = gql`
       contact
       customer
       quotationNo
-      brandId
+      brand
       category
       detail
       prob

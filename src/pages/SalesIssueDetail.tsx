@@ -81,8 +81,23 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                 {data.issueById.customer}
                             </Text>
                         </Stack>
-                        <Stack isInline mt={3} justify="space-between">
-                            <Text fontSize={["sm", "sm", "md", "md"]}>
+
+                            <Stack isInline mt={3} justify="space-around">
+                                <Text w="20%" fontSize={["sm", "sm", "md", "md"]}>
+                                    Contact :{" "}
+                                </Text>
+                                <Text
+                                    align="right"
+                                    w="80%"
+                                    fontSize={["sm", "sm", "md", "md"]}
+                                    as="i"
+                                    fontWeight="semibold"
+                                >
+                                    {data.issueById.contact}
+                                </Text>
+                            </Stack>
+                            <Stack isInline mt={3} justify="space-between">
+                                <Text fontSize={["sm", "sm", "md", "md"]}>
                                 Quotation No. :{" "}
                             </Text>
                             <Text
@@ -102,7 +117,7 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                 as="i"
                                 fontWeight="semibold"
                             >
-                                {data.issueById.brandId}
+                                    {data.issueById.brand}
                             </Text>
                         </Stack>
                         <Stack isInline mt={3} justify="space-between">

@@ -24,7 +24,7 @@ query SalesRoleById($id: Int!,$monthIndex: Int!) {
             contact
             customer
             quotationNo
-            brandId
+            brand
             category
             detail
             prob

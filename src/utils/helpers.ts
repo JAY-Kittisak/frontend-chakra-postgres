@@ -256,7 +256,14 @@ export const selectMonth: SelectMonth[] = [
     "พฤศจิกายน",
     "ธันวาคม"
 ]
-export type DemoChannel = "SC" | "Cutting 1" | "Cutting 2" | "Area" | "Region" | "Project"
+export type DemoChannel = "Cutting 1" | "Cutting 2" | "Area" | "Region" | "Project"
+export const salesChannel: Array<DemoChannel> = [
+    "Cutting 1",
+    "Cutting 2",
+    "Area",
+    "Region",
+    "Project",
+]
 export type DemoSalesRole = "Sales01" | "Sales02" | "Sales03" | "Sales04" | "Sales05" | "Sales06"
 export type DemoData = {
     id: number;
@@ -275,7 +282,7 @@ export const demoData: DemoData | undefined = [
         createdAt: new Date(2021, 0, 5).getTime(),
         value: 1000,
         branch: "ลาดกระบัง",
-        channel: "SC",
+        channel: "Cutting 1",
         salesRole: "Sales01"
     },
     {
@@ -284,7 +291,7 @@ export const demoData: DemoData | undefined = [
         createdAt: new Date(2021, 1, 5).getTime(),
         value: 2000,
         branch: "ลาดกระบัง",
-        channel: "SC",
+        channel: "Cutting 1",
         salesRole: "Sales01"
     },
     {
@@ -293,7 +300,7 @@ export const demoData: DemoData | undefined = [
         createdAt: new Date(2021, 2, 5).getTime(),
         value: 3000,
         branch: "ลาดกระบัง",
-        channel: "SC",
+        channel: "Cutting 1",
         salesRole: "Sales01"
     },
     {
@@ -302,7 +309,7 @@ export const demoData: DemoData | undefined = [
         createdAt: new Date(2021, 3, 5).getTime(),
         value: 4000,
         branch: "ลาดกระบัง",
-        channel: "SC",
+        channel: "Cutting 1",
         salesRole: "Sales01"
     },
     {
@@ -311,7 +318,7 @@ export const demoData: DemoData | undefined = [
         createdAt: new Date(2021, 4, 5).getTime(),
         value: 5000,
         branch: "ลาดกระบัง",
-        channel: "SC",
+        channel: "Cutting 1",
         salesRole: "Sales01"
     },
     {
@@ -320,7 +327,7 @@ export const demoData: DemoData | undefined = [
         createdAt: new Date(2021, 5, 5).getTime(),
         value: 6000,
         branch: "ลาดกระบัง",
-        channel: "SC",
+        channel: "Cutting 1",
         salesRole: "Sales01"
     },
     {
@@ -329,7 +336,7 @@ export const demoData: DemoData | undefined = [
         createdAt: new Date(2022, 6, 5).getTime(),
         value: 7007,
         branch: "ลาดกระบัง",
-        channel: "SC",
+        channel: "Cutting 1",
         salesRole: "Sales01"
     },
     {
@@ -338,7 +345,7 @@ export const demoData: DemoData | undefined = [
         createdAt: new Date(2022, 7, 5).getTime(),
         value: 6008,
         branch: "ลาดกระบัง",
-        channel: "SC",
+        channel: "Cutting 1",
         salesRole: "Sales01"
     },
     {
@@ -347,7 +354,7 @@ export const demoData: DemoData | undefined = [
         createdAt: new Date(2022, 8, 5).getTime(),
         value: 5009,
         branch: "ลาดกระบัง",
-        channel: "SC",
+        channel: "Cutting 1",
         salesRole: "Sales01"
     },
     {
@@ -356,7 +363,7 @@ export const demoData: DemoData | undefined = [
         createdAt: new Date(2022, 9, 5).getTime(),
         value: 4010,
         branch: "ลาดกระบัง",
-        channel: "SC",
+        channel: "Cutting 1",
         salesRole: "Sales01"
     },
     {
@@ -365,7 +372,7 @@ export const demoData: DemoData | undefined = [
         createdAt: new Date(2022, 10, 5).getTime(),
         value: 3011,
         branch: "ลาดกระบัง",
-        channel: "SC",
+        channel: "Cutting 1",
         salesRole: "Sales01"
     },
     {
@@ -374,7 +381,7 @@ export const demoData: DemoData | undefined = [
         createdAt: new Date(2022, 11, 5).getTime(),
         value: 2012,
         branch: "ลาดกระบัง",
-        channel: "SC",
+        channel: "Cutting 1",
         salesRole: "Sales01"
     },
     {
@@ -383,7 +390,7 @@ export const demoData: DemoData | undefined = [
         createdAt: new Date(2021, 6, 5).getTime(),
         value: 1000,
         branch: "ลาดกระบัง",
-        channel: "SC",
+        channel: "Cutting 1",
         salesRole: "Sales01"
     },
     {
@@ -392,7 +399,7 @@ export const demoData: DemoData | undefined = [
         createdAt: new Date(2021, 7, 5).getTime(),
         value: 2000,
         branch: "ลาดกระบัง",
-        channel: "SC",
+        channel: "Cutting 1",
         salesRole: "Sales01"
     },
     {
@@ -401,7 +408,7 @@ export const demoData: DemoData | undefined = [
         createdAt: new Date(2021, 8, 5).getTime(),
         value: 3000,
         branch: "ลาดกระบัง",
-        channel: "SC",
+        channel: "Cutting 1",
         salesRole: "Sales01"
     },
     {
@@ -410,7 +417,7 @@ export const demoData: DemoData | undefined = [
         createdAt: new Date(2021, 9, 5).getTime(),
         value: 4000,
         branch: "ลาดกระบัง",
-        channel: "SC",
+        channel: "Cutting 1",
         salesRole: "Sales01"
     },
     {
@@ -419,7 +426,7 @@ export const demoData: DemoData | undefined = [
         createdAt: new Date(2021, 10, 5).getTime(),
         value: 5000,
         branch: "ลาดกระบัง",
-        channel: "SC",
+        channel: "Cutting 1",
         salesRole: "Sales01"
     },
     {
@@ -428,7 +435,7 @@ export const demoData: DemoData | undefined = [
         createdAt: new Date(2021, 11, 5).getTime(),
         value: 6000,
         branch: "ลาดกระบัง",
-        channel: "SC",
+        channel: "Cutting 1",
         salesRole: "Sales01"
     },
 ];

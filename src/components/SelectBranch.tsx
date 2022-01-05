@@ -15,7 +15,7 @@ interface Props {
 
 const SelectBranch: React.FC<Props> = ({ title, branch, setBranch }) => {
     return (
-        <>
+        <Flex flexDir="column" px="5">
             <Flex justify="space-between">
                 <Text
                     as="i"
@@ -41,7 +41,7 @@ const SelectBranch: React.FC<Props> = ({ title, branch, setBranch }) => {
                 </Flex>
             </Flex>
             <Divider mt={1} mb={5} orientation="horizontal" />
-        </>
+        </Flex>
     )
 }
 

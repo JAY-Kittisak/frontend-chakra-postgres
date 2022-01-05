@@ -32,7 +32,7 @@ const userPrev = ["ปัจจุบัน", "ก่อนหน้า"]
 const SalesRoleDetail: React.FC<Props> = () => {
     useIsAuth();
 
-    const today = new Date().getFullYear().toString();
+    const currentYear = new Date().getFullYear();
     const [alertWarning, setAlertWarning] = useState<AlertNt>("hide");
     const [loading, setLoading] = useState(false);
 
@@ -69,7 +69,8 @@ const SalesRoleDetail: React.FC<Props> = () => {
     const [item, setItem] = useState(0);
 
     const [chooseMonth, setChooseMonth] = useState("เดือน");
-    const [chooseYear, setChooseYear] = useState(today);
+    const [chooseYear, setChooseYear] = useState(currentYear.toString());
+    const [selectYear, setSelectYear] = useState([currentYear]);
     const [monthIndex, setMonthIndex] = useState(0);
 
     const history = useHistory();
@@ -91,9 +92,9 @@ const SalesRoleDetail: React.FC<Props> = () => {
 
     const dateStart = "01/01/2012"
     // const dateStart = "2020/01/01"
-    const tody = new Date();
+    const today = new Date();
     const getDateStart = new Date(dateStart);
-    const differenceInTime = tody.getTime() - getDateStart.getTime();
+    const differenceInTime = today.getTime() - getDateStart.getTime();
     const sumDateAll = differenceInTime / (1000 * 3600 * 24);
     const sumYear = sumDateAll / 365;
     const dateDifference = new Date(differenceInTime);
@@ -151,6 +152,11 @@ const SalesRoleDetail: React.FC<Props> = () => {
             พฤศจิกายน: novemberResult,
             ธันวาคม: decemberResult,
         });
+
+        if (data?.salesRoleById.targets) {
+            const yearAll = data.salesRoleById.targets.map(val => val.year).reverse()
+            setSelectYear(yearAll)
+        }
         // const issueFilterYear = data?.salesRoleById.issues.filter(
         const issueFilterYear = demoData?.filter(
             (y) => formatGetYear(+y.createdAt) === +chooseYear
@@ -371,11 +377,13 @@ const SalesRoleDetail: React.FC<Props> = () => {
                         name="selectYear"
                         onChange={(e) => onChangeYear(e)}
                     >
-                        {data?.salesRoleById.targets.map((val) => (
-                            <option key={val.id} value={val.year}>
-                                {val.year}
-                            </option>
-                        ))}
+                        {selectYear.map((year, i) => {
+                            return (
+                                <option key={i} value={year}>
+                                    {year}
+                                </option>
+                            )
+                        })}
                     </Select>
                 </Flex>
             </Flex>
@@ -700,20 +708,20 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                                                 <Center>{val.saleName}</Center>
                                                             </Td>
                                                             <Td w="10%">
-                                                                <Center color="red">{val.customer}</Center>
+                                                                <Center>{val.customer}</Center>
                                                             </Td>
                                                             <Td w="10%">
                                                                 <Center>{val.quotationNo}</Center>
                                                             </Td>
                                                             <Td w="10%">
-                                                                <Center color="red">{val.brandId} ดึง Value มาใช้</Center>
+                                                                <Center>{val.brand}</Center>
                                                             </Td>
                                                             <Td w="10%">
                                                                 <Center>{val.category}</Center>
                                                             </Td>
                                                             <Td w="30%">{val.detail}</Td>
                                                             <Td w="5%">{val.prob}</Td>
-                                                            <Td w="5%" color="red">{val.status}</Td>
+                                                            <Td w="5%" color="cyan.600">{val.status}</Td>
                                                             <Td w="10%">
                                                                 <Center>{formatAmount(val.value)}</Center>
                                                             </Td>

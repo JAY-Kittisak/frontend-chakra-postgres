@@ -1,0 +1,11 @@
+mutation CreateSalesRole($input: SalesRole_Input!) {
+    createSalesRole(input: $input) {
+        errors {
+            field
+            message
+        }
+        salesRoles {
+            ...RegularSalesRole
+        }
+    }
+}

@@ -137,6 +137,14 @@ const SalesReport: React.FC<Props> = () => {
         }
     };
 
+    const userHandleBtn = () => {
+        if (me?.me?.position.includes("GM")) {
+            history.push("/sales-report/role-manage")
+        } else {
+            return setAlertWarning("show");
+        }
+    };
+
     const onChangeMonth = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setChooseMonth(e.target.value);
     };
@@ -147,6 +155,7 @@ const SalesReport: React.FC<Props> = () => {
 
     useEffect(() => {
         setLoading(true);
+
         if (branch === "ชลบุรี") {
             setColorBranch("#7be4ca");
             setColorBranchPass("#0AB68B");
@@ -186,7 +195,7 @@ const SalesReport: React.FC<Props> = () => {
         });
     }, [branch, chooseYear]);
 
-    console.log(chooseMonth, chooseYear);
+    // console.log(chooseMonth, chooseYear);
 
     return (
         <Flex
@@ -408,11 +417,10 @@ const SalesReport: React.FC<Props> = () => {
                                             </Text>
                                             <Button
                                                 mt="3"
-                                                disabled={false}
                                                 leftIcon={<SettingsIcon />}
                                                 variant='outline'
                                                 colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}
-                                                onClick={() => history.push("/sales-report/role-manage")}
+                                                onClick={() => userHandleBtn()}
                                             >
                                                 Sales Role
                                             </Button>

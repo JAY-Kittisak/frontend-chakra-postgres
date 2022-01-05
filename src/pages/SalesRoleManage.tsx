@@ -9,7 +9,9 @@ import { useHistory } from "react-router-dom";
 import { useIsAuth } from '../utils/uselsAuth';
 import { useSalesRolesQuery } from '../generated/graphql';
 import Spinner from '../components/Spinner';
+import { useDialog } from "../components/dialogs/useDialog";
 import { CatUserRole, catUserRole, formatAmount } from '../utils/helpers';
+import AddAndEditRole from '../components/sales-report/AddAndEditRole';
 
 interface Props { }
 
@@ -18,6 +20,7 @@ const SalesRoleManage: React.FC<Props> = () => {
 
     const [branch, setBranch] = useState<CatUserRole>("ลาดกระบัง");
 
+    const { isOpen, setIsOpen } = useDialog();
     const history = useHistory()
     const [{ data, fetching }] = useSalesRolesQuery()
 
@@ -92,9 +95,25 @@ const SalesRoleManage: React.FC<Props> = () => {
                     >
                         <Flex justify="space-between" w="100%">
                                     <Flex flexDir="column" w="100%" align="center">
-                                        <Button mb="5" leftIcon={<AddIcon />} colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "whatsapp"} variant='outline'>
+                                        <Button
+                                            mb="5"
+                                            leftIcon={<AddIcon />}
+                                            colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "whatsapp"}
+                                            variant='outline'
+                                            onClick={() => {
+                                                // setStockToEdit(null);
+                                                setIsOpen(true);
+                                            }}
+                                        >
                                             Add Sales Role
                                         </Button>
+                                        {isOpen && (
+                                            <AddAndEditRole
+                                                Open={true}
+                                                setOpen={() => setIsOpen(false)}
+                                            // stockToEdit={stockToEdit}
+                                            />
+                                        )}
 
                                 <Table boxShadow="base" variant="striped" colorScheme="blackAlpha">
                                     <Thead>

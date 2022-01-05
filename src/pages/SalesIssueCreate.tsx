@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Flex, Text, Divider, Button, Select } from '@chakra-ui/react'
+import {
+    Flex, Text, Divider, Button, Select,
+} from '@chakra-ui/react'
 import { Form, Formik } from "formik";
 import { useHistory } from "react-router";
 
@@ -7,18 +9,12 @@ import SelectCustomer from "../components/resell/SelectCustomer";
 import InputField from '../components/InputField';
 import { catStatus } from '../utils/helpers';
 import { useIsAuth } from '../utils/uselsAuth';
-import { useCreateSalesIssueMutation, FieldError } from '../generated/graphql';
+import { useCreateSalesIssueMutation, FieldError, useSalesBrandsQuery } from '../generated/graphql';
 import { toErrorMap } from "../utils/toErrorMap";
 
 interface Props { }
 
-const SalesRole = [
-    "Mitutoyo",
-    "Imada",
-    "Teclock",
-    "Fuji Tool",
-];
-const Category = [
+const categorySelect = [
     "Automation",
     "Marposs",
     "Mi",
@@ -27,7 +23,8 @@ const Category = [
     "Project",
     "SmallTool",
 ];
-const Prob = [
+
+const probSelect = [
     "น้อยกว่า 30%",
     "มากกว่า 30%",
     "มากกว่า 50%",
@@ -41,6 +38,7 @@ const SalesIssueCreate: React.FC<Props> = () => {
     const [category, setCategory] = useState("Automation");
     const [prob, setProb] = useState("น้อยกว่า 30%");
     const [status, setStatus] = useState("New");
+    const [brand, setBrand] = useState("3M");
 
     const [customerID, setCustomerID] = useState<number | undefined>(undefined);
     const [customerData, setCustomerData] = useState<
@@ -48,6 +46,7 @@ const SalesIssueCreate: React.FC<Props> = () => {
     >(undefined);
 
     const [, createIssue] = useCreateSalesIssueMutation()
+    const [{ data }] = useSalesBrandsQuery()
 
     const history = useHistory();
 
@@ -74,7 +73,6 @@ const SalesIssueCreate: React.FC<Props> = () => {
             <Formik
                 initialValues={{
                     quotationNo: "",
-                    brandId: 2,
                     detail: "",
                     value: 0,
                     contact: "",
@@ -87,6 +85,7 @@ const SalesIssueCreate: React.FC<Props> = () => {
                     const sumArr = {
                         ...values,
                         customer,
+                        brand,
                         category,
                         prob,
                         status
@@ -172,38 +171,38 @@ const SalesIssueCreate: React.FC<Props> = () => {
                                 />
 
                                 <Flex justify="space-between">
+                                        <Flex flexDir="column" w="45%">
+                                            {/* <Flex flexDir="column"
+                                                w="150px"> */}
+                                            <Text
+                                                fontWeight="semibold"
+                                                fontSize={["sm", "md"]}
+                                                mb="2"
+                                                mt="2"
+                                            >
+                                                Brand :
+                                            </Text>
+                                            <Select onChange={(e) => setBrand(e.target.value)}>
+                                                {data?.salesBrands?.map((value) => (
+                                                    <option key={value.id} value={value.brand}>
+                                                        {value.brand}
+                                                    </option>
+                                                ))}
+                                            </Select>
+                                        </Flex>
                                     <Flex flexDir="column" w="45%">
                                         <Text
                                             fontWeight="semibold"
                                             fontSize={["sm", "md"]}
                                             mb="2"
-                                            mt="3"
-                                        >
-                                            Brand :
-                                        </Text>
-                                        <Select onChange={(e) => {
-                                            console.log(e.target.value)
-                                        }}>
-                                            {SalesRole.map((value, i) => (
-                                                <option key={i} value={value}>
-                                                    {value}
-                                                </option>
-                                            ))}
-                                        </Select>
-                                    </Flex>
-                                    <Flex flexDir="column" w="45%">
-                                        <Text
-                                            fontWeight="semibold"
-                                            fontSize={["sm", "md"]}
-                                            mb="2"
-                                            mt="3"
+                                                mt="2"
                                         >
                                             Category :
                                         </Text>
                                         <Select onChange={(e) => {
                                             setCategory(e.target.value)
                                         }}>
-                                            {Category.map((value, i) => (
+                                                {categorySelect.map((value, i) => (
                                                 <option key={i} value={value}>
                                                     {value}
                                                 </option>
@@ -219,14 +218,14 @@ const SalesIssueCreate: React.FC<Props> = () => {
                                             fontWeight="semibold"
                                             fontSize={["sm", "md"]}
                                             mb="2"
-                                            mt="3"
+                                                mt="2"
                                         >
                                             Prob :
                                         </Text>
                                         <Select onChange={(e) => {
                                             setProb(e.target.value)
                                         }}>
-                                            {Prob.map((value, i) => (
+                                                {probSelect.map((value, i) => (
                                                 <option key={i} value={value}>
                                                     {value}
                                                 </option>
@@ -238,7 +237,7 @@ const SalesIssueCreate: React.FC<Props> = () => {
                                             fontWeight="semibold"
                                             fontSize={["sm", "md"]}
                                             mb="2"
-                                            mt="3"
+                                                mt="2"
                                         >
                                             Status :
                                         </Text>

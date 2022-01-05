@@ -1,0 +1,6 @@
+query SalesBrands {
+    salesBrands {
+        id
+        brand
+    }
+}

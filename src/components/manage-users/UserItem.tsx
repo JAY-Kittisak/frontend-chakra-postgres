@@ -20,6 +20,9 @@ const UserItem: React.FC<Props> = ({
     return (
         <Tr>
             <Td>
+                <Center>{user.id}</Center>
+            </Td>
+            <Td>
                 <Center>{user.username}</Center>
             </Td>
             <Td>
