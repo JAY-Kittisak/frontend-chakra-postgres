@@ -23,44 +23,44 @@ const menuItems = [
         to: "/sales-report",
         iconClassName: "bi bi-bar-chart-fill"
     },
-    {
-        name: "Tier",
-        to: "/tiers/factories",
-        iconClassName: "bi bi-diagram-3",
-        subMenus: [{ name: "Product", to: "/tiers/product-tier/all" }],
-    },
-    {
-        name: "แจ้งงาน IT",
-        to: "/job-it",
-        iconClassName: "bi bi-headset",
-        subMenus: [
-            { name: "ประวัติการแจ้ง Job IT", to: "/job-it/me" },
-        ],
-    },
-    {
-        name: "ของแจกลูกค้า",
-        to: "/gives/gives-all",
-        iconClassName: "bi bi-gift-fill",
-        subMenus: [{ name: "ประวัติการเบิกของคุณ", to: "/order-give/my-orders" }],
-    },
-    {
-        name: "เบิก-ยืม อุปกรณ์ IT",
-        to: "/stock-it/stock-all",
-        iconClassName: "bi bi-basket",
-        subMenus: [{ name: "ประวัติการเบิกของคุณ", to: "/stock-it/my-order" }],
-    },
-    {
-        name: "เบิก-ยืม Catalog",
-        to: "/cat",
-        iconClassName: "bi bi-basket",
-        subMenus: [{ name: "ประวัติการเบิกของคุณ", to: "/orderCat/Cat" }],
-    },
-    {
-        name: "ลางานออนไลน์",
-        to: "/leave",
-        iconClassName: "bi bi-calendar2-x",
-        subMenus: [{ name: "ประวัติการลาของคุณ", to: "/leave/me" }],
-    },
+    // {
+    //     name: "Tier",
+    //     to: "/tiers/factories",
+    //     iconClassName: "bi bi-diagram-3",
+    //     subMenus: [{ name: "Product", to: "/tiers/product-tier/all" }],
+    // },
+    // {
+    //     name: "แจ้งงาน IT",
+    //     to: "/job-it",
+    //     iconClassName: "bi bi-headset",
+    //     subMenus: [
+    //         { name: "ประวัติการแจ้ง Job IT", to: "/job-it/me" },
+    //     ],
+    // },
+    // {
+    //     name: "ของแจกลูกค้า",
+    //     to: "/gives/gives-all",
+    //     iconClassName: "bi bi-gift-fill",
+    //     subMenus: [{ name: "ประวัติการเบิกของคุณ", to: "/order-give/my-orders" }],
+    // },
+    // {
+    //     name: "เบิก-ยืม อุปกรณ์ IT",
+    //     to: "/stock-it/stock-all",
+    //     iconClassName: "bi bi-basket",
+    //     subMenus: [{ name: "ประวัติการเบิกของคุณ", to: "/stock-it/my-order" }],
+    // },
+    // {
+    //     name: "เบิก-ยืม Catalog",
+    //     to: "/cat",
+    //     iconClassName: "bi bi-basket",
+    //     subMenus: [{ name: "ประวัติการเบิกของคุณ", to: "/orderCat/Cat" }],
+    // },
+    // {
+    //     name: "ลางานออนไลน์",
+    //     to: "/leave",
+    //     iconClassName: "bi bi-calendar2-x",
+    //     subMenus: [{ name: "ประวัติการลาของคุณ", to: "/leave/me" }],
+    // },
     {
         name: "Resell",
         to: "/resell",
