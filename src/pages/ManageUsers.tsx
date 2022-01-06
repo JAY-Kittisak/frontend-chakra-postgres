@@ -91,7 +91,7 @@ const ManageUsers: React.FC<Props> = () => {
                                         color="white"
                                         w="15%"
                                     >
-                                            Position
+                                            Name
                                     </Th>
                                     <Th
                                         textAlign="center"

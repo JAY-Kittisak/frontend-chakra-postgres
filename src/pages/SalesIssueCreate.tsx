@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
     Flex, Text, Divider, Button, Select,
 } from '@chakra-ui/react'
 import { Form, Formik } from "formik";
 import { useHistory } from "react-router";
 
-import SelectCustomer from "../components/resell/SelectCustomer";
 import InputField from '../components/InputField';
 import { catStatus } from '../utils/helpers';
 import { useIsAuth } from '../utils/uselsAuth';
 import { useCreateSalesIssueMutation, FieldError, useSalesBrandsQuery } from '../generated/graphql';
 import { toErrorMap } from "../utils/toErrorMap";
+// import SelectCustomerJsr from '../components/sales-report/SelectCustomerJsr';
 
 interface Props { }
 
@@ -34,27 +34,27 @@ const probSelect = [
 const SalesIssueCreate: React.FC<Props> = () => {
     useIsAuth();
 
-    const [customer, setCustomer] = useState("");
+    // const [customer, setCustomer] = useState("");
     const [category, setCategory] = useState("Automation");
     const [prob, setProb] = useState("น้อยกว่า 30%");
     const [status, setStatus] = useState("New");
     const [brand, setBrand] = useState("3M");
 
-    const [customerID, setCustomerID] = useState<number | undefined>(undefined);
-    const [customerData, setCustomerData] = useState<
-        { code: string; name: string } | undefined
-    >(undefined);
+    // const [customerID, setCustomerID] = useState<number | undefined>(undefined);
+    // const [customerData, setCustomerData] = useState<
+    //     { code: string; name: string } | undefined
+    // >(undefined);
 
     const [, createIssue] = useCreateSalesIssueMutation()
     const [{ data }] = useSalesBrandsQuery()
 
     const history = useHistory();
 
-    useEffect(() => {
-        if (customerData?.name) {
-            setCustomer(customerData.name)
-        }
-    }, [customerData])
+    // useEffect(() => {
+    //     if (customerData?.name) {
+    //         setCustomer(customerData.name)
+    //     }
+    // }, [customerData])
 
     return (
         <Flex flexDir="column" px="5">
@@ -72,19 +72,19 @@ const SalesIssueCreate: React.FC<Props> = () => {
             <Divider orientation="horizontal" />
             <Formik
                 initialValues={{
+                    customer: "",
                     quotationNo: "",
                     detail: "",
                     value: 0,
                     contact: "",
                 }}
                 onSubmit={async (values, { setErrors }) => {
-                    if (!customerID) {
-                        return alert("โปรดเลือก Customer");
-                    }
+                    // if (!customerID) {
+                    //     return alert("โปรดเลือก Customer");
+                    // }
 
                     const sumArr = {
                         ...values,
-                        customer,
                         brand,
                         category,
                         prob,
@@ -103,7 +103,7 @@ const SalesIssueCreate: React.FC<Props> = () => {
                 }}
             >{({ isSubmitting }) => (
                 <Form>
-                    <Flex>
+                        <Flex w="100%" justify="center">
                         <Flex
                             flexDir="column"
                             w="50%"
@@ -118,7 +118,7 @@ const SalesIssueCreate: React.FC<Props> = () => {
                             </Text>
                             <Flex flexDir="column" w="80%" mb="5">
 
-                                <Flex>
+                                    {/* <Flex>
                                     <Text
                                         fontWeight="semibold"
                                         fontSize="lg"
@@ -143,7 +143,12 @@ const SalesIssueCreate: React.FC<Props> = () => {
                                             โปรดเลือกตัวเลือกด้านขวา...
                                         </Text>
                                     )}
-                                </Flex>
+                                </Flex> */}
+                                    <InputField
+                                        name="customer"
+                                        placeholder="ชื่อบริษัท..."
+                                        label="Customer :"
+                                    />
                                 <Flex className="flex-div" justify="space-between">
                                     <InputField
                                         name="quotationNo"
@@ -263,16 +268,13 @@ const SalesIssueCreate: React.FC<Props> = () => {
                                 </Button>
                             </Flex>
                         </Flex>
-                        <SelectCustomer
+                            {/* <SelectCustomerJsr
                             setCustomerID={setCustomerID}
                             setCustomerData={setCustomerData}
-                            orderCustomerId={undefined}
-                            resellId={undefined}
-                            addedId={undefined}
-                            setAlertSuccess={() => undefined}
-                            setAlertWarning={() => undefined}
-                        />
-                    </Flex>
+                                orderCustomerId={undefined}
+                                addedId={undefined}
+                        /> */}
+                        </Flex>
                 </Form>
             )}
             </Formik>

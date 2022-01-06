@@ -1,8 +1,8 @@
 import React from "react";
-import { Text, Flex, Image, Button } from "@chakra-ui/react";
-import { Link } from "react-router-dom"
+import { Text, Flex, Image } from "@chakra-ui/react";
 
-import testsvg from "../testsvg.svg"
+// import testsvg from "../testsvg.svg"
+import logo from "../JSR-Logo-new-PNG.png"
 
 interface Props { }
 
@@ -40,101 +40,11 @@ const Index: React.FC<Props> = () => {
                 </Flex>
                 <Flex w={["100%", "100%", "100%", "100%", "50%"]} justify="center">
                     <Image
-                        boxSize="400px"
-                        src={testsvg}
+                        w="600px"
+                        src={logo}
                         alt="Dan Abramov"
                     />
                 </Flex>
-            </Flex>
-
-            <Text align="center" a="i" fontSize="3xl" fontWeight="bold" mb="5" mt="5">
-                Function
-            </Text>
-
-            {/* -------------------------------------- Content --------------------------------------*/}
-            <Flex flexDir="row" justify="center" ml="-5">
-
-                <Flex
-                    flexDir="column"
-                    w="20%"
-                    h="100%"
-                    bg="#eee"
-                    boxShadow="md"
-                    ml="5"
-                    rounded="lg"
-                    justify="center"
-                    p="3"
-                >
-                    <Flex justify="center">
-                        <Image
-                            boxSize="150px"
-                            src="https://jsr.co.th/wp-content/uploads/2018/02/Jsr-group-header.png"
-                            alt="Dan Abramov"
-                        />
-                    </Flex>
-                    <Flex justify="center">
-                        <Link to="/profile">
-                            <Button mt="3" align="center" a="i" fontSize="2xl" colorScheme="green" color="#fff">
-                                Dashboard
-                            </Button>
-                        </Link>
-                    </Flex>
-                </Flex>
-
-                <Flex
-                    flexDir="column"
-                    w="20%"
-                    h="100%"
-                    bg="#eee"
-                    boxShadow="md"
-                    ml="5"
-                    rounded="lg"
-                    justify="center"
-                    p="3"
-                >
-                    <Flex justify="center">
-                        <Image
-                            boxSize="150px"
-                            src="https://jsr.co.th/wp-content/uploads/2018/02/Jsr-group-header.png"
-                            alt="Dan Abramov"
-                        />
-                    </Flex>
-                    <Flex justify="center">
-                        <Link to="/gives/gives-all">
-                            <Button mt="3" align="center" a="i" fontSize="2xl" colorScheme="green" color="#fff">
-                                เบิกของแจกลูกค้า
-                            </Button>
-                        </Link>
-                    </Flex>
-                </Flex>
-
-                <Flex
-                    flexDir="column"
-                    w="20%"
-                    h="100%"
-                    bg="#eee"
-                    boxShadow="md"
-                    ml="5"
-                    rounded="lg"
-                    justify="center"
-                    p="3"
-                >
-                    <Flex justify="center">
-                        <Image
-                            boxSize="150px"
-                            src="https://jsr.co.th/wp-content/uploads/2018/02/Jsr-group-header.png"
-                            alt="Dan Abramov"
-                        />
-                    </Flex>
-                    <Flex justify="center">
-                        <Link to="/tiers/factories">
-                            <Button mt="3" align="center" a="i" fontSize="2xl" colorScheme="green" color="#fff">
-                                Tier
-                            </Button>
-                        </Link>
-                    </Flex>
-                </Flex>
-
             </Flex>
         </Flex>
     );

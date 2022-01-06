@@ -1,0 +1,8 @@
+query CustomerJsr{
+    customerJsr{
+        id
+        customerCode
+        customerPrefix
+        customerName
+    }
+}

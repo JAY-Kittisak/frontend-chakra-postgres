@@ -92,6 +92,7 @@ const SalesReport: React.FC<Props> = () => {
 
     const [branch, setBranch] = useState<CatUserRole>("ลาดกระบัง");
     const [loading, setLoading] = useState(false);
+    const [userIsSales, setUserIsSales] = useState(true);
     const [team, setTeam] = useState("All");
 
     const [colorBranch, setColorBranch] = useState("#64c9e2");
@@ -156,6 +157,14 @@ const SalesReport: React.FC<Props> = () => {
     useEffect(() => {
         setLoading(true);
 
+        if (salesRole?.salesRoles && me?.me) {
+            const response = salesRole.salesRoles.map(item => item.userId)
+            const meId = me.me.id
+            if (response.includes(meId)) {
+                setUserIsSales(false)
+            }
+        }
+
         if (branch === "ชลบุรี") {
             setColorBranch("#7be4ca");
             setColorBranchPass("#0AB68B");
@@ -193,7 +202,7 @@ const SalesReport: React.FC<Props> = () => {
             พฤศจิกายน: 6000,
             ธันวาคม: 5000,
         });
-    }, [branch, chooseYear]);
+    }, [branch, chooseYear, me, salesRole]);
 
     // console.log(chooseMonth, chooseYear);
 
@@ -397,6 +406,7 @@ const SalesReport: React.FC<Props> = () => {
                                             </Button>
                                             <Button
                                                 mt="3"
+                                                disabled={userIsSales}
                                                 leftIcon={<EditIcon />}
                                                 variant='outline'
                                                 colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}

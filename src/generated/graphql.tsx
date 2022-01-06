@@ -48,6 +48,14 @@ export type Customer = {
   updatedAt: Scalars['String'];
 };
 
+export type CustomerJsr = {
+  __typename?: 'CustomerJsr';
+  id: Scalars['Float'];
+  customerCode: Scalars['String'];
+  customerPrefix: Scalars['String'];
+  customerName: Scalars['String'];
+};
+
 export type Customer_Input = {
   customerCode: Scalars['String'];
   customerName: Scalars['String'];
@@ -764,6 +772,7 @@ export type Query = {
   issueByRoleId?: Maybe<Array<SalesIssue>>;
   issueById?: Maybe<SalesIssue>;
   salesBrands?: Maybe<Array<SalesBrand>>;
+  customerJsr?: Maybe<Array<CustomerJsr>>;
 };
 
 
@@ -2022,6 +2031,17 @@ export type CustomerByIdQuery = (
     { __typename?: 'Customer' }
     & RegularCustomerFragment
   ) }
+);
+
+export type CustomerJsrQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CustomerJsrQuery = (
+  { __typename?: 'Query' }
+  & { customerJsr?: Maybe<Array<(
+    { __typename?: 'CustomerJsr' }
+    & Pick<CustomerJsr, 'id' | 'customerCode' | 'customerPrefix' | 'customerName'>
+  )>> }
 );
 
 export type CustomersQueryVariables = Exact<{ [key: string]: never; }>;
@@ -3416,6 +3436,20 @@ export const CustomerByIdDocument = gql`
 
 export function useCustomerByIdQuery(options: Omit<Urql.UseQueryArgs<CustomerByIdQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<CustomerByIdQuery>({ query: CustomerByIdDocument, ...options });
+};
+export const CustomerJsrDocument = gql`
+    query CustomerJsr {
+  customerJsr {
+    id
+    customerCode
+    customerPrefix
+    customerName
+  }
+}
+    `;
+
+export function useCustomerJsrQuery(options: Omit<Urql.UseQueryArgs<CustomerJsrQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<CustomerJsrQuery>({ query: CustomerJsrDocument, ...options });
 };
 export const CustomersDocument = gql`
     query Customers {
