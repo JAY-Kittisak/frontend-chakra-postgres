@@ -54,13 +54,16 @@ const AddAndEditRole: React.FC<Props> = ({ Open, setOpen }) => {
             <Formik
                 initialValues={{
                     salesRole: "",
+                    areaCode: "",
                     channel: "Cutting 1",
                     userId: 0,
                     branch: "ลาดกระบัง",
                     status: "ใช้งาน",
                 }}
                 onSubmit={async (values, { setErrors }) => {
-                    console.log(values)
+                    if (values.userId === 0) {
+                        alert("โปรดใช้ User ID")
+                    }
                     const response = await createSalesRole({
                         input: values,
                     });
@@ -85,17 +88,20 @@ const AddAndEditRole: React.FC<Props> = ({ Open, setOpen }) => {
                             <Form>
                                 <AlertDialogBody>
                                     <Flex flexDir="column">
+                                        <Flex className="plus-div-mgl">
                                         <InputField
                                             name="salesRole"
                                             placeholder="Sales..."
                                             label="Sales Role"
-                                        />
-                                        <Flex className="plus-div-mgl">
+                                            />
                                             <InputField
+                                                type="number"
                                                 name="userId"
                                                 placeholder="id..."
                                                 label="User ID"
                                             />
+                                        </Flex>
+                                        <Flex className="plus-div-mgl">
                                             <Flex flexDir="column" w="100%">
                                                 <Text
                                                     fontWeight="semibold"
@@ -111,6 +117,11 @@ const AddAndEditRole: React.FC<Props> = ({ Open, setOpen }) => {
                                                     ))}
                                                 </SelectControl>
                                             </Flex>
+                                            <InputField
+                                                name="areaCode"
+                                                placeholder="code..."
+                                                label="Area Code"
+                                            />
                                         </Flex>
                                         <Flex className="plus-div-mgl">
                                             <Flex flexDir="column" w="100%">

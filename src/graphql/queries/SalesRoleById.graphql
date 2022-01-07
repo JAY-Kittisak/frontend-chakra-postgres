@@ -2,6 +2,7 @@ query SalesRoleById($id: Int!,$monthIndex: Int!) {
     salesRoleById(id: $id,monthIndex: $monthIndex) {
         id
         salesRole
+        areaCode
         channel
         branch
         status

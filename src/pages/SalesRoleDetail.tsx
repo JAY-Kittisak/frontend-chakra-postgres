@@ -478,7 +478,7 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                     </Flex>
                                     <Flex justify="space-between">
                                         <Text fontWeight="semibold">Area Code</Text>
-                                        <Text>Demo</Text>
+                                        <Text>{data.salesRoleById.areaCode}</Text>
                                     </Flex>
                                     <Flex justify="space-between">
                                         <Text fontWeight="semibold">Date Start</Text>

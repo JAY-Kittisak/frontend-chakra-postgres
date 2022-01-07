@@ -62,11 +62,11 @@ const NavBar: React.FC<Props> = () => {
     } else {
         body = (
                 <Button
-                    onClick={() => {
-                        logout()
+                onClick={async () => {
+                    await logout()
                     window.location.reload()
-                    }}
-                    isLoading={logoutFetching}
+                }}
+                isLoading={logoutFetching}
                 variant='link'
                 fontSize="xl"
                 cursor="pointer"

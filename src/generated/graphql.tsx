@@ -1028,6 +1028,7 @@ export type SalesRole = {
   id: Scalars['Float'];
   salesRole: Scalars['String'];
   channel: Scalars['String'];
+  areaCode: Scalars['String'];
   branch: Scalars['String'];
   status: Scalars['String'];
   userId: Scalars['Float'];
@@ -1040,6 +1041,7 @@ export type SalesRole = {
 export type SalesRole_Input = {
   salesRole: Scalars['String'];
   channel: Scalars['String'];
+  areaCode: Scalars['String'];
   branch: Scalars['String'];
   status: Scalars['String'];
   userId: Scalars['Float'];
@@ -2381,7 +2383,7 @@ export type SalesRoleByIdQuery = (
   { __typename?: 'Query' }
   & { salesRoleById: (
     { __typename?: 'SalesRole' }
-    & Pick<SalesRole, 'id' | 'salesRole' | 'channel' | 'branch' | 'status' | 'userId'>
+    & Pick<SalesRole, 'id' | 'salesRole' | 'areaCode' | 'channel' | 'branch' | 'status' | 'userId'>
     & { targets: Array<(
       { __typename?: 'SalesTarget' }
       & Pick<SalesTarget, 'id' | 'year' | 'value' | 'branch'>
@@ -3782,6 +3784,7 @@ export const SalesRoleByIdDocument = gql`
   salesRoleById(id: $id, monthIndex: $monthIndex) {
     id
     salesRole
+    areaCode
     channel
     branch
     status

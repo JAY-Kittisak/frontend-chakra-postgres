@@ -93,28 +93,27 @@ const SalesRoleManage: React.FC<Props> = () => {
                         rounded="7px"
                         boxShadow="md"
                     >
-                        <Flex justify="space-between" w="100%">
-                                    <Flex flexDir="column" w="100%" align="center">
-                                        <Button
-                                            mb="5"
-                                            leftIcon={<AddIcon />}
-                                            colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "whatsapp"}
-                                            variant='outline'
-                                            onClick={() => {
-                                                // setStockToEdit(null);
-                                                setIsOpen(true);
-                                            }}
-                                        >
-                                            Add Sales Role
-                                        </Button>
-                                        {isOpen && (
-                                            <AddAndEditRole
-                                                Open={true}
-                                                setOpen={() => setIsOpen(false)}
-                                            // stockToEdit={stockToEdit}
-                                            />
-                                        )}
-
+                                <Flex flexDir="column" align="center" w="100%">
+                                    <Button
+                                        w="20%"
+                                        mb="5"
+                                        leftIcon={<AddIcon />}
+                                        colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "whatsapp"}
+                                        onClick={() => {
+                                            // setStockToEdit(null);
+                                            setIsOpen(true);
+                                        }}
+                                    >
+                                        Add Sales Role
+                                    </Button>
+                                    {isOpen && (
+                                        <AddAndEditRole
+                                            Open={true}
+                                            setOpen={() => setIsOpen(false)}
+                                        // stockToEdit={stockToEdit}
+                                        />
+                                    )}
+                                    <Flex flexDir="column" w="100%" h="80vh" overflowX="auto">
                                 <Table boxShadow="base" variant="striped" colorScheme="blackAlpha">
                                     <Thead>
                                                 <Tr bg={branch === "ลาดกระบัง" ? "#1379ec" : "#0AB68B"}>
@@ -130,6 +129,13 @@ const SalesRoleManage: React.FC<Props> = () => {
                                                 fontSize={["xs", "xs", "sm", "md"]}
                                                 color="white"
                                             >
+                                                        User Id
+                                                    </Th>
+                                                    <Th
+                                                        textAlign="center"
+                                                        fontSize={["xs", "xs", "sm", "md"]}
+                                                        color="white"
+                                                    >
                                                 user
                                             </Th>
                                             <Th
@@ -151,7 +157,14 @@ const SalesRoleManage: React.FC<Props> = () => {
                                                 fontSize={["xs", "xs", "sm", "md"]}
                                                 color="white"
                                             >
-                                                target
+                                                        status
+                                                    </Th>
+                                                    <Th
+                                                        textAlign="center"
+                                                        fontSize={["xs", "xs", "sm", "md"]}
+                                                        color="white"
+                                                    >
+                                                        Area Code
                                             </Th>
                                         </Tr>
                                     </Thead>
@@ -173,16 +186,22 @@ const SalesRoleManage: React.FC<Props> = () => {
                                                     )}
                                                 </Td>
                                                 <Td w="10%">
+                                                            <Center>{formatAmount(val.userId)}</Center>
+                                                        </Td>
+                                                        <Td w="20%">
                                                     {val.user.fullNameTH}
                                                 </Td>
                                                 <Td w="20%">
                                                     <Center>{val.salesRole}</Center>
                                                 </Td>
-                                                <Td w="30%">
+                                                        <Td w="20%">
                                                     <Center>{val.channel}</Center>
                                                 </Td>
                                                 <Td w="10%">
-                                                    <Center>{formatAmount(val.userId)}</Center>
+                                                            <Center>{val.status}</Center>
+                                                        </Td>
+                                                        <Td w="20%">
+                                                            <Center>JSR001</Center>
                                                 </Td>
                                             </Tr>
                                         ))}

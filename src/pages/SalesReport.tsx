@@ -397,15 +397,6 @@ const SalesReport: React.FC<Props> = () => {
                                             </Text>
                                             <Button
                                                 mt="3"
-                                                leftIcon={<EditIcon />}
-                                                colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}
-                                                variant='outline'
-                                                onClick={() => history.push("/sales-report/actual-create")}
-                                            >
-                                                บันทึกยอดขาย
-                                            </Button>
-                                            <Button
-                                                mt="3"
                                                 disabled={userIsSales}
                                                 leftIcon={<EditIcon />}
                                                 variant='outline'
@@ -413,6 +404,16 @@ const SalesReport: React.FC<Props> = () => {
                                                 onClick={() => history.push("/sales-report/issue-create")}
                                             >
                                                 บันทึก Issue
+                                            </Button>
+                                            <Button
+                                                mt="3"
+                                                disabled={true}
+                                                leftIcon={<EditIcon />}
+                                                colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}
+                                                variant='outline'
+                                                onClick={() => history.push("/sales-report/actual-create")}
+                                            >
+                                                บันทึกยอดขาย
                                             </Button>
                                         </Flex>
 
