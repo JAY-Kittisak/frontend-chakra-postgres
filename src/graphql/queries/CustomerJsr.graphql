@@ -1,5 +1,5 @@
-query CustomerJsr{
-    customerJsr{
+query CustomerJsr($customerName: String!) {
+    customerJsr(customerName: $customerName) {
         id
         customerCode
         customerPrefix

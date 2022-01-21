@@ -84,9 +84,9 @@ const SelectCustomer: React.FC<Props> = ({
     return (
         <Flex
             flexDir="column"
-            w="40%"
+            w="50%"
             h="80vh"
-            p="6"
+            px="6"
             mt="8"
             ml="3"
             boxShadow="xl"

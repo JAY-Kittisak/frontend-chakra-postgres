@@ -16,7 +16,7 @@ import {
     Button
 } from "@chakra-ui/react";
 import { Search2Icon } from "@chakra-ui/icons";
-import { useCustomerJsrQuery } from '../../generated/graphql';
+import { useCustomerCdcQuery } from '../../generated/graphql';
 
 interface Props {
     setCustomerID: React.Dispatch<React.SetStateAction<number | undefined>>;
@@ -34,7 +34,7 @@ interface Props {
     addedId: number[] | undefined;
 }
 
-const SelectCustomerJsr: React.FC<Props> = ({
+const SelectCustomerCdc: React.FC<Props> = ({
     setCustomerID,
     setCustomerData,
     orderCustomerId,
@@ -44,7 +44,7 @@ const SelectCustomerJsr: React.FC<Props> = ({
     const [checkId, setCheckId] = useState(0);
     const [customerName, setCustomerName] = useState("")
 
-    const [{ data, fetching }] = useCustomerJsrQuery({
+    const [{ data, fetching }] = useCustomerCdcQuery({
         variables: { customerName }
     })
 
@@ -144,7 +144,7 @@ const SelectCustomerJsr: React.FC<Props> = ({
                                 })
                                 */}
 
-                                {data?.customerJsr?.map((val, i) => (
+                                {data?.customerCdc?.map((val, i) => (
                                     <Tr
                                         key={i}
                                         cursor={
@@ -153,7 +153,7 @@ const SelectCustomerJsr: React.FC<Props> = ({
                                                 : "pointer"
                                         }
                                         onClick={() => {
-                                            handleSubmit(val.id, val.customerCode, val.customerPrefix, val.customerName);
+                                            handleSubmit(val.id, val.customerCode, "", val.customerName);
                                         }}
                                     >
                                         <Td w="40%">
@@ -174,7 +174,7 @@ const SelectCustomerJsr: React.FC<Props> = ({
                                                 <Center ml="10">{val.customerCode}</Center>
                                             </Flex>
                                         </Td>
-                                    <Td w="60%">{val.customerPrefix + " " + val.customerName}</Td>
+                                    <Td w="60%">{val.customerName}</Td>
                                     </Tr>
                                 ))}
                         </Tbody>
@@ -185,4 +185,4 @@ const SelectCustomerJsr: React.FC<Props> = ({
     )
 }
 
-export default SelectCustomerJsr
+export default SelectCustomerCdc

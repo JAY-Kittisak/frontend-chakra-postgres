@@ -30,12 +30,23 @@ interface Props {
     colorBranch: string;
     colorBranchPass: string;
     colorOnMouse: string;
-    team: string
+    title: string
+    commission: number
+    strategy: number
     monthValue: MonthValue
     setMonthIndex: (index: number) => void | undefined
 }
 
-const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, colorOnMouse, team, monthValue, setMonthIndex }) => {
+const SalesChart: React.FC<Props> = ({
+    colorBranch,
+    colorBranchPass,
+    colorOnMouse,
+    title,
+    commission,
+    strategy,
+    monthValue,
+    setMonthIndex
+}) => {
     const [colorIndexZero, setColorIndexZero] = useState<
         number | undefined
     >(undefined);
@@ -75,93 +86,93 @@ const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, colorOnMous
 
     const [onMouseIndex, setOnMouseIndex] = useState<number | undefined>(undefined);
 
-    const targetKpi = 5500;
-    const strategyLine = 6000;
-    const safetyLine = 6500;
+    const greenLine = strategy / 10
+    const yellowLine = strategy / 12
+    const redLine = commission / 12
 
     const dataCh = [
         {
             name: "มกราคม",
-            safety_line: safetyLine,
-            Target_กลยุทธ์: strategyLine,
-            Target_KPI: targetKpi,
+            safety_line: greenLine,
+            Target_กลยุทธ์: yellowLine,
+            Target_KPI: redLine,
             action: monthValue.มกราคม,
         },
         {
             name: "กุมภาพันธ์",
-            safety_line: safetyLine,
-            Target_กลยุทธ์: strategyLine,
-            Target_KPI: targetKpi,
+            safety_line: greenLine,
+            Target_กลยุทธ์: yellowLine,
+            Target_KPI: redLine,
             action: monthValue.กุมภาพันธ์,
         },
         {
             name: "มีนาคม",
-            safety_line: safetyLine,
-            Target_กลยุทธ์: strategyLine,
-            Target_KPI: targetKpi,
+            safety_line: greenLine,
+            Target_กลยุทธ์: yellowLine,
+            Target_KPI: redLine,
             action: monthValue.มีนาคม,
         },
         {
             name: "เมษายน",
-            safety_line: safetyLine,
-            Target_กลยุทธ์: strategyLine,
-            Target_KPI: targetKpi,
+            safety_line: greenLine,
+            Target_กลยุทธ์: yellowLine,
+            Target_KPI: redLine,
             action: monthValue.เมษายน,
         },
         {
             name: "พฤษภาคม",
-            safety_line: safetyLine,
-            Target_กลยุทธ์: strategyLine,
-            Target_KPI: targetKpi,
+            safety_line: greenLine,
+            Target_กลยุทธ์: yellowLine,
+            Target_KPI: redLine,
             action: monthValue.พฤษภาคม,
         },
         {
             name: "มิถุนายน",
-            safety_line: safetyLine,
-            Target_กลยุทธ์: strategyLine,
-            Target_KPI: targetKpi,
+            safety_line: greenLine,
+            Target_กลยุทธ์: yellowLine,
+            Target_KPI: redLine,
             action: monthValue.มิถุนายน,
         },
         {
             name: "กรกฎาคม",
-            safety_line: safetyLine,
-            Target_กลยุทธ์: strategyLine,
-            Target_KPI: targetKpi,
+            safety_line: greenLine,
+            Target_กลยุทธ์: yellowLine,
+            Target_KPI: redLine,
             action: monthValue.กรกฎาคม,
         },
         {
             name: "สิงหาคม",
-            safety_line: safetyLine,
-            Target_กลยุทธ์: strategyLine,
-            Target_KPI: targetKpi,
+            safety_line: greenLine,
+            Target_กลยุทธ์: yellowLine,
+            Target_KPI: redLine,
             action: monthValue.สิงหาคม,
         },
         {
             name: "กันยายน",
-            safety_line: safetyLine,
-            Target_กลยุทธ์: strategyLine,
-            Target_KPI: targetKpi,
+            safety_line: greenLine,
+            Target_กลยุทธ์: yellowLine,
+            Target_KPI: redLine,
             action: monthValue.กันยายน,
         },
         {
             name: "ตุลาคม",
-            safety_line: safetyLine,
-            Target_กลยุทธ์: strategyLine,
-            Target_KPI: targetKpi,
+            safety_line: greenLine,
+            Target_กลยุทธ์: yellowLine,
+            Target_KPI: redLine,
             action: monthValue.ตุลาคม,
         },
         {
             name: "พฤศจิกายน",
-            safety_line: safetyLine,
-            Target_กลยุทธ์: strategyLine,
-            Target_KPI: targetKpi,
+            safety_line: greenLine,
+            Target_กลยุทธ์: yellowLine,
+            Target_KPI: redLine,
             action: monthValue.พฤศจิกายน,
         },
         {
             name: "ธันวาคม",
-            safety_line: safetyLine,
-            Target_กลยุทธ์: strategyLine,
-            Target_KPI: targetKpi,
+            safety_line: greenLine,
+            Target_กลยุทธ์: yellowLine,
+            Target_KPI: redLine,
             action: monthValue.ธันวาคม,
         }
     ];
@@ -174,79 +185,79 @@ const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, colorOnMous
     );
 
     useEffect(() => {
-        if (monthValue.มกราคม >= targetKpi) {
+        if (monthValue.มกราคม >= yellowLine) {
             setColorIndexZero(0);
         } else {
             setColorIndexZero(undefined);
         }
 
-        if (monthValue.กุมภาพันธ์ >= targetKpi) {
+        if (monthValue.กุมภาพันธ์ >= yellowLine) {
             setColorIndexOne(1);
         } else {
             setColorIndexOne(undefined);
         }
 
-        if (monthValue.มีนาคม >= targetKpi) {
+        if (monthValue.มีนาคม >= yellowLine) {
             setColorIndexTwo(2);
         } else {
             setColorIndexTwo(undefined);
         }
 
-        if (monthValue.เมษายน >= targetKpi) {
+        if (monthValue.เมษายน >= yellowLine) {
             setColorIndexThree(3);
         } else {
             setColorIndexThree(undefined);
         }
 
-        if (monthValue.พฤษภาคม >= targetKpi) {
+        if (monthValue.พฤษภาคม >= yellowLine) {
             setColorIndexFour(4);
         } else {
             setColorIndexFour(undefined);
         }
 
-        if (monthValue.มิถุนายน >= targetKpi) {
+        if (monthValue.มิถุนายน >= yellowLine) {
             setColorIndexFive(5);
         } else {
             setColorIndexFive(undefined);
         }
 
-        if (monthValue.กรกฎาคม >= targetKpi) {
+        if (monthValue.กรกฎาคม >= yellowLine) {
             setColorIndexSix(6);
         } else {
             setColorIndexSix(undefined);
         }
 
-        if (monthValue.สิงหาคม >= targetKpi) {
+        if (monthValue.สิงหาคม >= yellowLine) {
             setColorIndexSeven(7);
         } else {
             setColorIndexSeven(undefined);
         }
 
-        if (monthValue.กันยายน >= targetKpi) {
+        if (monthValue.กันยายน >= yellowLine) {
             setColorIndexEight(8);
         } else {
             setColorIndexEight(undefined);
         }
 
-        if (monthValue.ตุลาคม >= targetKpi) {
+        if (monthValue.ตุลาคม >= yellowLine) {
             setColorIndexNine(9);
         } else {
             setColorIndexNine(undefined);
         }
 
-        if (monthValue.พฤศจิกายน >= targetKpi) {
+        if (monthValue.พฤศจิกายน >= yellowLine) {
             setColorIndexTen(10);
         } else {
             setColorIndexTen(undefined);
         }
 
-        if (monthValue.ธันวาคม >= targetKpi) {
+        if (monthValue.ธันวาคม >= yellowLine) {
             setColorIndexEleven(11);
         } else {
             setColorIndexEleven(undefined);
         }
 
-    }, [targetKpi, monthValue]);
+    }, [yellowLine, monthValue]);
 
     const onMouseOver = (_: any, index: number) => setOnMouseIndex(index)
 
@@ -259,7 +270,7 @@ const SalesChart: React.FC<Props> = ({ colorBranch, colorBranchPass, colorOnMous
             align="center"
         >
             <Text fontSize="2xl" fontWeight="semibold" mb="-5">
-                {team}
+                {title}
             </Text>
             <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart

@@ -201,7 +201,7 @@ const SalesRoleManage: React.FC<Props> = () => {
                                                             <Center>{val.status}</Center>
                                                         </Td>
                                                         <Td w="20%">
-                                                            <Center>JSR001</Center>
+                                                            <Center>{val.areaCode}</Center>
                                                 </Td>
                                             </Tr>
                                         ))}

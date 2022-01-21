@@ -58,7 +58,7 @@ const ResellCreate: React.FC<Props> = () => {
     }, [maker, catIndex]);
 
     return (
-        <Flex flexDir="column">
+        <Flex flexDir="column" px="5">
             <Flex justify="space-between">
                 <Text
                     as="i"
@@ -114,7 +114,6 @@ const ResellCreate: React.FC<Props> = () => {
                             <Flex
                                 flexDir="column"
                                 w="50%"
-                                p="6"
                                 mt="8"
                                 boxShadow="xl"
                                 borderRadius="md"
@@ -145,8 +144,8 @@ const ResellCreate: React.FC<Props> = () => {
                                                 </Text>
                                             </>
                                         ) : (
-                                            <Text color="gray" fontSize="md" mb="2" mt="3">
-                                                โปรดเลือกตัวเลือกด้านขวา...
+                                                <Text color="red" fontSize="md" mb="2" mt="3">
+                                                    โปรดเลือกตัวเลือกด้านขวา*
                                             </Text>
                                         )}
                                     </Flex>

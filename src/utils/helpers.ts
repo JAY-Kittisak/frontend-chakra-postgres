@@ -256,6 +256,16 @@ export const selectMonth: SelectMonth[] = [
     "พฤศจิกายน",
     "ธันวาคม"
 ]
+
+export const formatDateNew = (value: number) => {
+    const date = new Date(value)
+    const dd = date.getDate()
+    const mm = date.getMonth()
+    const yy = date.getFullYear()
+    return `${dd} ${selectMonth[mm + 1]} ${yy}`;
+
+}
+
 export type DemoChannel = "Cutting 1" | "Cutting 2" | "Area" | "Region" | "Project"
 export const salesChannel: Array<DemoChannel> = [
     "Cutting 1",
@@ -279,7 +289,7 @@ export const demoData: DemoData | undefined = [
     {
         id: 1,
         title: "title 1",
-        createdAt: new Date(2021, 0, 5).getTime(),
+        createdAt: new Date(2022, 0, 5).getTime(),
         value: 1000,
         branch: "ลาดกระบัง",
         channel: "Cutting 1",
@@ -288,7 +298,7 @@ export const demoData: DemoData | undefined = [
     {
         id: 2,
         title: "title 2",
-        createdAt: new Date(2021, 1, 5).getTime(),
+        createdAt: new Date(2022, 1, 5).getTime(),
         value: 2000,
         branch: "ลาดกระบัง",
         channel: "Cutting 1",
@@ -297,7 +307,7 @@ export const demoData: DemoData | undefined = [
     {
         id: 3,
         title: "title 3",
-        createdAt: new Date(2021, 2, 5).getTime(),
+        createdAt: new Date(2022, 2, 5).getTime(),
         value: 3000,
         branch: "ลาดกระบัง",
         channel: "Cutting 1",
@@ -306,7 +316,7 @@ export const demoData: DemoData | undefined = [
     {
         id: 4,
         title: "title 4",
-        createdAt: new Date(2021, 3, 5).getTime(),
+        createdAt: new Date(2022, 3, 5).getTime(),
         value: 4000,
         branch: "ลาดกระบัง",
         channel: "Cutting 1",
@@ -315,7 +325,7 @@ export const demoData: DemoData | undefined = [
     {
         id: 5,
         title: "title 5",
-        createdAt: new Date(2021, 4, 5).getTime(),
+        createdAt: new Date(2022, 4, 5).getTime(),
         value: 5000,
         branch: "ลาดกระบัง",
         channel: "Cutting 1",
@@ -324,8 +334,8 @@ export const demoData: DemoData | undefined = [
     {
         id: 6,
         title: "title 6",
-        createdAt: new Date(2021, 5, 5).getTime(),
-        value: 6000,
+        createdAt: new Date(2022, 5, 5).getTime(),
+        value: 5500,
         branch: "ลาดกระบัง",
         channel: "Cutting 1",
         salesRole: "Sales01"
@@ -333,7 +343,7 @@ export const demoData: DemoData | undefined = [
     {
         id: 7,
         title: "title 7",
-        createdAt: new Date(2022, 6, 5).getTime(),
+        createdAt: new Date(2023, 0, 5).getTime(),
         value: 7007,
         branch: "ลาดกระบัง",
         channel: "Cutting 1",
@@ -342,7 +352,7 @@ export const demoData: DemoData | undefined = [
     {
         id: 8,
         title: "title 8",
-        createdAt: new Date(2022, 7, 5).getTime(),
+        createdAt: new Date(2023, 1, 5).getTime(),
         value: 6008,
         branch: "ลาดกระบัง",
         channel: "Cutting 1",
@@ -351,7 +361,7 @@ export const demoData: DemoData | undefined = [
     {
         id: 9,
         title: "title 9",
-        createdAt: new Date(2022, 8, 5).getTime(),
+        createdAt: new Date(2023, 2, 5).getTime(),
         value: 5009,
         branch: "ลาดกระบัง",
         channel: "Cutting 1",
@@ -360,8 +370,8 @@ export const demoData: DemoData | undefined = [
     {
         id: 10,
         title: "title 10",
-        createdAt: new Date(2022, 9, 5).getTime(),
-        value: 4010,
+        createdAt: new Date(2023, 3, 5).getTime(),
+        value: 3010,
         branch: "ลาดกระบัง",
         channel: "Cutting 1",
         salesRole: "Sales01"
@@ -369,8 +379,8 @@ export const demoData: DemoData | undefined = [
     {
         id: 11,
         title: "title 11",
-        createdAt: new Date(2022, 10, 5).getTime(),
-        value: 3011,
+        createdAt: new Date(2023, 4, 5).getTime(),
+        value: 7007,
         branch: "ลาดกระบัง",
         channel: "Cutting 1",
         salesRole: "Sales01"
@@ -378,8 +388,8 @@ export const demoData: DemoData | undefined = [
     {
         id: 12,
         title: "title 12",
-        createdAt: new Date(2022, 11, 5).getTime(),
-        value: 2012,
+        createdAt: new Date(2023, 5, 5).getTime(),
+        value: 6012,
         branch: "ลาดกระบัง",
         channel: "Cutting 1",
         salesRole: "Sales01"
@@ -387,7 +397,7 @@ export const demoData: DemoData | undefined = [
     {
         id: 13,
         title: "title 13",
-        createdAt: new Date(2021, 6, 5).getTime(),
+        createdAt: new Date(2022, 6, 5).getTime(),
         value: 1000,
         branch: "ลาดกระบัง",
         channel: "Cutting 1",
@@ -396,7 +406,7 @@ export const demoData: DemoData | undefined = [
     {
         id: 14,
         title: "title 14",
-        createdAt: new Date(2021, 7, 5).getTime(),
+        createdAt: new Date(2022, 7, 5).getTime(),
         value: 2000,
         branch: "ลาดกระบัง",
         channel: "Cutting 1",
@@ -405,7 +415,7 @@ export const demoData: DemoData | undefined = [
     {
         id: 15,
         title: "title 15",
-        createdAt: new Date(2021, 8, 5).getTime(),
+        createdAt: new Date(2022, 8, 5).getTime(),
         value: 3000,
         branch: "ลาดกระบัง",
         channel: "Cutting 1",
@@ -414,7 +424,7 @@ export const demoData: DemoData | undefined = [
     {
         id: 16,
         title: "title 16",
-        createdAt: new Date(2021, 9, 5).getTime(),
+        createdAt: new Date(2022, 9, 5).getTime(),
         value: 4000,
         branch: "ลาดกระบัง",
         channel: "Cutting 1",
@@ -423,7 +433,7 @@ export const demoData: DemoData | undefined = [
     {
         id: 17,
         title: "title 17",
-        createdAt: new Date(2021, 10, 5).getTime(),
+        createdAt: new Date(2022, 10, 5).getTime(),
         value: 5000,
         branch: "ลาดกระบัง",
         channel: "Cutting 1",
@@ -432,7 +442,7 @@ export const demoData: DemoData | undefined = [
     {
         id: 18,
         title: "title 18",
-        createdAt: new Date(2021, 11, 5).getTime(),
+        createdAt: new Date(2022, 11, 5).getTime(),
         value: 6000,
         branch: "ลาดกระบัง",
         channel: "Cutting 1",
@@ -440,4 +450,12 @@ export const demoData: DemoData | undefined = [
     },
 ];
 
+export const probSelect = [
+    "น้อยกว่า 30%",
+    "มากกว่า 30%",
+    "มากกว่า 50%",
+    "มากกว่า 90%",
+];
+
+export const catIssueStatus = ["Proposed", "Quoted", "Purchased", "Issued"];
 

@@ -2,7 +2,15 @@ fragment RegularSalesRole on SalesRole {
     id
     salesRole
     channel
+    areaCode
     userId
     branch
     status
+    startDate
+    updatedAt
+    user {
+        id
+        fullNameTH
+        imageUrl
+    }
 }

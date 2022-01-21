@@ -460,13 +460,14 @@ body{
     font-weight: bold;
 }
 
+.font-w-semibold {
+    font-weight: 500;
+}
+
 .flex-div div{
     margin-right: 10px;
 }
 
-.plus-div-mgl div{
-    margin-right: 5px;
-}
 .plus-div-mgl div+div{
     margin-left: 5px;
 }

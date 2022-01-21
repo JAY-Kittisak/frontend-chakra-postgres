@@ -379,7 +379,9 @@ const SalesReport: React.FC<Props> = () => {
                                         colorBranch={colorBranch}
                                         colorBranchPass={colorBranchPass}
                                         colorOnMouse={colorOnMouse}
-                                        team={team}
+                                        title={team}
+                                        strategy={6000 * 12}
+                                        commission={5500 * 12}
                                         monthValue={monthValue}
                                         setMonthIndex={() => undefined}
                                     />

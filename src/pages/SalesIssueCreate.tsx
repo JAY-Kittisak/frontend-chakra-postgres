@@ -1,16 +1,28 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import {
-    Flex, Text, Divider, Button, Select,
+    Flex, Text, Divider, Button, Select, Input,
+    Popover, PopoverTrigger, PopoverContent, PopoverHeader,
+    PopoverBody, PopoverArrow, PopoverCloseButton,
 } from '@chakra-ui/react'
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Form, Formik } from "formik";
 import { useHistory } from "react-router";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 
 import InputField from '../components/InputField';
-import { catStatus } from '../utils/helpers';
 import { useIsAuth } from '../utils/uselsAuth';
-import { useCreateSalesIssueMutation, FieldError, useSalesBrandsQuery } from '../generated/graphql';
+import { 
+    useCreateSalesIssueMutation, 
+    FieldError, 
+    useSalesBrandsQuery, 
+    useMeQuery 
+} from '../generated/graphql';
+
 import { toErrorMap } from "../utils/toErrorMap";
-// import SelectCustomerJsr from '../components/sales-report/SelectCustomerJsr';
+import { selectMonth,probSelect,catIssueStatus } from '../utils/helpers';
+import SelectCustomerJsr from '../components/sales-report/SelectCustomerJsr';
+import SelectCustomerCdc from '../components/sales-report/SelectCustomerCdc';
 
 interface Props { }
 
@@ -24,40 +36,61 @@ const categorySelect = [
     "SmallTool",
 ];
 
-const probSelect = [
-    "น้อยกว่า 30%",
-    "มากกว่า 30%",
-    "มากกว่า 50%",
-    "มากกว่า 90%",
-];
-
 const SalesIssueCreate: React.FC<Props> = () => {
     useIsAuth();
 
-    // const [customer, setCustomer] = useState("");
     const [category, setCategory] = useState("Automation");
     const [prob, setProb] = useState("น้อยกว่า 30%");
-    const [status, setStatus] = useState("New");
+    const [status, setStatus] = useState("PROPOSED");
     const [brand, setBrand] = useState("3M");
 
-    // const [customerID, setCustomerID] = useState<number | undefined>(undefined);
-    // const [customerData, setCustomerData] = useState<
-    //     { code: string; name: string } | undefined
-    // >(undefined);
+    const [dateEnd, setDateEnd] = useState(new Date());
+    const [completionDate, setCompletionDate] = useState("");
+    const [dateStart, setDateStart] = useState(new Date());
+    const [visitDate, setVisitDate] = useState("");
+
+    const [customerID, setCustomerID] = useState<number | undefined>(undefined);
+    const [customerData, setCustomerData] = useState<
+        { code: string, prefix: string, name: string } | undefined
+    >(undefined);
+
+    const [customer, setCustomer] = useState("");
+    const [changeInput, setChangeInput] = useState(true);
 
     const [, createIssue] = useCreateSalesIssueMutation()
     const [{ data }] = useSalesBrandsQuery()
+    const [{ data: me }] = useMeQuery()
 
     const history = useHistory();
 
-    // useEffect(() => {
-    //     if (customerData?.name) {
-    //         setCustomer(customerData.name)
-    //     }
-    // }, [customerData])
+    const onChangeEnd = (date: Date) => {
+        setDateEnd(date);
+        const dd = date.getDate()
+        const mm = date.getMonth()
+        const yy = date.getFullYear()
+        setCompletionDate(`${dd} ${selectMonth[mm + 1]} ${yy}`);
+    };
+
+    const onChangeStart = (visit: Date) => {
+        setDateStart(visit);
+        const dd = visit.getDate()
+        const mm = visit.getMonth()
+        const yy = visit.getFullYear()
+        setVisitDate(`${dd} ${selectMonth[mm + 1]} ${yy}`);
+    };
+
+    useEffect(() => {
+        setCustomer('')
+        if (customerData) {
+            setChangeInput(true)
+            setCustomer(customerData.prefix + " " + customerData.name)
+        }
+    }, [customerData])
+
+    console.log(customer);
 
     return (
-        <Flex flexDir="column" px="5">
+        <Flex flexDir="column" px="5" overflowY="auto" h="95vh">
             <Flex justify="space-between">
                 <Text
                     as="i"
@@ -72,19 +105,18 @@ const SalesIssueCreate: React.FC<Props> = () => {
             <Divider orientation="horizontal" />
             <Formik
                 initialValues={{
-                    customer: "",
-                    quotationNo: "",
+                    quotationNo: "ยังไม่มีข้อมูล",
                     detail: "",
                     value: 0,
                     contact: "",
                 }}
                 onSubmit={async (values, { setErrors }) => {
-                    // if (!customerID) {
-                    //     return alert("โปรดเลือก Customer");
-                    // }
 
                     const sumArr = {
                         ...values,
+                        customer,
+                        visitDate,
+                        completionDate,
                         brand,
                         category,
                         prob,
@@ -103,11 +135,10 @@ const SalesIssueCreate: React.FC<Props> = () => {
                 }}
             >{({ isSubmitting }) => (
                 <Form>
-                        <Flex w="100%" justify="center">
+                        <Flex>
                         <Flex
                             flexDir="column"
-                            w="50%"
-                            p="6"
+                                w="50%"
                             mt="8"
                             boxShadow="xl"
                             borderRadius="md"
@@ -116,39 +147,91 @@ const SalesIssueCreate: React.FC<Props> = () => {
                             <Text fontSize="2xl" fontWeight="bold">
                                 บันทึกข้อมูล
                             </Text>
-                            <Flex flexDir="column" w="80%" mb="5">
-
-                                    {/* <Flex>
-                                    <Text
-                                        fontWeight="semibold"
-                                        fontSize="lg"
-                                        mb="2"
-                                        mt="3"
-                                    >
-                                        Customer :
-                                    </Text>
-                                    &nbsp;
-                                    {customerData?.code ? (
-                                        <>
-                                            <Text fontWeight="semibold" fontSize="md" mb="2" mt="3">
-                                                {customerData.code}
-                                            </Text>
-                                            &nbsp;
-                                            <Text fontWeight="semibold" fontSize="md" mb="2" mt="3">
-                                                {customerData.name}
-                                            </Text>
-                                        </>
-                                    ) : (
-                                        <Text color="gray" fontSize="md" mb="2" mt="3">
-                                            โปรดเลือกตัวเลือกด้านขวา...
+                            <Flex flexDir="column" w="90%" mb="5">
+                                    <Flex flexDir="column">
+                                        <Text
+                                            fontSize={["sm", "md"]}
+                                            mb="2"
+                                            mt="2"
+                                        >
+                                            <span className='font-w-semibold'>Customer : </span>
+                                            {!customerID && <span className='error'>พิมพ์หรือเลือกตัวเลือกด้านขวา*</span>}
+                                            {changeInput && <span>{customer}</span>}
                                         </Text>
-                                    )}
-                                </Flex> */}
-                                    <InputField
-                                        name="customer"
-                                        placeholder="ชื่อบริษัท..."
-                                        label="Customer :"
-                                    />
+                                        <Input
+                                            disabled={!!customerID}
+                                            defaultValue={customer}
+                                            placeholder='ชื่อบริษัท...'
+                                            onChange={(e) => {
+                                                setChangeInput(false)
+                                                setCustomer(e.target.value)
+                                            }}
+                                        />
+                                    </Flex>
+                                    <Flex className="flex-div" justify="space-between">
+                                        <Flex flexDir="column" mt="1" w="50%">
+                                            <Text
+                                                fontWeight="semibold"
+                                                fontSize={["sm", "md"]}
+                                                mb="2"
+                                                mt="2"
+                                            >
+                                                Customer visit date :
+                                            </Text>
+                                            <Popover>
+                                                <PopoverTrigger>
+                                                    <Button
+                                                        w="100%"
+                                                        rightIcon={<ChevronDownIcon />}
+                                                        variant='outline'
+                                                        color={visitDate ? "" : "gray"}
+                                                        fontWeight={visitDate ? "" : "light"}
+                                                    >
+                                                        {visitDate ? visitDate : "วันที่ไปหาลูกค้า"}
+                                                    </Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent w="400px">
+                                                    <PopoverArrow />
+                                                    <PopoverCloseButton />
+                                                    <PopoverHeader >เลือกวันที่</PopoverHeader>
+                                                    <PopoverBody fontSize="13px" ml="3">
+                                                        <Calendar onChange={onChangeStart} value={dateEnd} />
+                                                    </PopoverBody>
+                                                </PopoverContent>
+                                            </Popover>
+                                        </Flex>
+                                        <Flex flexDir="column" mt="1" w="50%">
+                                            <Text
+                                                fontWeight="semibold"
+                                                fontSize={["sm", "md"]}
+                                                mb="2"
+                                                mt="2"
+                                            >
+                                                Completion date :
+                                            </Text>
+                                            <Popover>
+                                                <PopoverTrigger>
+                                                    <Button
+                                                        w="100%"
+                                                        rightIcon={<ChevronDownIcon />}
+                                                        variant='outline'
+                                                        color={completionDate ? "" : "gray"}
+                                                        fontWeight={completionDate ? "" : "light"}
+                                                    >
+                                                        {completionDate ? completionDate : "วันที่จะจบงานนี้"}
+                                                    </Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent w="400px">
+                                                    <PopoverArrow />
+                                                    <PopoverCloseButton />
+                                                    <PopoverHeader >เลือกวันที่</PopoverHeader>
+                                                    <PopoverBody fontSize="13px" ml="3">
+                                                        <Calendar onChange={onChangeEnd} value={dateStart} />
+                                                    </PopoverBody>
+                                                </PopoverContent>
+                                            </Popover>
+                                        </Flex>
+                                    </Flex>
                                 <Flex className="flex-div" justify="space-between">
                                     <InputField
                                         name="quotationNo"
@@ -249,7 +332,7 @@ const SalesIssueCreate: React.FC<Props> = () => {
                                         <Select onChange={(e) => {
                                             setStatus(e.target.value)
                                         }}>
-                                            {catStatus.map((value, i) => (
+                                            {catIssueStatus.map((value, i) => (
                                                 <option key={i} value={value}>
                                                     {value}
                                                 </option>
@@ -257,23 +340,34 @@ const SalesIssueCreate: React.FC<Props> = () => {
                                         </Select>
                                     </Flex>
                                 </Flex>
-                                <Button
-                                    mt="10"
-                                    w="100%"
-                                    colorScheme="green"
-                                    isLoading={isSubmitting}
-                                    type="submit"
-                                >
-                                    Submit
-                                </Button>
+                                <Flex>
+                                    <Button
+                                        mt="10"
+                                        w='100%'
+                                        colorScheme="green"
+                                        isLoading={isSubmitting}
+                                        type="submit"
+                                    >
+                                        save
+                                    </Button>
+                                </Flex>
                             </Flex>
                         </Flex>
-                            {/* <SelectCustomerJsr
-                            setCustomerID={setCustomerID}
-                            setCustomerData={setCustomerData}
-                                orderCustomerId={undefined}
-                                addedId={undefined}
-                        /> */}
+                            {me?.me?.branch === 0 ? (
+                                <SelectCustomerJsr
+                                    setCustomerID={setCustomerID}
+                                    setCustomerData={setCustomerData}
+                                    orderCustomerId={undefined}
+                                    addedId={undefined}
+                                />
+                            ) : (
+                                <SelectCustomerCdc
+                                    setCustomerID={setCustomerID}
+                                    setCustomerData={setCustomerData}
+                                    orderCustomerId={undefined}
+                                    addedId={undefined}
+                                />
+                            )} 
                         </Flex>
                 </Form>
             )}

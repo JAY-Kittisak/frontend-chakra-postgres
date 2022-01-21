@@ -12,8 +12,8 @@ const Login: React.FC<{}> = () => {
     const history = useHistory()
     const [, login] = useLoginMutation()
     return (
-        <>
-            <Flex direction="column" align="center">
+        <Flex h="700px" align="center" justify="center">
+            <Flex direction="column" align="center" borderRadius="xl" boxShadow="xl" p="10">
                 <Heading as="h3" size="xl" mb="7">Login</Heading>
                 <Formik
                     initialValues={{ username: "", password: "" }}
@@ -47,6 +47,7 @@ const Login: React.FC<{}> = () => {
                                 />
                             </Box>
                             <Button
+                                w="100%"
                                 mt={4}
                                 type="submit"
                                 isLoading={isSubmitting}
@@ -58,7 +59,7 @@ const Login: React.FC<{}> = () => {
                     )}
                 </Formik>
             </Flex>
-        </>
+        </Flex>
     )
 }
 

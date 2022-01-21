@@ -1,0 +1,16 @@
+mutation CreateSalesTarget($input: SalesTarget_Input!){
+    createSalesTarget(input: $input){
+        errors{
+            field
+            message
+        }
+        salesTargets{
+            id
+            year
+            commission
+            strategy
+            branch
+            salesRoleId
+        }
+    }
+}

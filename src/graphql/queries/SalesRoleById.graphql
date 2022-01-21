@@ -1,5 +1,5 @@
-query SalesRoleById($id: Int!,$monthIndex: Int!) {
-    salesRoleById(id: $id,monthIndex: $monthIndex) {
+query SalesRoleById($id: Int!,$monthIndex: Int!,$year: Int!) {
+    salesRoleById(id: $id,monthIndex: $monthIndex,year: $year) {
         id
         salesRole
         areaCode
@@ -7,10 +7,13 @@ query SalesRoleById($id: Int!,$monthIndex: Int!) {
         branch
         status
         userId
+        startDate
+        updatedAt
         targets {
             id
             year
-            value
+            commission
+            strategy
             branch
         }
         user {

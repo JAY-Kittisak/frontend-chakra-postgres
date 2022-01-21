@@ -1,15 +1,5 @@
 query SalesRoles {
     salesRoles {
-        id
-        salesRole
-        channel
-        branch
-        status
-        userId
-        user {
-            id
-            fullNameTH
-            imageUrl
-        }
+        ...RegularSalesRole
     }
 }

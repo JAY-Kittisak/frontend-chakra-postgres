@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
-    Flex, Text, Divider, Image, Table, Tbody, Th, Thead, Tr, Td,
-    Center, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Select,
+    Flex, Text, Divider, Image, Table, Tbody, Th, Thead, Tr,
+    Td, Center, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Select,
 } from "@chakra-ui/react";
 import { useParams, useHistory } from "react-router-dom";
 import { AddIcon } from "@chakra-ui/icons";
@@ -10,24 +10,20 @@ import { useMeQuery, useSalesRoleByIdQuery } from "../generated/graphql";
 import { useIsAuth } from "../utils/uselsAuth";
 import Spinner from "../components/Spinner";
 import {
-    AlertNt,
-    formatAmount,
-    formatDate,
-    formatGetMonth,
-    formatGetYear,
-    selectMonth,
-    reducer,
-    demoData,
+    AlertNt, formatAmount, formatDateNew, formatGetMonth,
+    formatGetYear, selectMonth, reducer, demoData,
 } from "../utils/helpers";
 import AlertNotification from "../components/dialogs/AlertNotification";
 
 import SalesChart from "../components/sales-report/SalesChart";
 import SalesPercent from "../components/sales-report/SalesPercent";
 import IssueChart from "../components/sales-report/IssueChart";
+import AddAndEditTarget from "../components/sales-report/AddAndEditTarget";
+import { useDialog } from "../components/dialogs/useDialog";
 
 interface Props { }
 
-const userPrev = ["ปัจจุบัน", "ก่อนหน้า"]
+const userPrev = ["ปัจจุบัน", "ก่อนหน้า"];
 
 const SalesRoleDetail: React.FC<Props> = () => {
     useIsAuth();
@@ -71,27 +67,32 @@ const SalesRoleDetail: React.FC<Props> = () => {
     const [chooseMonth, setChooseMonth] = useState("เดือน");
     const [chooseYear, setChooseYear] = useState(currentYear.toString());
     const [selectYear, setSelectYear] = useState([currentYear]);
+    const [dateStart, setDateStart] = useState("");
     const [monthIndex, setMonthIndex] = useState(0);
+    const [commission, setCommission] = useState(0);
+    const [strategy, setStrategy] = useState(0);
+
 
     const history = useHistory();
     const params = useParams<{ id: string }>();
 
+    const { isOpen, setIsOpen } = useDialog();
+
     const [{ data, fetching }] = useSalesRoleByIdQuery({
         variables: {
             id: +params.id,
-            monthIndex
+            monthIndex,
+            year: +chooseYear
         },
     });
 
     const [{ data: me }] = useMeQuery();
 
-    const branch = data?.salesRoleById.branch
-    const colorBranch = branch === "ลาดกระบัง" ? "#64c9e2" : "#7be4ca"
-    const colorBranchPass = branch === "ลาดกระบัง" ? "#1379ec" : "#0AB68B"
-    const colorOnMouse = branch === "ลาดกระบัง" ? "#0a7988" : "#0d4e3e"
+    const branch = data?.salesRoleById.branch;
+    const colorBranch = branch === "ลาดกระบัง" ? "#64c9e2" : "#7be4ca";
+    const colorBranchPass = branch === "ลาดกระบัง" ? "#1379ec" : "#0AB68B";
+    const colorOnMouse = branch === "ลาดกระบัง" ? "#0a7988" : "#0d4e3e";
 
-    const dateStart = "01/01/2012"
-    // const dateStart = "2020/01/01"
     const today = new Date();
     const getDateStart = new Date(dateStart);
     const differenceInTime = today.getTime() - getDateStart.getTime();
@@ -154,8 +155,18 @@ const SalesRoleDetail: React.FC<Props> = () => {
         });
 
         if (data?.salesRoleById.targets) {
-            const yearAll = data.salesRoleById.targets.map(val => val.year).reverse()
-            setSelectYear(yearAll)
+            const yearAll = data.salesRoleById.targets
+                .map((val) => val.year)
+            const commission = data.salesRoleById.targets
+                .filter(item => item.year === +chooseYear)
+                .map((val) => val.commission)
+            const strategy = data.salesRoleById.targets
+                .filter(item => item.year === +chooseYear)
+                .map((val) => val.strategy)
+            setCommission(commission[0])
+            setStrategy(strategy[0])
+            setSelectYear(yearAll);
+            setDateStart(data.salesRoleById.startDate)
         }
         // const issueFilterYear = data?.salesRoleById.issues.filter(
         const issueFilterYear = demoData?.filter(
@@ -170,9 +181,12 @@ const SalesRoleDetail: React.FC<Props> = () => {
 
         if (issueFilterYear && chooseMonth === "เดือน") {
             const queryValue = issueFilterYear.map((val) => val.value);
+
+            console.log('queryValue', queryValue)
             let result = 0;
             if (queryValue.length !== 0) {
                 result = queryValue.reduce(reducer);
+                console.log('result', result)
             }
             setItem(result);
 
@@ -332,7 +346,7 @@ const SalesRoleDetail: React.FC<Props> = () => {
         }
     }, [data, chooseMonth, chooseYear]);
 
-    console.log("monthValue", monthValue);
+    console.log("ร่วม ค่า Issues ทั้งหมด", item)
 
     return (
         <Flex flexDir="column" p="5" pb="10" overflow="auto" h="96vh">
@@ -346,12 +360,7 @@ const SalesRoleDetail: React.FC<Props> = () => {
                     {data?.salesRoleById.salesRole} {data?.salesRoleById.branch}
                 </Text>
                 <Flex>
-                    <Select
-                        w="150px"
-                        mr="5"
-                        fontWeight="semibold"
-                        name="userPrev"
-                    >
+                    <Select w="150px" mr="5" fontWeight="semibold" name="userPrev">
                         {userPrev.map((val, i) => (
                             <option key={i} value={val}>
                                 {val}
@@ -382,7 +391,7 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                 <option key={i} value={year}>
                                     {year}
                                 </option>
-                            )
+                            );
                         })}
                     </Select>
                 </Flex>
@@ -396,7 +405,7 @@ const SalesRoleDetail: React.FC<Props> = () => {
                 label="คุณไม่สามารถเข้าถึงข้อมูลนี้ได้!"
             />
 
-            {(fetching || loading) ? (
+            {fetching || loading ? (
                 <Flex justify="center">
                     <Spinner color="grey" height={50} width={50} />
                     <Text
@@ -423,13 +432,22 @@ const SalesRoleDetail: React.FC<Props> = () => {
                 </Flex>
             ) : (
                 <>
-                            <Flex justify="center" align="center" h="320px" w="100%">
+                            <Flex
+                                flexDir={["column", "column", "column", "column", "column", "row",]}
+                                rounded="7px"
+                                boxShadow="md"
+                                p="5"
+                                justify="center"
+                                align="center"
+                                mb="3"
+                            >
+                                <Flex w="100%" mb="3" justify="center">
                                 <Flex
                                     mr="1"
                                     h="230px"
-                                    w="230px"
-                                    rounded="7px"
-                                    boxShadow="md"
+                                        w="360px"
+                                        rounded="7px"
+                                        justify="center"
                                     cursor="pointer"
                                     _hover={{ fontWeight: "bold" }}
                                     onClick={() => userHandle(data?.salesRoleById.user.id)}
@@ -442,125 +460,143 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                             alt="Dan Abramov"
                                         />
                                     )}
+                                    </Flex>
+                                    <Flex
+                                        flexDir="column"
+                                        fontSize="xl"
+                                        h="230px"
+                                        w="410px"
+                                        p="5"
+                                        rounded="7px"
+                                        boxShadow="md"
+                                        color="white"
+                                        bg={colorBranchPass}
+                                        justify="center"
+                                    >
+                                        <Flex justify="space-between">
+                                            <Text fontWeight="semibold">Name</Text>
+                                            <Text>{data.salesRoleById.user.fullNameTH}</Text>
+                                        </Flex>
+                                        <Flex justify="space-between">
+                                            <Text fontWeight="semibold">Code</Text>
+                                            <Text>{data.salesRoleById.salesRole}</Text>
+                                        </Flex>
+                                        <Flex justify="space-between">
+                                            <Text fontWeight="semibold">Team</Text>
+                                            <Text>{data.salesRoleById.channel}</Text>
+                                        </Flex>
+                                        <Flex justify="space-between">
+                                            <Text fontWeight="semibold">Area</Text>
+                                            <Text>
+                                                {data.salesRoleById.areaCode.includes("--ตัวอย่าง--")
+                                                    ? "--ตัวอย่าง--"
+                                                    : data.salesRoleById.areaCode.includes("--ตัวอย่าง--")
+                                                        ? "--ตัวอย่าง--"
+                                                        : "--ตัวอย่าง--"}
+                                            </Text>
+                                        </Flex>
+                                        <Flex justify="space-between">
+                                            <Text fontWeight="semibold">Area Code</Text>
+                                            <Text>{data.salesRoleById.areaCode}</Text>
+                                        </Flex>
+                                        <Flex justify="space-between">
+                                            <Text fontWeight="semibold">Date Start</Text>
+                                            <Text>{dateStart}</Text>
+                                        </Flex>
+                                        <Flex justify="space-between">
+                                            <Text fontWeight="semibold">อายุงาน</Text>
+                                            {/* <Text>{data.salesRoleById.วันเริ่มตำแหน่ง หรือ อายุงาน}</Text> */}
+                                            <Text>
+                                                {sumYear >= 1 && sumYear.toString().split(".")[0] + " ปี"}{" "}
+                                                {monthDiff >= 1 && monthDiff + " เดือน"} {dayDiff} วัน
+                                            </Text>
+                                        </Flex>
+                                    </Flex>
                                 </Flex>
 
-                                <Flex
-                                    flexDir="column"
-                                    fontSize="md"
-                                    h="230px"
-                                    w="280px"
-                                    p="5"
-                                    mr="1"
-                                    rounded="7px"
-                                    boxShadow="md"
-                                    background={colorBranchPass}
-                                    color="white"
-                                >
-                                    <Flex justify="space-between">
-                                        <Text fontWeight="semibold">Company</Text>
-                                        <Text>JSRI</Text>
-                                    </Flex>
-                                    <Flex justify="space-between">
-                                        <Text fontWeight="semibold">Name</Text>
-                                        <Text>{data.salesRoleById.user.fullNameTH}</Text>
-                                    </Flex>
-                                    <Flex justify="space-between">
-                                        <Text fontWeight="semibold">Code</Text>
-                                        <Text>Demo</Text>
-                                    </Flex>
-                                    <Flex justify="space-between">
-                                        <Text fontWeight="semibold">Team</Text>
-                                        <Text>Demo</Text>
-                                    </Flex>
-                                    <Flex justify="space-between">
-                                        <Text fontWeight="semibold">Area</Text>
-                                        <Text>Demo</Text>
-                                    </Flex>
-                                    <Flex justify="space-between">
-                                        <Text fontWeight="semibold">Area Code</Text>
-                                        <Text>{data.salesRoleById.areaCode}</Text>
-                                    </Flex>
-                                    <Flex justify="space-between">
-                                        <Text fontWeight="semibold">Date Start</Text>
-                                        <Text>{dateStart}</Text>
-                                    </Flex>
-                                    <Flex justify="space-between">
-                                        <Text fontWeight="semibold">อายุงาน</Text>
-                                        {/* <Text>{data.salesRoleById.วันเริ่มตำแหน่ง หรือ อายุงาน}</Text> */}
-                                        <Text>
-                                            {sumYear >= 1 && sumYear.toString().split(".")[0] + " ปี"}{" "}
-                                            {monthDiff >= 1 && monthDiff + " เดือน"} {dayDiff} วัน
-                                        </Text>
-                                    </Flex>
-                                </Flex>
-
+                                <Flex w="100%" mb="3" justifyContent="center">
                                 <SalesPercent colorBranch={colorBranch} />
 
-                                <Flex flexDir="column" p="3" h="100%">
-                                    <Flex justify="space-between" mb="1" px="2">
-                                        <Text fontWeight="bold" fontSize="xl">
-                                            Target
-                                        </Text>
-                                        <Button
-                                            ml="5"
-                                            size="sm"
-                                            colorScheme={branch === "ลาดกระบัง" ? "blue" : "teal"}
-                                            color="white"
-                                            leftIcon={<AddIcon />}
-                                        // onClick={() => {
-                                        //     lineNotifyToDevGroup();
-                                        // }}
-                                        >
-                                            เพิ่ม
-                                        </Button>
-                                    </Flex>
-
-                                    <Table
-                                        boxShadow="base"
-                                        variant="striped"
-                                        colorScheme="blackAlpha"
+                                    <Flex
+                                        p="3"
+                                        h="230px"
+                                        w="410px"
+                                        flexDir="column"
+                                        rounded="7px"
+                                        boxShadow="md"
                                     >
-                                        <Thead>
-                                            <Tr bg={colorBranchPass}>
-                                                <Th
-                                                    textAlign="center"
-                                                    fontSize={["xs", "xs", "sm", "md"]}
-                                                    color="white"
-                                                >
-                                                    Year
-                                                </Th>
-                                                <Th
-                                                    textAlign="center"
-                                                    fontSize={["xs", "xs", "sm", "md"]}
-                                                    color="white"
-                                                >
-                                                    Safety Line
-                                                </Th>
-                                                <Th
-                                                    textAlign="center"
-                                                    fontSize={["xs", "xs", "sm", "md"]}
-                                                    color="white"
-                                                >
-                                                    KPI
-                                                </Th>
-                                            </Tr>
-                                        </Thead>
-                                        <Tbody>
-                                            {data.salesRoleById.targets.map((val) => (
-                                                <Tr key={val.id}>
-                                                    <Td>
-                                                        <Center>{val.year}</Center>
-                                                    </Td>
-                                                    <Td>
-                                                        <Center>{formatAmount(val.value)}</Center>
-                                                    </Td>
-                                                    <Td>
-                                                        <Center>Demo</Center>
-                                                    </Td>
+                                        <Flex justify="space-between" mb="1" px="2">
+                                            <Text fontWeight="bold" fontSize="xl">
+                                                Target
+                                            </Text>
+                                            <Button
+                                                ml="5"
+                                                size="sm"
+                                                colorScheme={branch === "ลาดกระบัง" ? "blue" : "teal"}
+                                                color="white"
+                                                leftIcon={<AddIcon />}
+                                                onClick={() => {
+                                                    if (me?.me?.position.includes("GM")) {
+                                                        setIsOpen(true);
+                                                    } else {
+                                                        return setAlertWarning("show");
+                                                    }
+                                                }}
+                                            >
+                                                เพิ่ม
+                                            </Button>
+                                            {isOpen && (
+                                                <AddAndEditTarget
+                                                    Open={true}
+                                                    setOpen={() => setIsOpen(false)}
+                                                    branch={branch}
+                                                    roleId={params.id}
+                                                />
+                                            )}
+                                        </Flex>
+                                        <Table>
+                                            <Thead>
+                                                <Tr bg={colorBranchPass}>
+                                                    <Th
+                                                        textAlign="center"
+                                                        fontSize={["xs", "xs", "sm", "md"]}
+                                                        color="white"
+                                                    >
+                                                        Year
+                                                    </Th>
+                                                    <Th
+                                                        textAlign="center"
+                                                        fontSize={["xs", "xs", "sm", "md"]}
+                                                        color="white"
+                                                    >
+                                                        commission
+                                                    </Th>
+                                                    <Th
+                                                        textAlign="center"
+                                                        fontSize={["xs", "xs", "sm", "md"]}
+                                                        color="white"
+                                                    >
+                                                        strategy
+                                                    </Th>
                                                 </Tr>
-                                            ))}
-                                        </Tbody>
-                                    </Table>
+                                            </Thead>
+                                            <Tbody>
+                                                {data.salesRoleById.targets.map((val) => (
+                                                    <Tr key={val.id}>
+                                                        <Td>
+                                                            <Center>{val.year}</Center>
+                                                        </Td>
+                                                        <Td>
+                                                            <Center>{formatAmount(val.commission)}</Center>
+                                                        </Td>
+                                                        <Td>
+                                                            <Center>{formatAmount(val.strategy)}</Center>
+                                                        </Td>
+                                                    </Tr>
+                                                ))}
+                                            </Tbody>
+                                        </Table>
+                                    </Flex>
                                 </Flex>
                             </Flex>
 
@@ -569,7 +605,9 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                     colorBranch={colorBranch}
                                     colorBranchPass={colorBranchPass}
                                     colorOnMouse={colorOnMouse}
-                                    team={chooseYear}
+                                    title={chooseYear}
+                                    commission={commission}
+                                    strategy={strategy}
                                     monthValue={monthValue}
                                     setMonthIndex={setMonthIndex}
                                 />
@@ -577,13 +615,25 @@ const SalesRoleDetail: React.FC<Props> = () => {
 
                             <Flex mt="2" justify="space-between">
                                 <Flex flexDir="column" w="33%" rounded="7px" boxShadow="md">
-                                    <IssueChart label="สรุป Issue รายเดือน" monthValue={monthValue} colorBranch={colorBranch} />
+                                    <IssueChart
+                                        label="สรุป Issue รายเดือน"
+                                        monthValue={monthValue}
+                                        colorBranch={colorBranch}
+                                    />
                                 </Flex>
                                 <Flex flexDir="column" w="33%" rounded="7px" boxShadow="md">
-                                    <IssueChart label="สรุป WIP รายเดือน" monthValue={monthValue} colorBranch={colorBranch} />
+                                    <IssueChart
+                                        label="สรุป WIP รายเดือน"
+                                        monthValue={monthValue}
+                                        colorBranch={colorBranch}
+                                    />
                                 </Flex>
                                 <Flex flexDir="column" w="33%" rounded="7px" boxShadow="md">
-                                    <IssueChart label="สรุป Visit รายเดือน" monthValue={monthVisit} colorBranch={colorBranch} />
+                                    <IssueChart
+                                        label="สรุป Visit รายเดือน"
+                                        monthValue={monthVisit}
+                                        colorBranch={colorBranch}
+                                    />
                                 </Flex>
                             </Flex>
 
@@ -599,14 +649,6 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                                 <Text ml="6" fontWeight="bold" fontSize="xl">
                                                     {" "}
                                                     ประวัติการกรอก Issue ของทั้งหมด
-                                                </Text>
-                                                <Text
-                                                    ml="2"
-                                                    fontWeight="bold"
-                                                    fontSize="xl"
-                                                    color="blue.500"
-                                                >
-                                                    {formatAmount(item)}
                                                 </Text>
                                             </Flex>
                                             <Table
@@ -642,35 +684,7 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                                             fontSize={["xs", "xs", "sm", "md"]}
                                                             color="white"
                                                         >
-                                                            Quotation No.
-                                                        </Th>
-                                                        <Th
-                                                            textAlign="center"
-                                                            fontSize={["xs", "xs", "sm", "md"]}
-                                                            color="white"
-                                                        >
-                                                            Brand
-                                                        </Th>
-                                                        <Th
-                                                            textAlign="center"
-                                                            fontSize={["xs", "xs", "sm", "md"]}
-                                                            color="white"
-                                                        >
-                                                            Category
-                                                        </Th>
-                                                        <Th
-                                                            textAlign="center"
-                                                            fontSize={["xs", "xs", "sm", "md"]}
-                                                            color="white"
-                                                        >
                                                             Detail
-                                                        </Th>
-                                                        <Th
-                                                            textAlign="center"
-                                                            fontSize={["xs", "xs", "sm", "md"]}
-                                                            color="white"
-                                                        >
-                                                            Prob
                                                         </Th>
                                                         <Th
                                                             textAlign="center"
@@ -686,46 +700,35 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                                         >
                                                             Value
                                                         </Th>
-                                                        <Th
-                                                            textAlign="center"
-                                                            fontSize={["xs", "xs", "sm", "md"]}
-                                                            color="white"
-                                                        >
-                                                            Contact
-                                                        </Th>
                                                     </Tr>
                                                 </Thead>
                                                 <Tbody>
                                                     {data.salesRoleById.issues.map((val, i) => (
-                                                        <Tr key={i} cursor="pointer" onClick={() => history.push(`/sales-report/issue/${val.id}`)}>
-                                                            <Td w="10%">
+                                                        <Tr
+                                                            key={i}
+                                                            cursor="pointer"
+                                                            onClick={() =>
+                                                                history.push(`/sales-report/issue/${val.id}`)
+                                                            }
+                                                        >
+                                                            <Td w="20%">
                                                                 <Flex flexDir="column">
-                                                                    <Center>{formatDate(+val.createdAt)}</Center>
-                                                                    <Center>เดือน {new Date(+val.createdAt).getMonth() + 1}</Center>
+                                                                    <Center>{formatDateNew(+val.createdAt)}</Center>
                                                                 </Flex>
                                                             </Td>
-                                                            <Td w="10%">
+                                                            <Td w="15%">
                                                                 <Center>{val.saleName}</Center>
                                                             </Td>
-                                                            <Td w="10%">
+                                                            <Td w="15%">
                                                                 <Center>{val.customer}</Center>
                                                             </Td>
-                                                            <Td w="10%">
-                                                                <Center>{val.quotationNo}</Center>
-                                                            </Td>
-                                                            <Td w="10%">
-                                                                <Center>{val.brand}</Center>
-                                                            </Td>
-                                                            <Td w="10%">
-                                                                <Center>{val.category}</Center>
-                                                            </Td>
                                                             <Td w="30%">{val.detail}</Td>
-                                                            <Td w="5%">{val.prob}</Td>
-                                                            <Td w="5%" color="cyan.600">{val.status}</Td>
-                                                            <Td w="10%">
+                                                            <Td w="5%" color="cyan.600">
+                                                                {val.status}
+                                                            </Td>
+                                                            <Td w="15%">
                                                                 <Center>{formatAmount(val.value)}</Center>
                                                             </Td>
-                                                            <Td w="10%">{val.contact}</Td>
                                                         </Tr>
                                                     ))}
                                                 </Tbody>
@@ -809,7 +812,7 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                                     {data.salesRoleById.salesActual.map((val, i) => (
                                                         <Tr key={i}>
                                                             <Td w="10%">
-                                                                <Center>{formatDate(+val.createdAt)}</Center>
+                                                                <Center>{formatDateNew(+val.createdAt)}</Center>
                                                             </Td>
                                                             <Td w="10%">
                                                                 <Center>{val.user.fullNameTH}</Center>

@@ -20,7 +20,6 @@ import {
     // RegularSalesRoleFragment,
     useCreateSalesRoleMutation
 } from "../../generated/graphql";
-
 import InputField from "../InputField";
 import SelectControl from "../Selectfield";
 // import {
@@ -54,6 +53,7 @@ const AddAndEditRole: React.FC<Props> = ({ Open, setOpen }) => {
             <Formik
                 initialValues={{
                     salesRole: "",
+                    startDate: "",
                     areaCode: "",
                     channel: "Cutting 1",
                     userId: 0,
@@ -61,6 +61,7 @@ const AddAndEditRole: React.FC<Props> = ({ Open, setOpen }) => {
                     status: "ใช้งาน",
                 }}
                 onSubmit={async (values, { setErrors }) => {
+                    console.table(values)
                     if (values.userId === 0) {
                         alert("โปรดใช้ User ID")
                     }
@@ -88,17 +89,22 @@ const AddAndEditRole: React.FC<Props> = ({ Open, setOpen }) => {
                             <Form>
                                 <AlertDialogBody>
                                     <Flex flexDir="column">
-                                        <Flex className="plus-div-mgl">
                                         <InputField
                                             name="salesRole"
                                             placeholder="Sales..."
                                             label="Sales Role"
                                             />
+                                        <Flex className="plus-div-mgl">
                                             <InputField
                                                 type="number"
                                                 name="userId"
                                                 placeholder="id..."
                                                 label="User ID"
+                                            />
+                                            <InputField
+                                                name="startDate"
+                                                placeholder="dd/mm/yyyy..."
+                                                label="วันที่เริ่มงาน"
                                             />
                                         </Flex>
                                         <Flex className="plus-div-mgl">
@@ -185,7 +191,7 @@ const AddAndEditRole: React.FC<Props> = ({ Open, setOpen }) => {
 
                                 <AlertDialogFooter>
                                     <Button
-                                        colorScheme="green"
+                                        colorScheme="blue"
                                         isLoading={isSubmitting}
                                         type="submit"
                                     >

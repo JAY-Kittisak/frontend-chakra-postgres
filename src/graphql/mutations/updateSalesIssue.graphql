@@ -1,0 +1,5 @@
+mutation UpdateSalesIssue($input: UpdateIssue_Input!) {
+  updateSalesIssue(input: $input) {
+    ...RegularSalesIssue
+  }
+}

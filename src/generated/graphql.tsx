@@ -48,6 +48,13 @@ export type Customer = {
   updatedAt: Scalars['String'];
 };
 
+export type CustomerCdc = {
+  __typename?: 'CustomerCdc';
+  id: Scalars['Float'];
+  customerCode: Scalars['String'];
+  customerName: Scalars['String'];
+};
+
 export type CustomerJsr = {
   __typename?: 'CustomerJsr';
   id: Scalars['Float'];
@@ -426,6 +433,7 @@ export type Mutation = {
   deleteSalesRole: Scalars['Boolean'];
   createSalesTarget: SalesTarget_Response;
   createSalesIssue: SalesIssue_Response;
+  updateSalesIssue: SalesIssue;
 };
 
 
@@ -691,6 +699,11 @@ export type MutationCreateSalesIssueArgs = {
   input: SalesIssue_Input;
 };
 
+
+export type MutationUpdateSalesIssueArgs = {
+  input: UpdateIssue_Input;
+};
+
 export type ProductByTier = {
   __typename?: 'ProductByTier';
   id: Scalars['Float'];
@@ -773,6 +786,7 @@ export type Query = {
   issueById?: Maybe<SalesIssue>;
   salesBrands?: Maybe<Array<SalesBrand>>;
   customerJsr?: Maybe<Array<CustomerJsr>>;
+  customerCdc?: Maybe<Array<CustomerCdc>>;
 };
 
 
@@ -882,6 +896,7 @@ export type QueryCustomerByIdArgs = {
 
 
 export type QuerySalesRoleByIdArgs = {
+  year: Scalars['Int'];
   monthIndex: Scalars['Int'];
   id: Scalars['Int'];
 };
@@ -899,6 +914,16 @@ export type QueryIssueByRoleIdArgs = {
 
 export type QueryIssueByIdArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryCustomerJsrArgs = {
+  customerName: Scalars['String'];
+};
+
+
+export type QueryCustomerCdcArgs = {
+  customerName: Scalars['String'];
 };
 
 export type QueryJobIt_Input = {
@@ -985,10 +1010,26 @@ export type SalesBrand = {
   brand: Scalars['String'];
 };
 
+export type SalesEditIssue = {
+  __typename?: 'SalesEditIssue';
+  id: Scalars['Float'];
+  issueId: Scalars['Float'];
+  userEdit: Scalars['String'];
+  branch: Scalars['String'];
+  customer: Scalars['String'];
+  prob: Scalars['String'];
+  status: Scalars['String'];
+  value: Scalars['Float'];
+  issue: SalesIssue;
+  createdAt: Scalars['String'];
+};
+
 export type SalesIssue = {
   __typename?: 'SalesIssue';
   id: Scalars['Float'];
   saleRoleId: Scalars['Float'];
+  visitDate: Scalars['String'];
+  completionDate: Scalars['String'];
   saleName: Scalars['String'];
   contact: Scalars['String'];
   customer: Scalars['String'];
@@ -1001,12 +1042,15 @@ export type SalesIssue = {
   value: Scalars['Float'];
   branch: Scalars['String'];
   saleRole: SalesRole;
+  editIssues: Array<SalesEditIssue>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
 
 export type SalesIssue_Input = {
   customer: Scalars['String'];
+  visitDate: Scalars['String'];
+  completionDate: Scalars['String'];
   quotationNo: Scalars['String'];
   brand: Scalars['String'];
   category: Scalars['String'];
@@ -1032,6 +1076,8 @@ export type SalesRole = {
   branch: Scalars['String'];
   status: Scalars['String'];
   userId: Scalars['Float'];
+  startDate: Scalars['String'];
+  updatedAt: Scalars['String'];
   user: User;
   salesActual: Array<SalesActual>;
   targets: Array<SalesTarget>;
@@ -1045,6 +1091,7 @@ export type SalesRole_Input = {
   branch: Scalars['String'];
   status: Scalars['String'];
   userId: Scalars['Float'];
+  startDate: Scalars['String'];
 };
 
 export type SalesRole_Response = {
@@ -1057,7 +1104,8 @@ export type SalesTarget = {
   __typename?: 'SalesTarget';
   id: Scalars['Float'];
   year: Scalars['Float'];
-  value: Scalars['Float'];
+  commission: Scalars['Float'];
+  strategy: Scalars['Float'];
   branch: Scalars['String'];
   salesRoleId: Scalars['Float'];
   sale: SalesRole;
@@ -1067,7 +1115,8 @@ export type SalesTarget = {
 
 export type SalesTarget_Input = {
   year: Scalars['Float'];
-  value: Scalars['Float'];
+  commission: Scalars['Float'];
+  strategy: Scalars['Float'];
   branch: Scalars['String'];
   salesRoleId: Scalars['Float'];
 };
@@ -1165,6 +1214,13 @@ export type UpdateGiveResponse = {
   __typename?: 'UpdateGiveResponse';
   errors?: Maybe<Array<FieldErrorGive>>;
   give?: Maybe<Give>;
+};
+
+export type UpdateIssue_Input = {
+  id: Scalars['Float'];
+  prob: Scalars['String'];
+  status: Scalars['String'];
+  value: Scalars['Float'];
 };
 
 export type UpdateStockItOrResponse = {
@@ -1321,16 +1377,23 @@ export type RegularResellFragment = (
 
 export type RegularSalesIssueFragment = (
   { __typename?: 'SalesIssue' }
-  & Pick<SalesIssue, 'id' | 'saleRoleId' | 'saleName' | 'contact' | 'customer' | 'quotationNo' | 'category' | 'detail' | 'prob' | 'status' | 'value' | 'branch' | 'createdAt' | 'updatedAt' | 'brand'>
+  & Pick<SalesIssue, 'id' | 'saleRoleId' | 'saleName' | 'contact' | 'customer' | 'visitDate' | 'completionDate' | 'quotationNo' | 'category' | 'detail' | 'prob' | 'status' | 'value' | 'branch' | 'createdAt' | 'updatedAt' | 'brand'>
   & { saleRole: (
     { __typename?: 'SalesRole' }
     & Pick<SalesRole, 'id' | 'salesRole' | 'channel'>
-  ) }
+  ), editIssues: Array<(
+    { __typename?: 'SalesEditIssue' }
+    & Pick<SalesEditIssue, 'id' | 'userEdit' | 'prob' | 'status' | 'value' | 'createdAt'>
+  )> }
 );
 
 export type RegularSalesRoleFragment = (
   { __typename?: 'SalesRole' }
-  & Pick<SalesRole, 'id' | 'salesRole' | 'channel' | 'userId' | 'branch' | 'status'>
+  & Pick<SalesRole, 'id' | 'salesRole' | 'channel' | 'areaCode' | 'userId' | 'branch' | 'status' | 'startDate' | 'updatedAt'>
+  & { user: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'fullNameTH' | 'imageUrl'>
+  ) }
 );
 
 export type RegularStockItFragment = (
@@ -1583,6 +1646,25 @@ export type CreateSalesRoleMutation = (
     )>>, salesRoles?: Maybe<Array<(
       { __typename?: 'SalesRole' }
       & RegularSalesRoleFragment
+    )>> }
+  ) }
+);
+
+export type CreateSalesTargetMutationVariables = Exact<{
+  input: SalesTarget_Input;
+}>;
+
+
+export type CreateSalesTargetMutation = (
+  { __typename?: 'Mutation' }
+  & { createSalesTarget: (
+    { __typename?: 'SalesTarget_Response' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorSalesRole' }
+      & Pick<FieldErrorSalesRole, 'field' | 'message'>
+    )>>, salesTargets?: Maybe<Array<(
+      { __typename?: 'SalesTarget' }
+      & Pick<SalesTarget, 'id' | 'year' | 'commission' | 'strategy' | 'branch' | 'salesRoleId'>
     )>> }
   ) }
 );
@@ -1930,6 +2012,19 @@ export type UpdateRolesMutation = (
   ) }
 );
 
+export type UpdateSalesIssueMutationVariables = Exact<{
+  input: UpdateIssue_Input;
+}>;
+
+
+export type UpdateSalesIssueMutation = (
+  { __typename?: 'Mutation' }
+  & { updateSalesIssue: (
+    { __typename?: 'SalesIssue' }
+    & RegularSalesIssueFragment
+  ) }
+);
+
 export type UpdateStockItMutationVariables = Exact<{
   id: Scalars['Int'];
   input: StockItInput;
@@ -2035,7 +2130,22 @@ export type CustomerByIdQuery = (
   ) }
 );
 
-export type CustomerJsrQueryVariables = Exact<{ [key: string]: never; }>;
+export type CustomerCdcQueryVariables = Exact<{
+  customerName: Scalars['String'];
+}>;
+
+
+export type CustomerCdcQuery = (
+  { __typename?: 'Query' }
+  & { customerCdc?: Maybe<Array<(
+    { __typename?: 'CustomerCdc' }
+    & Pick<CustomerCdc, 'id' | 'customerCode' | 'customerName'>
+  )>> }
+);
+
+export type CustomerJsrQueryVariables = Exact<{
+  customerName: Scalars['String'];
+}>;
 
 
 export type CustomerJsrQuery = (
@@ -2376,6 +2486,7 @@ export type SalesBrandsQuery = (
 export type SalesRoleByIdQueryVariables = Exact<{
   id: Scalars['Int'];
   monthIndex: Scalars['Int'];
+  year: Scalars['Int'];
 }>;
 
 
@@ -2383,10 +2494,10 @@ export type SalesRoleByIdQuery = (
   { __typename?: 'Query' }
   & { salesRoleById: (
     { __typename?: 'SalesRole' }
-    & Pick<SalesRole, 'id' | 'salesRole' | 'areaCode' | 'channel' | 'branch' | 'status' | 'userId'>
+    & Pick<SalesRole, 'id' | 'salesRole' | 'areaCode' | 'channel' | 'branch' | 'status' | 'userId' | 'startDate' | 'updatedAt'>
     & { targets: Array<(
       { __typename?: 'SalesTarget' }
-      & Pick<SalesTarget, 'id' | 'year' | 'value' | 'branch'>
+      & Pick<SalesTarget, 'id' | 'year' | 'commission' | 'strategy' | 'branch'>
     )>, user: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'fullNameTH' | 'imageUrl'>
@@ -2414,11 +2525,7 @@ export type SalesRolesQuery = (
   { __typename?: 'Query' }
   & { salesRoles?: Maybe<Array<(
     { __typename?: 'SalesRole' }
-    & Pick<SalesRole, 'id' | 'salesRole' | 'channel' | 'branch' | 'status' | 'userId'>
-    & { user: (
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'fullNameTH' | 'imageUrl'>
-    ) }
+    & RegularSalesRoleFragment
   )>> }
 );
 
@@ -2747,6 +2854,8 @@ export const RegularSalesIssueFragmentDoc = gql`
   saleName
   contact
   customer
+  visitDate
+  completionDate
   quotationNo
   category
   detail
@@ -2762,6 +2871,14 @@ export const RegularSalesIssueFragmentDoc = gql`
     salesRole
     channel
   }
+  editIssues {
+    id
+    userEdit
+    prob
+    status
+    value
+    createdAt
+  }
 }
     `;
 export const RegularSalesRoleFragmentDoc = gql`
@@ -2769,9 +2886,17 @@ export const RegularSalesRoleFragmentDoc = gql`
   id
   salesRole
   channel
+  areaCode
   userId
   branch
   status
+  startDate
+  updatedAt
+  user {
+    id
+    fullNameTH
+    imageUrl
+  }
 }
     `;
 export const RegularStockItFragmentDoc = gql`
@@ -3046,6 +3171,28 @@ export const CreateSalesRoleDocument = gql`
 
 export function useCreateSalesRoleMutation() {
   return Urql.useMutation<CreateSalesRoleMutation, CreateSalesRoleMutationVariables>(CreateSalesRoleDocument);
+};
+export const CreateSalesTargetDocument = gql`
+    mutation CreateSalesTarget($input: SalesTarget_Input!) {
+  createSalesTarget(input: $input) {
+    errors {
+      field
+      message
+    }
+    salesTargets {
+      id
+      year
+      commission
+      strategy
+      branch
+      salesRoleId
+    }
+  }
+}
+    `;
+
+export function useCreateSalesTargetMutation() {
+  return Urql.useMutation<CreateSalesTargetMutation, CreateSalesTargetMutationVariables>(CreateSalesTargetDocument);
 };
 export const CreateStockItDocument = gql`
     mutation CreateStockIt($input: StockItInput!, $options: Upload!) {
@@ -3348,6 +3495,17 @@ export const UpdateRolesDocument = gql`
 export function useUpdateRolesMutation() {
   return Urql.useMutation<UpdateRolesMutation, UpdateRolesMutationVariables>(UpdateRolesDocument);
 };
+export const UpdateSalesIssueDocument = gql`
+    mutation UpdateSalesIssue($input: UpdateIssue_Input!) {
+  updateSalesIssue(input: $input) {
+    ...RegularSalesIssue
+  }
+}
+    ${RegularSalesIssueFragmentDoc}`;
+
+export function useUpdateSalesIssueMutation() {
+  return Urql.useMutation<UpdateSalesIssueMutation, UpdateSalesIssueMutationVariables>(UpdateSalesIssueDocument);
+};
 export const UpdateStockItDocument = gql`
     mutation UpdateStockIt($id: Int!, $input: StockItInput!) {
   updateStockIt(id: $id, input: $input) {
@@ -3439,9 +3597,22 @@ export const CustomerByIdDocument = gql`
 export function useCustomerByIdQuery(options: Omit<Urql.UseQueryArgs<CustomerByIdQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<CustomerByIdQuery>({ query: CustomerByIdDocument, ...options });
 };
+export const CustomerCdcDocument = gql`
+    query CustomerCdc($customerName: String!) {
+  customerCdc(customerName: $customerName) {
+    id
+    customerCode
+    customerName
+  }
+}
+    `;
+
+export function useCustomerCdcQuery(options: Omit<Urql.UseQueryArgs<CustomerCdcQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<CustomerCdcQuery>({ query: CustomerCdcDocument, ...options });
+};
 export const CustomerJsrDocument = gql`
-    query CustomerJsr {
-  customerJsr {
+    query CustomerJsr($customerName: String!) {
+  customerJsr(customerName: $customerName) {
     id
     customerCode
     customerPrefix
@@ -3780,8 +3951,8 @@ export function useSalesBrandsQuery(options: Omit<Urql.UseQueryArgs<SalesBrandsQ
   return Urql.useQuery<SalesBrandsQuery>({ query: SalesBrandsDocument, ...options });
 };
 export const SalesRoleByIdDocument = gql`
-    query SalesRoleById($id: Int!, $monthIndex: Int!) {
-  salesRoleById(id: $id, monthIndex: $monthIndex) {
+    query SalesRoleById($id: Int!, $monthIndex: Int!, $year: Int!) {
+  salesRoleById(id: $id, monthIndex: $monthIndex, year: $year) {
     id
     salesRole
     areaCode
@@ -3789,10 +3960,13 @@ export const SalesRoleByIdDocument = gql`
     branch
     status
     userId
+    startDate
+    updatedAt
     targets {
       id
       year
-      value
+      commission
+      strategy
       branch
     }
     user {
@@ -3847,20 +4021,10 @@ export function useSalesRoleByIdQuery(options: Omit<Urql.UseQueryArgs<SalesRoleB
 export const SalesRolesDocument = gql`
     query SalesRoles {
   salesRoles {
-    id
-    salesRole
-    channel
-    branch
-    status
-    userId
-    user {
-      id
-      fullNameTH
-      imageUrl
-    }
+    ...RegularSalesRole
   }
 }
-    `;
+    ${RegularSalesRoleFragmentDoc}`;
 
 export function useSalesRolesQuery(options: Omit<Urql.UseQueryArgs<SalesRolesQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<SalesRolesQuery>({ query: SalesRolesDocument, ...options });

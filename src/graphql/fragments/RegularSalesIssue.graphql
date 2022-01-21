@@ -1,22 +1,32 @@
 fragment RegularSalesIssue on SalesIssue {
+  id
+  saleRoleId
+  saleName
+  contact
+  customer
+  visitDate
+  completionDate
+  quotationNo
+  category
+  detail
+  prob
+  status
+  value
+  branch
+  createdAt
+  updatedAt
+  brand
+  saleRole {
     id
-    saleRoleId
-    saleName
-    contact
-    customer
-    quotationNo
-    category
-    detail
+    salesRole
+    channel
+  }
+  editIssues{
+    id
+    userEdit
     prob
     status
     value
-    branch
     createdAt
-    updatedAt
-    brand
-    saleRole {
-      id
-      salesRole
-      channel
-    }
   }
+}
