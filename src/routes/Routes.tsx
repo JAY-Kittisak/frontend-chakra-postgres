@@ -29,6 +29,8 @@ import OrderGiveRoute from "./OrderGiveRoute";
 import AdminRoutes from "./AdminRoutes";
 import ManualADRoute from "./ManualADRoute";
 import StockItRoute from "./StockItRoute";
+import SalesVisitCreate from "../pages/SalesVisitCreate";
+import SalesVisitDetail from "../pages/SalesVisitDetail";
 
 interface Props { }
 
@@ -41,6 +43,9 @@ const Routes: React.FC<Props> = () => {
             <Route path="/sales-report/issue/:id">
                 <SalesIssueDetail />
             </Route>
+            <Route path="/sales-report/visit/:id">
+                <SalesVisitDetail />
+            </Route>
             <Route path="/sales-report/role-manage/:id">
                 <SalesRoleDetail />
             </Route>
@@ -49,6 +54,9 @@ const Routes: React.FC<Props> = () => {
             </Route>
             <Route path="/sales-report/issue-create">
                 <SalesIssueCreate />
+            </Route>
+            <Route path="/sales-report/visit-create">
+                <SalesVisitCreate />
             </Route>
             <Route path="/sales-report/actual-create">
                 <SalesActualCreate />

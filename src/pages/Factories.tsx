@@ -27,49 +27,50 @@ const Factories: React.FC<Props> = () => {
 
 
     useEffect(() => {
+        if (!factoryAll) return
         if (industrialEstateSelect === "All") {
-            const filterIndustrialEstate = factoryAll?.factories.filter((data) => {
+            const filterIndustrialEstate = factoryAll.factories.filter((data) => {
                 return data;
             });
             return setIndustrialEstate(filterIndustrialEstate);
         }
         if (industrialEstateSelect === "แก่งคอย") {
-            const filterIndustrialEstate = factoryAll?.factories.filter((data) => {
+            const filterIndustrialEstate = factoryAll.factories.filter((data) => {
                 return data.industrialEstate === "แก่งคอย";
             });
             return setIndustrialEstate(filterIndustrialEstate);
         }
 
         if (industrialEstateSelect === "แหลมฉบัง") {
-            const filterIndustrialEstate = factoryAll?.factories.filter((data) => {
+            const filterIndustrialEstate = factoryAll.factories.filter((data) => {
                 return data.industrialEstate === "แหลมฉบัง";
             });
             return setIndustrialEstate(filterIndustrialEstate);
         }
 
         if (industrialEstateSelect === "เหมราชอีสเทิร์นซีบอร์ด") {
-            const filterIndustrialEstate = factoryAll?.factories.filter((data) => {
+            const filterIndustrialEstate = factoryAll.factories.filter((data) => {
                 return data.industrialEstate === "เหมราชอีสเทิร์นซีบอร์ด";
             });
             return setIndustrialEstate(filterIndustrialEstate);
         }
 
         if (industrialEstateSelect === "เอเซีย (สุวรรณภูมิ)") {
-            const filterIndustrialEstate = factoryAll?.factories.filter((data) => {
+            const filterIndustrialEstate = factoryAll.factories.filter((data) => {
                 return data.industrialEstate === "เอเซีย (สุวรรณภูมิ)";
             });
             return setIndustrialEstate(filterIndustrialEstate);
         }
 
         if (industrialEstateSelect === "เอเซีย") {
-            const filterIndustrialEstate = factoryAll?.factories.filter((data) => {
+            const filterIndustrialEstate = factoryAll.factories.filter((data) => {
                 return data.industrialEstate === "เอเซีย";
             });
             return setIndustrialEstate(filterIndustrialEstate);
         }
 
         if (industrialEstateSelect === "เหมราชอีสเทิร์นซีบอร์ด แห่งที่ 4") {
-            const filterIndustrialEstate = factoryAll?.factories.filter((data) => {
+            const filterIndustrialEstate = factoryAll.factories.filter((data) => {
                 return data.industrialEstate === "เหมราชอีสเทิร์นซีบอร์ด แห่งที่ 4";
             });
             return setIndustrialEstate(filterIndustrialEstate);
@@ -77,7 +78,7 @@ const Factories: React.FC<Props> = () => {
     }, [
         industrialEstateSelect,
         setIndustrialEstateSelect,
-        factoryAll?.factories,
+        factoryAll,
     ]);
 
     const estate = industrialEstate
@@ -90,7 +91,7 @@ const Factories: React.FC<Props> = () => {
         .map(data => <Text as="ins" color="orange" key={data.id}>{data.industrialEstate}</Text>)
 
     return (
-        <>
+        <Flex flexDir="column" p="5" pb="10" overflow="auto" h="96vh">
             <Stack isInline justify="space-between">
                 <Box mb="5" w="20%">
                     <Text as="h2" fontWeight="semibold" fontSize={["sm", "sm", "lg", "xl"]} my={2}>
@@ -181,7 +182,7 @@ const Factories: React.FC<Props> = () => {
                         </Flex>
             )}
             </Box>
-        </>
+        </Flex>
     );
 };
 

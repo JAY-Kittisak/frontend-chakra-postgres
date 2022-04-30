@@ -1,0 +1,23 @@
+fragment RegularSalesVisit on SalesVisit {
+    id
+    saleRoleId,
+    saleName,
+    customer,
+    visitDate,
+    quotationNo,
+    value,
+    contactName,
+    position,
+    department,
+    jobPurpose,
+    customerType,
+    branch,
+    createdAt,
+    updatedAt,
+    issueReceives {
+      id
+      customer
+      detail
+      createdAt
+    }
+}

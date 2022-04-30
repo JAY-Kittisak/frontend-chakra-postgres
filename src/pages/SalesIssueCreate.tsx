@@ -6,20 +6,20 @@ import {
 } from '@chakra-ui/react'
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Form, Formik } from "formik";
-import { useHistory } from "react-router";
+// import { useHistory } from "react-router";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
 import InputField from '../components/InputField';
 import { useIsAuth } from '../utils/uselsAuth';
 import { 
-    useCreateSalesIssueMutation, 
-    FieldError, 
+    // useCreateSalesIssueMutation, 
+    // FieldError, 
     useSalesBrandsQuery, 
     useMeQuery 
 } from '../generated/graphql';
 
-import { toErrorMap } from "../utils/toErrorMap";
+// import { toErrorMap } from "../utils/toErrorMap";
 import { selectMonth,probSelect,catIssueStatus } from '../utils/helpers';
 import SelectCustomerJsr from '../components/sales-report/SelectCustomerJsr';
 import SelectCustomerCdc from '../components/sales-report/SelectCustomerCdc';
@@ -57,11 +57,11 @@ const SalesIssueCreate: React.FC<Props> = () => {
     const [customer, setCustomer] = useState("");
     const [changeInput, setChangeInput] = useState(true);
 
-    const [, createIssue] = useCreateSalesIssueMutation()
+    // const [, createIssue] = useCreateSalesIssueMutation()
     const [{ data }] = useSalesBrandsQuery()
     const [{ data: me }] = useMeQuery()
 
-    const history = useHistory();
+    // const history = useHistory();
 
     const onChangeEnd = (date: Date) => {
         setDateEnd(date);
@@ -87,8 +87,6 @@ const SalesIssueCreate: React.FC<Props> = () => {
         }
     }, [customerData])
 
-    console.log(customer);
-
     return (
         <Flex flexDir="column" px="5" overflowY="auto" h="95vh">
             <Flex justify="space-between">
@@ -110,7 +108,7 @@ const SalesIssueCreate: React.FC<Props> = () => {
                     value: 0,
                     contact: "",
                 }}
-                onSubmit={async (values, { setErrors }) => {
+                onSubmit={async (values) => {
 
                     const sumArr = {
                         ...values,
@@ -122,15 +120,15 @@ const SalesIssueCreate: React.FC<Props> = () => {
                         prob,
                         status
                     };
-                    const response = await createIssue({ input: sumArr });
-                    if (response.data?.createSalesIssue.errors) {
-                        setErrors(
-                            toErrorMap(response.data.createSalesIssue.errors as FieldError[])
-                        );
-                    } else if (response.data?.createSalesIssue.salesIssues) {
-                        const newId = response.data.createSalesIssue.salesIssues[0].id;
-                        history.push(`/sales-report/issue/${newId}`);
-                    }
+                    // const response = await createIssue({ input: sumArr });
+                    // if (response.data?.createSalesIssue.errors) {
+                    //     setErrors(
+                    //         toErrorMap(response.data.createSalesIssue.errors as FieldError[])
+                    //     );
+                    // } else if (response.data?.createSalesIssue.salesIssues) {
+                    //     const newId = response.data.createSalesIssue.salesIssues[0].id;
+                    //     history.push(`/sales-report/issue/${newId}`);
+                    // }
                     console.log(sumArr)
                 }}
             >{({ isSubmitting }) => (
@@ -260,8 +258,6 @@ const SalesIssueCreate: React.FC<Props> = () => {
 
                                 <Flex justify="space-between">
                                         <Flex flexDir="column" w="45%">
-                                            {/* <Flex flexDir="column"
-                                                w="150px"> */}
                                             <Text
                                                 fontWeight="semibold"
                                                 fontSize={["sm", "md"]}

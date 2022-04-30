@@ -139,11 +139,12 @@ const SalesReport: React.FC<Props> = () => {
     };
 
     const userHandleBtn = () => {
-        if (me?.me?.position.includes("GM")) {
-            history.push("/sales-report/role-manage")
-        } else {
-            return setAlertWarning("show");
-        }
+        // if (me?.me?.position.includes("GM")) {
+        //     history.push("/sales-report/role-manage")
+        // } else {
+        //     return setAlertWarning("show");
+        // }
+        history.push("/sales-report/role-manage")
     };
 
     const onChangeMonth = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -401,13 +402,22 @@ const SalesReport: React.FC<Props> = () => {
                                                 mt="3"
                                                 disabled={userIsSales}
                                                 leftIcon={<EditIcon />}
+                                                colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}
+                                                variant='outline'
+                                                onClick={() => history.push("/sales-report/visit-create")}
+                                            >
+                                                บันทึกการเข้าพบลูกค้า
+                                            </Button>
+                                            {/* <Button
+                                                mt="3"
+                                                leftIcon={<EditIcon />}
                                                 variant='outline'
                                                 colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}
                                                 onClick={() => history.push("/sales-report/issue-create")}
                                             >
                                                 บันทึก Issue
-                                            </Button>
-                                            <Button
+                                            </Button> */}
+                                            {/* <Button
                                                 mt="3"
                                                 disabled={true}
                                                 leftIcon={<EditIcon />}
@@ -416,7 +426,7 @@ const SalesReport: React.FC<Props> = () => {
                                                 onClick={() => history.push("/sales-report/actual-create")}
                                             >
                                                 บันทึกยอดขาย
-                                            </Button>
+                                            </Button> */}
                                         </Flex>
 
                                         <Flex flexDir="column" mb="10">
@@ -433,7 +443,7 @@ const SalesReport: React.FC<Props> = () => {
                                                 leftIcon={<SettingsIcon />}
                                                 variant='outline'
                                                 colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}
-                                                onClick={() => userHandleBtn()}
+                                                onClick={userHandleBtn}
                                             >
                                                 Sales Role
                                             </Button>

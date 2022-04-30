@@ -1,0 +1,11 @@
+mutation CreateSalesVisit($input: SalesVisit_Input!){
+    createSalesVisit(input: $input){
+        errors {
+            field
+            message
+        }
+        salesVisit {
+            ...RegularSalesVisit
+        }
+    }
+}

@@ -2,20 +2,35 @@ fragment RegularSalesIssue on SalesIssue {
   id
   saleRoleId
   saleName
-  contact
   customer
-  visitDate
-  completionDate
-  quotationNo
-  category
   detail
-  prob
+  issueValue
+  forecastDate
+  brand
+  category
+  units
+  model
+  size
   status
-  value
+  rate
+  closedDate
+  closedStatus
+  failReason
   branch
   createdAt
   updatedAt
-  brand
+  visitLoaders {
+    id
+    saleRoleId,
+    customer,
+    visitDate,
+    contactName,
+    position,
+    department,
+    jobPurpose,
+    customerType,
+    createdAt,
+  }
   saleRole {
     id
     salesRole
@@ -24,9 +39,9 @@ fragment RegularSalesIssue on SalesIssue {
   editIssues{
     id
     userEdit
-    prob
+    rate
     status
-    value
+    issueValue
     createdAt
   }
 }

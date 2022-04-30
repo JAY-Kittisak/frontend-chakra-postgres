@@ -20,7 +20,7 @@ interface Props {
 const SalesUpdateIssue: React.FC<Props> = ({ Open, setOpen, branch, issueId }) => {
     const cancelRef = useRef();
 
-    const [prob, setProb] = useState("น้อยกว่า 30%");
+    const [rate, setRate] = useState("น้อยกว่า 30%");
     const [status, setStatus] = useState("PROPOSED");
 
     const [, updateSalesIssue] = useUpdateSalesIssueMutation()
@@ -43,9 +43,9 @@ const SalesUpdateIssue: React.FC<Props> = ({ Open, setOpen, branch, issueId }) =
                     const response = await updateSalesIssue({
                         input: {
                             id: +issueId,
-                            prob,
+                            rate,
                             status,
-                            value: values.value
+                            issueValue: values.value
                         }
                     });
 
@@ -73,7 +73,7 @@ const SalesUpdateIssue: React.FC<Props> = ({ Open, setOpen, branch, issueId }) =
                                             Prob :
                                         </Text>
                                         <Select onChange={(e) => {
-                                            setProb(e.target.value)
+                                            setRate(e.target.value)
                                         }}>
                                                 {probSelect.map((value, i) => (
                                                 <option key={i} value={value}>

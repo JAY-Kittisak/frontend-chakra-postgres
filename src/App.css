@@ -471,3 +471,9 @@ body{
 .plus-div-mgl div+div{
     margin-left: 5px;
 }
+    
+.truncated {
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

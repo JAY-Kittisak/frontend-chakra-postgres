@@ -1,0 +1,5 @@
+query VisitById($id: Int!){
+  visitById(id: $id){
+    ...RegularSalesVisit
+  }
+}

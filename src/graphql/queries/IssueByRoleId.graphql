@@ -1,0 +1,5 @@
+query IssueByRoleId($id: Int!){
+  issueByRoleId(id: $id){
+    ...RegularSalesIssue
+  }
+}

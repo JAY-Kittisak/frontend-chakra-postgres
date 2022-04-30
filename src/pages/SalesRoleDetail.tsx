@@ -449,7 +449,7 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                         rounded="7px"
                                         justify="center"
                                     cursor="pointer"
-                                    _hover={{ fontWeight: "bold" }}
+                                    _hover={{ bg: '#eee'}}
                                     onClick={() => userHandle(data?.salesRoleById.user.id)}
                                 >
                                     {data?.salesRoleById.user.imageUrl && (
@@ -529,22 +529,20 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                             <Text fontWeight="bold" fontSize="xl">
                                                 Target
                                             </Text>
-                                            <Button
-                                                ml="5"
-                                                size="sm"
-                                                colorScheme={branch === "ลาดกระบัง" ? "blue" : "teal"}
-                                                color="white"
-                                                leftIcon={<AddIcon />}
-                                                onClick={() => {
-                                                    if (me?.me?.position.includes("GM")) {
-                                                        setIsOpen(true);
-                                                    } else {
-                                                        return setAlertWarning("show");
-                                                    }
-                                                }}
-                                            >
-                                                เพิ่ม
-                                            </Button>
+                                            
+                                            {me?.me?.position.includes("GM") && (
+                                                <Button
+                                                    ml="5"
+                                                    size="sm"
+                                                    colorScheme={branch === "ลาดกระบัง" ? "blue" : "teal"}
+                                                    color="white"
+                                                    leftIcon={<AddIcon />}
+                                                    onClick={() => setIsOpen(true)}
+                                                >
+                                                    เพิ่ม
+                                                </Button>
+                                            )}
+
                                             {isOpen && (
                                                 <AddAndEditTarget
                                                     Open={true}
@@ -637,11 +635,11 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                 </Flex>
                             </Flex>
 
-                            <Flex p="3" rounded="7px" boxShadow="md">
-                                <Tabs align="end" variant="enclosed" w="100%">
+                            <Flex p="3" mt="10" rounded="7px" boxShadow="md">
+                                <Tabs variant="enclosed" w="100%">
                                     <TabList>
-                                        <Tab>Issue</Tab>
-                                        <Tab>ยอดขาย</Tab>
+                                        <Tab fontWeight="bold">Issue</Tab>
+                                        <Tab fontWeight="bold">การเข้าพบลูกค้า</Tab>
                                     </TabList>
                                     <TabPanels>
                                         <TabPanel>
@@ -653,7 +651,7 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                             </Flex>
                                             <Table
                                                 boxShadow="base"
-                                                variant="striped"
+                                                variant="simple"
                                                 colorScheme="blackAlpha"
                                             >
                                                 <Thead>
@@ -707,6 +705,7 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                                         <Tr
                                                             key={i}
                                                             cursor="pointer"
+                                                            _hover={{ bg: '#eee'}}
                                                             onClick={() =>
                                                                 history.push(`/sales-report/issue/${val.id}`)
                                                             }
@@ -727,7 +726,7 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                                                 {val.status}
                                                             </Td>
                                                             <Td w="15%">
-                                                                <Center>{formatAmount(val.value)}</Center>
+                                                                <Center>{formatAmount(val.issueValue)}</Center>
                                                             </Td>
                                                         </Tr>
                                                     ))}
@@ -735,6 +734,12 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                             </Table>
                                         </TabPanel>
                                         <TabPanel>
+                                            <Flex>
+                                                <Text ml="6" fontWeight="bold" fontSize="xl">
+                                                    {" "}
+                                                    ประวัติการเข้าพบลูกค้าทั้งหมด
+                                                </Text>
+                                            </Flex>
                                             {/* {actualSum?.length === 0 || !actualSum ? (
                                                 <Flex>
                                                     <Text ml="6" fontWeight="bold" fontSize="xl">
@@ -759,7 +764,7 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                             )} */}
                                             <Table
                                                 boxShadow="base"
-                                                variant="striped"
+                                                variant="simple"
                                                 colorScheme="blackAlpha"
                                             >
                                                 <Thead>
@@ -776,53 +781,44 @@ const SalesRoleDetail: React.FC<Props> = () => {
                                                             fontSize={["xs", "xs", "sm", "md"]}
                                                             color="white"
                                                         >
-                                                            user
+                                                            SALE NAME
                                                         </Th>
                                                         <Th
                                                             textAlign="center"
                                                             fontSize={["xs", "xs", "sm", "md"]}
                                                             color="white"
                                                         >
-                                                            สินค้าที่ขาย
+                                                            COMPANY
                                                         </Th>
                                                         <Th
                                                             textAlign="center"
                                                             fontSize={["xs", "xs", "sm", "md"]}
                                                             color="white"
                                                         >
-                                                            รายละเอียด
-                                                        </Th>
-                                                        <Th
-                                                            textAlign="center"
-                                                            fontSize={["xs", "xs", "sm", "md"]}
-                                                            color="white"
-                                                        >
-                                                            ราคา
-                                                        </Th>
-                                                        <Th
-                                                            textAlign="center"
-                                                            fontSize={["xs", "xs", "sm", "md"]}
-                                                            color="white"
-                                                        >
-                                                            ขายให้กับบริษัท
+                                                            jobPurpose
                                                         </Th>
                                                     </Tr>
                                                 </Thead>
                                                 <Tbody>
-                                                    {data.salesRoleById.salesActual.map((val, i) => (
-                                                        <Tr key={i}>
-                                                            <Td w="10%">
-                                                                <Center>{formatDateNew(+val.createdAt)}</Center>
+                                                    {data.salesRoleById.visits && data.salesRoleById.visits.map((val, i) => (
+                                                        <Tr 
+                                                        key={i} 
+                                                        cursor="pointer"
+                                                        _hover={{ bg: '#eee'}}
+                                                        onClick={() =>
+                                                            history.push(`/sales-report/visit/${val.id}`)
+                                                        }>
+                                                            <Td>
+                                                                <Center>{val.visitDate}</Center>
                                                             </Td>
-                                                            <Td w="10%">
-                                                                <Center>{val.user.fullNameTH}</Center>
+                                                            <Td>
+                                                                <Center>{val.saleName}</Center>
                                                             </Td>
-                                                            <Td w="20%">{val.title}</Td>
-                                                            <Td w="30%">{val.detail}</Td>
-                                                            <Td w="10%">
+                                                            <Td>{val.customer}</Td>
+                                                            <Td><Center>{val.jobPurpose}</Center></Td>
+                                                            {/* <Td w="10%">
                                                                 <Center>{formatAmount(val.actual)}</Center>
-                                                            </Td>
-                                                            <Td w="20%">{val.customer.customerName}</Td>
+                                                            </Td> */}
                                                         </Tr>
                                                     ))}
                                                 </Tbody>

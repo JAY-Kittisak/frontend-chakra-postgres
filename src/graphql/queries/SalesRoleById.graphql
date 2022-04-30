@@ -23,20 +23,19 @@ query SalesRoleById($id: Int!,$monthIndex: Int!,$year: Int!) {
         }
         issues{
             id
-            saleRoleId
-            saleName
-            contact
-            customer
-            quotationNo
-            brand
-            category
-            detail
-            prob
-            status
-            value
-            branch
+            saleName,
+            customer,
+            detail,
+            issueValue,
+            status,
             createdAt
-            updatedAt
+        }
+        visits {
+            id
+            visitDate
+            saleName
+            customer
+            jobPurpose
         }
         salesActual {
             id

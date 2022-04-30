@@ -1,0 +1,5 @@
+mutation JoinVisit($input: JoinVisitInput!) {
+    joinVisit(input: $input) {
+        ...RegularSalesVisit
+    }
+}

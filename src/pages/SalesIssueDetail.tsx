@@ -2,10 +2,10 @@ import React from "react";
 import {
     Flex, Text, Divider, Stack, Button,
     Table, Center, Thead, Tbody, Tr, Th,
-    Td, TableCaption
+    Td, TableCaption, Heading, Box, Grid
 } from "@chakra-ui/react";
 import { EditIcon } from "@chakra-ui/icons";
-import { useParams } from "react-router-dom";
+import { useParams,useHistory } from "react-router-dom";
 import { useIssueByIdQuery } from "../generated/graphql";
 
 import { formatAmount, formatDateNew } from "../utils/helpers";
@@ -20,6 +20,7 @@ const SalesIssueDetail: React.FC<Props> = () => {
     useIsAuth();
 
     const params = useParams<{ id: string }>();
+    const history = useHistory();
 
     const { isOpen, setIsOpen } = useDialog();
 
@@ -58,6 +59,17 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                         fontSize={["sm", "sm", "md", "md"]}
                                         fontWeight="semibold"
                                     >
+                                        บริษัท :{" "}
+                                    </Text>
+                                    <Text fontSize={["sm", "sm", "md", "md"]}>
+                                        {data.issueById.customer}
+                                    </Text>
+                                </Stack>
+                                <Stack isInline mt={3} justify="space-between">
+                                    <Text
+                                        fontSize={["sm", "sm", "md", "md"]}
+                                        fontWeight="semibold"
+                                    >
                                         Sale Name :{" "}
                                     </Text>
                                     <Text fontSize={["sm", "sm", "md", "md"]}>
@@ -75,7 +87,7 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                         {data.issueById.branch}
                                     </Text>
                                 </Stack>
-                                <Stack isInline mt={3} justify="space-between">
+                                {/* <Stack isInline mt={3} justify="space-between">
                                     <Text
                                         fontSize={["sm", "sm", "md", "md"]}
                                         fontWeight="semibold"
@@ -85,7 +97,7 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                     <Text fontSize={["sm", "sm", "md", "md"]}>
                                         {data.issueById.visitDate}
                                     </Text>
-                                </Stack>
+                                </Stack> */}
                                 <Stack isInline mt={3} justify="space-between">
                                     <Text
                                         fontSize={["sm", "sm", "md", "md"]}
@@ -94,7 +106,7 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                         วันที่สำเร็จโดยประมาณ :{" "}
                                     </Text>
                                     <Text fontSize={["sm", "sm", "md", "md"]}>
-                                        {data.issueById.completionDate}
+                                        {data.issueById.forecastDate}
                                     </Text>
                                 </Stack>
                                 <Stack isInline mt={3} justify="space-between">
@@ -113,10 +125,10 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                         fontSize={["sm", "sm", "md", "md"]}
                                         fontWeight="semibold"
                                     >
-                                        Prob :{" "}
+                                        Rate :{" "}
                                     </Text>
                                     <Text fontSize={["sm", "sm", "md", "md"]}>
-                                        {data.issueById.prob}
+                                        {data.issueById.rate}
                                     </Text>
                                 </Stack>
                                 <Stack isInline mt={3} justify="space-between">
@@ -133,7 +145,7 @@ const SalesIssueDetail: React.FC<Props> = () => {
                             </Flex>
 
                             <Flex flexDir="column" w="70%" p="6" ml="10" mt="2" rounded="7px" boxShadow="md">
-                                <Stack isInline justify="space-between">
+                                {/* <Stack isInline justify="space-between">
                                     <Text
                                         fontSize={["sm", "sm", "md", "md"]}
                                         fontWeight="semibold"
@@ -143,9 +155,9 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                     <Text fontSize={["sm", "sm", "md", "md"]}>
                                         {data.issueById.customer}
                                     </Text>
-                                </Stack>
+                                </Stack> */}
 
-                                <Stack isInline mt={3} justify="space-around">
+                                {/* <Stack isInline mt={3} justify="space-around">
                                     <Text
                                         w="20%"
                                         fontSize={["sm", "sm", "md", "md"]}
@@ -156,18 +168,7 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                     <Text align="right" w="80%" fontSize={["sm", "sm", "md", "md"]}>
                                         {data.issueById.contact}
                                     </Text>
-                                </Stack>
-                                <Stack isInline mt={3} justify="space-between">
-                                    <Text
-                                        fontSize={["sm", "sm", "md", "md"]}
-                                        fontWeight="semibold"
-                                    >
-                                        Quotation No. :{" "}
-                                    </Text>
-                                    <Text fontSize={["sm", "sm", "md", "md"]}>
-                                        {data.issueById.quotationNo}
-                                    </Text>
-                                </Stack>
+                                </Stack> */}
                                 <Stack isInline mt={3} justify="space-between">
                                     <Text
                                         fontSize={["sm", "sm", "md", "md"]}
@@ -198,9 +199,31 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                         มูลค่า :{" "}
                                     </Text>
                                     <Text fontSize={["sm", "sm", "md", "md"]}>
-                                        {formatAmount(data.issueById.value)} บาท
+                                        {formatAmount(data.issueById.issueValue)} บาท
                                     </Text>
                                 </Stack>
+                                {/* <Stack isInline mt={3} justify="space-between">
+                                    <Text
+                                        fontSize={["sm", "sm", "md", "md"]}
+                                        fontWeight="semibold"
+                                    >
+                                        Quotation No. :{" "}
+                                    </Text>
+                                    <Text fontSize={["sm", "sm", "md", "md"]}>
+                                        {data.issueById.quotationNo}
+                                    </Text>
+                                </Stack> */}
+                                {/* <Stack isInline mt={3} justify="space-between">
+                                    <Text
+                                        fontSize={["sm", "sm", "md", "md"]}
+                                        fontWeight="semibold"
+                                    >
+                                        value QT :{" "}
+                                    </Text>
+                                    <Text fontSize={["sm", "sm", "md", "md"]}>
+                                        {data.issueById.quotationNo}
+                                    </Text>
+                                </Stack> */}
                                 <Stack isInline mt={3} justify="space-around">
                                     <Text
                                         w="20%"
@@ -215,10 +238,53 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                 </Stack>
                             </Flex>
                         </Flex>
+
+                        <Text fontSize="xl" fontWeight="semibold" mt={3}>
+                                            รายละเอียดการเข้าพบลูกค้า
+                        </Text>
+                        <Grid templateColumns='repeat(3, 1fr)' gap={6} cursor='pointer'>
+                            {data.issueById.visitLoaders && data.issueById.visitLoaders.map(item => (
+                                <Box 
+                                    key={item.id} 
+                                    p={5} 
+                                    mt={3} 
+                                    shadow='md' 
+                                    borderWidth='1px'
+                                    _hover={{ bg: '#eee'}}
+                                    onClick={() => history.push(`/sales-report/visit/${item.id}`)}
+                                >
+                                    <Heading fontSize='xl'>การเข้าพบลูกค้า ID : {item.id}</Heading>
+                                    <Stack isInline mt={3} justify="space-between">
+                                        <Text
+                                            fontSize={["sm", "sm", "md", "md"]}
+                                            fontWeight="semibold"
+                                        >
+                                            วัตถุประสงค์การเข้า :{" "}
+                                        </Text>
+                                        <Text fontSize={["sm", "sm", "md", "md"]}>
+                                            {item.jobPurpose}
+                                        </Text>
+                                    </Stack>
+                                    <Stack isInline mt={3} justify="space-between">
+                                        <Text
+                                            fontSize={["sm", "sm", "md", "md"]}
+                                            fontWeight="semibold"
+                                        >
+                                            วันที่ไปพบลูกค้า :{" "}
+                                        </Text>
+                                        <Text fontSize={["sm", "sm", "md", "md"]}>
+                                            {item.visitDate}
+                                        </Text>
+                                    </Stack>
+                                </Box>
+                            ))}
+                        </Grid>
+
                         <Flex w="100%" justifyContent="center" mt="5">
                             <Button
                                 w="30%"
-                                colorScheme={data.issueById.branch === "ลาดกระบัง" ? "blue" : "green"}
+                                disabled
+                                colorScheme={data.issueById.branch === "ลาดกระบัง" ? "red" : "green"}
                                 leftIcon={<EditIcon />}
                                 onClick={() => setIsOpen(true)}
                             >
@@ -282,9 +348,9 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                                 <Td isNumeric>{formatDateNew(+item.createdAt)}</Td>
                                                 <Td><Center>{i + 1}</Center></Td>
                                                 <Td>{item.userEdit}</Td>
-                                                <Td>{item.prob}</Td>
+                                                <Td>{item.rate}</Td>
                                                 <Td>{item.status}</Td>
-                                                <Td isNumeric>{formatAmount(item.value)} บาท</Td>
+                                                <Td isNumeric>{formatAmount(item.issueValue)} บาท</Td>
                                             </Tr>
                                         ))}
                                     </Tbody>

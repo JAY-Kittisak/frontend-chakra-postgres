@@ -65,7 +65,7 @@ const FactoryDetail: React.FC<Props> = () => {
             {fetching ? (
                 <div>Loading...</div>
             ) : (
-                <Box>
+                <Box p="5" pb="10" overflow="auto" h="96vh">
                     <Flex>
                             <Box w="100%" p={5} rounded="7px" boxShadow="md" bg={bg}>
                                 <Stack isInline align="baseline" justify="space-between" mb={4}>
