@@ -1,5 +1,5 @@
-query IssueByRoleId($id: Int!){
-  issueByRoleId(id: $id){
+query IssueByRoleId($saleRoleId: Int!){
+  issueByRoleId(saleRoleId: $saleRoleId){
     ...RegularSalesIssue
   }
 }

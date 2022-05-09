@@ -1,11 +1,11 @@
 import React from "react";
 import {
     Flex, Text, Divider, Stack, Button,
-    Table, Center, Thead, Tbody, Tr, Th,
+    TableContainer, Table, Center, Thead, Tbody, Tr, Th,
     Td, TableCaption, Heading, Box, Grid
 } from "@chakra-ui/react";
 import { EditIcon } from "@chakra-ui/icons";
-import { useParams,useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { useIssueByIdQuery } from "../generated/graphql";
 
 import { formatAmount, formatDateNew } from "../utils/helpers";
@@ -50,210 +50,218 @@ const SalesIssueDetail: React.FC<Props> = () => {
                         </Text>
                     </Flex>
                 ) : (
-                    <Flex flexDir="column" w="100%" align="center">
-                        <Flex w="80%">
-
-                            <Flex flexDir="column" w="30%" p="6" mt="2" rounded="7px" boxShadow="md">
-                                <Stack isInline justify="space-between">
+                    <Flex flexDir="column" w={["100%","100%","100%","100%","70%"]} align="center">
+                        <Flex 
+                            flexDir="column"
+                            w="100%"
+                            p="6"
+                            mt="2"
+                            shadow='md'
+                            borderWidth='1px'
+                            borderRadius='md'
+                        >
+                            <Flex>
+                                <Text
+                                    fontSize="lg"
+                                    fontWeight="semibold"
+                                >
+                                    Code : &nbsp;
+                                </Text>
+                                <Text fontSize="lg">
+                                    {data.issueById.saleRole.salesRole} &nbsp;
+                                </Text>
+                                <Text
+                                    fontSize="lg"
+                                    fontWeight="semibold"
+                                >
+                                    ชื่อ : &nbsp;
+                                </Text>
+                                <Text fontSize="lg">
+                                    {data.issueById.saleName} &nbsp;
+                                </Text>
+                                <Text
+                                    fontSize="lg"
+                                    fontWeight="semibold"
+                                >
+                                    สาขา : &nbsp;
+                                </Text>
+                                <Text fontSize="lg">
+                                    {data.issueById.branch}
+                                </Text>
+                            </Flex>
+                            <Flex mt="1">
+                                <Text
+                                    fontSize="lg"
+                                    fontWeight="semibold"
+                                >
+                                    บริษัท : &nbsp;
+                                </Text>
+                                <Text fontSize="lg">
+                                    {data.issueById.customer} &nbsp;
+                                </Text>
+                                <Text
+                                    fontSize="lg"
+                                    fontWeight="semibold"
+                                >
+                                    วันที่คาดว่าจะปิดงาน : &nbsp;
+                                </Text>
+                                <Text fontSize="lg">
+                                    {data.issueById.forecastDate}
+                                </Text>
+                            </Flex>
+                            {data.issueById.closedDate !== 'Pending' && (
+                                <Flex mt="1">
                                     <Text
-                                        fontSize={["sm", "sm", "md", "md"]}
+                                        fontSize="lg"
                                         fontWeight="semibold"
                                     >
-                                        บริษัท :{" "}
+                                        วันที่ปิด issued  : &nbsp;
                                     </Text>
-                                    <Text fontSize={["sm", "sm", "md", "md"]}>
-                                        {data.issueById.customer}
+                                    <Text fontSize="lg">
+                                        {data.issueById.closedDate} &nbsp;
                                     </Text>
-                                </Stack>
-                                <Stack isInline mt={3} justify="space-between">
-                                    <Text
-                                        fontSize={["sm", "sm", "md", "md"]}
-                                        fontWeight="semibold"
-                                    >
-                                        Sale Name :{" "}
-                                    </Text>
-                                    <Text fontSize={["sm", "sm", "md", "md"]}>
-                                        {data.issueById.saleName}
-                                    </Text>
-                                </Stack>
-                                <Stack isInline mt={3} justify="space-between">
-                                    <Text
-                                        fontSize={["sm", "sm", "md", "md"]}
-                                        fontWeight="semibold"
-                                    >
-                                        สาขา :{" "}
-                                    </Text>
-                                    <Text fontSize={["sm", "sm", "md", "md"]}>
-                                        {data.issueById.branch}
-                                    </Text>
-                                </Stack>
-                                {/* <Stack isInline mt={3} justify="space-between">
-                                    <Text
-                                        fontSize={["sm", "sm", "md", "md"]}
-                                        fontWeight="semibold"
-                                    >
-                                        วันที่ไปพบลูกค้า :{" "}
-                                    </Text>
-                                    <Text fontSize={["sm", "sm", "md", "md"]}>
-                                        {data.issueById.visitDate}
-                                    </Text>
-                                </Stack> */}
-                                <Stack isInline mt={3} justify="space-between">
-                                    <Text
-                                        fontSize={["sm", "sm", "md", "md"]}
-                                        fontWeight="semibold"
-                                    >
-                                        วันที่สำเร็จโดยประมาณ :{" "}
-                                    </Text>
-                                    <Text fontSize={["sm", "sm", "md", "md"]}>
-                                        {data.issueById.forecastDate}
-                                    </Text>
-                                </Stack>
-                                <Stack isInline mt={3} justify="space-between">
-                                    <Text
-                                        fontSize={["sm", "sm", "md", "md"]}
-                                        fontWeight="semibold"
-                                    >
-                                        วันที่บันทึก :{" "}
-                                    </Text>
-                                    <Text fontSize={["sm", "sm", "md", "md"]}>
-                                        {formatDateNew(+data.issueById.createdAt)}
-                                    </Text>
-                                </Stack>
-                                <Stack isInline mt={3} justify="space-between">
-                                    <Text
-                                        fontSize={["sm", "sm", "md", "md"]}
-                                        fontWeight="semibold"
-                                    >
-                                        Rate :{" "}
-                                    </Text>
-                                    <Text fontSize={["sm", "sm", "md", "md"]}>
-                                        {data.issueById.rate}
-                                    </Text>
-                                </Stack>
-                                <Stack isInline mt={3} justify="space-between">
-                                    <Text
-                                        fontSize={["sm", "sm", "md", "md"]}
-                                        fontWeight="semibold"
-                                    >
-                                        Status :{" "}
-                                    </Text>
-                                    <Text fontSize={["sm", "sm", "md", "md"]}>
-                                        {data.issueById.status}
-                                    </Text>
-                                </Stack>
+                                </Flex>
+                            )}
+                            <Flex mt="1">
+                                <Text
+                                    fontSize="lg"
+                                    fontWeight="semibold"
+                                >
+                                    วันที่บันทึก : &nbsp;
+                                </Text>
+                                <Text fontSize="lg">
+                                    {formatDateNew(+data.issueById.createdAt)} &nbsp;
+                                </Text>
+                            </Flex>
+                            <Flex mt="1">
+                                <Text
+                                    fontSize="lg"
+                                    fontWeight="semibold"
+                                >
+                                    สถานะปัจจุบัน : &nbsp;
+                                </Text>
+                                <Text fontSize="lg">
+                                    {data.issueById.status}
+                                </Text>
+                            </Flex>
+                            <Flex mt="1">
+                                <Text
+                                    fontSize="lg"
+                                    fontWeight="semibold"
+                                >
+                                    Success Rate : &nbsp;
+                                </Text>
+                                <Text fontSize="lg">
+                                    {data.issueById.rate}%
+                                </Text>
+                            </Flex>
+                            <Flex mt="1">
+                                <Text
+                                    fontSize="lg"
+                                    fontWeight="semibold"
+                                >
+                                    สถานะการปิด issue : &nbsp;
+                                </Text>
+                                <Text fontSize="lg">
+                                    {data.issueById.closedStatus}
+                                </Text>
+                            </Flex>
+                            <Flex mt="1">
+                                <Text
+                                    fontSize="lg"
+                                    fontWeight="semibold"
+                                >
+                                    สาเหตุของการ fail : &nbsp;
+                                </Text>
+                                <Text fontSize="lg">
+                                    {data.issueById.failReason}
+                                </Text>
                             </Flex>
 
-                            <Flex flexDir="column" w="70%" p="6" ml="10" mt="2" rounded="7px" boxShadow="md">
-                                {/* <Stack isInline justify="space-between">
-                                    <Text
-                                        fontSize={["sm", "sm", "md", "md"]}
-                                        fontWeight="semibold"
-                                    >
-                                        บริษัทติดต่อ :{" "}
-                                    </Text>
-                                    <Text fontSize={["sm", "sm", "md", "md"]}>
-                                        {data.issueById.customer}
-                                    </Text>
-                                </Stack> */}
-
-                                {/* <Stack isInline mt={3} justify="space-around">
-                                    <Text
-                                        w="20%"
-                                        fontSize={["sm", "sm", "md", "md"]}
-                                        fontWeight="semibold"
-                                    >
-                                        Contact :{" "}
-                                    </Text>
-                                    <Text align="right" w="80%" fontSize={["sm", "sm", "md", "md"]}>
-                                        {data.issueById.contact}
-                                    </Text>
-                                </Stack> */}
-                                <Stack isInline mt={3} justify="space-between">
-                                    <Text
-                                        fontSize={["sm", "sm", "md", "md"]}
-                                        fontWeight="semibold"
-                                    >
-                                        ยี่ห้อ :{" "}
-                                    </Text>
-                                    <Text fontSize={["sm", "sm", "md", "md"]}>
-                                        {data.issueById.brand}
-                                    </Text>
-                                </Stack>
-                                <Stack isInline mt={3} justify="space-between">
-                                    <Text
-                                        fontSize={["sm", "sm", "md", "md"]}
-                                        fontWeight="semibold"
-                                    >
-                                        ประเภท :{" "}
-                                    </Text>
-                                    <Text fontSize={["sm", "sm", "md", "md"]}>
-                                        {data.issueById.category}
-                                    </Text>
-                                </Stack>
-                                <Stack isInline mt={3} justify="space-between">
-                                    <Text
-                                        fontSize={["sm", "sm", "md", "md"]}
-                                        fontWeight="semibold"
-                                    >
-                                        มูลค่า :{" "}
-                                    </Text>
-                                    <Text fontSize={["sm", "sm", "md", "md"]}>
-                                        {formatAmount(data.issueById.issueValue)} บาท
-                                    </Text>
-                                </Stack>
-                                {/* <Stack isInline mt={3} justify="space-between">
-                                    <Text
-                                        fontSize={["sm", "sm", "md", "md"]}
-                                        fontWeight="semibold"
-                                    >
-                                        Quotation No. :{" "}
-                                    </Text>
-                                    <Text fontSize={["sm", "sm", "md", "md"]}>
-                                        {data.issueById.quotationNo}
-                                    </Text>
-                                </Stack> */}
-                                {/* <Stack isInline mt={3} justify="space-between">
-                                    <Text
-                                        fontSize={["sm", "sm", "md", "md"]}
-                                        fontWeight="semibold"
-                                    >
-                                        value QT :{" "}
-                                    </Text>
-                                    <Text fontSize={["sm", "sm", "md", "md"]}>
-                                        {data.issueById.quotationNo}
-                                    </Text>
-                                </Stack> */}
-                                <Stack isInline mt={3} justify="space-around">
-                                    <Text
-                                        w="20%"
-                                        fontSize={["sm", "sm", "md", "md"]}
-                                        fontWeight="semibold"
-                                    >
-                                        รายละเอียด :{" "}
-                                    </Text>
-                                    <Text align="right" w="80%" fontSize={["sm", "sm", "md", "md"]}>
-                                        {data.issueById.detail}
-                                    </Text>
-                                </Stack>
+                            <TableContainer mt="3">
+                                <Table variant='simple'>
+                                    <Thead>
+                                        <Tr
+                                            bg={data.issueById.branch === "ลาดกระบัง" ? "#1379ec" : "#0AB68B"}
+                                            fontSize="18px"
+                                        >
+                                            <Th
+                                                fontSize={["xs", "xs", "sm", "md"]}
+                                                color="white">
+                                                โมเดล
+                                            </Th>
+                                            <Th
+                                                fontSize={["xs", "xs", "sm", "md"]}
+                                                color="white">
+                                                <Center>ขนาด</Center>
+                                            </Th>
+                                            <Th
+                                                fontSize={["xs", "xs", "sm", "md"]}
+                                                color="white">
+                                                <Center>ยี่ห้อ</Center>
+                                            </Th>
+                                            <Th
+                                                fontSize={["xs", "xs", "sm", "md"]}
+                                                color="white">
+                                                <Center>ประเภท</Center>
+                                            </Th>
+                                            <Th
+                                                fontSize={["xs", "xs", "sm", "md"]}
+                                                color="white">
+                                                <Center>จำนวน</Center>
+                                            </Th>
+                                            <Th isNumeric
+                                                fontSize={["xs", "xs", "sm", "md"]}
+                                                color="white">
+                                                มูลค่า
+                                            </Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                            <Tr>
+                                                <Td>{data.issueById.model}</Td>
+                                                <Td><Center>{data.issueById.size}</Center></Td>
+                                                <Td><Center>{data.issueById.brand}</Center></Td>
+                                                <Td><Center>{data.issueById.category}</Center></Td>
+                                                <Td><Center>{data.issueById.units}</Center></Td>
+                                                <Td isNumeric>{formatAmount(data.issueById.issueValue)} บาท</Td>
+                                            </Tr>
+                                    </Tbody>
+                                </Table>
+                            </TableContainer>
+                            <Flex mt="2">
+                                <Text
+                                    minW="110px"
+                                    fontSize="lg"
+                                    fontWeight="semibold"
+                                >
+                                    รายละเอียด : &nbsp;
+                                </Text>
+                                <Text fontSize="lg">
+                                    {data.issueById.detail}
+                                </Text>
                             </Flex>
                         </Flex>
 
-                        <Text fontSize="xl" fontWeight="semibold" mt={3}>
-                                            รายละเอียดการเข้าพบลูกค้า
+                        <Text fontSize="xl" fontWeight="semibold" mt={6}>
+                            รายละเอียดการเข้าพบลูกค้า
                         </Text>
-                        <Grid templateColumns='repeat(3, 1fr)' gap={6} cursor='pointer'>
-                            {data.issueById.visitLoaders && data.issueById.visitLoaders.map(item => (
-                                <Box 
-                                    key={item.id} 
-                                    p={5} 
-                                    mt={3} 
-                                    shadow='md' 
+
+                        <Grid templateColumns='repeat(3, 1fr)' gap={2}>
+                            {data.issueById.visitLoaders && data.issueById.visitLoaders.map((item, i) => (
+                                <Box
+                                    key={item.id}
+                                    minW="285px"
+                                    p={2}
+                                    mt={3}
+                                    shadow='md'
                                     borderWidth='1px'
-                                    _hover={{ bg: '#eee'}}
+                                    borderRadius='md'
+                                    cursor='pointer'
+                                    _hover={{ bg: '#eee' }}
                                     onClick={() => history.push(`/sales-report/visit/${item.id}`)}
                                 >
-                                    <Heading fontSize='xl'>การเข้าพบลูกค้า ID : {item.id}</Heading>
+                                    <Heading fontSize='xl'>เข้าพบลูกค้าครั้งที่ : {i + 1}</Heading>
                                     <Stack isInline mt={3} justify="space-between">
                                         <Text
                                             fontSize={["sm", "sm", "md", "md"]}
@@ -283,8 +291,7 @@ const SalesIssueDetail: React.FC<Props> = () => {
                         <Flex w="100%" justifyContent="center" mt="5">
                             <Button
                                 w="30%"
-                                disabled
-                                colorScheme={data.issueById.branch === "ลาดกระบัง" ? "red" : "green"}
+                                colorScheme="teal"
                                 leftIcon={<EditIcon />}
                                 onClick={() => setIsOpen(true)}
                             >
@@ -296,13 +303,21 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                     setOpen={() => setIsOpen(false)}
                                     branch={data.issueById.branch}
                                     issueId={params.id}
+                                    currentPrice={data.issueById.issueValue}
                                 />
                             )}
                         </Flex>
                         {data.issueById.editIssues.length > 0 && (
-                            <Flex rounded="7px" boxShadow="md" px='5' mt="3">
+                            <Flex 
+                                mt="2"
+                                px="6"
+                                w="100%"
+                                shadow='md'
+                                borderWidth='1px'
+                                borderRadius='md'
+                            >
                                 <Table variant='simple'>
-                                    <TableCaption placement="top" fontSize="24px">
+                                    <TableCaption mt="0" placement="top" fontSize="24px" color="black">
                                         ประวัติการแก้ไข
                                     </TableCaption>
                                     <Thead>
@@ -348,7 +363,7 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                                 <Td isNumeric>{formatDateNew(+item.createdAt)}</Td>
                                                 <Td><Center>{i + 1}</Center></Td>
                                                 <Td>{item.userEdit}</Td>
-                                                <Td>{item.rate}</Td>
+                                                <Td>{item.rate}%</Td>
                                                 <Td>{item.status}</Td>
                                                 <Td isNumeric>{formatAmount(item.issueValue)} บาท</Td>
                                             </Tr>

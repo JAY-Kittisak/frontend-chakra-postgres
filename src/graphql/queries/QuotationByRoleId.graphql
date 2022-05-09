@@ -1,0 +1,5 @@
+query QuotationByRoleId($saleRoleId: Int!){
+  quotationByRoleId(saleRoleId: $saleRoleId){
+    ...RegularSalesQuotation
+  }
+}

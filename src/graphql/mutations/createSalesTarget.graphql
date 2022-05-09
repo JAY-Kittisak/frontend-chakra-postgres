@@ -9,6 +9,10 @@ mutation CreateSalesTarget($input: SalesTarget_Input!){
             year
             commission
             strategy
+            countVisit
+            countIssue
+            valueIssue
+            valueQt
             branch
             salesRoleId
         }

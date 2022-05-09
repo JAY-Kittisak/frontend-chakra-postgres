@@ -20,7 +20,7 @@ import SalesActualCreate from "../pages/SalesActualCreate";
 import SalesIssueCreate from "../pages/SalesIssueCreate";
 import SalesIssueDetail from "../pages/SalesIssueDetail";
 import SalesRoleManage from "../pages/SalesRoleManage";
-import SalesRoleDetail from "../pages/SalesRoleDetail";
+import SalesRoleDe from "../pages/SalesRoleDe";
 import UserDetail from "../pages/UserDetail";
 import PageNotFound from "../pages/PageNotFound";
 import TierRoute from "./TierRoute";
@@ -47,7 +47,7 @@ const Routes: React.FC<Props> = () => {
                 <SalesVisitDetail />
             </Route>
             <Route path="/sales-report/role-manage/:id">
-                <SalesRoleDetail />
+                <SalesRoleDe />
             </Route>
             <Route path="/sales-report/role-manage">
                 <SalesRoleManage />

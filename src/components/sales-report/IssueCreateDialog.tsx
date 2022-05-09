@@ -4,7 +4,6 @@ import {
     AlertDialogHeader, AlertDialogContent, AlertDialogOverlay, ModalCloseButton,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-// import { useHistory } from "react-router";
 
 import InputField from '../InputField'
 import { 
@@ -28,15 +27,14 @@ const IssueCreateDialog: React.FC<Props> = ({ Open, setOpen, branch, visitId, cu
     const [category, setCategory] = useState("One shot");
     const [status, setStatus] = useState("Proposed");
     const [rate, setRate] = useState("น้อยกว่า 30");
-    const [closedStatus, setClosedStatus] = useState("Success 1");
-    const [failReason, setFailReason] = useState("ด้านราคา");
+    const [closedStatus, setClosedStatus] = useState("Pending");
+    const [failReason, setFailReason] = useState("Pending");
 
     const [, createIssue] = useCreateSalesIssueMutation()
     const [, joinVisit] = useJoinVisitMutation();
     const [{ data }] = useSalesBrandsQuery()
 
     const cancelRef = useRef();
-    // const history = useHistory();
 
     console.log('IssueCreateDialog ID', visitId)
 
@@ -55,7 +53,7 @@ const IssueCreateDialog: React.FC<Props> = ({ Open, setOpen, branch, visitId, cu
                     units: 0,
                     model: '',
                     size: '',
-                    closedDate: 'null',
+                    closedDate: 'Pending',
                 }}
                 onSubmit={async (values, { setErrors }) => {
                     const sumArr = {
@@ -69,12 +67,13 @@ const IssueCreateDialog: React.FC<Props> = ({ Open, setOpen, branch, visitId, cu
                         failReason,
                     }
                     const response = await createIssue({ input: sumArr });
-                    const issueId = response.data?.createSalesIssue.salesIssues[0].id
                     if (response.data?.createSalesIssue.errors) {
                         setErrors(
                             toErrorMap(response.data.createSalesIssue.errors as FieldError[])
-                        );
+                            );
                     } else if (response.data?.createSalesIssue.salesIssues) {
+                        const issueId = response.data?.createSalesIssue.salesIssues[0].id
+                        
                         if (issueId) {
                             const responseVisit = await joinVisit({ input: {
                                 visitId,
@@ -115,8 +114,8 @@ const IssueCreateDialog: React.FC<Props> = ({ Open, setOpen, branch, visitId, cu
                                 </Flex>
 
                                 {/* Brand */}
-                                <Flex justify="space-between">
-                                        <Flex flexDir="column" w="48%">
+                                <Flex className="flex-div" justify="space-between">
+                                        <Flex flexDir="column" w="50%">
                                             <Text
                                                 fontWeight="semibold"
                                                 fontSize={["sm", "md"]}
@@ -170,8 +169,8 @@ const IssueCreateDialog: React.FC<Props> = ({ Open, setOpen, branch, visitId, cu
                                 </Flex>
                                 
                                 {/* Size */}
-                                <Flex justify="space-between">
-                                    <Flex w="48%">
+                                <Flex className="flex-div" justify="space-between">
+                                    <Flex w="50%">
                                         <InputField
                                             name="size"
                                             label="Size :"
@@ -239,8 +238,8 @@ const IssueCreateDialog: React.FC<Props> = ({ Open, setOpen, branch, visitId, cu
                                 </Flex>
 
                                 {/* Closed status : */}
-                                <Flex justify="space-between">
-                                    <Flex flexDir="column" w="48%">
+                                <Flex className="flex-div" justify="space-between">
+                                    <Flex flexDir="column" w="50%">
                                         <Text
                                             fontWeight="semibold"
                                             fontSize={["sm", "md"]}
@@ -250,6 +249,9 @@ const IssueCreateDialog: React.FC<Props> = ({ Open, setOpen, branch, visitId, cu
                                             Closed status :
                                         </Text>
                                         <Select onChange={(e) => setClosedStatus(e.target.value)}>
+                                                <option value='Pending'>
+                                                    Pending
+                                                </option>
                                                 <option value='Success 1'>
                                                     Success 1 (ได้ PO เต็มตามเสนอราคา)
                                                 </option>
@@ -274,6 +276,9 @@ const IssueCreateDialog: React.FC<Props> = ({ Open, setOpen, branch, visitId, cu
                                             Fail reason :
                                         </Text>
                                         <Select onChange={(e) => setFailReason(e.target.value)}>
+                                                <option value='Pending'>
+                                                    Pending
+                                                </option>
                                                 <option value='ด้านราคา'>
                                                     ด้านราคา (แพ้ด้วยเรื่องราคา)
                                                 </option>

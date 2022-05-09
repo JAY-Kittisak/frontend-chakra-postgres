@@ -442,6 +442,7 @@ export type Mutation = {
   updateSalesIssue: SalesIssue;
   createSalesVisit: SalesVisit_Response;
   joinVisit: SalesVisit;
+  createSalesQuotation: SalesQuotation_Response;
 };
 
 
@@ -728,6 +729,11 @@ export type MutationJoinVisitArgs = {
   input: JoinVisitInput;
 };
 
+
+export type MutationCreateSalesQuotationArgs = {
+  input: SalesQuotation_Input;
+};
+
 export type ProductByTier = {
   __typename?: 'ProductByTier';
   id: Scalars['Float'];
@@ -805,7 +811,8 @@ export type Query = {
   salesRoles?: Maybe<Array<SalesRole>>;
   salesRoleById: SalesRole;
   salesActuals?: Maybe<Array<SalesActual>>;
-  targetByRoleId?: Maybe<Array<SalesTarget>>;
+  targetByRole?: Maybe<Array<SalesTarget>>;
+  targetByRoleId?: Maybe<SalesTarget>;
   issueByRoleId?: Maybe<Array<SalesIssue>>;
   issueById?: Maybe<SalesIssue>;
   salesBrands?: Maybe<Array<SalesBrand>>;
@@ -813,6 +820,7 @@ export type Query = {
   customerCdc?: Maybe<Array<CustomerCdc>>;
   visitByRoleId?: Maybe<Array<SalesVisit>>;
   visitById?: Maybe<SalesVisit>;
+  quotationByRoleId?: Maybe<Array<SalesQuotation>>;
 };
 
 
@@ -928,13 +936,19 @@ export type QuerySalesRoleByIdArgs = {
 };
 
 
+export type QueryTargetByRoleArgs = {
+  salesRoleId: Scalars['Int'];
+};
+
+
 export type QueryTargetByRoleIdArgs = {
+  year: Scalars['Int'];
   salesRoleId: Scalars['Int'];
 };
 
 
 export type QueryIssueByRoleIdArgs = {
-  id: Scalars['Int'];
+  saleRoleId: Scalars['Int'];
 };
 
 
@@ -960,6 +974,11 @@ export type QueryVisitByRoleIdArgs = {
 
 export type QueryVisitByIdArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryQuotationByRoleIdArgs = {
+  saleRoleId: Scalars['Int'];
 };
 
 export type QueryJobIt_Input = {
@@ -1109,6 +1128,33 @@ export type SalesIssue_Response = {
   salesIssues?: Maybe<Array<SalesIssue>>;
 };
 
+export type SalesQuotation = {
+  __typename?: 'SalesQuotation';
+  id: Scalars['Float'];
+  saleRoleId: Scalars['Float'];
+  saleName: Scalars['String'];
+  visitId: Scalars['Float'];
+  quotationCode: Scalars['String'];
+  value: Scalars['Float'];
+  branch: Scalars['String'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  saleRole: SalesRole;
+  visit: SalesVisit;
+};
+
+export type SalesQuotation_Input = {
+  visitId: Scalars['Float'];
+  quotationCode: Scalars['String'];
+  value: Scalars['Float'];
+};
+
+export type SalesQuotation_Response = {
+  __typename?: 'SalesQuotation_Response';
+  errors?: Maybe<Array<FieldErrorSalesRole>>;
+  salesVisit?: Maybe<SalesVisit>;
+};
+
 export type SalesRole = {
   __typename?: 'SalesRole';
   id: Scalars['Float'];
@@ -1125,6 +1171,7 @@ export type SalesRole = {
   targets: Array<SalesTarget>;
   issues: Array<SalesIssue>;
   visits: Array<SalesVisit>;
+  quotations: Array<SalesQuotation>;
 };
 
 export type SalesRole_Input = {
@@ -1149,6 +1196,10 @@ export type SalesTarget = {
   year: Scalars['Float'];
   commission: Scalars['Float'];
   strategy: Scalars['Float'];
+  countVisit: Scalars['Float'];
+  countIssue: Scalars['Float'];
+  valueIssue: Scalars['Float'];
+  valueQt: Scalars['Float'];
   branch: Scalars['String'];
   salesRoleId: Scalars['Float'];
   sale: SalesRole;
@@ -1160,6 +1211,10 @@ export type SalesTarget_Input = {
   year: Scalars['Float'];
   commission: Scalars['Float'];
   strategy: Scalars['Float'];
+  countVisit: Scalars['Float'];
+  countIssue: Scalars['Float'];
+  valueIssue: Scalars['Float'];
+  valueQt: Scalars['Float'];
   branch: Scalars['String'];
   salesRoleId: Scalars['Float'];
 };
@@ -1177,25 +1232,22 @@ export type SalesVisit = {
   saleName: Scalars['String'];
   customer: Scalars['String'];
   visitDate: Scalars['String'];
-  quotationNo: Scalars['String'];
-  value: Scalars['Float'];
   contactName: Scalars['String'];
   position: Scalars['String'];
   department: Scalars['String'];
   jobPurpose: Scalars['String'];
   customerType: Scalars['String'];
   branch: Scalars['String'];
-  saleRole: SalesRole;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
+  saleRole: SalesRole;
+  quotations: Array<SalesQuotation>;
   issueReceives?: Maybe<Array<SalesIssue>>;
 };
 
 export type SalesVisit_Input = {
   customer: Scalars['String'];
   visitDate: Scalars['String'];
-  quotationNo: Scalars['String'];
-  value: Scalars['Float'];
   contactName: Scalars['String'];
   position: Scalars['String'];
   department: Scalars['String'];
@@ -1472,6 +1524,15 @@ export type RegularSalesIssueFragment = (
   )> }
 );
 
+export type RegularSalesQuotationFragment = (
+  { __typename?: 'SalesQuotation' }
+  & Pick<SalesQuotation, 'id' | 'quotationCode' | 'value' | 'createdAt'>
+  & { visit: (
+    { __typename?: 'SalesVisit' }
+    & Pick<SalesVisit, 'id' | 'customer' | 'visitDate'>
+  ) }
+);
+
 export type RegularSalesRoleFragment = (
   { __typename?: 'SalesRole' }
   & Pick<SalesRole, 'id' | 'salesRole' | 'channel' | 'areaCode' | 'userId' | 'branch' | 'status' | 'startDate' | 'updatedAt'>
@@ -1483,11 +1544,14 @@ export type RegularSalesRoleFragment = (
 
 export type RegularSalesVisitFragment = (
   { __typename?: 'SalesVisit' }
-  & Pick<SalesVisit, 'id' | 'saleRoleId' | 'saleName' | 'customer' | 'visitDate' | 'quotationNo' | 'value' | 'contactName' | 'position' | 'department' | 'jobPurpose' | 'customerType' | 'branch' | 'createdAt' | 'updatedAt'>
+  & Pick<SalesVisit, 'id' | 'saleRoleId' | 'saleName' | 'customer' | 'visitDate' | 'contactName' | 'position' | 'department' | 'jobPurpose' | 'customerType' | 'branch' | 'createdAt' | 'updatedAt'>
   & { issueReceives?: Maybe<Array<(
     { __typename?: 'SalesIssue' }
-    & Pick<SalesIssue, 'id' | 'customer' | 'detail' | 'createdAt'>
-  )>> }
+    & Pick<SalesIssue, 'id' | 'customer' | 'detail' | 'createdAt' | 'forecastDate' | 'status' | 'rate'>
+  )>>, quotations: Array<(
+    { __typename?: 'SalesQuotation' }
+    & Pick<SalesQuotation, 'id' | 'quotationCode' | 'value'>
+  )> }
 );
 
 export type RegularStockItFragment = (
@@ -1725,6 +1789,25 @@ export type CreateSalesIssueMutation = (
   ) }
 );
 
+export type CreateSalesQuotationMutationVariables = Exact<{
+  input: SalesQuotation_Input;
+}>;
+
+
+export type CreateSalesQuotationMutation = (
+  { __typename?: 'Mutation' }
+  & { createSalesQuotation: (
+    { __typename?: 'SalesQuotation_Response' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorSalesRole' }
+      & Pick<FieldErrorSalesRole, 'field' | 'message'>
+    )>>, salesVisit?: Maybe<(
+      { __typename?: 'SalesVisit' }
+      & RegularSalesVisitFragment
+    )> }
+  ) }
+);
+
 export type CreateSalesRoleMutationVariables = Exact<{
   input: SalesRole_Input;
 }>;
@@ -1758,7 +1841,7 @@ export type CreateSalesTargetMutation = (
       & Pick<FieldErrorSalesRole, 'field' | 'message'>
     )>>, salesTargets?: Maybe<Array<(
       { __typename?: 'SalesTarget' }
-      & Pick<SalesTarget, 'id' | 'year' | 'commission' | 'strategy' | 'branch' | 'salesRoleId'>
+      & Pick<SalesTarget, 'id' | 'year' | 'commission' | 'strategy' | 'countVisit' | 'countIssue' | 'valueIssue' | 'valueQt' | 'branch' | 'salesRoleId'>
     )>> }
   ) }
 );
@@ -2460,7 +2543,7 @@ export type IssueByIdQuery = (
 );
 
 export type IssueByRoleIdQueryVariables = Exact<{
-  id: Scalars['Int'];
+  saleRoleId: Scalars['Int'];
 }>;
 
 
@@ -2576,6 +2659,19 @@ export type QueryProvincesQuery = (
   )> }
 );
 
+export type QuotationByRoleIdQueryVariables = Exact<{
+  saleRoleId: Scalars['Int'];
+}>;
+
+
+export type QuotationByRoleIdQuery = (
+  { __typename?: 'Query' }
+  & { quotationByRoleId?: Maybe<Array<(
+    { __typename?: 'SalesQuotation' }
+    & RegularSalesQuotationFragment
+  )>> }
+);
+
 export type ResellByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -2634,29 +2730,10 @@ export type SalesRoleByIdQuery = (
   & { salesRoleById: (
     { __typename?: 'SalesRole' }
     & Pick<SalesRole, 'id' | 'salesRole' | 'areaCode' | 'channel' | 'branch' | 'status' | 'userId' | 'startDate' | 'updatedAt'>
-    & { targets: Array<(
-      { __typename?: 'SalesTarget' }
-      & Pick<SalesTarget, 'id' | 'year' | 'commission' | 'strategy' | 'branch'>
-    )>, user: (
+    & { user: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'fullNameTH' | 'imageUrl'>
-    ), issues: Array<(
-      { __typename?: 'SalesIssue' }
-      & Pick<SalesIssue, 'id' | 'saleName' | 'customer' | 'detail' | 'issueValue' | 'status' | 'createdAt'>
-    )>, visits: Array<(
-      { __typename?: 'SalesVisit' }
-      & Pick<SalesVisit, 'id' | 'visitDate' | 'saleName' | 'customer' | 'jobPurpose'>
-    )>, salesActual: Array<(
-      { __typename?: 'SalesActual' }
-      & Pick<SalesActual, 'id' | 'title' | 'detail' | 'actual' | 'branch' | 'customerId' | 'userId' | 'salesRoleId' | 'createdAt' | 'updatedAt'>
-      & { customer: (
-        { __typename?: 'Customer' }
-        & Pick<Customer, 'id' | 'customerName'>
-      ), user: (
-        { __typename?: 'User' }
-        & Pick<User, 'id' | 'fullNameTH'>
-      ) }
-    )> }
+    ) }
   ) }
 );
 
@@ -2693,6 +2770,33 @@ export type StockItsQuery = (
     { __typename?: 'StockIt' }
     & RegularStockItFragment
   )>> }
+);
+
+export type TargetByRoleQueryVariables = Exact<{
+  salesRoleId: Scalars['Int'];
+}>;
+
+
+export type TargetByRoleQuery = (
+  { __typename?: 'Query' }
+  & { targetByRole?: Maybe<Array<(
+    { __typename?: 'SalesTarget' }
+    & Pick<SalesTarget, 'id' | 'year' | 'commission' | 'strategy' | 'countVisit' | 'countIssue' | 'valueIssue' | 'valueQt' | 'branch'>
+  )>> }
+);
+
+export type TargetByRoleIdQueryVariables = Exact<{
+  salesRoleId: Scalars['Int'];
+  year: Scalars['Int'];
+}>;
+
+
+export type TargetByRoleIdQuery = (
+  { __typename?: 'Query' }
+  & { targetByRoleId?: Maybe<(
+    { __typename?: 'SalesTarget' }
+    & Pick<SalesTarget, 'id' | 'year' | 'commission' | 'strategy' | 'countVisit' | 'countIssue' | 'valueIssue' | 'valueQt' | 'branch'>
+  )> }
 );
 
 export type UserAdminQueryVariables = Exact<{ [key: string]: never; }>;
@@ -2741,6 +2845,19 @@ export type VisitByIdQuery = (
     { __typename?: 'SalesVisit' }
     & RegularSalesVisitFragment
   )> }
+);
+
+export type VisitByRoleIdQueryVariables = Exact<{
+  saleRoleId: Scalars['Int'];
+}>;
+
+
+export type VisitByRoleIdQuery = (
+  { __typename?: 'Query' }
+  & { visitByRoleId?: Maybe<Array<(
+    { __typename?: 'SalesVisit' }
+    & RegularSalesVisitFragment
+  )>> }
 );
 
 export type FactoryByIdQueryVariables = Exact<{
@@ -3051,6 +3168,19 @@ export const RegularSalesIssueFragmentDoc = gql`
   }
 }
     `;
+export const RegularSalesQuotationFragmentDoc = gql`
+    fragment RegularSalesQuotation on SalesQuotation {
+  id
+  quotationCode
+  value
+  createdAt
+  visit {
+    id
+    customer
+    visitDate
+  }
+}
+    `;
 export const RegularSalesRoleFragmentDoc = gql`
     fragment RegularSalesRole on SalesRole {
   id
@@ -3076,8 +3206,6 @@ export const RegularSalesVisitFragmentDoc = gql`
   saleName
   customer
   visitDate
-  quotationNo
-  value
   contactName
   position
   department
@@ -3091,6 +3219,14 @@ export const RegularSalesVisitFragmentDoc = gql`
     customer
     detail
     createdAt
+    forecastDate
+    status
+    rate
+  }
+  quotations {
+    id
+    quotationCode
+    value
   }
 }
     `;
@@ -3350,6 +3486,23 @@ export const CreateSalesIssueDocument = gql`
 export function useCreateSalesIssueMutation() {
   return Urql.useMutation<CreateSalesIssueMutation, CreateSalesIssueMutationVariables>(CreateSalesIssueDocument);
 };
+export const CreateSalesQuotationDocument = gql`
+    mutation CreateSalesQuotation($input: SalesQuotation_Input!) {
+  createSalesQuotation(input: $input) {
+    errors {
+      field
+      message
+    }
+    salesVisit {
+      ...RegularSalesVisit
+    }
+  }
+}
+    ${RegularSalesVisitFragmentDoc}`;
+
+export function useCreateSalesQuotationMutation() {
+  return Urql.useMutation<CreateSalesQuotationMutation, CreateSalesQuotationMutationVariables>(CreateSalesQuotationDocument);
+};
 export const CreateSalesRoleDocument = gql`
     mutation CreateSalesRole($input: SalesRole_Input!) {
   createSalesRole(input: $input) {
@@ -3379,6 +3532,10 @@ export const CreateSalesTargetDocument = gql`
       year
       commission
       strategy
+      countVisit
+      countIssue
+      valueIssue
+      valueQt
       branch
       salesRoleId
     }
@@ -4023,8 +4180,8 @@ export function useIssueByIdQuery(options: Omit<Urql.UseQueryArgs<IssueByIdQuery
   return Urql.useQuery<IssueByIdQuery>({ query: IssueByIdDocument, ...options });
 };
 export const IssueByRoleIdDocument = gql`
-    query IssueByRoleId($id: Int!) {
-  issueByRoleId(id: $id) {
+    query IssueByRoleId($saleRoleId: Int!) {
+  issueByRoleId(saleRoleId: $saleRoleId) {
     ...RegularSalesIssue
   }
 }
@@ -4139,6 +4296,17 @@ export const QueryProvincesDocument = gql`
 export function useQueryProvincesQuery(options: Omit<Urql.UseQueryArgs<QueryProvincesQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<QueryProvincesQuery>({ query: QueryProvincesDocument, ...options });
 };
+export const QuotationByRoleIdDocument = gql`
+    query QuotationByRoleId($saleRoleId: Int!) {
+  quotationByRoleId(saleRoleId: $saleRoleId) {
+    ...RegularSalesQuotation
+  }
+}
+    ${RegularSalesQuotationFragmentDoc}`;
+
+export function useQuotationByRoleIdQuery(options: Omit<Urql.UseQueryArgs<QuotationByRoleIdQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<QuotationByRoleIdQuery>({ query: QuotationByRoleIdDocument, ...options });
+};
 export const ResellByIdDocument = gql`
     query ResellById($id: Int!) {
   resellById(id: $id) {
@@ -4196,53 +4364,10 @@ export const SalesRoleByIdDocument = gql`
     userId
     startDate
     updatedAt
-    targets {
-      id
-      year
-      commission
-      strategy
-      branch
-    }
     user {
       id
       fullNameTH
       imageUrl
-    }
-    issues {
-      id
-      saleName
-      customer
-      detail
-      issueValue
-      status
-      createdAt
-    }
-    visits {
-      id
-      visitDate
-      saleName
-      customer
-      jobPurpose
-    }
-    salesActual {
-      id
-      title
-      detail
-      actual
-      branch
-      customerId
-      customer {
-        id
-        customerName
-      }
-      userId
-      user {
-        id
-        fullNameTH
-      }
-      salesRoleId
-      createdAt
-      updatedAt
     }
   }
 }
@@ -4283,6 +4408,44 @@ export const StockItsDocument = gql`
 
 export function useStockItsQuery(options: Omit<Urql.UseQueryArgs<StockItsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<StockItsQuery>({ query: StockItsDocument, ...options });
+};
+export const TargetByRoleDocument = gql`
+    query TargetByRole($salesRoleId: Int!) {
+  targetByRole(salesRoleId: $salesRoleId) {
+    id
+    year
+    commission
+    strategy
+    countVisit
+    countIssue
+    valueIssue
+    valueQt
+    branch
+  }
+}
+    `;
+
+export function useTargetByRoleQuery(options: Omit<Urql.UseQueryArgs<TargetByRoleQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<TargetByRoleQuery>({ query: TargetByRoleDocument, ...options });
+};
+export const TargetByRoleIdDocument = gql`
+    query TargetByRoleId($salesRoleId: Int!, $year: Int!) {
+  targetByRoleId(salesRoleId: $salesRoleId, year: $year) {
+    id
+    year
+    commission
+    strategy
+    countVisit
+    countIssue
+    valueIssue
+    valueQt
+    branch
+  }
+}
+    `;
+
+export function useTargetByRoleIdQuery(options: Omit<Urql.UseQueryArgs<TargetByRoleIdQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<TargetByRoleIdQuery>({ query: TargetByRoleIdDocument, ...options });
 };
 export const UserAdminDocument = gql`
     query UserAdmin {
@@ -4327,6 +4490,17 @@ export const VisitByIdDocument = gql`
 
 export function useVisitByIdQuery(options: Omit<Urql.UseQueryArgs<VisitByIdQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<VisitByIdQuery>({ query: VisitByIdDocument, ...options });
+};
+export const VisitByRoleIdDocument = gql`
+    query VisitByRoleId($saleRoleId: Int!) {
+  visitByRoleId(saleRoleId: $saleRoleId) {
+    ...RegularSalesVisit
+  }
+}
+    ${RegularSalesVisitFragmentDoc}`;
+
+export function useVisitByRoleIdQuery(options: Omit<Urql.UseQueryArgs<VisitByRoleIdQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<VisitByRoleIdQuery>({ query: VisitByRoleIdDocument, ...options });
 };
 export const FactoryByIdDocument = gql`
     query FactoryById($id: Int!) {

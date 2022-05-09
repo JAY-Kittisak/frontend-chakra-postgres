@@ -464,8 +464,8 @@ body{
     font-weight: 500;
 }
 
-.flex-div div{
-    margin-right: 10px;
+.flex-div div+div{
+    margin-left: 10px;
 }
 
 .plus-div-mgl div+div{
@@ -476,4 +476,30 @@ body{
     white-space: nowrap; 
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.progress-bar {
+    display: flex;
+    align-items: center;
+}
+.progress-bar p {
+    padding-right: .5rem;
+}
+
+.progress-bar .progress {
+    position: relative;
+    width: 100%;
+    height: .4rem;
+    background-color: #dad6d6;
+}
+
+.progress-bar .progress span {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 100%;
+}
+
+.paragraph-short {
+    text-indent: 50px;
 }

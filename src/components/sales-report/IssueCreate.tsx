@@ -1,29 +1,50 @@
 import React from 'react'
 import {
-    Flex, Text, Button,
-    TableContainer, Table, Thead,
+    Flex, Text, Button, Table, Thead,
     Tr, Tbody, Td, Th
 } from '@chakra-ui/react'
 
 import { useDialog } from "../dialogs/useDialog";
 import IssueCreateDialog from './IssueCreateDialog';
-import { useIssueByRoleIdQuery } from '../../generated/graphql'
-import { formatDate } from '../../utils/helpers'
+import { useIssueByRoleIdQuery, useJoinVisitMutation } from '../../generated/graphql'
+import { formatDate, AlertNt } from '../../utils/helpers'
 import Spinner from '../Spinner';
 
 interface Props {
     visitId: number
     customer: string
     saleRoleId: number
+    checkAddId: number[] | undefined
+    setAlertWarning: (action: AlertNt) => void | undefined
+    setAlertSuccess: (action: AlertNt) => void | undefined
 }
 
-const IssueCreate: React.FC<Props> = ({ visitId, saleRoleId, customer }) => {
+const IssueCreate: React.FC<Props> = ({
+    visitId,
+    saleRoleId,
+    customer,
+    checkAddId,
+    setAlertWarning,
+    setAlertSuccess
+}) => {
     const { isOpen, setIsOpen } = useDialog();
+
     const [{ data, fetching }] = useIssueByRoleIdQuery({
         variables: {
-            id: saleRoleId,
+            saleRoleId,
         },
     });
+
+    const [, joinVisit] = useJoinVisitMutation();
+
+    const joinData = async (issueId: number) => {
+        const response = await joinVisit({ input: { visitId, issueId } })
+        if (response.error?.message) {
+            return alert("Error Function joinVisit")
+        } else if (response.data?.joinVisit) {
+            return setAlertSuccess("show")
+        }
+    };
 
     return (
         <Flex
@@ -37,47 +58,70 @@ const IssueCreate: React.FC<Props> = ({ visitId, saleRoleId, customer }) => {
             borderRadius="md"
             justifyContent='space-between'
         >
-            <Flex alignItems="center" flexDir="column">
-                <Text fontSize="2xl" fontWeight="bold" mb='5'>
-                    Issue ทั้งหมดของคุณ
-                </Text>
+            <Text align='center' fontSize="2xl" fontWeight="bold" mb='5'>
+                Issue ทั้งหมดของคุณ
+            </Text>
 
-                {(fetching) ? (
-                    <Flex h="225px" justify="center" align="center">
-                        <Spinner color="grey" height={50} width={50} />
-                        <Text
-                            as="i"
-                            fontWeight="semibold"
-                            fontSize={["md", "md", "xl", "3xl"]}
-                            my={2}
-                        >
-                            {" "}
-                            &nbsp; Loading...
-                        </Text>
-                    </Flex>
-                ) : (
-                    <TableContainer w="100%">
-                        <Table variant='striped' colorScheme='teal'>
-                            <Thead>
-                                <Tr>
-                                    <Th fontSize='lg'>ID</Th>
-                                    <Th fontSize='lg'>รายละเอียด</Th>
-                                    <Th fontSize='lg' isNumeric>วันที่</Th>
+            {(fetching) ? (
+                <Flex h="225px" justify="center" align="center">
+                    <Spinner color="grey" height={50} width={50} />
+                    <Text
+                        as="i"
+                        fontWeight="semibold"
+                        fontSize={["md", "md", "xl", "3xl"]}
+                        my={2}
+                    >
+                        {" "}
+                        &nbsp; Loading...
+                    </Text>
+                </Flex>
+            ) : (
+                <Flex mt="5" overflowX="auto" rounded="5px" boxShadow="md">
+                    <Table variant='striped' colorScheme='teal'>
+                        <Thead>
+                            <Tr>
+                                <Th fontSize='lg'>รายละเอียด</Th>
+                                <Th fontSize='lg' isNumeric>วันที่</Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {data?.issueByRoleId && data.issueByRoleId.map(item => (
+                                <Tr
+                                    key={item.id}
+                                    cursor={
+                                        !checkAddId ? "pointer"
+                                            : checkAddId.includes(item.id)
+                                                ? "not-allowed"
+                                                : "pointer"
+                                    }
+                                    onClick={() => {
+                                        if (checkAddId?.includes(item.id)) {
+                                            return setAlertWarning("show")
+                                        }
+                                        joinData(item.id)
+                                    }}
+                                >
+                                    <Td className='truncated' maxW="400px">
+                                        <Flex>
+                                            {checkAddId?.includes(item.id) ? (
+                                                <Flex>
+                                                    <i className="bi bi-check-square"></i>
+                                                </Flex>
+                                            ) : (
+                                                <Flex>
+                                                    <i className="bi bi-square"></i>
+                                                </Flex>
+                                            )}
+                                            <Text ml="10">{item.detail}</Text>
+                                        </Flex>
+                                    </Td>
+                                    <Td isNumeric>{formatDate(+item.createdAt)}</Td>
                                 </Tr>
-                            </Thead>
-                            <Tbody>
-                                {data?.issueByRoleId && data.issueByRoleId.map(item => (
-                                    <Tr key={item.id}>
-                                        <Td>{item.id}</Td>
-                                        <Td className='truncated' maxW="400px">{item.detail}</Td>
-                                        <Td isNumeric>{formatDate(+item.createdAt)}</Td>
-                                    </Tr>
-                                ))}
-                            </Tbody>
-                        </Table>
-                    </TableContainer>
-                )}
-            </Flex>
+                            ))}
+                        </Tbody>
+                    </Table>
+                </Flex>
+            )}
 
             <Button colorScheme='teal' my={5} onClick={() => setIsOpen(true)}>New Issue</Button>
 

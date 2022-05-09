@@ -1,23 +1,29 @@
 fragment RegularSalesVisit on SalesVisit {
     id
-    saleRoleId,
-    saleName,
-    customer,
-    visitDate,
-    quotationNo,
-    value,
-    contactName,
-    position,
-    department,
-    jobPurpose,
-    customerType,
-    branch,
-    createdAt,
-    updatedAt,
+    saleRoleId
+    saleName
+    customer
+    visitDate
+    contactName
+    position
+    department
+    jobPurpose
+    customerType
+    branch
+    createdAt
+    updatedAt
     issueReceives {
       id
       customer
       detail
       createdAt
+      forecastDate
+      status
+      rate
+    }
+    quotations {
+      id
+      quotationCode
+      value
     }
 }

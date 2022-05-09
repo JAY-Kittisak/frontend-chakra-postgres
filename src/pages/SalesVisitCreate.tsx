@@ -59,8 +59,6 @@ const SalesVisitCreate: React.FC<Props> = () => {
             <Formik
                 initialValues={{
                     visitDate: '',
-                    quotationNo: 'ว่าง',
-                    value: 0,
                     contactName: '',
                     position: '',
                     department: ''
@@ -146,21 +144,6 @@ const SalesVisitCreate: React.FC<Props> = () => {
                                     </Flex>
                                 </Flex>
 
-                                {/* เลขที่ใบเสนอราคา */}
-                                {jobPurpose === 'ติดตามใบเสนอราคา' && (
-                                    <>
-                                        <InputField
-                                            name="quotationNo"
-                                            label="เลขที่ใบเสนอราคา :"
-                                        />
-                                        <InputField
-                                            type='number'
-                                            name="value"
-                                            label="มูลค่าการเสนอราคา :"
-                                        />
-                                    </>
-                                )}
-
                                 {/* ข้อมูลการติดต่อ */}
                                 <Flex className="flex-div" justify="space-between">
                                     <InputField
@@ -172,6 +155,12 @@ const SalesVisitCreate: React.FC<Props> = () => {
                                         label="ตำแหน่งผู้ติดต่อ :"
                                     />
                                 </Flex>
+
+                                {/* แผนกผู้ติดต่อ */}
+                                <InputField
+                                    name="department"
+                                    label="แผนกผู้ติดต่อ :"
+                                />
 
                                 {/* ประเภทลูกค้า */}
                                 <Text
@@ -187,12 +176,6 @@ const SalesVisitCreate: React.FC<Props> = () => {
                                     <option value="New customer 2">New customer 2 (ลูกค้าในฐานเดิม แต่เป็น issue ที่ทำขึ้นมาใหม่)</option>
                                     <option value="Existing customer">Existing customer (ลูกค้าเดิม)</option>
                                 </Select>
-
-                                {/* แผนกผู้ติดต่อ */}
-                                <InputField
-                                    name="department"
-                                    label="แผนกผู้ติดต่อ :"
-                                />
 
                                 <Button
                                     mt="10"

@@ -8,33 +8,33 @@ import {
     useUpdateSalesIssueMutation
 } from "../../generated/graphql";
 import InputField from "../InputField";
-import { probSelect,catIssueStatus } from "../../utils/helpers";
 
 interface Props {
     Open: boolean;
     setOpen: () => void;
     issueId: string
     branch: string | undefined
+    currentPrice: number
 }
 
-const SalesUpdateIssue: React.FC<Props> = ({ Open, setOpen, branch, issueId }) => {
+const SalesUpdateIssue: React.FC<Props> = ({ Open, setOpen, branch, issueId, currentPrice }) => {
     const cancelRef = useRef();
 
-    const [rate, setRate] = useState("น้อยกว่า 30%");
-    const [status, setStatus] = useState("PROPOSED");
+    const [rate, setRate] = useState("น้อยกว่า 30");
+    const [status, setStatus] = useState("Proposed");
 
     const [, updateSalesIssue] = useUpdateSalesIssueMutation()
     
     return (
         <AlertDialog
-            size="xs"
+            size="xl"
             isOpen={Open}
             leastDestructiveRef={cancelRef.current}
             onClose={setOpen}
         >
             <Formik
                 initialValues={{
-                    value: 0
+                    value: currentPrice
                 }}
                 onSubmit={async (values) => {
                     if (!branch) {
@@ -70,16 +70,21 @@ const SalesUpdateIssue: React.FC<Props> = ({ Open, setOpen, branch, issueId }) =
                                             mb="2"
                                                 mt="2"
                                         >
-                                            Prob :
+                                            Success Rate :
                                         </Text>
-                                        <Select onChange={(e) => {
-                                            setRate(e.target.value)
-                                        }}>
-                                                {probSelect.map((value, i) => (
-                                                <option key={i} value={value}>
-                                                    {value}
+                                        <Select onChange={(e) => setRate(e.target.value)}>
+                                                <option value='น้อยกว่า 30'>
+                                                    น้อยกว่า 30% (ได้เป็นหัวเรื่อง)
                                                 </option>
-                                            ))}
+                                                <option value='มากกว่า 30'>
+                                                    มากกว่า 30% (ได้เสนอเป็นหัวเรื่อง ประมาณการ issue ได้)
+                                                </option>
+                                                <option value='มากกว่า 50'>
+                                                    มากกว่า 50% (ได้เสนอราคา แต่ยังไม่ได้ PO)
+                                                </option>
+                                                <option value='มากกว่า 90'>
+                                                    มากกว่า 90% (ได้ PO แล้ว แต่รอเปิด Invoice)
+                                                </option>
                                         </Select>
                                     </Flex>
                                     <Flex flexDir="column">
@@ -91,14 +96,25 @@ const SalesUpdateIssue: React.FC<Props> = ({ Open, setOpen, branch, issueId }) =
                                         >
                                             Status :
                                         </Text>
-                                        <Select onChange={(e) => {
-                                            setStatus(e.target.value)
-                                        }}>
-                                            {catIssueStatus.map((value, i) => (
-                                                <option key={i} value={value}>
-                                                    {value}
-                                                </option>
-                                            ))}
+                                        <Select onChange={(e) => setStatus(e.target.value)}>
+                                            <option value='Proposed'>
+                                                Proposed (นำเสนอ ยังไม่เป็นหัวเรื่องที่ชัดเจน ยังไม่สามารถใส่มูลค่าประมาณการได้)
+                                            </option>
+                                            <option value='Issued'>
+                                                Issued (ได้ออกมาเป็น หัวเรื่องแล้ว สามารถใส่มูลค่าประมาณการได้)
+                                            </option>
+                                            <option value='Demo'>
+                                                Demo (สามารถระบุรุ่น และต้นทุนการ test ได้)
+                                            </option>
+                                            <option value='Test'>
+                                                Test (สามารถระบุรุ่น และต้นทุนการ test ได้)
+                                            </option>
+                                            <option value='Quoted'>
+                                                Quoted (ได้เสนอราคาเรียบร้อยแล้ว)
+                                            </option>
+                                            <option value='Purchased'>
+                                                Purchased (สามารถระบุวันที่ PO ได้)
+                                            </option>
                                         </Select>
                                     </Flex>
                                         <InputField

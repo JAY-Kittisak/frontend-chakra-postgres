@@ -1,17 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Flex, Text, Divider, Button, Stack, Heading, Box } from '@chakra-ui/react'
 import { useParams, useHistory } from "react-router-dom";
 
 import Spinner from "../components/Spinner";
 import IssueCreate from '../components/sales-report/IssueCreate'
-import IssueJoinVisit from '../components/sales-report/IssueJoinVisit';
+import AddQuotation from '../components/sales-report/AddQuotation';
 import { useDialog } from '../components/dialogs/useDialog'
+import AlertNotification from "../components/dialogs/AlertNotification";
+import AlertNtSuccess from "../components/dialogs/AlertNtSuccess";
 import { useVisitByIdQuery } from "../generated/graphql";
-import { formatDate } from "../utils/helpers";
+import { formatDate, AlertNt } from "../utils/helpers";
 
 interface Props { }
 
 const SalesVisitDetail: React.FC<Props> = () => {
+    const [alertSuccess, setAlertSuccess] = useState<AlertNt>("hide")
+    const [alertWarning, setAlertWarning] = useState<AlertNt>("hide")
 
     const params = useParams<{ id: string }>();
 
@@ -25,6 +29,8 @@ const SalesVisitDetail: React.FC<Props> = () => {
         },
     });
 
+    const checkAddId = data?.visitById?.issueReceives?.map(val => val.id)
+
     return (
         <Flex flexDir="column" px="5" overflowY="auto" h="95vh">
             <Text
@@ -35,6 +41,9 @@ const SalesVisitDetail: React.FC<Props> = () => {
             >
                 รายละเอียดการเข้าพบลูกค้า
             </Text>
+
+            <AlertNtSuccess alertSuccess={alertSuccess} setAlertSuccess={setAlertSuccess} />
+            <AlertNotification alertWarning={alertWarning} setAlertWarning={setAlertWarning} label="ไม่สามารถเลือกตัวเลือกนี้ได้!" />
 
             <Divider orientation="horizontal" />
             {!data?.visitById || fetching ? (
@@ -51,161 +60,164 @@ const SalesVisitDetail: React.FC<Props> = () => {
                             ข้อมูลการเข้าพบลูกค้า
                         </Text>
 
-                        <Stack isInline justify="space-between">
+                        <Flex>
                             <Text
-                                fontSize={["sm", "sm", "md", "md"]}
+                                fontSize={["sm", "sm", "md", "lg"]}
                                 fontWeight="semibold"
                             >
-                                ชื่อ Sales :{" "}
+                                ชื่อ Sales : &nbsp;
                             </Text>
-                            <Text fontSize={["sm", "sm", "md", "md"]}>
-                                {data.visitById.saleName}
+                            <Text fontSize={["sm", "sm", "md", "lg"]}>
+                                {data.visitById.saleName} &nbsp;
                             </Text>
-                        </Stack>
-                        <Stack isInline mt={3} justify="space-between">
                             <Text
-                                fontSize={["sm", "sm", "md", "md"]}
+                                fontSize={["sm", "sm", "md", "lg"]}
                                 fontWeight="semibold"
                             >
-                                สาขา :{" "}
+                                สาขา : &nbsp;
                             </Text>
-                            <Text fontSize={["sm", "sm", "md", "md"]}>
+                            <Text fontSize={["sm", "sm", "md", "lg"]}>
                                 {data.visitById.branch}
                             </Text>
-                        </Stack>
-                        <Stack isInline mt={3} justify="space-between">
+                        </Flex>
+                        <Flex mt="1">
                             <Text
-                                fontSize={["sm", "sm", "md", "md"]}
+                                fontSize={["sm", "sm", "md", "lg"]}
                                 fontWeight="semibold"
                             >
-                                ชื่อบริษัท :{" "}
+                                ชื่อบริษัท : &nbsp;
                             </Text>
-                            <Text fontSize={["sm", "sm", "md", "md"]}>
+                            <Text fontSize={["sm", "sm", "md", "lg"]}>
                                 {data.visitById.customer}
                             </Text>
-                        </Stack>
-                        <Stack isInline mt={3} justify="space-between">
+                        </Flex>
+                        <Flex mt="1">
                             <Text
-                                fontSize={["sm", "sm", "md", "md"]}
+                                fontSize={["sm", "sm", "md", "lg"]}
                                 fontWeight="semibold"
                             >
-                                วันที่ไปพบลูกค้า :{" "}
+                                วัตถุประสงค์การเข้า : &nbsp;
                             </Text>
-                            <Text fontSize={["sm", "sm", "md", "md"]}>
+                            <Text fontSize={["sm", "sm", "md", "lg"]}>
+                                {data.visitById.jobPurpose} &nbsp;
+                            </Text>
+                        </Flex>
+                        <Flex mt="1">
+                            <Text
+                                fontSize={["sm", "sm", "md", "lg"]}
+                                fontWeight="semibold"
+                            >
+                                วันที่ไปพบลูกค้า : &nbsp;
+                            </Text>
+                            <Text fontSize={["sm", "sm", "md", "lg"]}>
                                 {data.visitById.visitDate}
                             </Text>
-                        </Stack>
-                        <Stack isInline mt={3} justify="space-between">
+                        </Flex>
+                        <Flex mt="1">
                             <Text
-                                fontSize={["sm", "sm", "md", "md"]}
+                                fontSize={["sm", "sm", "md", "lg"]}
                                 fontWeight="semibold"
                             >
-                                วัตถุประสงค์การเข้า :{" "}
+                                ชื่อผู้ติดต่อ : &nbsp;
                             </Text>
-                            <Text fontSize={["sm", "sm", "md", "md"]}>
-                                {data.visitById.jobPurpose}
+                            <Text fontSize={["sm", "sm", "md", "lg"]}>
+                                {data.visitById.contactName} &nbsp;
                             </Text>
-                        </Stack>
-                        {data.visitById.jobPurpose === 'ติดตามใบเสนอราคา' && (
-                            <>
-                                <Stack isInline mt={3} justify="space-between">
-                                    <Text
-                                        fontSize={["sm", "sm", "md", "md"]}
-                                        fontWeight="semibold"
-                                    >
-                                        เลขที่ใบเสนอราคา :{" "}
-                                    </Text>
-                                    <Text fontSize={["sm", "sm", "md", "md"]}>
-                                        {data.visitById.quotationNo}
-                                    </Text>
-                                </Stack>
-                                <Stack isInline mt={3} justify="space-between">
-                                    <Text
-                                        fontSize={["sm", "sm", "md", "md"]}
-                                        fontWeight="semibold"
-                                    >
-                                        มูลค่าการเสนอราคา :{" "}
-                                    </Text>
-                                    <Text fontSize={["sm", "sm", "md", "md"]}>
-                                        {data.visitById.value}
-                                    </Text>
-                                </Stack>
-                            </>
-                        )}
-                        <Stack isInline mt={3} justify="space-between">
                             <Text
-                                fontSize={["sm", "sm", "md", "md"]}
+                                fontSize={["sm", "sm", "md", "lg"]}
                                 fontWeight="semibold"
                             >
-                                ชื่อผู้ติดต่อ :{" "}
+                                ตำแหน่งผู้ติดต่อ : &nbsp;
                             </Text>
-                            <Text fontSize={["sm", "sm", "md", "md"]}>
-                                {data.visitById.contactName}
+                            <Text fontSize={["sm", "sm", "md", "lg"]}>
+                                {data.visitById.position} &nbsp;
                             </Text>
-                        </Stack>
-                        <Stack isInline mt={3} justify="space-between">
+                        </Flex>
+                        <Flex mt="1">
                             <Text
-                                fontSize={["sm", "sm", "md", "md"]}
+                                fontSize={["sm", "sm", "md", "lg"]}
                                 fontWeight="semibold"
                             >
-                                ตำแหน่งผู้ติดต่อ :{" "}
+                                แผนกผู้ติดต่อ : &nbsp;
                             </Text>
-                            <Text fontSize={["sm", "sm", "md", "md"]}>
-                                {data.visitById.position}
+                            <Text fontSize={["sm", "sm", "md", "lg"]}>
+                                {data.visitById.department} &nbsp;
                             </Text>
-                        </Stack>
-                        <Stack isInline mt={3} justify="space-between">
                             <Text
-                                fontSize={["sm", "sm", "md", "md"]}
+                                fontSize={["sm", "sm", "md", "lg"]}
                                 fontWeight="semibold"
                             >
-                                ประเภทลูกค้า :{" "}
+                                ประเภทลูกค้า : &nbsp;
                             </Text>
-                            <Text fontSize={["sm", "sm", "md", "md"]}>
+                            <Text fontSize={["sm", "sm", "md", "lg"]}>
                                 {data.visitById.customerType}
                             </Text>
-                        </Stack>
-                        <Stack isInline mt={3} justify="space-between">
-                            <Text
-                                fontSize={["sm", "sm", "md", "md"]}
-                                fontWeight="semibold"
-                            >
-                                แผนกผู้ติดต่อ :{" "}
-                            </Text>
-                            <Text fontSize={["sm", "sm", "md", "md"]}>
-                                {data.visitById.department}
-                            </Text>
-                        </Stack>
+                        </Flex>
 
-                        {data.visitById.issueReceives && data.visitById.issueReceives.map(item => (
-                            <Box 
-                                key={item.id} 
-                                p={5} 
-                                mt={3} 
-                                shadow='md' 
-                                borderWidth='1px'
-                                cursor='pointer'
-                                _hover={{ bg: '#eee'}}
-                                onClick={() => history.push(`/sales-report/issue/${item.id}`)}
-                            >
-                                <Stack isInline justify="space-between">
-                                    <Heading fontSize='xl'>Issue ID : {item.id}</Heading>
-                                    <Text>วันที่ : {formatDate(+item.createdAt)}</Text>
-                                </Stack>
-                                <Text mt={4}>{item.detail}</Text>
-                          </Box>
-                        ))}
+                        {data.visitById.jobPurpose === 'ติดตามใบเสนอราคา' && (
+                            <Flex justifyContent="center">
+                                <Button
+                                    w="30%"
+                                    colorScheme='teal'
+                                    mt={5}
+                                    onClick={() => setIsOpen(true)}
+                                >
+                                    เพิ่มใบเสนอราคา
+                                </Button>
+                            </Flex>
+                        )}
 
-                        <Button
-                            colorScheme='teal'
-                            mt={5}
-                            onClick={() => setIsOpen(true)}
-                        >
-                            เลือก Issue
-                        </Button>
+                        {data.visitById.quotations.length >= 1 && (
+                            <>
+                                <Heading mt={2} fontSize='xl'>Quotation :</Heading>
+                                
+                                {data.visitById.quotations.map(item => (
+                                    <Box
+                                        key={item.id}
+                                        p={2}
+                                        mt={3}
+                                        shadow='md'
+                                        borderWidth='1px'
+                                        borderRadius="md"
+                                    >
+                                        <Stack isInline justify="space-between">
+                                            <Text>เลขที่ใบเสนอราคา : {item.quotationCode}</Text>
+                                            <Text>มูลค่า : {item.value}</Text>
+                                        </Stack>
+                                    </Box>
+                                ))}
+                            </>
+                        )}
+
+                        {data.visitById.issueReceives && (
+                            <>
+                                <Heading mt={2} fontSize='xl'>Issue :</Heading>
+                                
+                                {data.visitById.issueReceives.map(item => (
+                                    <Box
+                                        key={item.id}
+                                        p={2}
+                                        mt={3}
+                                        shadow='md'
+                                        borderWidth='1px'
+                                        borderRadius="md"
+                                        cursor='pointer'
+                                        _hover={{ bg: '#eee' }}
+                                        onClick={() => history.push(`/sales-report/issue/${item.id}`)}
+                                    >
+                                        <Stack isInline justify="space-between">
+                                            <Heading fontSize='lg'>Status : {item.status}</Heading>
+                                            <Text>CreateAt : {formatDate(+item.createdAt)}</Text>
+                                        </Stack>
+                                        <Text mt={2} className="paragraph-short">{item.detail}</Text>
+                                        <Text mt={2}>Success Rate :{item.rate}</Text>
+                                    </Box>
+                                ))}
+                            </>
+                        )}
 
                         {isOpen && (
-                            <IssueJoinVisit
+                            <AddQuotation
                                 Open={true}
                                 setOpen={() => setIsOpen(false)}
                                 visitId={+params.id}
@@ -213,7 +225,14 @@ const SalesVisitDetail: React.FC<Props> = () => {
                         )}
 
                     </Flex>
-                    <IssueCreate visitId={+params.id} customer={data.visitById.customer} saleRoleId={data.visitById.saleRoleId}/>
+                    <IssueCreate
+                        visitId={+params.id}
+                        customer={data.visitById.customer}
+                        saleRoleId={data.visitById.saleRoleId}
+                        checkAddId={checkAddId}
+                        setAlertSuccess={setAlertSuccess}
+                        setAlertWarning={setAlertWarning}
+                    />
                 </Flex>
             )}
         </Flex>

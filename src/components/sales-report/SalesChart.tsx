@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Box, Text } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import {
     Bar,
     Line,
@@ -30,7 +30,6 @@ interface Props {
     colorBranch: string;
     colorBranchPass: string;
     colorOnMouse: string;
-    title: string
     commission: number
     strategy: number
     monthValue: MonthValue
@@ -41,7 +40,6 @@ const SalesChart: React.FC<Props> = ({
     colorBranch,
     colorBranchPass,
     colorOnMouse,
-    title,
     commission,
     strategy,
     monthValue,
@@ -265,13 +263,8 @@ const SalesChart: React.FC<Props> = ({
         <Box
             mr="3"
             p="2"
-            paddingBottom="8"
             h={["250px", "250px", "250px", "250px", "250px", "330px"]}
-            align="center"
         >
-            <Text fontSize="2xl" fontWeight="semibold" mb="-5">
-                {title}
-            </Text>
             <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart
                     width={500}

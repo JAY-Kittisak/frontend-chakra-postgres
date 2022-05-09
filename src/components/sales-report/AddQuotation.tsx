@@ -5,8 +5,12 @@ import {
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 
-import { useJoinVisitMutation } from "../../generated/graphql"
 import InputField from '../InputField'
+import { 
+    useCreateSalesQuotationMutation,
+    FieldError,
+} from '../../generated/graphql';
+import { toErrorMap } from "../../utils/toErrorMap";
 
 interface Props {
     Open: boolean
@@ -14,9 +18,9 @@ interface Props {
     visitId: number
 }
 
-const IssueJoinVisit: React.FC<Props> = ({ Open, setOpen, visitId }) => {
+const AddQuotation: React.FC<Props> = ({ Open, setOpen, visitId }) => {
+    const [, createSalesQuotation] = useCreateSalesQuotationMutation()
     const cancelRef = useRef();
-    const [, joinVisit] = useJoinVisitMutation();
 
     return (
         <AlertDialog
@@ -29,13 +33,16 @@ const IssueJoinVisit: React.FC<Props> = ({ Open, setOpen, visitId }) => {
             <Formik
                 initialValues={{
                     visitId,
-                    issueId: 0,
+                    quotationCode: "",
+                    value: 0,
                 }}
-                onSubmit={async (values) => {
-                    const response = await joinVisit({ input: values })
-                    if (response.error?.message) {
-                        return alert(response.error?.message)
-                    } else if (response.data?.joinVisit) {
+                onSubmit={async (values, { setErrors }) => {
+                    const response = await createSalesQuotation({ input: values })
+                    if (response.data?.createSalesQuotation.errors) {
+                        setErrors(
+                            toErrorMap(response.data?.createSalesQuotation.errors as FieldError[])
+                        )
+                    } else if (response.data?.createSalesQuotation.salesVisit) {
                         return setOpen()
                     }
                 }}
@@ -43,17 +50,20 @@ const IssueJoinVisit: React.FC<Props> = ({ Open, setOpen, visitId }) => {
                 <AlertDialogOverlay>
                     <AlertDialogContent>
                         <AlertDialogHeader textAlign='center' fontSize="lg" fontWeight="bold">
-                            เพิ่ม Issue
+                            เพิ่มใบเสนอราคา
                         </AlertDialogHeader>
                         <ModalCloseButton />
 
                         <Form>
                             <AlertDialogBody textAlign='center'>
                                 <InputField
+                                    name="quotationCode"
+                                    label="เลขที่ใบเสนอราคา :"
+                                />
+                                <InputField
                                     type="number"
-                                    name="issueId"
-                                    placeholder='ไอดี'
-                                    label="Issue ID :"
+                                    name="value"
+                                    label="มูลค่า :"
                                 />
                             </AlertDialogBody>
 
@@ -78,4 +88,4 @@ const IssueJoinVisit: React.FC<Props> = ({ Open, setOpen, visitId }) => {
     )
 }
 
-export default IssueJoinVisit
+export default AddQuotation

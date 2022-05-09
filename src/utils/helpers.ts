@@ -9,6 +9,36 @@ export const formatUpperCase = (category: string) => category.toUpperCase();
 export const reducer = (previousValue: number, currentValue: number) =>
     previousValue + currentValue;
 
+export const formatDateNew = (value: number) => {
+    const date = new Date(value)
+    const dd = date.getDate()
+    const mm = date.getMonth()
+    const yy = date.getFullYear()
+    return `${dd} ${selectMonth[mm + 1]} ${yy}`;
+}
+
+export const serviceLife = (dateStart: string) => {
+    const today = new Date();
+    const getDateStart = new Date(dateStart);
+    const differenceInTime = today.getTime() - getDateStart.getTime();
+    const sumDateAll = differenceInTime / (1000 * 3600 * 24);
+    const sumYear = sumDateAll / 365;
+    const dateDifference = new Date(differenceInTime);
+    const dayDiff = dateDifference.getUTCDate();
+    const monthDiff = dateDifference.getUTCMonth();
+
+    let resultYear = ''
+    let resultMonth = ''
+
+    if (sumYear >= 1) resultYear = sumYear.toString().split(".")[0] + "ปี "
+    if (monthDiff >= 1) resultMonth = monthDiff + " เดือน " + dayDiff + ' วัน'
+
+    const response = resultYear + resultMonth
+    
+    return response
+}
+
+
 type CatProductV1 = "อะไหล่รถยนต์" | "อาหาร" | "อิเล็กทรอนิกส์" | "*โปรดเลือก";
 
 export const factoryTab: FactoryTab[] = [
@@ -256,15 +286,6 @@ export const selectMonth: SelectMonth[] = [
     "พฤศจิกายน",
     "ธันวาคม"
 ]
-
-export const formatDateNew = (value: number) => {
-    const date = new Date(value)
-    const dd = date.getDate()
-    const mm = date.getMonth()
-    const yy = date.getFullYear()
-    return `${dd} ${selectMonth[mm + 1]} ${yy}`;
-
-}
 
 export type DemoChannel = "Cutting 1" | "Cutting 2" | "Area" | "Region" | "Project"
 export const salesChannel: Array<DemoChannel> = [

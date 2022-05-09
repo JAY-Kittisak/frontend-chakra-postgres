@@ -71,7 +71,7 @@ const SelectCustomerCdc: React.FC<Props> = ({
         >
             <Flex justify="center">
                 <Text fontSize="2xl" fontWeight="bold">
-                    Customer JSR
+                    Customer CDC
                 </Text>
             </Flex>
 

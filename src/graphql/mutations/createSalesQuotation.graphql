@@ -1,0 +1,11 @@
+mutation CreateSalesQuotation($input: SalesQuotation_Input!){
+    createSalesQuotation(input: $input){
+        errors {
+            field
+            message
+        }
+        salesVisit {
+            ...RegularSalesVisit
+        }
+    }
+}

@@ -1,0 +1,5 @@
+query VisitByRoleId($saleRoleId: Int!){
+  visitByRoleId(saleRoleId: $saleRoleId){
+    ...RegularSalesVisit
+  }
+}

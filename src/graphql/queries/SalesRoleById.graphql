@@ -9,53 +9,10 @@ query SalesRoleById($id: Int!,$monthIndex: Int!,$year: Int!) {
         userId
         startDate
         updatedAt
-        targets {
-            id
-            year
-            commission
-            strategy
-            branch
-        }
         user {
             id
             fullNameTH
             imageUrl
-        }
-        issues{
-            id
-            saleName,
-            customer,
-            detail,
-            issueValue,
-            status,
-            createdAt
-        }
-        visits {
-            id
-            visitDate
-            saleName
-            customer
-            jobPurpose
-        }
-        salesActual {
-            id
-            title
-            detail
-            actual
-            branch
-            customerId
-            customer {
-                id
-                customerName
-            }
-            userId
-            user {
-                id
-                fullNameTH
-            }
-            salesRoleId
-            createdAt
-            updatedAt
         }
     }
 }

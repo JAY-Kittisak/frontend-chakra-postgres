@@ -1,0 +1,11 @@
+fragment RegularSalesQuotation on SalesQuotation {
+    id
+    quotationCode
+    value
+    createdAt
+    visit {
+      id
+      customer
+      visitDate
+    }
+}

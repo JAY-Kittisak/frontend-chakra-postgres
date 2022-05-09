@@ -23,18 +23,23 @@ const AddAndEditTarget: React.FC<Props> = ({ Open, setOpen, branch, roleId }) =>
     const cancelRef = useRef();
     const selectYear = [2021, 2022, 2023, 2024, 2025]
     const [, createTarget] = useCreateSalesTargetMutation()
+
     return (
         <AlertDialog
-            size="xs"
+            size="md"
             isOpen={Open}
             leastDestructiveRef={cancelRef.current}
             onClose={setOpen}
         >
             <Formik
                 initialValues={{
-                    year: 2021,
+                    year: 2022,
                     commission: 0,
                     strategy: 0,
+                    countVisit: 0,
+                    countIssue: 0,
+                    valueIssue: 0,
+                    valueQt: 0,
                 }}
                 onSubmit={async (values, { setErrors }) => {
                     if (!branch) {
@@ -45,6 +50,10 @@ const AddAndEditTarget: React.FC<Props> = ({ Open, setOpen, branch, roleId }) =>
                             year: +values.year,
                             commission: values.commission,
                             strategy: values.strategy,
+                            countVisit: values.countVisit,
+                            countIssue: values.countIssue,
+                            valueIssue: values.valueIssue,
+                            valueQt: values.valueQt,
                             branch,
                             salesRoleId: +roleId
                         }
@@ -60,7 +69,7 @@ const AddAndEditTarget: React.FC<Props> = ({ Open, setOpen, branch, roleId }) =>
                 }}
             >
                 {({ isSubmitting }) => (
-                    <AlertDialogOverlay size="xs">
+                    <AlertDialogOverlay>
                         <AlertDialogContent>
                             <AlertDialogHeader fontSize="lg" fontWeight="bold">
                                 Target ประจำปี
@@ -85,16 +94,48 @@ const AddAndEditTarget: React.FC<Props> = ({ Open, setOpen, branch, roleId }) =>
                                                 ))}
                                             </SelectControl>
                                         </Flex>
-                                        <InputField
-                                            type="number"
-                                            name="commission"
-                                            label="Commission Target"
-                                        />
-                                        <InputField
-                                            type="number"
-                                            name="strategy"
-                                            label="Strategy Target"
-                                        />
+
+                                        {/* commission  */}
+                                        <Flex className="flex-div" w="100%">
+                                            <InputField
+                                                type="number"
+                                                name="commission"
+                                                label="Commission Target"
+                                            />
+                                            <InputField
+                                                type="number"
+                                                name="strategy"
+                                                label="Strategy Target"
+                                            />
+                                        </Flex>
+                                        
+                                        {/* count  */}
+                                        <Flex className="flex-div" w="100%">
+                                            <InputField
+                                                type="number"
+                                                name="countVisit"
+                                                label="เป้าจำนวน Visit"
+                                            />
+                                            <InputField
+                                                type="number"
+                                                name="countIssue"
+                                                label="เป้าจำนวน Issue"
+                                            />
+                                        </Flex>
+                                        
+                                        {/* value */}
+                                        <Flex className="flex-div" w="100%">
+                                            <InputField
+                                                type="number"
+                                                name="valueIssue"
+                                                label="เป้ามูลค่า Issue"
+                                            />
+                                            <InputField
+                                                type="number"
+                                                name="valueQt"
+                                                label="เป้ามูลค่า QT"
+                                            />
+                                        </Flex>
                                     </Flex>
                                 </AlertDialogBody>
 
