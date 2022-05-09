@@ -1074,6 +1074,9 @@ export type SalesEditIssue = {
   rate: Scalars['String'];
   status: Scalars['String'];
   issueValue: Scalars['Float'];
+  closedDate: Scalars['String'];
+  closedStatus: Scalars['String'];
+  failReason: Scalars['String'];
   issue: SalesIssue;
   createdAt: Scalars['String'];
 };
@@ -1355,6 +1358,9 @@ export type UpdateIssue_Input = {
   rate: Scalars['String'];
   status: Scalars['String'];
   issueValue: Scalars['Float'];
+  closedDate: Scalars['String'];
+  closedStatus: Scalars['String'];
+  failReason: Scalars['String'];
 };
 
 export type UpdateStockItOrResponse = {
@@ -1520,7 +1526,7 @@ export type RegularSalesIssueFragment = (
     & Pick<SalesRole, 'id' | 'salesRole' | 'channel'>
   ), editIssues: Array<(
     { __typename?: 'SalesEditIssue' }
-    & Pick<SalesEditIssue, 'id' | 'userEdit' | 'rate' | 'status' | 'issueValue' | 'createdAt'>
+    & Pick<SalesEditIssue, 'id' | 'userEdit' | 'rate' | 'status' | 'issueValue' | 'closedDate' | 'closedStatus' | 'failReason' | 'createdAt'>
   )> }
 );
 
@@ -3164,6 +3170,9 @@ export const RegularSalesIssueFragmentDoc = gql`
     rate
     status
     issueValue
+    closedDate
+    closedStatus
+    failReason
     createdAt
   }
 }

@@ -31,7 +31,7 @@ const SalesIssueDetail: React.FC<Props> = () => {
     });
 
     return (
-        <Flex px="5" flexDir="column">
+        <Flex flexDir="column" p="5" pb="10" overflow="auto" h="96vh">
             <Text
                 as="i"
                 fontWeight="semibold"
@@ -50,7 +50,7 @@ const SalesIssueDetail: React.FC<Props> = () => {
                         </Text>
                     </Flex>
                 ) : (
-                    <Flex flexDir="column" w={["100%","100%","100%","100%","70%"]} align="center">
+                    <Flex flexDir="column" w="100%" align="center">
                         <Flex 
                             flexDir="column"
                             w="100%"
@@ -343,12 +343,27 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                             <Th
                                                 fontSize={["xs", "xs", "sm", "md"]}
                                                 color="white">
-                                                Prob
+                                                Success Rate
                                             </Th>
                                             <Th
                                                 fontSize={["xs", "xs", "sm", "md"]}
                                                 color="white">
                                                 Status
+                                            </Th>
+                                            <Th
+                                                fontSize={["xs", "xs", "sm", "md"]}
+                                                color="white">
+                                                สถานะการปิด issue
+                                            </Th>
+                                            <Th
+                                                fontSize={["xs", "xs", "sm", "md"]}
+                                                color="white">
+                                                สาเหตุของการ fail
+                                            </Th>
+                                            <Th
+                                                fontSize={["xs", "xs", "sm", "md"]}
+                                                color="white">
+                                                วันที่คาดว่าจะปิดงาน
                                             </Th>
                                             <Th isNumeric
                                                 fontSize={["xs", "xs", "sm", "md"]}
@@ -365,6 +380,9 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                                 <Td>{item.userEdit}</Td>
                                                 <Td>{item.rate}%</Td>
                                                 <Td>{item.status}</Td>
+                                                <Td>{item.closedDate}</Td>
+                                                <Td>{item.closedStatus}</Td>
+                                                <Td>{item.failReason}</Td>
                                                 <Td isNumeric>{formatAmount(item.issueValue)} บาท</Td>
                                             </Tr>
                                         ))}

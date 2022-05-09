@@ -42,6 +42,9 @@ fragment RegularSalesIssue on SalesIssue {
     rate
     status
     issueValue
+    closedDate
+    closedStatus
+    failReason
     createdAt
   }
 }
