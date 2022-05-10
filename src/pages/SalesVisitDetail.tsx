@@ -1,6 +1,11 @@
-import React, { useState } from 'react'
-import { Flex, Text, Divider, Button, Stack, Heading, Box } from '@chakra-ui/react'
+import React, { useState, useRef } from 'react'
+import { 
+    Flex, Text, Divider, Button, Stack, Heading, Box, IconButton,
+    AlertDialog, AlertDialogBody,AlertDialogFooter, AlertDialogHeader,
+    AlertDialogContent, AlertDialogOverlay
+} from '@chakra-ui/react'
 import { useParams, useHistory } from "react-router-dom";
+import { CloseIcon } from "@chakra-ui/icons";
 
 import Spinner from "../components/Spinner";
 import IssueCreate from '../components/sales-report/IssueCreate'
@@ -8,14 +13,21 @@ import AddQuotation from '../components/sales-report/AddQuotation';
 import { useDialog } from '../components/dialogs/useDialog'
 import AlertNotification from "../components/dialogs/AlertNotification";
 import AlertNtSuccess from "../components/dialogs/AlertNtSuccess";
-import { useVisitByIdQuery } from "../generated/graphql";
-import { formatDate, AlertNt } from "../utils/helpers";
+import { useVisitByIdQuery, useDeleteJoinVisitMutation } from "../generated/graphql";
+import { formatDateNew, AlertNt } from "../utils/helpers";
+import { useIsAuth } from "../utils/uselsAuth";
 
 interface Props { }
 
 const SalesVisitDetail: React.FC<Props> = () => {
+    useIsAuth();
+
     const [alertSuccess, setAlertSuccess] = useState<AlertNt>("hide")
     const [alertWarning, setAlertWarning] = useState<AlertNt>("hide")
+    const [deleteDialog, setDeleteDialog] = useState(false);
+    const [issueId, setIssueId] = useState(0);
+
+    const cancelRef = useRef();
 
     const params = useParams<{ id: string }>();
 
@@ -28,6 +40,24 @@ const SalesVisitDetail: React.FC<Props> = () => {
             id: +params.id,
         },
     });
+
+    const [, deleteJoinVisit] = useDeleteJoinVisitMutation()
+
+    const onClose = () => setDeleteDialog(false);
+
+    const handleDeleteJoinVisit = async() => {
+        const response = await deleteJoinVisit({
+            input: {
+                visitId: +params.id,
+                issueId,
+            },
+        });
+        if (response.error) {
+            alert("Delete Error! โปรดติดต่อผู้ดูแล");
+        } else if (response.data?.deleteJoinVisit) {
+            setDeleteDialog(false);
+        }
+    }
 
     const checkAddId = data?.visitById?.issueReceives?.map(val => val.id)
 
@@ -107,17 +137,6 @@ const SalesVisitDetail: React.FC<Props> = () => {
                                 fontSize={["sm", "sm", "md", "lg"]}
                                 fontWeight="semibold"
                             >
-                                วันที่ไปพบลูกค้า : &nbsp;
-                            </Text>
-                            <Text fontSize={["sm", "sm", "md", "lg"]}>
-                                {data.visitById.visitDate}
-                            </Text>
-                        </Flex>
-                        <Flex mt="1">
-                            <Text
-                                fontSize={["sm", "sm", "md", "lg"]}
-                                fontWeight="semibold"
-                            >
                                 ชื่อผู้ติดต่อ : &nbsp;
                             </Text>
                             <Text fontSize={["sm", "sm", "md", "lg"]}>
@@ -153,6 +172,26 @@ const SalesVisitDetail: React.FC<Props> = () => {
                                 {data.visitById.customerType}
                             </Text>
                         </Flex>
+                        <Flex mt="1">
+                            <Text
+                                fontSize={["sm", "sm", "md", "lg"]}
+                                fontWeight="semibold"
+                            >
+                                วันที่ไปพบลูกค้า : &nbsp;
+                            </Text>
+                            <Text fontSize={["sm", "sm", "md", "lg"]}>
+                                {data.visitById.visitDate} &nbsp;
+                            </Text>
+                            <Text
+                                fontSize={["sm", "sm", "md", "lg"]}
+                                fontWeight="semibold"
+                            >
+                                วันที่บันทึก : &nbsp;
+                            </Text>
+                            <Text fontSize={["sm", "sm", "md", "lg"]}>
+                                {formatDateNew(+data.visitById.createdAt)} &nbsp;
+                            </Text>
+                        </Flex>
 
                         {data.visitById.jobPurpose === 'ติดตามใบเสนอราคา' && (
                             <Flex justifyContent="center">
@@ -170,7 +209,7 @@ const SalesVisitDetail: React.FC<Props> = () => {
                         {data.visitById.quotations.length >= 1 && (
                             <>
                                 <Heading mt={2} fontSize='xl'>Quotation :</Heading>
-                                
+
                                 {data.visitById.quotations.map(item => (
                                     <Box
                                         key={item.id}
@@ -192,26 +231,39 @@ const SalesVisitDetail: React.FC<Props> = () => {
                         {data.visitById.issueReceives && (
                             <>
                                 <Heading mt={2} fontSize='xl'>Issue :</Heading>
-                                
+
                                 {data.visitById.issueReceives.map(item => (
-                                    <Box
-                                        key={item.id}
-                                        p={2}
-                                        mt={3}
-                                        shadow='md'
-                                        borderWidth='1px'
-                                        borderRadius="md"
-                                        cursor='pointer'
-                                        _hover={{ bg: '#eee' }}
-                                        onClick={() => history.push(`/sales-report/issue/${item.id}`)}
-                                    >
-                                        <Stack isInline justify="space-between">
-                                            <Heading fontSize='lg'>Status : {item.status}</Heading>
-                                            <Text>CreateAt : {formatDate(+item.createdAt)}</Text>
-                                        </Stack>
-                                        <Text mt={2} className="paragraph-short">{item.detail}</Text>
-                                        <Text mt={2}>Success Rate :{item.rate}</Text>
-                                    </Box>
+                                    <Flex key={item.id} alignItems="center">
+                                        <IconButton
+                                            mr="1"
+                                            aria-label=""
+                                            icon={<CloseIcon />}
+                                            color="red.500"
+                                            colorScheme="white"
+                                            onClick={() => {
+                                                setIssueId(item.id);
+                                                setDeleteDialog(true);
+                                            }}
+                                        />
+                                        <Box
+                                            w="100%"
+                                            p={2}
+                                            mt={3}
+                                            shadow='md'
+                                            borderWidth='1px'
+                                            borderRadius="md"
+                                            cursor='pointer'
+                                            _hover={{ bg: '#eee' }}
+                                            onClick={() => history.push(`/sales-report/issue/${item.id}`)}
+                                        >
+                                            <Stack isInline justify="space-between">
+                                                <Heading fontSize='lg'>Status : {item.status}</Heading>
+                                                <Text>CreateAt : {formatDateNew(+item.createdAt)}</Text>
+                                            </Stack>
+                                            <Text mt={2} className="paragraph-short">{item.detail}</Text>
+                                            <Text mt={2}>Success Rate :{item.rate}</Text>
+                                        </Box>
+                                    </Flex>
                                 ))}
                             </>
                         )}
@@ -235,6 +287,45 @@ const SalesVisitDetail: React.FC<Props> = () => {
                     />
                 </Flex>
             )}
+            <AlertDialog
+                isOpen={deleteDialog}
+                leastDestructiveRef={cancelRef.current}
+                onClose={onClose}
+                isCentered
+            >
+                <AlertDialogOverlay>
+                    <AlertDialogContent>
+                        <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                            <Flex bgColor="red.600" rounded="7px" boxShadow="md">
+                                <Text fontWeight="bold" color="white" ml="5">
+                                    Delete Issue
+                                </Text>
+                            </Flex>
+                        </AlertDialogHeader>
+
+                        <AlertDialogBody>
+                            <div>
+                                <Text>คุณต้องการลบ Issue นี้ออกจากการเข้าพบลูกค้าครั้งนี้</Text>
+                                <Text>ใช่หรือไม่</Text>
+                            </div>
+                        </AlertDialogBody>
+
+                        <AlertDialogFooter>
+                            <Button
+                                color="white"
+                                colorScheme="red"
+                                mr={3}
+                                onClick={handleDeleteJoinVisit}
+                            >
+                                Delete
+                            </Button>
+                            <Button ref={cancelRef.current} onClick={onClose}>
+                                Cancel
+                            </Button>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialogOverlay>
+            </AlertDialog>
         </Flex>
     )
 }

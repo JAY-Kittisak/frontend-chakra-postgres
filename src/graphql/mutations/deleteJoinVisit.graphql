@@ -1,0 +1,5 @@
+mutation deleteJoinVisit($input: JoinVisitInput!) {
+    deleteJoinVisit(input: $input){
+        ...RegularSalesVisit
+    }
+}

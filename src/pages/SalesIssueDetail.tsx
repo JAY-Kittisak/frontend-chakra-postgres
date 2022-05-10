@@ -363,7 +363,7 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                             <Th
                                                 fontSize={["xs", "xs", "sm", "md"]}
                                                 color="white">
-                                                วันที่คาดว่าจะปิดงาน
+                                                วันที่ปิด issued
                                             </Th>
                                             <Th isNumeric
                                                 fontSize={["xs", "xs", "sm", "md"]}

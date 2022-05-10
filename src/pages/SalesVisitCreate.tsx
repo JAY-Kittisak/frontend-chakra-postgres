@@ -14,6 +14,7 @@ import InputField from '../components/InputField'
 import SelectCustomerJsr from '../components/sales-report/SelectCustomerJsr';
 import SelectCustomerCdc from '../components/sales-report/SelectCustomerCdc';
 import { toErrorMap } from '../utils/toErrorMap';
+import { useIsAuth } from "../utils/uselsAuth";
 
 type CatJobPurpose = "สร้างหัวเรื่องใหม่" | "ติดตามหัวเรื่องเดิม" | "ติดตามใบเสนอราคา"
 const catJobPurpose: CatJobPurpose[] = ["สร้างหัวเรื่องใหม่", "ติดตามหัวเรื่องเดิม", "ติดตามใบเสนอราคา"]
@@ -21,6 +22,8 @@ const catJobPurpose: CatJobPurpose[] = ["สร้างหัวเรื่อ
 interface Props { }
 
 const SalesVisitCreate: React.FC<Props> = () => {
+    useIsAuth();
+    
     const [customerID, setCustomerID] = useState<number | undefined>(undefined);
     const [customerData, setCustomerData] = useState<
         { code: string, prefix: string, name: string } | undefined

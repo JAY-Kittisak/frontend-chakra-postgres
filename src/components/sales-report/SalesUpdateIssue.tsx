@@ -183,7 +183,7 @@ const SalesUpdateIssue: React.FC<Props> = ({ Open, setOpen, branch, issueId, cur
                                     </Flex>
                                 </Flex>
                                     <Flex className="flex-div" justify="space-between">
-                                        <InputField type="date" name="closedDate" label="วันที่คาดว่าจะปิดงาน :" />
+                                        <InputField type="date" name="closedDate" label="วันที่ปิด issued :" />
                                         <InputField
                                             type="number"
                                             name="value"

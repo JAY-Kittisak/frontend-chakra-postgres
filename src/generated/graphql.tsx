@@ -442,6 +442,7 @@ export type Mutation = {
   updateSalesIssue: SalesIssue;
   createSalesVisit: SalesVisit_Response;
   joinVisit: SalesVisit;
+  deleteJoinVisit: SalesVisit;
   createSalesQuotation: SalesQuotation_Response;
 };
 
@@ -726,6 +727,11 @@ export type MutationCreateSalesVisitArgs = {
 
 
 export type MutationJoinVisitArgs = {
+  input: JoinVisitInput;
+};
+
+
+export type MutationDeleteJoinVisitArgs = {
   input: JoinVisitInput;
 };
 
@@ -1978,6 +1984,19 @@ export type DeleteJoinResellMutation = (
   & { deleteJoinResell: (
     { __typename?: 'Resell' }
     & RegularResellFragment
+  ) }
+);
+
+export type DeleteJoinVisitMutationVariables = Exact<{
+  input: JoinVisitInput;
+}>;
+
+
+export type DeleteJoinVisitMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteJoinVisit: (
+    { __typename?: 'SalesVisit' }
+    & RegularSalesVisitFragment
   ) }
 );
 
@@ -3668,6 +3687,17 @@ export const DeleteJoinResellDocument = gql`
 
 export function useDeleteJoinResellMutation() {
   return Urql.useMutation<DeleteJoinResellMutation, DeleteJoinResellMutationVariables>(DeleteJoinResellDocument);
+};
+export const DeleteJoinVisitDocument = gql`
+    mutation deleteJoinVisit($input: JoinVisitInput!) {
+  deleteJoinVisit(input: $input) {
+    ...RegularSalesVisit
+  }
+}
+    ${RegularSalesVisitFragmentDoc}`;
+
+export function useDeleteJoinVisitMutation() {
+  return Urql.useMutation<DeleteJoinVisitMutation, DeleteJoinVisitMutationVariables>(DeleteJoinVisitDocument);
 };
 export const DeleteStockItDocument = gql`
     mutation DeleteStockIt($id: Int!) {
