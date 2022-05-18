@@ -503,3 +503,22 @@ body{
 .paragraph-short {
     text-indent: 50px;
 }
+
+.table-timestamp {
+    width: 100%;
+    border-color: collapse;
+}
+
+.table-timestamp td {
+    padding: 5px 5px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.table-timestamp thead td {
+    color: #fff;
+}
+
+.table-timestamp tbody tr:nth-child(even) {
+    background-color: #f5f5f5;
+}

@@ -15,6 +15,7 @@ import ResellCreate from "../pages/ResellCreate";
 import ResellCreateStep2 from "../pages/ResellCreateStep2";
 import ResellReport from "../pages/ResellReport";
 import ResellByMe from "../pages/ResellByMe";
+import SalesReportLeader from "../pages/SalesReportLeader";
 import SalesReport from "../pages/SalesReport";
 import SalesActualCreate from "../pages/SalesActualCreate";
 import SalesIssueCreate from "../pages/SalesIssueCreate";
@@ -60,6 +61,9 @@ const Routes: React.FC<Props> = () => {
             </Route>
             <Route path="/sales-report/actual-create">
                 <SalesActualCreate />
+            </Route>
+            <Route path="/sales-report-leader">
+                <SalesReportLeader />
             </Route>
             <Route path="/sales-report">
                 <SalesReport />

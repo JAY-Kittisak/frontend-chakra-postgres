@@ -1,0 +1,5 @@
+query Visits($dateBegin: String!,$dateEnd: String!,) {
+    visits(dateBegin: $dateBegin,dateEnd: $dateEnd) {
+        ...RegularSalesVisit
+    }
+}

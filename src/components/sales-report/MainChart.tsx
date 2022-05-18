@@ -29,9 +29,10 @@ interface Props {
     chooseMonth: string;
     targetYear: TgDemo
     setTeam: React.Dispatch<React.SetStateAction<string>>
+    team: string
 }
 
-const MainChart: React.FC<Props> = ({ colorBranch, colorBranchPass, chooseMonth, setTeam, targetYear }) => {
+const MainChart: React.FC<Props> = ({ colorBranch, colorBranchPass, chooseMonth, setTeam, targetYear, team }) => {
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
     const [colorIndexCuttingOne, setColorIndexCuttingOne] = useState<
@@ -167,14 +168,14 @@ const MainChart: React.FC<Props> = ({ colorBranch, colorBranchPass, chooseMonth,
 
     return (
         <Box
-            mx="2"
+            ml="3"
             p="5"
             w="40%"
             h="230px"
             rounded="7px"
             boxShadow="md"
         >
-            <Text align="center" mt="-3" mb="1" fontWeight="bold" fontSize="xl">Channel All</Text>
+            <Text align="center" mt="-3" mb="1" fontWeight="bold" fontSize="xl">{team}</Text>
             <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart
                     width={500}

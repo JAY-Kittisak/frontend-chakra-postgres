@@ -6,21 +6,21 @@ import {
 import { EditIcon } from "@chakra-ui/icons";
 
 import Spinner from "../components/Spinner";
-import { 
+import {
     useMeQuery,
     useSalesRoleByIdQuery,
     useTargetByRoleIdQuery,
     useVisitByRoleIdQuery,
     useIssueByRoleIdQuery,
-    useQuotationByRoleIdQuery
+    useQuotationByRoleIdQuery,
+    RegularSalesVisitFragment,
+    RegularSalesIssueFragment,
 } from "../generated/graphql";
 import { useIsAuth } from "../utils/uselsAuth";
-import { 
-    // selectMonth, 
-    serviceLife
-} from "../utils/helpers";
+import { selectMonth, formatGetMonth, reducer, serviceLife } from "../utils/helpers";
 import Target from '../components/sales-report/Target';
 import TabsSaleRole from '../components/sales-report/TabsSaleRole';
+import IssueChart from '../components/sales-report/IssueChart';
 
 interface Props { }
 
@@ -30,15 +30,34 @@ const initialIssue = {
     valueIssue: 0
 }
 
+const monthly = new Date().getMonth()
+
 const SalesRoleDe: React.FC<Props> = () => {
     useIsAuth();
 
-    const [loading, setLoading] = useState(false);
     // const [chooseMonth, setChooseMonth] = useState("เดือน");
     const [chooseYear, setChooseYear] = useState(currentYear.toString());
     // const [selectYear, setSelectYear] = useState([currentYear]);
-    const [ issueProcess, setIssueProcess] = useState(initialIssue);
-    const [ quotationValue, setQuotationValue] = useState(0);
+    const [issueProcess, setIssueProcess] = useState(initialIssue);
+    const [quotationValue, setQuotationValue] = useState(0);
+
+    const [monthIndex, setMonthIndex] = useState(monthly+1);
+    const [monthValue, setMonthValue] = useState({
+        มกราคม: 0,
+        กุมภาพันธ์: 0,
+        มีนาคม: 0,
+        เมษายน: 0,
+        พฤษภาคม: 0,
+        มิถุนายน: 0,
+        กรกฎาคม: 0,
+        สิงหาคม: 0,
+        กันยายน: 0,
+        ตุลาคม: 0,
+        พฤศจิกายน: 0,
+        ธันวาคม: 0,
+    });
+    const [monthlyVisit, setMonthlyVisit] = useState<RegularSalesVisitFragment[] | undefined>()
+    const [monthlyIssue, setMonthlyIssue] = useState<RegularSalesIssueFragment[] | undefined>()
 
     const history = useHistory();
     const params = useParams<{ id: string }>();
@@ -51,30 +70,32 @@ const SalesRoleDe: React.FC<Props> = () => {
             year: +chooseYear
         },
     });
-    const [{ data: target}] = useTargetByRoleIdQuery({
+    const [{ data: target }] = useTargetByRoleIdQuery({
         variables: {
             salesRoleId: +params.id,
             year: +chooseYear
         }
     })
-    const [{ data: visits}] = useVisitByRoleIdQuery({
+    const [{ data: visits }] = useVisitByRoleIdQuery({
         variables: {
             saleRoleId: +params.id,
         }
     })
-    const [{ data: issues}] = useIssueByRoleIdQuery({
+    const [{ data: issues }] = useIssueByRoleIdQuery({
         variables: {
             saleRoleId: +params.id,
         }
     })
-    const [{ data: quotations}] = useQuotationByRoleIdQuery({
+    const [{ data: quotations }] = useQuotationByRoleIdQuery({
         variables: {
             saleRoleId: +params.id,
         }
     })
 
     const branch = data?.salesRoleById.branch;
+    const colorBranch = branch === "ลาดกระบัง" ? "#64c9e2" : "#7be4ca";
     const colorBranchPass = branch === "ลาดกระบัง" ? "#1379ec" : "#0AB68B";
+    const colorOnMouse = branch === "ลาดกระบัง" ? "#0a7988" : "#0d4e3e";
     const selectYear = [currentYear]
 
     // const onChangeMonth = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -84,40 +105,79 @@ const SalesRoleDe: React.FC<Props> = () => {
     const onChangeYear = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setChooseYear(e.target.value);
     };
-    
-
-    // const myPromise = new Promise((resolve, reject) => {
-    //     setTimeout(() => {
-    //         reject("doner")
-    //     }, 1000);
-    // })
-
-    // myPromise.then(
-    //     result => alert(result),
-    //     reject => alert(reject)
-    // )
 
     useEffect(() => {
-        setLoading(true)
-        if (!issues?.issueByRoleId) return
         if (!quotations?.quotationByRoleId) return
-        
-        const countIssue = issues.issueByRoleId.length
-        const valueIssue = issues.issueByRoleId.reduce((value,e) => {
-            const total = e.issueValue + value
-            return total
-        },0 )
 
-        const valueQt = quotations.quotationByRoleId.reduce((value,e) => {
+        const valueQt = quotations.quotationByRoleId.reduce((value, e) => {
             const total = e.value + value
             return total
-        },0 )
+        }, 0)
 
-        setIssueProcess({countIssue,valueIssue})
         setQuotationValue(valueQt)
 
-        setLoading(false)
-    }, [issues, quotations])
+        setMonthValue({
+            มกราคม: 0,
+            กุมภาพันธ์: 0,
+            มีนาคม: 0,
+            เมษายน: 0,
+            พฤษภาคม: 0,
+            มิถุนายน: 0,
+            กรกฎาคม: 0,
+            สิงหาคม: 0,
+            กันยายน: 0,
+            ตุลาคม: 0,
+            พฤศจิกายน: 0,
+            ธันวาคม: 0,
+        })
+
+        if (!issues?.issueByRoleId || issues.issueByRoleId.length === 0) return
+
+        const aprilFilter = issues.issueByRoleId
+            .filter((m) => selectMonth[formatGetMonth(+m.createdAt) + 1] === "เมษายน")
+            .map(value => value.issueValue)
+            .reduce(reducer);
+
+        const mayFilter = issues.issueByRoleId
+            .filter((m) => selectMonth[formatGetMonth(+m.createdAt) + 1] === "พฤษภาคม")
+            .map(value => value.issueValue)
+            .reduce(reducer);
+
+        setMonthValue({
+            มกราคม: 0,
+            กุมภาพันธ์: 0,
+            มีนาคม: 0,
+            เมษายน: aprilFilter,
+            พฤษภาคม: mayFilter,
+            มิถุนายน: 0,
+            กรกฎาคม: 0,
+            สิงหาคม: 0,
+            กันยายน: 0,
+            ตุลาคม: 0,
+            พฤศจิกายน: 0,
+            ธันวาคม: 0,
+        })
+
+    }, [quotations, visits, issues])
+
+    useEffect(() => {
+        if (!issues?.issueByRoleId) return
+        if (!visits?.visitByRoleId) return
+
+        const filterVisit = visits.visitByRoleId.filter(value => (formatGetMonth(+value.createdAt) + 1) === monthIndex)
+        
+        const countIssue = issues.issueByRoleId.length
+        const valueIssue = issues.issueByRoleId.reduce((value, e) => {
+            const total = e.issueValue + value
+            return total
+        }, 0)
+        const filterIssue = issues.issueByRoleId.filter(value => (formatGetMonth(+value.createdAt) + 1) === monthIndex)
+
+        setMonthlyVisit(filterVisit)
+        setIssueProcess({ countIssue, valueIssue })
+        setMonthlyIssue(filterIssue)
+
+    }, [monthIndex, visits, issues])
 
     return (
         <Flex flexDir="column" p="5" pb="10" overflow="auto" h="96vh">
@@ -142,7 +202,6 @@ const SalesRoleDe: React.FC<Props> = () => {
                         </Button>
                     )}
                 </Flex>
-
 
                 <Flex>
                     {/* <Select
@@ -175,7 +234,7 @@ const SalesRoleDe: React.FC<Props> = () => {
                 </Flex>
             </Flex>
 
-            {fetching || loading ? (
+            {fetching ? (
                 <Flex justify="center">
                     <Spinner color="grey" height={50} width={50} />
                     <Text
@@ -252,66 +311,81 @@ const SalesRoleDe: React.FC<Props> = () => {
                                 <Text fontWeight="semibold">อายุงาน : </Text>
                                 {/* <Text>{data.salesRoleById.วันเริ่มตำแหน่ง หรือ อายุงาน}</Text> */}
                                 <Text>
-                                &nbsp;{serviceLife(data.salesRoleById.startDate)}
+                                    &nbsp;{serviceLife(data.salesRoleById.startDate)}
                                 </Text>
                             </Flex>
                         </Grid>
                     </Flex>
 
-                    
-
                     {target?.targetByRoleId && (
-                        <Grid
-                            templateColumns={[
-                                'repeat(1, 1fr)',
-                                'repeat(1, 1fr)',
-                                'repeat(2, 1fr)',
-                                'repeat(3, 1fr)',
-                                'repeat(3, 1fr)',
-                                'repeat(6, 1fr)'
-                            ]}
-                            gap={3}
-                        >
-                            <Target
-                                color={colorBranchPass}
-                                title={'COMMISSION'}
-                                valueTarget={target.targetByRoleId.commission}
-                                valueCurrent={0}
+                        <>
+                            <Grid
+                                templateColumns={[
+                                    'repeat(1, 1fr)',
+                                    'repeat(1, 1fr)',
+                                    'repeat(2, 1fr)',
+                                    'repeat(3, 1fr)',
+                                    'repeat(3, 1fr)',
+                                    'repeat(6, 1fr)'
+                                ]}
+                                gap={3}
+                            >
+                                <Target
+                                    color={colorBranchPass}
+                                    title={'COMMISSION'}
+                                    valueTarget={target.targetByRoleId.commission}
+                                    valueCurrent={0}
+                                />
+                                <Target
+                                    color={colorBranchPass}
+                                    title={'STRATEGY'}
+                                    valueTarget={target.targetByRoleId.strategy}
+                                    valueCurrent={0}
+                                />
+                                <Target
+                                    color={colorBranchPass}
+                                    title={'การเข้าพบลูกค้า'}
+                                    valueTarget={target.targetByRoleId.countVisit}
+                                    valueCurrent={visits?.visitByRoleId?.length ? visits.visitByRoleId.length : 0}
+                                />
+                                <Target
+                                    color={colorBranchPass}
+                                    title={'Issue'}
+                                    valueTarget={target.targetByRoleId.countIssue}
+                                    valueCurrent={issueProcess.countIssue}
+                                />
+                                <Target
+                                    color={colorBranchPass}
+                                    title={'มูลค่า Issue'}
+                                    valueTarget={target.targetByRoleId.valueIssue}
+                                    valueCurrent={issueProcess.valueIssue}
+                                />
+                                <Target
+                                    color={colorBranchPass}
+                                    title={'มูลค่า QT'}
+                                    valueTarget={target.targetByRoleId.valueQt}
+                                    valueCurrent={quotationValue}
+                                />
+                            </Grid>
+
+                            {/* กราฟ */}
+                            <IssueChart
+                                colorBranch={colorBranch}
+                                colorBranchPass={colorBranchPass}
+                                colorOnMouse={colorOnMouse}
+                                countIssue={target.targetByRoleId.countIssue}
+                                valueIssue={target.targetByRoleId.valueIssue}
+                                countVisit={target.targetByRoleId.countVisit}
+                                monthValue={monthValue}
+                                setMonthIndex={setMonthIndex}
+                                monthlyIssue={monthlyIssue}
+                                monthlyVisit={monthlyVisit}
                             />
-                            <Target
-                                color={colorBranchPass}
-                                title={'STRATEGY'}
-                                valueTarget={target.targetByRoleId.strategy}
-                                valueCurrent={0}
-                            />
-                            <Target
-                                color={colorBranchPass}
-                                title={'การเข้าพบลูกค้า'}
-                                valueTarget={target.targetByRoleId.countVisit}
-                                valueCurrent={visits?.visitByRoleId?.length ? visits.visitByRoleId.length : 0}
-                            />
-                            <Target
-                                color={colorBranchPass}
-                                title={'Issue'}
-                                valueTarget={target.targetByRoleId.countIssue}
-                                valueCurrent={issueProcess.countIssue}
-                            />
-                            <Target
-                                color={colorBranchPass}
-                                title={'มูลค่า Issue'}
-                                valueTarget={target.targetByRoleId.valueIssue}
-                                valueCurrent={issueProcess.valueIssue}
-                            />
-                            <Target
-                                color={colorBranchPass}
-                                title={'มูลค่า QT'}
-                                valueTarget={target.targetByRoleId.valueQt}
-                                valueCurrent={quotationValue}
-                            />
-                        </Grid>
+                        </>
                     )}
-                    <TabsSaleRole 
-                        visits={visits}
+
+                    <TabsSaleRole
+                        monthlyVisit={monthlyVisit}
                         issues={issues}
                         quotations={quotations}
                         color={colorBranchPass}

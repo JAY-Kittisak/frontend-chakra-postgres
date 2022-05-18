@@ -5,121 +5,28 @@ import {
 } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 
-import { formatDateNew, formatAmount  } from "../../utils/helpers";
-import { VisitByRoleIdQuery, IssueByRoleIdQuery, QuotationByRoleIdQuery } from '../../generated/graphql';
+import { formatDateNew, formatAmount } from "../../utils/helpers";
+import { RegularSalesVisitFragment, IssueByRoleIdQuery, QuotationByRoleIdQuery } from '../../generated/graphql';
 
 interface Props {
     color: string
     issues: IssueByRoleIdQuery | undefined
-    visits: VisitByRoleIdQuery | undefined
+    monthlyVisit: RegularSalesVisitFragment[] | undefined
     quotations: QuotationByRoleIdQuery | undefined
 }
 
-const TabsSaleRole: React.FC<Props> = ({ color, issues, visits, quotations }) => {
+const TabsSaleRole: React.FC<Props> = ({ color, issues, monthlyVisit, quotations }) => {
 
     const history = useHistory();
 
     return (
-        <Flex p="3" mt="5" rounded="7px" boxShadow="md">
-        <Tabs variant="enclosed" w="100%">
+        <Tabs mt="5" variant="enclosed" w="100%">
             <TabList>
-                <Tab fontWeight="bold">การเข้าพบลูกค้า</Tab>
                 <Tab fontWeight="bold">Issue</Tab>
+                <Tab fontWeight="bold">การเข้าพบลูกค้า</Tab>
                 <Tab fontWeight="bold">Quotation</Tab>
             </TabList>
             <TabPanels>
-                <TabPanel>
-                    <Flex>
-                        <Text ml="6" fontWeight="bold" fontSize="xl">
-                            {" "}
-                            ประวัติการเข้าพบลูกค้าทั้งหมด
-                        </Text>
-                    </Flex>
-                    {/* {actualSum?.length === 0 || !actualSum ? (
-                                <Flex>
-                                    <Text ml="6" fontWeight="bold" fontSize="xl">
-                                        ยังไม่มีข้อมูล
-                                    </Text>
-                                </Flex>
-                            ) : (
-                                <Flex>
-                                    <Text ml="6" fontWeight="bold" fontSize="xl">
-                                        {" "}
-                                        ประวัติการกรอก Issue ของทั้งหมด
-                                    </Text>
-                                    <Text
-                                        ml="2"
-                                        fontWeight="bold"
-                                        fontSize="xl"
-                                        color="blue.500"
-                                    >
-                                        {formatAmount(actualSum.reduce(reducer))}
-                                    </Text>
-                                </Flex>
-                            )} */}
-                    <Table
-                        boxShadow="base"
-                        variant="simple"
-                        colorScheme="blackAlpha"
-                    >
-                        <Thead>
-                            <Tr bg="#1379ec">
-                                <Th
-                                    textAlign="center"
-                                    fontSize={["xs", "xs", "sm", "md"]}
-                                    color="white"
-                                >
-                                    วันที่ไปพบลูกค้า
-                                </Th>
-                                <Th
-                                    textAlign="center"
-                                    fontSize={["xs", "xs", "sm", "md"]}
-                                    color="white"
-                                >
-                                    SALE NAME
-                                </Th>
-                                <Th
-                                    textAlign="center"
-                                    fontSize={["xs", "xs", "sm", "md"]}
-                                    color="white"
-                                >
-                                    COMPANY
-                                </Th>
-                                <Th
-                                    textAlign="center"
-                                    fontSize={["xs", "xs", "sm", "md"]}
-                                    color="white"
-                                >
-                                    jobPurpose
-                                </Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            {visits?.visitByRoleId && visits.visitByRoleId.map((val, i) => (
-                                <Tr
-                                    key={i}
-                                    cursor="pointer"
-                                    _hover={{ bg: '#eee' }}
-                                    onClick={() =>
-                                        history.push(`/sales-report/visit/${val.id}`)
-                                    }
-                                >
-                                    <Td>
-                                        <Center>{val.visitDate}</Center>
-                                    </Td>
-                                    <Td>
-                                        <Center>{val.saleName}</Center>
-                                    </Td>
-                                    <Td>{val.customer}</Td>
-                                    <Td><Center>{val.jobPurpose}</Center></Td>
-                                    {/* <Td w="10%">
-                                                <Center>{formatAmount(val.actual)}</Center>
-                                            </Td> */}
-                                </Tr>
-                            ))}
-                        </Tbody>
-                    </Table>
-                </TabPanel>
                 <TabPanel>
                     <Flex>
                         <Text ml="6" fontWeight="bold" fontSize="xl">
@@ -215,6 +122,98 @@ const TabsSaleRole: React.FC<Props> = ({ color, issues, visits, quotations }) =>
                     <Flex>
                         <Text ml="6" fontWeight="bold" fontSize="xl">
                             {" "}
+                            ประวัติการเข้าพบลูกค้าทั้งหมด
+                        </Text>
+                    </Flex>
+                    {/* {actualSum?.length === 0 || !actualSum ? (
+                                <Flex>
+                                    <Text ml="6" fontWeight="bold" fontSize="xl">
+                                        ยังไม่มีข้อมูล
+                                    </Text>
+                                </Flex>
+                            ) : (
+                                <Flex>
+                                    <Text ml="6" fontWeight="bold" fontSize="xl">
+                                        {" "}
+                                        ประวัติการกรอก Issue ของทั้งหมด
+                                    </Text>
+                                    <Text
+                                        ml="2"
+                                        fontWeight="bold"
+                                        fontSize="xl"
+                                        color="blue.500"
+                                    >
+                                        {formatAmount(actualSum.reduce(reducer))}
+                                    </Text>
+                                </Flex>
+                            )} */}
+                    <Table
+                        boxShadow="base"
+                        variant="simple"
+                        colorScheme="blackAlpha"
+                    >
+                        <Thead>
+                            <Tr bg={color}>
+                                <Th
+                                    textAlign="center"
+                                    fontSize={["xs", "xs", "sm", "md"]}
+                                    color="white"
+                                >
+                                    วันที่ไปพบลูกค้า
+                                </Th>
+                                <Th
+                                    textAlign="center"
+                                    fontSize={["xs", "xs", "sm", "md"]}
+                                    color="white"
+                                >
+                                    SALE NAME
+                                </Th>
+                                <Th
+                                    textAlign="center"
+                                    fontSize={["xs", "xs", "sm", "md"]}
+                                    color="white"
+                                >
+                                    COMPANY
+                                </Th>
+                                <Th
+                                    textAlign="center"
+                                    fontSize={["xs", "xs", "sm", "md"]}
+                                    color="white"
+                                >
+                                    jobPurpose
+                                </Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {monthlyVisit && monthlyVisit.map((val, i) => (
+                                <Tr
+                                    key={i}
+                                    cursor="pointer"
+                                    _hover={{ bg: '#eee' }}
+                                    onClick={() =>
+                                        history.push(`/sales-report/visit/${val.id}`)
+                                    }
+                                >
+                                    <Td>
+                                        <Center>{val.visitDate}</Center>
+                                    </Td>
+                                    <Td>
+                                        <Center>{val.saleName}</Center>
+                                    </Td>
+                                    <Td>{val.customer}</Td>
+                                    <Td><Center>{val.jobPurpose}</Center></Td>
+                                    {/* <Td w="10%">
+                                                <Center>{formatAmount(val.actual)}</Center>
+                                            </Td> */}
+                                </Tr>
+                            ))}
+                        </Tbody>
+                    </Table>
+                </TabPanel>
+                <TabPanel>
+                    <Flex>
+                        <Text ml="6" fontWeight="bold" fontSize="xl">
+                            {" "}
                             Quotation ทั้งหมด
                         </Text>
                     </Flex>
@@ -257,7 +256,7 @@ const TabsSaleRole: React.FC<Props> = ({ color, issues, visits, quotations }) =>
                         </Thead>
                         <Tbody>
                             {quotations?.quotationByRoleId && quotations?.quotationByRoleId.map((val, i) => (
-                                <Tr 
+                                <Tr
                                     key={i}
                                     cursor="pointer"
                                     _hover={{ bg: '#eee' }}
@@ -286,7 +285,6 @@ const TabsSaleRole: React.FC<Props> = ({ color, issues, visits, quotations }) =>
                 </TabPanel>
             </TabPanels>
         </Tabs>
-    </Flex>
     )
 }
 

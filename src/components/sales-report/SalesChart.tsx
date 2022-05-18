@@ -261,9 +261,13 @@ const SalesChart: React.FC<Props> = ({
 
     return (
         <Box
-            mr="3"
-            p="2"
+            mt="3"
+            pt="5"
+            pr="6"
             h={["250px", "250px", "250px", "250px", "250px", "330px"]}
+            rounded="7px" 
+            boxShadow="md" 
+            borderWidth='1px'
         >
             <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart

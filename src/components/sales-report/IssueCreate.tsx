@@ -56,7 +56,6 @@ const IssueCreate: React.FC<Props> = ({
             ml="3"
             boxShadow="xl"
             borderRadius="md"
-            justifyContent='space-between'
         >
             <Text align='center' fontSize="2xl" fontWeight="bold" mb='5'>
                 Issue ทั้งหมดของคุณ
@@ -76,7 +75,7 @@ const IssueCreate: React.FC<Props> = ({
                     </Text>
                 </Flex>
             ) : (
-                <Flex mt="5" overflowX="auto" rounded="5px" boxShadow="md">
+                <Flex mt="5" h="100%" overflowX="auto" rounded="5px" boxShadow="md">
                     <Table variant='striped' colorScheme='teal'>
                         <Thead>
                             <Tr>

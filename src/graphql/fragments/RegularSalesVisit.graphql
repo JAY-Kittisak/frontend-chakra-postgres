@@ -12,6 +12,11 @@ fragment RegularSalesVisit on SalesVisit {
     branch
     createdAt
     updatedAt
+    saleRole {
+      id
+      salesRole
+      channel
+    }
     issueReceives {
       id
       customer

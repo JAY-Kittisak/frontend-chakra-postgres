@@ -1,4 +1,4 @@
-import { FactoryTab, FactoryIndustrialEstate } from "../types";
+import { FactoryTab, FactoryIndustrialEstate, FilterRoleJsr } from "../types";
 
 export const formatAmount = (amount: number) =>
     amount.toLocaleString("en", { minimumFractionDigits: 0 });
@@ -30,7 +30,7 @@ export const serviceLife = (dateStart: string) => {
     let resultYear = ''
     let resultMonth = ''
 
-    if (sumYear >= 1) resultYear = sumYear.toString().split(".")[0] + "ปี "
+    if (sumYear >= 1) resultYear = sumYear.toString().split(".")[0] + " ปี "
     if (monthDiff >= 1) resultMonth = monthDiff + " เดือน " + dayDiff + ' วัน'
 
     const response = resultYear + resultMonth
@@ -480,3 +480,50 @@ export const probSelect = [
 
 export const catIssueStatus = ["Proposed", "Quoted", "Purchased", "Issued"];
 
+// Chart Sales Report
+export const initialRoleJsr: FilterRoleJsr = {
+    Sales01: [],
+    Sales02: [],
+    Sales03: [],
+    Sales04: [],
+    Sales05: [],
+    Sales06: [],
+    Sales07: [],
+    Sales08: [],
+    Sales09: [],
+    Sales10: [],
+    Sales11: [],
+    Sales12: [],
+    Sales13: [],
+    Sales14: [],
+    Sales15: [],
+    Sales16: [],
+    Sales17: [],
+}
+
+export const initialRoleCdc = {
+    salecda01: [],
+    salecda02: [],
+    salecda03: [],
+    salecda04: [],
+    salecda05: [],
+    salecda06: [],
+    salecda08: [],
+    salecda09: [],
+    salecda10: [],
+    salecda11: [],
+    salecda12: [],
+    salecda14: [],
+    salecda15: [],
+    salecda16: [],
+    salecdc00: [],
+    salecdc02: [],
+    salecdc03: [],
+    salecdc04: [],
+    salecdc05: [],
+    salecdc06: [],
+    salecdc07: [],
+    salecdc08: [],
+    salecdc09: [],
+    salecdc10: [],
+}

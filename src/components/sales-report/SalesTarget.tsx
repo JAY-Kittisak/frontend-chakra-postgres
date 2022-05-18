@@ -66,7 +66,7 @@ const SalesTarget: React.FC<Props> = ({ colorBranch, colorBranchPass }) => {
     return (
         <>
             <Flex
-                mx="2"
+                mr="3"
                 w="30%"
                 h="230px"
                 rounded="7px"
@@ -80,7 +80,7 @@ const SalesTarget: React.FC<Props> = ({ colorBranch, colorBranchPass }) => {
                                 1.25 B
                             </Text>
                             <Text ml="6" fontSize="sm" color="gray">
-                                เป้ายอดขายปี 2022
+                                เป้า Issue ปี 2022
                             </Text>
                         </Flex>
                     </Flex>
@@ -140,7 +140,7 @@ const SalesTarget: React.FC<Props> = ({ colorBranch, colorBranchPass }) => {
                             920.35 M
                         </Text>
                         <Text fontSize="sm" color="gray">
-                            เป้ายอดขาย ณ ปัจจุบัน
+                            เป้า Issue ณ ปัจจุบัน
                         </Text>
                     </Flex>
                     <Flex flexDir="column" align="center">
@@ -148,7 +148,7 @@ const SalesTarget: React.FC<Props> = ({ colorBranch, colorBranchPass }) => {
                             800.95 M
                         </Text>
                         <Text fontSize="sm" color="gray">
-                            ยอดขายจริง ณ ปัจจุบัน
+                            มูลค่า Issue จริง ณ ปัจจุบัน
                         </Text>
                     </Flex>
                 </Flex>
@@ -176,7 +176,7 @@ const SalesTarget: React.FC<Props> = ({ colorBranch, colorBranchPass }) => {
                         <CountUp start={0} end={percentNum} duration={2.5} separator=" " /><span>%</span>
                     </Text>
                 </Flex>
-                <Text mt="130px" align="center">คิดเป็น % ของเป้ายอดขาย ณ ปัจจุบัน</Text>
+                <Text mt="130px" align="center">คิดเป็น % ของเป้า Issue ณ ปัจจุบัน</Text>
 
 
                 {/* <Flex flexDir="column">

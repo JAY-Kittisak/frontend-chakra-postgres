@@ -824,6 +824,7 @@ export type Query = {
   salesBrands?: Maybe<Array<SalesBrand>>;
   customerJsr?: Maybe<Array<CustomerJsr>>;
   customerCdc?: Maybe<Array<CustomerCdc>>;
+  visits?: Maybe<Array<SalesVisit>>;
   visitByRoleId?: Maybe<Array<SalesVisit>>;
   visitById?: Maybe<SalesVisit>;
   quotationByRoleId?: Maybe<Array<SalesQuotation>>;
@@ -970,6 +971,12 @@ export type QueryCustomerJsrArgs = {
 
 export type QueryCustomerCdcArgs = {
   customerName: Scalars['String'];
+};
+
+
+export type QueryVisitsArgs = {
+  dateEnd: Scalars['String'];
+  dateBegin: Scalars['String'];
 };
 
 
@@ -1548,7 +1555,10 @@ export type RegularSalesQuotationFragment = (
 export type RegularSalesRoleFragment = (
   { __typename?: 'SalesRole' }
   & Pick<SalesRole, 'id' | 'salesRole' | 'channel' | 'areaCode' | 'userId' | 'branch' | 'status' | 'startDate' | 'updatedAt'>
-  & { user: (
+  & { issues: Array<(
+    { __typename?: 'SalesIssue' }
+    & Pick<SalesIssue, 'id' | 'issueValue'>
+  )>, user: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'fullNameTH' | 'imageUrl'>
   ) }
@@ -1557,7 +1567,10 @@ export type RegularSalesRoleFragment = (
 export type RegularSalesVisitFragment = (
   { __typename?: 'SalesVisit' }
   & Pick<SalesVisit, 'id' | 'saleRoleId' | 'saleName' | 'customer' | 'visitDate' | 'contactName' | 'position' | 'department' | 'jobPurpose' | 'customerType' | 'branch' | 'createdAt' | 'updatedAt'>
-  & { issueReceives?: Maybe<Array<(
+  & { saleRole: (
+    { __typename?: 'SalesRole' }
+    & Pick<SalesRole, 'id' | 'salesRole' | 'channel'>
+  ), issueReceives?: Maybe<Array<(
     { __typename?: 'SalesIssue' }
     & Pick<SalesIssue, 'id' | 'customer' | 'detail' | 'createdAt' | 'forecastDate' | 'status' | 'rate'>
   )>>, quotations: Array<(
@@ -2885,6 +2898,20 @@ export type VisitByRoleIdQuery = (
   )>> }
 );
 
+export type VisitsQueryVariables = Exact<{
+  dateBegin: Scalars['String'];
+  dateEnd: Scalars['String'];
+}>;
+
+
+export type VisitsQuery = (
+  { __typename?: 'Query' }
+  & { visits?: Maybe<Array<(
+    { __typename?: 'SalesVisit' }
+    & RegularSalesVisitFragment
+  )>> }
+);
+
 export type FactoryByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -3220,6 +3247,10 @@ export const RegularSalesRoleFragmentDoc = gql`
   status
   startDate
   updatedAt
+  issues {
+    id
+    issueValue
+  }
   user {
     id
     fullNameTH
@@ -3242,6 +3273,11 @@ export const RegularSalesVisitFragmentDoc = gql`
   branch
   createdAt
   updatedAt
+  saleRole {
+    id
+    salesRole
+    channel
+  }
   issueReceives {
     id
     customer
@@ -4540,6 +4576,17 @@ export const VisitByRoleIdDocument = gql`
 
 export function useVisitByRoleIdQuery(options: Omit<Urql.UseQueryArgs<VisitByRoleIdQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<VisitByRoleIdQuery>({ query: VisitByRoleIdDocument, ...options });
+};
+export const VisitsDocument = gql`
+    query Visits($dateBegin: String!, $dateEnd: String!) {
+  visits(dateBegin: $dateBegin, dateEnd: $dateEnd) {
+    ...RegularSalesVisit
+  }
+}
+    ${RegularSalesVisitFragmentDoc}`;
+
+export function useVisitsQuery(options: Omit<Urql.UseQueryArgs<VisitsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<VisitsQuery>({ query: VisitsDocument, ...options });
 };
 export const FactoryByIdDocument = gql`
     query FactoryById($id: Int!) {
