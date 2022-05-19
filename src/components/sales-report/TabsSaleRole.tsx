@@ -6,16 +6,16 @@ import {
 import { useHistory } from "react-router-dom";
 
 import { formatDateNew, formatAmount } from "../../utils/helpers";
-import { RegularSalesVisitFragment, IssueByRoleIdQuery, QuotationByRoleIdQuery } from '../../generated/graphql';
+import {RegularSalesIssueFragment, RegularSalesVisitFragment, QuotationByRoleIdQuery } from '../../generated/graphql';
 
 interface Props {
     color: string
-    issues: IssueByRoleIdQuery | undefined
     monthlyVisit: RegularSalesVisitFragment[] | undefined
+    monthlyIssue: RegularSalesIssueFragment[] | undefined
     quotations: QuotationByRoleIdQuery | undefined
 }
 
-const TabsSaleRole: React.FC<Props> = ({ color, issues, monthlyVisit, quotations }) => {
+const TabsSaleRole: React.FC<Props> = ({ color, monthlyIssue, monthlyVisit, quotations }) => {
 
     const history = useHistory();
 
@@ -86,7 +86,7 @@ const TabsSaleRole: React.FC<Props> = ({ color, issues, monthlyVisit, quotations
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {issues?.issueByRoleId && issues.issueByRoleId.map((val, i) => (
+                            {monthlyIssue && monthlyIssue.map((val, i) => (
                                 <Tr
                                     key={i}
                                     cursor="pointer"

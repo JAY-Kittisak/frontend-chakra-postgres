@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Box, Text } from "@chakra-ui/react";
 import {
     Bar,
@@ -13,37 +13,50 @@ import {
 
 import { RegularSalesVisitFragment } from '../../generated/graphql';
 
+type DataIssueMonth = { id: string, target: number, result: number }
+
 interface Props {
     colorBranch: string;
     countVisit: number
     monthlyVisit: RegularSalesVisitFragment[] | undefined
 }
 
+const initialDataIssue: DataIssueMonth[] = [{
+    id: "",
+    target: 0,
+    result: 0
+}]
+const dt = new Date();
+const month = dt.getMonth();
+const year = dt.getFullYear();
+const daysInMonth = new Date(year, month + 1, 0).getDate();
+
 const VisitChart: React.FC<Props> = ({
     colorBranch,
     countVisit,
     monthlyVisit
 }) => {
+    const [ dataVisitMonth,setDataVisitMonth] = useState(initialDataIssue)
 
     const greenLine = countVisit / 12
-    let dataDate = []
-    const dt = new Date();
-    const month = dt.getMonth();
-    const year = dt.getFullYear();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
     const targetDay = Math.ceil(greenLine / daysInMonth)
 
-    for (let i = 0; i < daysInMonth; i++) {
-        dataDate.push({
-            id: `${i + 1}`,
-            target: targetDay,
-            current: monthlyVisit ? monthlyVisit.filter(value => {
-                const date = new Date(+value.createdAt)
-
-                return date.getDate() === i + 1
-            }).length : 0,
-        })
-    }
+    useEffect(() => {
+        let dataDate: DataIssueMonth[] = []
+        for (let i = 0; i < daysInMonth; i++) {
+            dataDate.push({
+                id: `${i + 1}`,
+                target: targetDay,
+                result: monthlyVisit ? monthlyVisit.filter(value => {
+                    const date = new Date(+value.createdAt)
+    
+                    return date.getDate() === i + 1
+                }).length : 0,
+            })
+        }
+        
+        setDataVisitMonth(dataDate)
+    }, [ monthlyVisit, targetDay])
 
     return (
         <Box 
@@ -66,7 +79,7 @@ const VisitChart: React.FC<Props> = ({
                 <ComposedChart
                     width={500}
                     height={300}
-                    data={dataDate}
+                    data={dataVisitMonth}
                     margin={{
                         top: 5,
                         right: 10,
@@ -77,8 +90,8 @@ const VisitChart: React.FC<Props> = ({
                     <XAxis dataKey="id" />
                     <YAxis />
                     <Tooltip />
-                    <Bar dataKey="current" fill={colorBranch}>
-                        {dataDate.map((_, index) => (
+                    <Bar dataKey="result" fill={colorBranch}>
+                        {dataVisitMonth.map((_, index) => (
                             <Cell key={`cell-${index}`} />
                         ))}
                     </Bar>

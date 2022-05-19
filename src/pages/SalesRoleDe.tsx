@@ -17,7 +17,7 @@ import {
     RegularSalesIssueFragment,
 } from "../generated/graphql";
 import { useIsAuth } from "../utils/uselsAuth";
-import { selectMonth, formatGetMonth, reducer, serviceLife } from "../utils/helpers";
+import { selectMonth, formatGetMonth, reducer, serviceLife, TypeMonth } from "../utils/helpers";
 import Target from '../components/sales-report/Target';
 import TabsSaleRole from '../components/sales-report/TabsSaleRole';
 import IssueChart from '../components/sales-report/IssueChart';
@@ -32,6 +32,8 @@ const initialIssue = {
 
 const monthly = new Date().getMonth()
 
+type IssueMonth = { month: TypeMonth, target: number, sumIssue: number }
+
 const SalesRoleDe: React.FC<Props> = () => {
     useIsAuth();
 
@@ -42,22 +44,11 @@ const SalesRoleDe: React.FC<Props> = () => {
     const [quotationValue, setQuotationValue] = useState(0);
 
     const [monthIndex, setMonthIndex] = useState(monthly+1);
-    const [monthValue, setMonthValue] = useState({
-        มกราคม: 0,
-        กุมภาพันธ์: 0,
-        มีนาคม: 0,
-        เมษายน: 0,
-        พฤษภาคม: 0,
-        มิถุนายน: 0,
-        กรกฎาคม: 0,
-        สิงหาคม: 0,
-        กันยายน: 0,
-        ตุลาคม: 0,
-        พฤศจิกายน: 0,
-        ธันวาคม: 0,
-    });
+
     const [monthlyVisit, setMonthlyVisit] = useState<RegularSalesVisitFragment[] | undefined>()
     const [monthlyIssue, setMonthlyIssue] = useState<RegularSalesIssueFragment[] | undefined>()
+
+    const [issueMonth, setIssueMonth ] = useState<IssueMonth[]>()
 
     const history = useHistory();
     const params = useParams<{ id: string }>();
@@ -107,65 +98,15 @@ const SalesRoleDe: React.FC<Props> = () => {
     };
 
     useEffect(() => {
-        if (!quotations?.quotationByRoleId) return
+        // Target
+        let targetIssue = 0
+        if (target?.targetByRoleId) {
+            targetIssue = target.targetByRoleId.valueIssue / 12
+        }
 
-        const valueQt = quotations.quotationByRoleId.reduce((value, e) => {
-            const total = e.value + value
-            return total
-        }, 0)
-
-        setQuotationValue(valueQt)
-
-        setMonthValue({
-            มกราคม: 0,
-            กุมภาพันธ์: 0,
-            มีนาคม: 0,
-            เมษายน: 0,
-            พฤษภาคม: 0,
-            มิถุนายน: 0,
-            กรกฎาคม: 0,
-            สิงหาคม: 0,
-            กันยายน: 0,
-            ตุลาคม: 0,
-            พฤศจิกายน: 0,
-            ธันวาคม: 0,
-        })
-
-        if (!issues?.issueByRoleId || issues.issueByRoleId.length === 0) return
-
-        const aprilFilter = issues.issueByRoleId
-            .filter((m) => selectMonth[formatGetMonth(+m.createdAt) + 1] === "เมษายน")
-            .map(value => value.issueValue)
-            .reduce(reducer);
-
-        const mayFilter = issues.issueByRoleId
-            .filter((m) => selectMonth[formatGetMonth(+m.createdAt) + 1] === "พฤษภาคม")
-            .map(value => value.issueValue)
-            .reduce(reducer);
-
-        setMonthValue({
-            มกราคม: 0,
-            กุมภาพันธ์: 0,
-            มีนาคม: 0,
-            เมษายน: aprilFilter,
-            พฤษภาคม: mayFilter,
-            มิถุนายน: 0,
-            กรกฎาคม: 0,
-            สิงหาคม: 0,
-            กันยายน: 0,
-            ตุลาคม: 0,
-            พฤศจิกายน: 0,
-            ธันวาคม: 0,
-        })
-
-    }, [quotations, visits, issues])
-
-    useEffect(() => {
+        // ISSUE
         if (!issues?.issueByRoleId) return
-        if (!visits?.visitByRoleId) return
-
-        const filterVisit = visits.visitByRoleId.filter(value => (formatGetMonth(+value.createdAt) + 1) === monthIndex)
-        
+                
         const countIssue = issues.issueByRoleId.length
         const valueIssue = issues.issueByRoleId.reduce((value, e) => {
             const total = e.issueValue + value
@@ -173,11 +114,43 @@ const SalesRoleDe: React.FC<Props> = () => {
         }, 0)
         const filterIssue = issues.issueByRoleId.filter(value => (formatGetMonth(+value.createdAt) + 1) === monthIndex)
 
-        setMonthlyVisit(filterVisit)
-        setIssueProcess({ countIssue, valueIssue })
-        setMonthlyIssue(filterIssue)
+        let issueMonth : IssueMonth[] = []
 
-    }, [monthIndex, visits, issues])
+        selectMonth.forEach(month => {
+            if (month === "เดือน") return
+            if (!issues.issueByRoleId) return
+
+            const monthFilter = issues.issueByRoleId.filter((m) => selectMonth[formatGetMonth(+m.createdAt) + 1] === month)
+            const monthMap = monthFilter.map(value => value.issueValue)
+
+            const monthReduce = monthMap.reduce(reducer,0)
+            issueMonth.push({ month: month, target: targetIssue, sumIssue: monthReduce })
+        })
+        
+        setMonthlyIssue(filterIssue)
+        setIssueProcess({ countIssue, valueIssue })
+        setIssueMonth(issueMonth)
+
+    }, [monthIndex, quotations, visits, issues, target])
+
+    useEffect(() => {
+        if (!visits?.visitByRoleId) return
+        
+        const filterVisit = visits.visitByRoleId.filter(value => (formatGetMonth(+value.createdAt) + 1) === monthIndex)
+        
+        setMonthlyVisit(filterVisit)
+    }, [visits, monthIndex])
+
+    useEffect(() => {
+        if (!quotations?.quotationByRoleId) return
+        
+        const valueQt = quotations.quotationByRoleId.reduce((value, e) => {
+            const total = e.value + value
+            return total
+        }, 0)
+        
+        setQuotationValue(valueQt)
+    }, [quotations])
 
     return (
         <Flex flexDir="column" p="5" pb="10" overflow="auto" h="96vh">
@@ -374,19 +347,18 @@ const SalesRoleDe: React.FC<Props> = () => {
                                 colorBranchPass={colorBranchPass}
                                 colorOnMouse={colorOnMouse}
                                 countIssue={target.targetByRoleId.countIssue}
-                                valueIssue={target.targetByRoleId.valueIssue}
                                 countVisit={target.targetByRoleId.countVisit}
-                                monthValue={monthValue}
                                 setMonthIndex={setMonthIndex}
                                 monthlyIssue={monthlyIssue}
                                 monthlyVisit={monthlyVisit}
+                                issueMonth={issueMonth}
                             />
                         </>
                     )}
 
                     <TabsSaleRole
+                        monthlyIssue={monthlyIssue}
                         monthlyVisit={monthlyVisit}
-                        issues={issues}
                         quotations={quotations}
                         color={colorBranchPass}
                     />

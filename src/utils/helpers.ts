@@ -257,7 +257,7 @@ export type TypeDemoData = {
 
 export type AlertNt = "show" | "hide"
 
-type SelectMonth = "เดือน" |
+export type TypeMonth  = "เดือน" |
     "มกราคม" |
     "กุมภาพันธ์" |
     "มีนาคม" |
@@ -270,6 +270,8 @@ type SelectMonth = "เดือน" |
     "ตุลาคม" |
     "พฤศจิกายน" |
     "ธันวาคม"
+
+type SelectMonth = TypeMonth | "เดือน"
 
 export const selectMonth: SelectMonth[] = [
     "เดือน",
