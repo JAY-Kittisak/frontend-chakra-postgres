@@ -9,13 +9,13 @@ fragment RegularSalesVisit on SalesVisit {
     department
     jobPurpose
     customerType
-    branch
     createdAt
     updatedAt
     saleRole {
       id
       salesRole
       channel
+      branch
     }
     issueReceives {
       id

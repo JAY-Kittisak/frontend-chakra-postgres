@@ -24,6 +24,7 @@ interface Props {
     colorOnMouse: string;
     countIssue: number
     setMonthIndex: (index: number) => void | undefined
+    monthIndex: number
     monthlyIssue: RegularSalesIssueFragment[] | undefined
     countVisit: number
     monthlyVisit: RegularSalesVisitFragment[] | undefined
@@ -46,6 +47,7 @@ const IssueChart: React.FC<Props> = ({
     colorOnMouse,
     countIssue,
     setMonthIndex,
+    monthIndex,
     monthlyIssue,
     countVisit,
     monthlyVisit,
@@ -57,15 +59,18 @@ const IssueChart: React.FC<Props> = ({
 
     const [onMouseIndex, setOnMouseIndex] = useState<number | undefined>(undefined);
     const [ dataIssueMonth,setDataIssueMonth] = useState(initialDataIssue)
-
     const greenLine = countIssue / 12
     const targetDay = Math.ceil(greenLine / daysInMonth)
 
     const handleClick = useCallback(
         (_, index: number) => {
+            console.log(index,monthIndex)
+            if (index+1 === monthIndex) {
+                return setMonthIndex(0)
+            }
             setMonthIndex(index + 1);
         },
-        [setMonthIndex]
+        [setMonthIndex, monthIndex]
     );
     
     useEffect(() => {
@@ -90,7 +95,7 @@ const IssueChart: React.FC<Props> = ({
         if (!issueMonth) return
 
         selectMonth.forEach((element,index) => {
-            if (element === "เดือน") return
+            if (element === "ทุกเดือน") return
 
             const response = issueMonth.find(value => value.month === element)
 
@@ -115,7 +120,7 @@ const IssueChart: React.FC<Props> = ({
                     align='center'
                     fontSize="2xl"
                 >
-                    มูลค่า Issue ในแต่ละเดือน
+                    มูลค่า Issue ในแต่ละเดือน 
                 </Text>
                 {!issueMonth ? (
                     <p>No Data.</p>
@@ -164,13 +169,14 @@ const IssueChart: React.FC<Props> = ({
                     boxShadow="md" 
                     borderWidth='1px'
                 >
-                    <Text
+                    <Flex
                         mt="2"
-                        align='center'
+                        alignItems='center'
+                        justifyContent="center"
                         fontSize="2xl"
                     >
-                        จำนวน Issue ในแต่ละเดือน
-                    </Text>
+                        จำนวน Issue เดือน <Text fontWeight="bold" color={colorBranchPass}>&nbsp;{selectMonth[monthIndex]}</Text>
+                    </Flex>
                     <ResponsiveContainer width="100%" height="100%">
                         <ComposedChart
                             width={500}
@@ -199,6 +205,8 @@ const IssueChart: React.FC<Props> = ({
                     colorBranch={colorBranch}
                     countVisit={countVisit}      
                     monthlyVisit={monthlyVisit}
+                    monthIndex={monthIndex}
+                    colorBranchPass={colorBranchPass}
                 />
             </Flex>
         </>

@@ -16,7 +16,6 @@ const checkPercent = (value: number) => {
 }
 
 const Target: React.FC<Props> = ({  title, valueTarget, valueCurrent, color}) => {
-
     const result = (valueCurrent / valueTarget) * 100
     const useFloor = Math.floor(result)
     const percent = `${checkPercent(useFloor)}%`

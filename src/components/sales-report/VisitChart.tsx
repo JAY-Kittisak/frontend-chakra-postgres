@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text, Flex } from "@chakra-ui/react";
 import {
     Bar,
     Line,
@@ -12,6 +12,7 @@ import {
 } from "recharts";
 
 import { RegularSalesVisitFragment } from '../../generated/graphql';
+import { selectMonth } from '../../utils/helpers'
 
 type DataIssueMonth = { id: string, target: number, result: number }
 
@@ -19,6 +20,8 @@ interface Props {
     colorBranch: string;
     countVisit: number
     monthlyVisit: RegularSalesVisitFragment[] | undefined
+    monthIndex: number
+    colorBranchPass: string;
 }
 
 const initialDataIssue: DataIssueMonth[] = [{
@@ -34,7 +37,9 @@ const daysInMonth = new Date(year, month + 1, 0).getDate();
 const VisitChart: React.FC<Props> = ({
     colorBranch,
     countVisit,
-    monthlyVisit
+    monthlyVisit,
+    monthIndex,
+    colorBranchPass
 }) => {
     const [ dataVisitMonth,setDataVisitMonth] = useState(initialDataIssue)
 
@@ -68,13 +73,14 @@ const VisitChart: React.FC<Props> = ({
             boxShadow="md" 
             borderWidth='1px'
         >
-            <Text
+            <Flex
                 mt="2"
-                align='center'
+                alignItems='center'
+                justifyContent="center"
                 fontSize="2xl"
             >
-                จำนวนการเข้าพบลูกค่าให้แต่ละเดือน
-            </Text>
+                จำนวนการเข้าพบลูกค่าเดือน <Text fontWeight="bold" color={colorBranchPass}>&nbsp;{selectMonth[monthIndex]}</Text>
+            </Flex>
             <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart
                     width={500}

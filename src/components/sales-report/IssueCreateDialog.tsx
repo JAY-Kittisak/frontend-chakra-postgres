@@ -18,11 +18,10 @@ interface Props {
     Open: boolean;
     setOpen: () => void;
     visitId: number
-    customer: string
     branch: string | undefined
 }
 
-const IssueCreateDialog: React.FC<Props> = ({ Open, setOpen, branch, visitId, customer }) => {
+const IssueCreateDialog: React.FC<Props> = ({ Open, setOpen, branch, visitId }) => {
     const [brand, setBrand] = useState("3M");
     const [category, setCategory] = useState("One shot");
     const [status, setStatus] = useState("Proposed");
@@ -58,7 +57,6 @@ const IssueCreateDialog: React.FC<Props> = ({ Open, setOpen, branch, visitId, cu
                 onSubmit={async (values, { setErrors }) => {
                     const sumArr = {
                         ...values,
-                        customer,
                         brand,
                         category,
                         status,

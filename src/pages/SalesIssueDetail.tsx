@@ -86,7 +86,7 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                     สาขา : &nbsp;
                                 </Text>
                                 <Text fontSize="lg">
-                                    {data.issueById.branch}
+                                    {data.issueById.saleRole.branch}
                                 </Text>
                             </Flex>
                             <Flex mt="1">
@@ -94,19 +94,10 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                     fontSize="lg"
                                     fontWeight="semibold"
                                 >
-                                    บริษัท : &nbsp;
-                                </Text>
-                                <Text fontSize="lg">
-                                    {data.issueById.customer} &nbsp;
-                                </Text>
-                                <Text
-                                    fontSize="lg"
-                                    fontWeight="semibold"
-                                >
                                     วันที่คาดว่าจะปิดงาน : &nbsp;
                                 </Text>
                                 <Text fontSize="lg">
-                                    {data.issueById.forecastDate}
+                                    {formatDateNew(data.issueById.forecastDate)}
                                 </Text>
                             </Flex>
                             {data.issueById.closedDate !== 'Pending' && (
@@ -122,17 +113,6 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                     </Text>
                                 </Flex>
                             )}
-                            <Flex mt="1">
-                                <Text
-                                    fontSize="lg"
-                                    fontWeight="semibold"
-                                >
-                                    วันที่บันทึก : &nbsp;
-                                </Text>
-                                <Text fontSize="lg">
-                                    {formatDateNew(+data.issueById.createdAt)} &nbsp;
-                                </Text>
-                            </Flex>
                             <Flex mt="1">
                                 <Text
                                     fontSize="lg"
@@ -177,12 +157,35 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                     {data.issueById.failReason}
                                 </Text>
                             </Flex>
+                            <Flex mt="1">
+                                <Text
+                                    minW="110px"
+                                    fontSize="lg"
+                                    fontWeight="semibold"
+                                >
+                                    รายละเอียด : &nbsp;
+                                </Text>
+                                <Text fontSize="lg">
+                                    {data.issueById.detail}
+                                </Text>
+                            </Flex>
+                            <Flex mt="1">
+                                <Text
+                                    fontSize="lg"
+                                    fontWeight="semibold"
+                                >
+                                    วันที่บันทึก : &nbsp;
+                                </Text>
+                                <Text fontSize="lg">
+                                    {formatDateNew(+data.issueById.createdAt)} &nbsp;
+                                </Text>
+                            </Flex>
 
                             <TableContainer mt="3">
                                 <Table variant='simple'>
                                     <Thead>
                                         <Tr
-                                            bg={data.issueById.branch === "ลาดกระบัง" ? "#1379ec" : "#0AB68B"}
+                                            bg={data.issueById.saleRole.branch === "ลาดกระบัง" ? "#1379ec" : "#0AB68B"}
                                             fontSize="18px"
                                         >
                                             <Th
@@ -229,18 +232,6 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                     </Tbody>
                                 </Table>
                             </TableContainer>
-                            <Flex mt="2">
-                                <Text
-                                    minW="110px"
-                                    fontSize="lg"
-                                    fontWeight="semibold"
-                                >
-                                    รายละเอียด : &nbsp;
-                                </Text>
-                                <Text fontSize="lg">
-                                    {data.issueById.detail}
-                                </Text>
-                            </Flex>
                         </Flex>
 
                         <Text fontSize="xl" fontWeight="semibold" mt={6}>
@@ -301,7 +292,7 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                 <SalesUpdateIssue
                                     Open={true}
                                     setOpen={() => setIsOpen(false)}
-                                    branch={data.issueById.branch}
+                                    branch={data.issueById.saleRole.branch}
                                     issueId={params.id}
                                     currentPrice={data.issueById.issueValue}
                                 />
@@ -322,7 +313,7 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                     </TableCaption>
                                     <Thead>
                                         <Tr
-                                            bg={data.issueById.branch === "ลาดกระบัง" ? "#1379ec" : "#0AB68B"}
+                                            bg={data.issueById.saleRole.branch === "ลาดกระบัง" ? "#1379ec" : "#0AB68B"}
                                             fontSize="18px"
                                         >
                                             <Th isNumeric

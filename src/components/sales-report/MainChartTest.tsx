@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Box, Text } from '@chakra-ui/react'
+import { Flex, Box, Text, Button } from '@chakra-ui/react'
 import {
     Bar,
     // Line,
@@ -10,15 +10,79 @@ import {
     ResponsiveContainer,
     ComposedChart,
 } from "recharts";
+import { CSVLink } from "react-csv";
 
-import { RegularSalesRoleFragment } from '../../generated/graphql'
-import { reducer } from '../../utils/helpers'
+import { RegularSalesRoleFragment, useIssueByRoleIdQuery } from '../../generated/graphql'
+import { reducer, formatDateNew } from '../../utils/helpers'
 
 interface Props {
     salesChannel: RegularSalesRoleFragment[] | undefined
     colorBranch: string;
     setSalesChannel: React.Dispatch<React.SetStateAction<RegularSalesRoleFragment[] | undefined>>
 }
+
+type ExportItemCSV = {
+    id: number
+    saleName: string
+    detail: string
+    issueValue: number
+    forecastDate: string
+    brand: string
+    category: string
+    units: number
+    model: string
+    size: string
+    status: string
+    rate: string
+    closedDate: string
+    closedStatus: string
+    failReason: string
+    createdAt: string
+    updatedAt: string
+    saleRole?: string
+    channel?: string
+    visitId?: number
+    visitDate?: string
+    contactName?: string
+    customerType?: string
+    customer?: string
+    position?: string
+    department?: string
+    jobPurpose?: string
+    visitCreatedAt?: string
+};
+
+const headers = [
+    { label: "ID", key: "id" },
+    { label: "SaleName", key: "saleName" },
+    { label: "Detail", key: "detail" },
+    { label: "IssueValue", key: "issueValue" },
+    { label: "ForecastDate", key: "forecastDate" },
+    { label: "Brand", key: "brand" },
+    { label: "Category", key: "category" },
+    { label: "Units", key: "units" },
+    { label: "Model", key: "model" },
+    { label: "Size", key: "size" },
+    { label: "Status", key: "status" },
+    { label: "Rate", key: "rate" },
+    { label: "ClosedDate", key: "closedDate" },
+    { label: "ClosedStatus", key: "closedStatus" },
+    { label: "FailReason", key: "failReason" },
+    { label: "CreatedAt", key: "createdAt" },
+    { label: "UpdatedAt", key: "updatedAt" },
+    { label: "SaleRole", key: "saleRole" },
+    { label: "Channel", key: "channel" },
+    { label: "VisitId", key: "visitId" },
+    { label: "Customer", key: "customer" },
+    { label: "VisitDate", key: "visitDate" },
+    { label: "ContactName", key: "contactName" },
+    { label: "CustomerType", key: "customerType" },
+    { label: "Position", key: "position" },
+    { label: "Department", key: "department" },
+    { label: "JobPurpose", key: "jobPurpose" },
+    { label: "VisitCreatedAt", key: "visitCreatedAt" },
+];
+
 
 const MainChartTest: React.FC<Props> = ({ salesChannel, colorBranch, setSalesChannel }) => {
     const [channels, setChannels] = useState(['All']);
@@ -29,6 +93,13 @@ const MainChartTest: React.FC<Props> = ({ salesChannel, colorBranch, setSalesCha
 
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
     const [channel, setChannel] = useState("All")
+
+    const [item, setItem] = useState<ExportItemCSV[]>([]);
+    const [timeNow, setTimeNow] = useState("");
+
+    const [{ data }] =useIssueByRoleIdQuery({ 
+        variables : {saleRoleId: 2}
+    })
 
     const handleClick = useCallback(
         (_, index: number) => {
@@ -47,6 +118,20 @@ const MainChartTest: React.FC<Props> = ({ salesChannel, colorBranch, setSalesCha
         },
         [setActiveIndex,setSalesChannel, activeIndex, salesChannel, channels]
     );
+    
+    const csvReport = {
+        filename: `Resell_Report${timeNow}.csv`,
+        headers: headers,
+        data: item,
+    };
+
+    const setTimeOnClick = () => {
+        const dateNow = new Date()
+        const hours = dateNow.getHours()
+        const minutes = dateNow.getMinutes()
+        const seconds = dateNow.getSeconds()
+        setTimeNow(`_วันที่_${dateNow.toLocaleDateString()}_เวลา_${hours}_${minutes}_${seconds}`)
+    }
 
     useEffect(() => {
         if (!salesChannel) return
@@ -89,6 +174,101 @@ const MainChartTest: React.FC<Props> = ({ salesChannel, colorBranch, setSalesCha
         setChannels(items)
     }, [salesChannel])
 
+    useEffect(() => {
+        if (!data?.issueByRoleId) return
+
+        setItem([]);
+
+        const filterData = data.issueByRoleId.filter(val => val.saleRole.channel === channel)
+    
+        console.log('response',filterData)
+
+        filterData.forEach(val => {
+            const {
+                id,
+                saleName,
+                detail,
+                issueValue,
+                forecastDate,
+                brand,
+                category,
+                units,
+                model,
+                size,
+                status,
+                rate,
+                closedDate,
+                closedStatus,
+                failReason,
+                createdAt,
+                updatedAt,
+            } = val
+
+            if (!val.visitLoaders) {
+                setItem((arr) => [
+                    ...arr,
+                    {
+                        id,
+                        saleName,
+                        detail,
+                        issueValue,
+                        forecastDate,
+                        brand,
+                        category,
+                        units,
+                        model,
+                        size,
+                        status,
+                        rate,
+                        closedDate,
+                        closedStatus,
+                        failReason,
+                        createdAt: formatDateNew(+createdAt),
+                        updatedAt: formatDateNew(+updatedAt),
+                        saleRole: val.saleRole.salesRole,
+                        channel: val.saleRole.channel,
+                    },
+                ])
+            } else {
+                val.visitLoaders.forEach(visit => {
+                    setItem((arr) => [
+                        ...arr,
+                        {
+                            id,
+                            saleName,
+                            detail,
+                            issueValue,
+                            forecastDate,
+                            brand,
+                            category,
+                            units,
+                            model,
+                            size,
+                            status,
+                            rate,
+                            closedDate,
+                            closedStatus,
+                            failReason,
+                            createdAt: formatDateNew(+createdAt),
+                            updatedAt: formatDateNew(+updatedAt),
+                            saleRole: val.saleRole.salesRole,
+                            channel: val.saleRole.channel,
+                            visitId: visit.id,
+                            visitDate: visit.visitDate,
+                            contactName: visit.contactName,
+                            customer: visit.customer,
+                            customerType : visit.customerType,
+                            position: visit.position,
+                            department: visit.department,
+                            jobPurpose: visit.jobPurpose,
+                            visitCreatedAt: formatDateNew(+visit.createdAt),
+                        },
+                    ])
+                })
+            }
+        })
+    }, [data, channel])
+
     return (
         <>
             {dataByChannel && (
@@ -100,17 +280,33 @@ const MainChartTest: React.FC<Props> = ({ salesChannel, colorBranch, setSalesCha
                     rounded="7px"
                     boxShadow="md"
                 >
-                    <Text align="center" mt="-3" mb="1" fontWeight="bold" fontSize="xl">{channel}</Text>
+                    <Flex justifyContent='center'>
+                        <Text fontWeight="bold" fontSize="xl">{channel}</Text>
+                        {channel !== 'All' && (
+                            <CSVLink {...csvReport}>
+                                <Button
+                                    mt="1"
+                                    ml="2"
+                                    size='xs'
+                                    colorScheme="teal"
+                                    variant="outline"
+                                    onClick={setTimeOnClick}
+                                >
+                                    Export to CSV
+                                </Button>
+                            </CSVLink>
+                        )}
+                    </Flex>
                     <ResponsiveContainer width="100%" height="100%">
                         <ComposedChart
                             width={500}
                             height={300}
                             data={dataByChannel}
                             margin={{
-                                top: 5,
+                                top: 0,
                                 right: 0,
                                 left: 0,
-                                bottom: 5,
+                                bottom: 10,
                             }}
                         >
                             <CartesianGrid strokeDasharray="0 1" />

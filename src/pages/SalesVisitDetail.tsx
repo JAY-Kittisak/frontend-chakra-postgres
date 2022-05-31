@@ -180,7 +180,7 @@ const SalesVisitDetail: React.FC<Props> = () => {
                                 วันที่ไปพบลูกค้า : &nbsp;
                             </Text>
                             <Text fontSize={["sm", "sm", "md", "lg"]}>
-                                {data.visitById.visitDate} &nbsp;
+                                {formatDateNew(data.visitById.visitDate)} &nbsp;
                             </Text>
                             <Text
                                 fontSize={["sm", "sm", "md", "lg"]}

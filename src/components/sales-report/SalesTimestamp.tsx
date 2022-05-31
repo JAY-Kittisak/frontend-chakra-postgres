@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Flex } from "@chakra-ui/react";
+import { CheckIcon } from '@chakra-ui/icons'
 
 import { Branch, initialRoleJsr, initialRoleCdc } from '../../utils/helpers';
 import { RoleThisMonth, RoleJsr, RoleCdc, ThisMonth } from '../../types'
@@ -35,7 +36,7 @@ const SalesTimestamp: React.FC<Props> = ({ branch, colorBranchPass}) => {
     useEffect(() => {
         if (!data?.visits) return
 
-        const filterBranch = data.visits.filter(value => value.branch === branch)
+        const filterBranch = data.visits.filter(value => value.saleRole.branch === branch)
 
         let updatedRoleJsr: any = {}
         let countsVisitByDate: RoleThisMonth[] = []
@@ -51,19 +52,34 @@ const SalesTimestamp: React.FC<Props> = ({ branch, colorBranchPass}) => {
                 let thisMonth: ThisMonth[] = []
 
                 for (let i = 0; i < daysInMonth; i++) {
-                    const response = dataForFilter.some(value => {
+                    const filterDate = dataForFilter.filter(value => {
                         const created = new Date(+value.createdAt)
                         return created.getDate() === i + 1
                     })
+                    
+                    if (filterDate.length > 0) {
+                        const response = filterDate.map(val => {
+                            const createdAt = new Date(+val.createdAt)
+                            const visitDate = new Date(val.visitDate)
 
-                    thisMonth.push({
-                        date: i + 1,
-                        result: response
-                    })
+                            return createdAt.getDate() === visitDate.getDate()
+                        })
+
+                        const result = response.includes(true)
+
+                        thisMonth.push({
+                            date: i + 1,
+                            result: result ? 'green' : '#ff8c00'
+                        })
+                    } else {
+                        thisMonth.push({
+                            date: i + 1,
+                            result: 'black'
+                        })
+                    }
                 }
-    
-                const response = { role: role, thisMonth }
-                countsVisitByDate.push(response)
+
+                countsVisitByDate.push({ role: role, thisMonth })
             })
         } else {
             Object.keys(initialRoleCdc).forEach(roleCdc => {
@@ -76,19 +92,34 @@ const SalesTimestamp: React.FC<Props> = ({ branch, colorBranchPass}) => {
                 let thisMonth: ThisMonth[] = []
     
                 for (let i = 0; i < daysInMonth; i++) {
-                    const response = dataForFilter.some(value => {
+                    const filterDate = dataForFilter.filter(value => {
                         const created = new Date(+value.createdAt)
                         return created.getDate() === i + 1
                     })
+                    
+                    if (filterDate.length > 0) {
+                        const response = filterDate.map(val => {
+                            const createdAt = new Date(+val.createdAt)
+                            const visitDate = new Date(val.visitDate)
 
-                    thisMonth.push({
-                        date: i + 1,
-                        result: response
-                    })
+                            return createdAt.getDate() === visitDate.getDate()
+                        })
+
+                        const result = response.includes(true)
+
+                        thisMonth.push({
+                            date: i + 1,
+                            result: result ? 'green' : '#ff8c00'
+                        })
+                    } else {
+                        thisMonth.push({
+                            date: i + 1,
+                            result: 'black'
+                        })
+                    }
                 }
     
-                const response = { role: role, thisMonth }
-                countsVisitByDate.push(response)
+                countsVisitByDate.push({ role: role, thisMonth })
             })
         }
 
@@ -123,13 +154,10 @@ const SalesTimestamp: React.FC<Props> = ({ branch, colorBranchPass}) => {
                                 <td>{item.role}</td>
                                 {item.thisMonth.map(month => (
                                     <td 
-                                        key={month.date} 
-                                        style={month.result ? { color: colorBranchPass} : undefined }
+                                        key={month.date}
                                     >
-                                        {month.result ? (
-                                            <i className="bi bi-check-square"></i>
-                                            ) : (
-                                            <i className="bi bi-square"></i>
+                                        {month.result !== "black"  && (
+                                            <CheckIcon color={month.result} />
                                         )}
                                     </td>
                                 ))}

@@ -2,7 +2,6 @@ fragment RegularSalesIssue on SalesIssue {
   id
   saleRoleId
   saleName
-  customer
   detail
   issueValue
   forecastDate
@@ -16,7 +15,6 @@ fragment RegularSalesIssue on SalesIssue {
   closedDate
   closedStatus
   failReason
-  branch
   createdAt
   updatedAt
   visitLoaders {
@@ -35,6 +33,7 @@ fragment RegularSalesIssue on SalesIssue {
     id
     salesRole
     channel
+    branch
   }
   editIssues{
     id

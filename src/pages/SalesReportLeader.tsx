@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Flex, Image, Text, Divider, Select } from "@chakra-ui/react";
+import { Flex, Image, Text, Divider, Input } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 
 import {
     CatUserRole,
-    AlertNt,
-    selectMonth,
+    AlertNt
 } from "../utils/helpers";
 import { useMeQuery, useSalesRolesQuery, RegularSalesRoleFragment } from "../generated/graphql";
 import Spinner from "../components/Spinner";
@@ -20,41 +19,6 @@ import MainChartTest from "../components/sales-report/MainChartTest";
 import SwitchBranch from "../components/sales-report/SwitchBranch";
 
 interface Props { }
-
-// FIXME:
-// type TgDemo = {
-//     id: number;
-//     year: number;
-//     branch: string;
-//     c1: number;
-//     c2: number;
-//     are: number;
-//     reg: number;
-//     pro: number;
-// };
-
-// const targetDemoLkb = [
-//     {
-//         id: 1,
-//         year: 2022,
-//         branch: "ลาดกระบัง",
-//         c1: 350_000_000,
-//         c2: 350_000_000,
-//         are: 350_000_000,
-//         reg: 350_000_000,
-//         pro: 350_000_000,
-//     },
-//     {
-//         id: 2,
-//         year: 2021,
-//         branch: "ลาดกระบัง",
-//         c1: 250_000_000,
-//         c2: 250_000_000,
-//         are: 250_000_000,
-//         reg: 250_000_000,
-//         pro: 250_000_000,
-//     },
-// ];
 
 const SalesReportLeader: React.FC<Props> = () => {
     useIsAuth();
@@ -71,21 +35,7 @@ const SalesReportLeader: React.FC<Props> = () => {
     // const [chooseMonth, setChooseMonth] = useState("เดือน");
     // const [chooseYear, setChooseYear] = useState("2022");
     // const [targetYear, setTargetYear] = useState<TgDemo>(targetDemoLkb[0]);
-
-    // const [monthValue, setMonthValue] = useState({
-    //     มกราคม: 0,
-    //     กุมภาพันธ์: 0,
-    //     มีนาคม: 0,
-    //     เมษายน: 0,
-    //     พฤษภาคม: 0,
-    //     มิถุนายน: 0,
-    //     กรกฎาคม: 0,
-    //     สิงหาคม: 0,
-    //     กันยายน: 0,
-    //     ตุลาคม: 0,
-    //     พฤศจิกายน: 0,
-    //     ธันวาคม: 0,
-    // });
+    
     const [ dataSales, setDataSales ] = useState<RegularSalesRoleFragment[] | undefined>(undefined)
     const [salesChannel, setSalesChannel] = useState<RegularSalesRoleFragment[] | undefined>(undefined);
 
@@ -266,33 +216,23 @@ const SalesReportLeader: React.FC<Props> = () => {
                                 </Text>
 
                                 <Flex>
-                                    <Select
-                                        disabled
-                                        w="150px"
-                                        mr="5"
-                                        mt="1"
-                                        fontWeight="semibold"
-                                        name="selectYear"
-                                        // onChange={(e) => onChangeYear(e)}
-                                    >
-                                        <option value="2022">2022</option>
-                                        <option value="2021">2021</option>
-                                    </Select>
-                                    <Select
-                                        disabled
-                                        w="150px"
-                                        mr="5"
-                                        mt="1"
-                                        fontWeight="semibold"
-                                        name="selectMonth"
-                                        // onChange={(e) => onChangeMonth(e)}
-                                    >
-                                        {selectMonth.map((val, i) => (
-                                            <option key={i} value={val}>
-                                                {val}
-                                            </option>
-                                        ))}
-                                    </Select>
+                                    <Flex alignItems="center">
+                                        <Text mr="5">วันที่ : </Text>
+                                        <Input 
+                                            mr="5" 
+                                            w="200px" 
+                                            type="date" 
+                                            defaultValue="2022-05-01" 
+                                            // onChange={(e) => onChangeYear(e)}
+                                        />
+                                        <Text mr="5">ถึง :</Text>
+                                        <Input 
+                                            w="200px" 
+                                            type="date" 
+                                            defaultValue="2022-05-31" 
+                                            // onChange={(e) => onChangeMonth(e)}
+                                        />
+                                    </Flex>
                                 </Flex>
                             </Flex>
 

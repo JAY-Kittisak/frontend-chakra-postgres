@@ -9,7 +9,7 @@ export const formatUpperCase = (category: string) => category.toUpperCase();
 export const reducer = (previousValue: number, currentValue: number) =>
     previousValue + currentValue;
 
-export const formatDateNew = (value: number) => {
+export const formatDateNew = (value: number | string) => {
     const date = new Date(value)
     const dd = date.getDate()
     const mm = date.getMonth()
@@ -257,7 +257,7 @@ export type TypeDemoData = {
 
 export type AlertNt = "show" | "hide"
 
-export type TypeMonth  = "เดือน" |
+export type TypeMonth  = "ทุกเดือน" |
     "มกราคม" |
     "กุมภาพันธ์" |
     "มีนาคม" |
@@ -271,10 +271,10 @@ export type TypeMonth  = "เดือน" |
     "พฤศจิกายน" |
     "ธันวาคม"
 
-type SelectMonth = TypeMonth | "เดือน"
+type SelectMonth = TypeMonth | "ทุกเดือน"
 
 export const selectMonth: SelectMonth[] = [
-    "เดือน",
+    "ทุกเดือน",
     "มกราคม",
     "กุมภาพันธ์",
     "มีนาคม",

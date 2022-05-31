@@ -1113,7 +1113,6 @@ export type SalesIssue = {
   closedDate: Scalars['String'];
   closedStatus: Scalars['String'];
   failReason: Scalars['String'];
-  branch: Scalars['String'];
   saleRole: SalesRole;
   editIssues: Array<SalesEditIssue>;
   createdAt: Scalars['String'];
@@ -1122,7 +1121,6 @@ export type SalesIssue = {
 };
 
 export type SalesIssue_Input = {
-  customer: Scalars['String'];
   detail: Scalars['String'];
   issueValue: Scalars['Float'];
   forecastDate: Scalars['String'];
@@ -1253,7 +1251,6 @@ export type SalesVisit = {
   department: Scalars['String'];
   jobPurpose: Scalars['String'];
   customerType: Scalars['String'];
-  branch: Scalars['String'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   saleRole: SalesRole;
@@ -1530,13 +1527,13 @@ export type RegularResellFragment = (
 
 export type RegularSalesIssueFragment = (
   { __typename?: 'SalesIssue' }
-  & Pick<SalesIssue, 'id' | 'saleRoleId' | 'saleName' | 'customer' | 'detail' | 'issueValue' | 'forecastDate' | 'brand' | 'category' | 'units' | 'model' | 'size' | 'status' | 'rate' | 'closedDate' | 'closedStatus' | 'failReason' | 'branch' | 'createdAt' | 'updatedAt'>
+  & Pick<SalesIssue, 'id' | 'saleRoleId' | 'saleName' | 'detail' | 'issueValue' | 'forecastDate' | 'brand' | 'category' | 'units' | 'model' | 'size' | 'status' | 'rate' | 'closedDate' | 'closedStatus' | 'failReason' | 'createdAt' | 'updatedAt'>
   & { visitLoaders?: Maybe<Array<(
     { __typename?: 'SalesVisit' }
     & Pick<SalesVisit, 'id' | 'saleRoleId' | 'customer' | 'visitDate' | 'contactName' | 'position' | 'department' | 'jobPurpose' | 'customerType' | 'createdAt'>
   )>>, saleRole: (
     { __typename?: 'SalesRole' }
-    & Pick<SalesRole, 'id' | 'salesRole' | 'channel'>
+    & Pick<SalesRole, 'id' | 'salesRole' | 'channel' | 'branch'>
   ), editIssues: Array<(
     { __typename?: 'SalesEditIssue' }
     & Pick<SalesEditIssue, 'id' | 'userEdit' | 'rate' | 'status' | 'issueValue' | 'closedDate' | 'closedStatus' | 'failReason' | 'createdAt'>
@@ -1566,10 +1563,10 @@ export type RegularSalesRoleFragment = (
 
 export type RegularSalesVisitFragment = (
   { __typename?: 'SalesVisit' }
-  & Pick<SalesVisit, 'id' | 'saleRoleId' | 'saleName' | 'customer' | 'visitDate' | 'contactName' | 'position' | 'department' | 'jobPurpose' | 'customerType' | 'branch' | 'createdAt' | 'updatedAt'>
+  & Pick<SalesVisit, 'id' | 'saleRoleId' | 'saleName' | 'customer' | 'visitDate' | 'contactName' | 'position' | 'department' | 'jobPurpose' | 'customerType' | 'createdAt' | 'updatedAt'>
   & { saleRole: (
     { __typename?: 'SalesRole' }
-    & Pick<SalesRole, 'id' | 'salesRole' | 'channel'>
+    & Pick<SalesRole, 'id' | 'salesRole' | 'channel' | 'branch'>
   ), issueReceives?: Maybe<Array<(
     { __typename?: 'SalesIssue' }
     & Pick<SalesIssue, 'id' | 'customer' | 'detail' | 'createdAt' | 'forecastDate' | 'status' | 'rate'>
@@ -3176,7 +3173,6 @@ export const RegularSalesIssueFragmentDoc = gql`
   id
   saleRoleId
   saleName
-  customer
   detail
   issueValue
   forecastDate
@@ -3190,7 +3186,6 @@ export const RegularSalesIssueFragmentDoc = gql`
   closedDate
   closedStatus
   failReason
-  branch
   createdAt
   updatedAt
   visitLoaders {
@@ -3209,6 +3204,7 @@ export const RegularSalesIssueFragmentDoc = gql`
     id
     salesRole
     channel
+    branch
   }
   editIssues {
     id
@@ -3270,13 +3266,13 @@ export const RegularSalesVisitFragmentDoc = gql`
   department
   jobPurpose
   customerType
-  branch
   createdAt
   updatedAt
   saleRole {
     id
     salesRole
     channel
+    branch
   }
   issueReceives {
     id

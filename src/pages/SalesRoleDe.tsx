@@ -112,12 +112,17 @@ const SalesRoleDe: React.FC<Props> = () => {
             const total = e.issueValue + value
             return total
         }, 0)
-        const filterIssue = issues.issueByRoleId.filter(value => (formatGetMonth(+value.createdAt) + 1) === monthIndex)
+        const filterIssue = issues.issueByRoleId.filter(value => {
+            if (monthIndex === 0) {
+                return value
+            }
+            return (formatGetMonth(+value.createdAt) + 1) === monthIndex
+        })
 
         let issueMonth : IssueMonth[] = []
 
         selectMonth.forEach(month => {
-            if (month === "เดือน") return
+            if (month === "ทุกเดือน") return
             if (!issues.issueByRoleId) return
 
             const monthFilter = issues.issueByRoleId.filter((m) => selectMonth[formatGetMonth(+m.createdAt) + 1] === month)
@@ -136,7 +141,12 @@ const SalesRoleDe: React.FC<Props> = () => {
     useEffect(() => {
         if (!visits?.visitByRoleId) return
         
-        const filterVisit = visits.visitByRoleId.filter(value => (formatGetMonth(+value.createdAt) + 1) === monthIndex)
+        const filterVisit = visits.visitByRoleId.filter(value => {
+            if (monthIndex === 0) {
+                return value
+            }
+            return (formatGetMonth(+value.createdAt) + 1) === monthIndex
+        })
         
         setMonthlyVisit(filterVisit)
     }, [visits, monthIndex])
@@ -299,16 +309,10 @@ const SalesRoleDe: React.FC<Props> = () => {
                                     'repeat(2, 1fr)',
                                     'repeat(3, 1fr)',
                                     'repeat(3, 1fr)',
-                                    'repeat(6, 1fr)'
+                                    'repeat(5, 1fr)'
                                 ]}
                                 gap={3}
                             >
-                                <Target
-                                    color={colorBranchPass}
-                                    title={'COMMISSION'}
-                                    valueTarget={target.targetByRoleId.commission}
-                                    valueCurrent={0}
-                                />
                                 <Target
                                     color={colorBranchPass}
                                     title={'STRATEGY'}
@@ -349,6 +353,7 @@ const SalesRoleDe: React.FC<Props> = () => {
                                 countIssue={target.targetByRoleId.countIssue}
                                 countVisit={target.targetByRoleId.countVisit}
                                 setMonthIndex={setMonthIndex}
+                                monthIndex={monthIndex}
                                 monthlyIssue={monthlyIssue}
                                 monthlyVisit={monthlyVisit}
                                 issueMonth={issueMonth}

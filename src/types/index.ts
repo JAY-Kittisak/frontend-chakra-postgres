@@ -58,7 +58,7 @@ export type FilterRoleJsr = { [key in RoleJsr]: RegularSalesVisitFragment[] }
 
 export type ThisMonth = {
     date: number,
-    result: boolean
+    result: string
 }
 export type RoleThisMonth = {
     role: RoleJsr | RoleCdc
