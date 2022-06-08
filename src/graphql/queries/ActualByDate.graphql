@@ -1,0 +1,18 @@
+query ActualByDate($dateBegin: String!,$dateEnd: String!,) {
+    actualByDate(dateBegin: $dateBegin,dateEnd: $dateEnd) {
+        id
+        actual
+        createdAt
+        updatedAt
+        salesRole {
+            id
+            salesRole
+            channel
+            branch
+        }
+        user {
+            id
+            fullNameTH
+        }
+    }
+}

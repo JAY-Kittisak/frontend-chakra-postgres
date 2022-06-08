@@ -1,8 +1,8 @@
-import React, { useCallback, useState, useEffect } from "react";
-import { Box, Text } from "@chakra-ui/react";
+import React, { useState, useEffect, useCallback } from 'react'
+import { Flex, Box, Text, Button } from '@chakra-ui/react'
 import {
     Bar,
-    Line,
+    // Line,
     Cell,
     XAxis,
     CartesianGrid,
@@ -10,214 +10,286 @@ import {
     ResponsiveContainer,
     ComposedChart,
 } from "recharts";
+import { CSVLink } from "react-csv";
 
-// FIXME:
-type TgDemo = {
-    id: number;
-    year: number;
-    branch: string;
-    c1: number;
-    c2: number;
-    are: number;
-    reg: number;
-    pro: number;
-}
+import { RegularSalesVisitFragment } from '../../generated/graphql'
+import { formatDateNew } from '../../utils/helpers'
+import Spinner from '../Spinner';
 
 interface Props {
-    colorBranch: string;
-    colorBranchPass: string;
-    chooseMonth: string;
-    targetYear: TgDemo
-    setTeam: React.Dispatch<React.SetStateAction<string>>
-    team: string
+    colorBranch: string
+    dateBegin: string
+    dateEnd: string
+    channel: string
+    channels: string[]
+    dataByChannel: {
+        channel: string;
+        sumIssue: number;
+    }[] | undefined
+    fetching: boolean
+    setChannel: React.Dispatch<React.SetStateAction<string>>
+    visits: RegularSalesVisitFragment[] | undefined
 }
 
-const MainChart: React.FC<Props> = ({ colorBranch, colorBranchPass, chooseMonth, setTeam, targetYear, team }) => {
+type ExportItemCSV = {
+    saleRole: string
+    channel: string
+    saleName: string
+    visitId: number
+    visitDate: string
+    contactName: string
+    customerType: string
+    customer: string
+    position: string
+    department: string
+    jobPurpose: string
+    visitCreatedAt: string
+    issueId?: number
+    detail?: string
+    issueValue?: number
+    forecastDate?: string
+    brand?: string
+    category?: string
+    units?: number
+    model?: string
+    size?: string
+    status?: string
+    rate?: string
+    closedDate?: string
+    closedStatus?: string
+    failReason?: string
+    issueCreatedAt?: string
+    issueUpdatedAt?: string
+};
+
+const headers = [
+    { label: "SaleRole", key: "saleRole" },
+    { label: "Channel", key: "channel" },
+    { label: "SaleName", key: "saleName" },
+    { label: "VisitId", key: "visitId" },
+    { label: "Customer", key: "customer" },
+    { label: "VisitDate", key: "visitDate" },
+    { label: "ContactName", key: "contactName" },
+    { label: "CustomerType", key: "customerType" },
+    { label: "Position", key: "position" },
+    { label: "Department", key: "department" },
+    { label: "JobPurpose", key: "jobPurpose" },
+    { label: "VisitCreatedAt", key: "visitCreatedAt" },
+    { label: "IssueId", key: "issueId" },
+    { label: "Detail", key: "detail" },
+    { label: "IssueValue", key: "issueValue" },
+    { label: "ForecastDate", key: "forecastDate" },
+    { label: "Brand", key: "brand" },
+    { label: "Category", key: "category" },
+    { label: "Units", key: "units" },
+    { label: "Model", key: "model" },
+    { label: "Size", key: "size" },
+    { label: "Status", key: "status" },
+    { label: "Rate", key: "rate" },
+    { label: "ClosedDate", key: "closedDate" },
+    { label: "ClosedStatus", key: "closedStatus" },
+    { label: "FailReason", key: "failReason" },
+    { label: "IssueCreatedAt", key: "issueCreatedAt" },
+    { label: "IssueUpdatedAt", key: "issueUpdatedAt" },
+];
+
+const MainChart: React.FC<Props> = ({
+    colorBranch,
+    channel,
+    channels,
+    dataByChannel,
+    fetching,
+    setChannel,
+    visits
+}) => {
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-    const [colorIndexCuttingOne, setColorIndexCuttingOne] = useState<
-        number | undefined
-    >(undefined);
-    const [colorIndexCuttingTwo, setColorIndexCuttingTwo] = useState<
-        number | undefined
-    >(undefined);
-    const [colorIndexArea, setColorIndexArea] = useState<
-        number | undefined
-    >(undefined);
-    const [colorIndexRegion, setColorIndexRegion] = useState<
-        number | undefined
-    >(undefined);
-    const [colorIndexProject, setColorIndexProject] = useState<
-        number | undefined
-    >(undefined);
-
-    const [divideMonth, setDivideMonth] = useState(targetYear.c1)
-
-    // const cuttingOneQuota = 100_000_000;
-    const cuttingOneDate = 360_000_000;
-    const cuttingTwoQuota = 120_000_000;
-    const cuttingTwoDate = 180_000_000;
-    const areaQuota = 200_000_000;
-    const areaDate = 150_000_000;
-    const regionQuota = 180_000_000;
-    const regionDate = 190_000_000;
-    const projectQuota = 160_000_000;
-    const projectDate = 100_000_000;
-
-    const dataCh = [
-        {
-            name: "Cutting 1",
-            quota: divideMonth,
-            action: cuttingOneDate,
-        },
-        {
-            name: "Cutting 2",
-            quota: cuttingTwoQuota,
-            action: cuttingTwoDate,
-        },
-        {
-            name: "Area",
-            quota: areaQuota,
-            action: areaDate,
-        },
-        {
-            name: "Region",
-            quota: regionQuota,
-            action: regionDate,
-        },
-        {
-            name: "Project",
-            quota: projectQuota,
-            action: projectDate,
-        },
-    ];
-    const Channel = dataCh[activeIndex ? activeIndex : 0].name
+    const [item, setItem] = useState<ExportItemCSV[]>([]);
+    const [timeNow, setTimeNow] = useState("");
 
     const handleClick = useCallback(
         (_, index: number) => {
             if (index === activeIndex) {
-                setActiveIndex(null);
+                setActiveIndex(null)
+                setChannel('All')
             } else {
-                setActiveIndex(index);
+                setActiveIndex(index)
+                setChannel(channels[index + 1])
             }
         },
-        [setActiveIndex, activeIndex]
+        [setChannel, activeIndex, channels]
     );
+
+    const csvReport = {
+        filename: `Resell_Report${timeNow}.csv`,
+        headers: headers,
+        data: item,
+    };
+
+    const setTimeOnClick = () => {
+        const dateNow = new Date()
+        const hours = dateNow.getHours()
+        const minutes = dateNow.getMinutes()
+        const seconds = dateNow.getSeconds()
+        setTimeNow(`_วันที่_${dateNow.toLocaleDateString()}_เวลา_${hours}_${minutes}_${seconds}`)
+    }
 
     useEffect(() => {
-        if (activeIndex === null) {
-            setTeam("All")
-        } else if (activeIndex >= 0) {
-            setTeam(Channel)
-        }
+        if (!visits) return
 
-        if (cuttingOneDate >= divideMonth) {
-            setColorIndexCuttingOne(0);
-        } else {
-            setColorIndexCuttingOne(undefined);
-        }
+        setItem([]);
 
-        if (cuttingTwoDate >= cuttingTwoQuota) {
-            setColorIndexCuttingTwo(1);
-        } else {
-            setColorIndexCuttingTwo(undefined);
-        }
+        visits.forEach(visit => {
+            const {
+                id,
+                saleName,
+                visitDate,
+                contactName,
+                customer,
+                customerType,
+                position,
+                department,
+                jobPurpose,
+                createdAt,
+            } = visit
+            
+            if (!visit.issueReceives) {
+                setItem((arr) => [
+                    ...arr,
+                    {
+                        saleRole: visit.saleRole.salesRole,
+                        channel: visit.saleRole.channel,
+                        saleName,
+                        visitId: id,
+                        visitDate,
+                        contactName,
+                        customer,
+                        customerType,
+                        position,
+                        department,
+                        jobPurpose,
+                        visitCreatedAt: formatDateNew(+createdAt)
+                    },
+                ])
+            } else {
+                visit.issueReceives.forEach(issue => {
+                    setItem((arr) => [
+                        ...arr,
+                        {
+                            saleRole: visit.saleRole.salesRole,
+                            channel: visit.saleRole.channel,
+                            saleName,
+                            visitId: id,
+                            visitDate,
+                            contactName,
+                            customer,
+                            customerType,
+                            position,
+                            department,
+                            jobPurpose,
+                            visitCreatedAt: formatDateNew(+createdAt),
+                            issueId: issue.id,
+                            detail: issue.detail,
+                            issueValue: issue.issueValue,
+                            forecastDate: issue.forecastDate,
+                            brand: issue.brand,
+                            category: issue.category,
+                            units: issue.units,
+                            model: issue.model,
+                            size: issue.size,
+                            status: issue.status,
+                            rate: issue.rate,
+                            closedDate: issue.closedDate,
+                            closedStatus: issue.closedStatus,
+                            failReason: issue.failReason,
+                            issueCreatedAt: formatDateNew(+issue.createdAt),
+                            issueUpdatedAt: formatDateNew(+issue.updatedAt),
+                        },
+                    ])
+                })
+            }
+        })
 
-        if (areaDate >= areaQuota) {
-            setColorIndexArea(2);
-        } else {
-            setColorIndexArea(undefined);
-        }
-
-        if (regionDate >= regionQuota) {
-            setColorIndexRegion(3);
-        } else {
-            setColorIndexRegion(undefined);
-        }
-
-        if (projectDate >= projectQuota) {
-            setColorIndexProject(4);
-        } else {
-            setColorIndexProject(undefined);
-        }
-
-        if (chooseMonth !== "เดือน") {
-            const response = targetYear.c1 / 12
-            setDivideMonth(response)
-        } else if (chooseMonth === "เดือน") {
-            setDivideMonth(targetYear.c1)
-        }
-    }, [
-        targetYear.c1,
-        cuttingOneDate,
-        cuttingTwoQuota,
-        cuttingTwoDate,
-        areaQuota,
-        areaDate,
-        regionQuota,
-        regionDate,
-        projectQuota,
-        projectDate,
-        activeIndex,
-        Channel,
-        chooseMonth,
-        divideMonth,
-        setTeam,
-        setDivideMonth
-    ]);
+    }, [visits])
 
     return (
-        <Box
-            ml="3"
-            p="5"
-            w="40%"
-            h="230px"
-            rounded="7px"
-            boxShadow="md"
-        >
-            <Text align="center" mt="-3" mb="1" fontWeight="bold" fontSize="xl">{team}</Text>
-            <ResponsiveContainer width="100%" height="100%">
-                <ComposedChart
-                    width={500}
-                    height={300}
-                    data={dataCh}
-                    margin={{
-                        top: 5,
-                        right: 0,
-                        left: 0,
-                        bottom: 5,
-                    }}
+        <>
+            {dataByChannel && (
+                <Box
+                    ml="3"
+                    p="5"
+                    w="40%"
+                    h="230px"
+                    rounded="7px"
+                    boxShadow="md"
                 >
-                    <CartesianGrid strokeDasharray="0 1" />
-                    <XAxis dataKey="name" />
-                    <Tooltip />
+                    <Flex justifyContent='center'>
+                        <Text fontWeight="bold" fontSize="xl">{channel}</Text>
+                        {channel !== 'All' && (
+                            <CSVLink {...csvReport}>
+                                <Button
+                                    mt="1"
+                                    ml="2"
+                                    size='xs'
+                                    colorScheme="teal"
+                                    variant="outline"
+                                    onClick={setTimeOnClick}
+                                >
+                                    Export to CSV
+                                </Button>
+                            </CSVLink>
+                        )}
+                    </Flex>
+                    {fetching ? (
+                        <Flex alignItems='center' justify="center" align="center">
+                            <Spinner color="grey" height={50} width={50} />
+                        </Flex>
+                    ) : (
+                        <ResponsiveContainer width="100%" height="100%">
+                            <ComposedChart
+                                width={500}
+                                height={300}
+                                data={dataByChannel}
+                                margin={{
+                                    top: 0,
+                                    right: 0,
+                                    left: 0,
+                                    bottom: 10,
+                                }}
+                            >
+                                <CartesianGrid strokeDasharray="0 1" />
+                                <XAxis dataKey="channel" />
+                                <Tooltip />
 
-                    <Bar dataKey="action" fill={colorBranch} onClick={handleClick}>
-                        {dataCh.map((_, index) => (
-                            <Cell
-                                stroke={index === activeIndex ? "#ff0000" : colorBranch}
-                                cursor="pointer"
-                                fill={index === colorIndexCuttingTwo
-                                        ? colorBranchPass
-                                        : index === colorIndexCuttingOne
-                                            ? colorBranchPass
-                                            : index === colorIndexArea
-                                                ? colorBranchPass
-                                                : index === colorIndexRegion
-                                                    ? colorBranchPass
-                                                    : index === colorIndexProject
-                                                        ? colorBranchPass
-                                                        : colorBranch
-                                }
-                                key={`cell-${index}`}
-                            />
-                        ))}
-                    </Bar>
-                    <Line type="monotone" dataKey="quota" stroke="#bd1717" />
-                </ComposedChart>
-            </ResponsiveContainer>
-        </Box>
-    );
-};
+                                <Bar dataKey="sumIssue" fill={colorBranch} onClick={handleClick}>
+                                    {dataByChannel.map((_, index) => (
+                                        <Cell
+                                            // stroke={index === activeIndex ? "#ff0000" : colorBranch}
+                                            cursor="pointer"
+                                            // fill={index === colorIndexCuttingTwo
+                                            //         ? colorBranchPass
+                                            //         : index === colorIndexCuttingOne
+                                            //             ? colorBranchPass
+                                            //             : index === colorIndexArea
+                                            //                 ? colorBranchPass
+                                            //                 : index === colorIndexRegion
+                                            //                     ? colorBranchPass
+                                            //                     : index === colorIndexProject
+                                            //                         ? colorBranchPass
+                                            //                         : colorBranch
+                                            // }
+                                            key={`cell-${index}`}
+                                        />
+                                    ))}
+                                </Bar>
+                                {/* <Line type="monotone" dataKey="quota" stroke="#bd1717" /> */}
+                            </ComposedChart>
+                        </ResponsiveContainer>
+                    )}
+                </Box>
+            )}
+        </>
+    )
+}
 
-export default MainChart;
+export default MainChart

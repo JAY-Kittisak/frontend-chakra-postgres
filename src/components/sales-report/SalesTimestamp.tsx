@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Flex } from "@chakra-ui/react";
 import { CheckIcon } from '@chakra-ui/icons'
 
-import { Branch, initialRoleJsr, initialRoleCdc } from '../../utils/helpers';
+import { Branch, initialRoleJsr, initialRoleCdc, countDayInMonth } from '../../utils/helpers';
 import { RoleThisMonth, RoleJsr, RoleCdc, ThisMonth } from '../../types'
 
 import { useVisitsQuery, RegularSalesVisitFragment } from '../../generated/graphql'
@@ -10,26 +10,23 @@ import { useVisitsQuery, RegularSalesVisitFragment } from '../../generated/graph
 interface Props {
     branch: Branch
     colorBranchPass: string
+    dateBegin: string
+    dateEnd: string
 }
 
-const SalesTimestamp: React.FC<Props> = ({ branch, colorBranchPass}) => {
+const SalesTimestamp: React.FC<Props> = ({ branch, colorBranchPass, dateBegin, dateEnd}) => {
     const [visitByRoleJsr, setVisitByRoleJsr] = useState<RoleThisMonth[]>([])
 
     let headByDay = []
 
-    const dt = new Date();
-    const month = dt.getMonth();
-    const year = dt.getFullYear();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-    for (let i = 0; i < daysInMonth; i++) {
+    for (let i = 0; i < countDayInMonth; i++) {
         headByDay.push(i + 1)
     }
 
     const [{ data, fetching }] = useVisitsQuery({
         variables: {
-            dateBegin: "2022-05-01",
-            dateEnd: "2022-05-31"
+            dateBegin,
+            dateEnd
         }
     })
 
@@ -51,7 +48,7 @@ const SalesTimestamp: React.FC<Props> = ({ branch, colorBranchPass}) => {
     
                 let thisMonth: ThisMonth[] = []
 
-                for (let i = 0; i < daysInMonth; i++) {
+                for (let i = 0; i < countDayInMonth; i++) {
                     const filterDate = dataForFilter.filter(value => {
                         const created = new Date(+value.createdAt)
                         return created.getDate() === i + 1
@@ -91,7 +88,7 @@ const SalesTimestamp: React.FC<Props> = ({ branch, colorBranchPass}) => {
     
                 let thisMonth: ThisMonth[] = []
     
-                for (let i = 0; i < daysInMonth; i++) {
+                for (let i = 0; i < countDayInMonth; i++) {
                     const filterDate = dataForFilter.filter(value => {
                         const created = new Date(+value.createdAt)
                         return created.getDate() === i + 1
@@ -125,7 +122,7 @@ const SalesTimestamp: React.FC<Props> = ({ branch, colorBranchPass}) => {
 
         setVisitByRoleJsr(countsVisitByDate)
 
-    }, [data, branch, daysInMonth])
+    }, [data, branch])
 
     return (
         <Flex

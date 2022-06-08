@@ -43,7 +43,6 @@ export type Customer = {
   creator: User;
   orderResell: Array<Resell>;
   resellLoaders?: Maybe<Array<Resell>>;
-  salesActual: Array<SalesActual>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -434,7 +433,7 @@ export type Mutation = {
   deleteJoinResell: Resell;
   createSalesRole: SalesRole_Response;
   updateSalesRole: SalesRole;
-  createSalesActual: SalesActual_Response;
+  createSalesActual: Scalars['Boolean'];
   deleteSalesActual: Scalars['Boolean'];
   deleteSalesRole: Scalars['Boolean'];
   createSalesTarget: SalesTarget_Response;
@@ -816,7 +815,7 @@ export type Query = {
   customerById: Customer;
   salesRoles?: Maybe<Array<SalesRole>>;
   salesRoleById: SalesRole;
-  salesActuals?: Maybe<Array<SalesActual>>;
+  actualByDate?: Maybe<Array<SalesActual>>;
   targetByRole?: Maybe<Array<SalesTarget>>;
   targetByRoleId?: Maybe<SalesTarget>;
   issueByRoleId?: Maybe<Array<SalesIssue>>;
@@ -943,6 +942,12 @@ export type QuerySalesRoleByIdArgs = {
 };
 
 
+export type QueryActualByDateArgs = {
+  dateEnd: Scalars['String'];
+  dateBegin: Scalars['String'];
+};
+
+
 export type QueryTargetByRoleArgs = {
   salesRoleId: Scalars['Int'];
 };
@@ -1042,14 +1047,9 @@ export type Resell_Response = {
 export type SalesActual = {
   __typename?: 'SalesActual';
   id: Scalars['Float'];
-  title: Scalars['String'];
-  detail: Scalars['String'];
   actual: Scalars['Float'];
-  branch: Scalars['String'];
-  customerId: Scalars['Float'];
   userId: Scalars['Float'];
   salesRoleId: Scalars['Float'];
-  customer: Customer;
   user: User;
   salesRole: SalesRole;
   createdAt: Scalars['String'];
@@ -1057,19 +1057,8 @@ export type SalesActual = {
 };
 
 export type SalesActual_Input = {
-  title: Scalars['String'];
-  detail: Scalars['String'];
   actual: Scalars['Float'];
-  branch: Scalars['String'];
-  customerId: Scalars['Float'];
-  userId: Scalars['Float'];
   salesRoleId: Scalars['Float'];
-};
-
-export type SalesActual_Response = {
-  __typename?: 'SalesActual_Response';
-  errors?: Maybe<Array<FieldErrorSalesRole>>;
-  salesActual?: Maybe<Array<SalesActual>>;
 };
 
 export type SalesBrand = {
@@ -1552,10 +1541,7 @@ export type RegularSalesQuotationFragment = (
 export type RegularSalesRoleFragment = (
   { __typename?: 'SalesRole' }
   & Pick<SalesRole, 'id' | 'salesRole' | 'channel' | 'areaCode' | 'userId' | 'branch' | 'status' | 'startDate' | 'updatedAt'>
-  & { issues: Array<(
-    { __typename?: 'SalesIssue' }
-    & Pick<SalesIssue, 'id' | 'issueValue'>
-  )>, user: (
+  & { user: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'fullNameTH' | 'imageUrl'>
   ) }
@@ -1569,7 +1555,7 @@ export type RegularSalesVisitFragment = (
     & Pick<SalesRole, 'id' | 'salesRole' | 'channel' | 'branch'>
   ), issueReceives?: Maybe<Array<(
     { __typename?: 'SalesIssue' }
-    & Pick<SalesIssue, 'id' | 'customer' | 'detail' | 'createdAt' | 'forecastDate' | 'status' | 'rate'>
+    & Pick<SalesIssue, 'id' | 'detail' | 'issueValue' | 'forecastDate' | 'brand' | 'category' | 'units' | 'model' | 'size' | 'status' | 'rate' | 'closedDate' | 'closedStatus' | 'failReason' | 'createdAt' | 'updatedAt'>
   )>>, quotations: Array<(
     { __typename?: 'SalesQuotation' }
     & Pick<SalesQuotation, 'id' | 'quotationCode' | 'value'>
@@ -1790,6 +1776,16 @@ export type CreateResellMutation = (
       & RegularResellFragment
     )>> }
   ) }
+);
+
+export type CreateSalesActualMutationVariables = Exact<{
+  input: SalesActual_Input;
+}>;
+
+
+export type CreateSalesActualMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'createSalesActual'>
 );
 
 export type CreateSalesIssueMutationVariables = Exact<{
@@ -2346,6 +2342,27 @@ export type UploadImageMeMutation = (
       & RegularUserFragment
     )> }
   ) }
+);
+
+export type ActualByDateQueryVariables = Exact<{
+  dateBegin: Scalars['String'];
+  dateEnd: Scalars['String'];
+}>;
+
+
+export type ActualByDateQuery = (
+  { __typename?: 'Query' }
+  & { actualByDate?: Maybe<Array<(
+    { __typename?: 'SalesActual' }
+    & Pick<SalesActual, 'id' | 'actual' | 'createdAt' | 'updatedAt'>
+    & { salesRole: (
+      { __typename?: 'SalesRole' }
+      & Pick<SalesRole, 'id' | 'salesRole' | 'channel' | 'branch'>
+    ), user: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'fullNameTH'>
+    ) }
+  )>> }
 );
 
 export type AmphuresPvIdQueryVariables = Exact<{
@@ -3243,10 +3260,6 @@ export const RegularSalesRoleFragmentDoc = gql`
   status
   startDate
   updatedAt
-  issues {
-    id
-    issueValue
-  }
   user {
     id
     fullNameTH
@@ -3276,12 +3289,21 @@ export const RegularSalesVisitFragmentDoc = gql`
   }
   issueReceives {
     id
-    customer
     detail
-    createdAt
+    issueValue
     forecastDate
+    brand
+    category
+    units
+    model
+    size
     status
     rate
+    closedDate
+    closedStatus
+    failReason
+    createdAt
+    updatedAt
   }
   quotations {
     id
@@ -3528,6 +3550,15 @@ export const CreateResellDocument = gql`
 
 export function useCreateResellMutation() {
   return Urql.useMutation<CreateResellMutation, CreateResellMutationVariables>(CreateResellDocument);
+};
+export const CreateSalesActualDocument = gql`
+    mutation CreateSalesActual($input: SalesActual_Input!) {
+  createSalesActual(input: $input)
+}
+    `;
+
+export function useCreateSalesActualMutation() {
+  return Urql.useMutation<CreateSalesActualMutation, CreateSalesActualMutationVariables>(CreateSalesActualDocument);
 };
 export const CreateSalesIssueDocument = gql`
     mutation CreateSalesIssue($input: SalesIssue_Input!) {
@@ -4024,6 +4055,30 @@ export const UploadImageMeDocument = gql`
 
 export function useUploadImageMeMutation() {
   return Urql.useMutation<UploadImageMeMutation, UploadImageMeMutationVariables>(UploadImageMeDocument);
+};
+export const ActualByDateDocument = gql`
+    query ActualByDate($dateBegin: String!, $dateEnd: String!) {
+  actualByDate(dateBegin: $dateBegin, dateEnd: $dateEnd) {
+    id
+    actual
+    createdAt
+    updatedAt
+    salesRole {
+      id
+      salesRole
+      channel
+      branch
+    }
+    user {
+      id
+      fullNameTH
+    }
+  }
+}
+    `;
+
+export function useActualByDateQuery(options: Omit<Urql.UseQueryArgs<ActualByDateQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<ActualByDateQuery>({ query: ActualByDateDocument, ...options });
 };
 export const AmphuresPvIdDocument = gql`
     query AmphuresPvId($id: Int!) {

@@ -8,10 +8,6 @@ fragment RegularSalesRole on SalesRole {
     status
     startDate
     updatedAt
-    issues {
-      id
-      issueValue
-    }
     user {
         id
         fullNameTH

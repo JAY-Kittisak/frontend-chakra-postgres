@@ -4,19 +4,28 @@ import { useHistory } from "react-router-dom";
 
 import {
     CatUserRole,
-    AlertNt
+    AlertNt,
+    reducer,
+    firstDayOfMonth,
+    lastDayOfMonth
 } from "../utils/helpers";
-import { useMeQuery, useSalesRolesQuery, RegularSalesRoleFragment } from "../generated/graphql";
+import { 
+    useMeQuery, 
+    useSalesRolesQuery, 
+    RegularSalesRoleFragment,
+    useVisitsQuery,
+    RegularSalesVisitFragment
+} from "../generated/graphql";
 import Spinner from "../components/Spinner";
 import SalesTarget from "../components/sales-report/SalesTarget";
-// import SalesChart from "../components/sales-report/SalesChart";
 import { useIsAuth } from "../utils/uselsAuth";
 import AlertNotification from "../components/dialogs/AlertNotification";
 
 import "../styles/card-sales.css";
-import SalesChartTest from "../components/sales-report/SalesChartTest";
-import MainChartTest from "../components/sales-report/MainChartTest";
+import SalesChart from "../components/sales-report/SalesChart";
+import MainChart from "../components/sales-report/MainChart";
 import SwitchBranch from "../components/sales-report/SwitchBranch";
+import ActualChart from "../components/sales-report/ActualChart";
 
 interface Props { }
 
@@ -31,17 +40,30 @@ const SalesReportLeader: React.FC<Props> = () => {
     // const [colorOnMouse, setColorOnMouse] = useState("#0a7988");
 
     const [alertWarning, setAlertWarning] = useState<AlertNt>("hide");
-
-    // const [chooseMonth, setChooseMonth] = useState("เดือน");
-    // const [chooseYear, setChooseYear] = useState("2022");
-    // const [targetYear, setTargetYear] = useState<TgDemo>(targetDemoLkb[0]);
     
-    const [ dataSales, setDataSales ] = useState<RegularSalesRoleFragment[] | undefined>(undefined)
-    const [salesChannel, setSalesChannel] = useState<RegularSalesRoleFragment[] | undefined>(undefined);
+    const [salesByChannel, setSalesByChannel] = useState<RegularSalesRoleFragment[] | undefined>(undefined)
+    const [visits, setVisits] = useState<RegularSalesVisitFragment[] | undefined>(undefined)
+
+    const [dateBegin, setDateBegin] = useState(firstDayOfMonth);
+    const [dateEnd, setDateEnd] = useState(lastDayOfMonth);
+
+    const [channel, setChannel] = useState("All")
+    const [channels, setChannels] = useState(['All']);
+    const [dataByChannel, setDataByChannel] = useState<{
+        channel: string;
+        sumIssue: number;
+    }[]>()
 
     const [{ data: me }] = useMeQuery();
 
     const [{ data: salesRole, fetching }] = useSalesRolesQuery();
+
+    const [{ data: dataVisits, fetching: visitFetching }] = useVisitsQuery({
+        variables: {
+            dateBegin,
+            dateEnd
+        }
+    })
 
     const history = useHistory();
 
@@ -56,14 +78,6 @@ const SalesReportLeader: React.FC<Props> = () => {
             return setAlertWarning("show");
         }
     };
-
-    // const onChangeMonth = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    //     setChooseMonth(e.target.value);
-    // };
-
-    // const onChangeYear = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    //     setChooseYear(e.target.value);
-    // };
 
     useEffect(() => {
         setLoading(true);
@@ -85,36 +99,59 @@ const SalesReportLeader: React.FC<Props> = () => {
                 setLoading(false);
             }, 500);
         }
-
-        // if (chooseYear) {
-        //     const response = targetDemoLkb.filter((val) => val.year === +chooseYear);
-        //     setTargetYear(response[0]);
-        // }
-
-        // setMonthValue({
-        //     มกราคม: 5000,
-        //     กุมภาพันธ์: 3000,
-        //     มีนาคม: 5000,
-        //     เมษายน: 4000,
-        //     พฤษภาคม: 4440,
-        //     มิถุนายน: 6000,
-        //     กรกฎาคม: 2500,
-        //     สิงหาคม: 1000,
-        //     กันยายน: 8000,
-        //     ตุลาคม: 4000,
-        //     พฤศจิกายน: 6000,
-        //     ธันวาคม: 5000,
-        // });
-    }, [branch, me]);
+    }, [branch])
 
     useEffect(() => {
         if (!salesRole?.salesRoles) return
+        if (!dataVisits?.visits) return
 
-        const result = salesRole.salesRoles.filter((val) => val.branch === branch)
-        setDataSales(result)
-        setSalesChannel(result)
+        const filterBranch = dataVisits.visits.filter(val => val.saleRole.branch === branch)
+        
+        const roleFilterBranch = salesRole.salesRoles.filter((val) => val.branch === branch)
+        const mapChannel = roleFilterBranch.map(item => item.channel)
 
-    } ,[ salesRole, branch])
+        if (channel === 'All') {
+            setVisits(filterBranch)
+            setSalesByChannel(roleFilterBranch)
+        } else {
+            const filteredData = roleFilterBranch.filter(item => item.channel === channel);
+            const filteredVisit = filterBranch.filter(item => item.saleRole.channel === channel)
+
+            setVisits(filteredVisit)
+            setSalesByChannel(filteredData)
+        }
+
+        const newSetChannel = new Set(mapChannel)
+        
+        let itemChannels: string[] = ['All']
+        newSetChannel.forEach(function (value) {
+            itemChannels.push(value)
+        });
+        
+        let issueChannel: { channel: string, sumIssue: number }[] = []
+
+        itemChannels.forEach(team => {
+            if (team === 'All') return
+
+            const filterTeam = filterBranch.filter(val => val.saleRole.channel === team);
+            const issues = filterTeam.map(val => val.issueReceives)
+
+            let sumIssue: number[] = []
+
+            issues.forEach(issue => {
+                if (!issue) return
+
+                const valueIssue = issue.map(issueVal => issueVal.issueValue)
+                sumIssue.push(valueIssue.reduce(reducer, 0))
+            })
+
+            issueChannel.push({ channel: team, sumIssue: sumIssue.reduce(reducer, 0) })
+        })
+
+        setDataByChannel(issueChannel)
+        setChannels(itemChannels)
+
+    } ,[ salesRole, dataVisits, branch, channel])
 
     return (
         <Flex
@@ -172,8 +209,8 @@ const SalesReportLeader: React.FC<Props> = () => {
                                 },
                             }}
                         >
-                            {salesChannel &&
-                                salesChannel
+                            {salesByChannel &&
+                                salesByChannel
                                     .filter((val) => val.branch === branch)
                                     .map(
                                         (val) =>
@@ -189,7 +226,6 @@ const SalesReportLeader: React.FC<Props> = () => {
                                                     <p>{val.salesRole}</p>
                                                     <Image
                                                         objectFit="cover"
-                                                        // src="https://bit.ly/sage-adebayo"
                                                         src={val.user.imageUrl}
                                                         alt={
                                                             val.user.fullNameTH
@@ -218,51 +254,53 @@ const SalesReportLeader: React.FC<Props> = () => {
                                 <Flex>
                                     <Flex alignItems="center">
                                         <Text mr="5">วันที่ : </Text>
-                                        <Input 
+                                        <Input
                                             mr="5" 
                                             w="200px" 
-                                            type="date" 
-                                            defaultValue="2022-05-01" 
-                                            // onChange={(e) => onChangeYear(e)}
+                                            type="date"
+                                            defaultValue={dateBegin}
+                                            onChange={(e) => setDateBegin(e.target.value)}
                                         />
                                         <Text mr="5">ถึง :</Text>
-                                        <Input 
-                                            w="200px" 
-                                            type="date" 
-                                            defaultValue="2022-05-31" 
-                                            // onChange={(e) => onChangeMonth(e)}
+                                        <Input
+                                            w="200px"
+                                            type="date"
+                                            defaultValue={dateEnd}
+                                            onChange={(e) => setDateEnd(e.target.value)}
                                         />
                                     </Flex>
                                 </Flex>
                             </Flex>
-
 
                             <Flex mt="-2">
                                 <SalesTarget
                                     colorBranch={colorBranch}
                                     colorBranchPass={colorBranchPass}
                                 />
-                                <MainChartTest salesChannel={dataSales} setSalesChannel={setSalesChannel} colorBranch={colorBranch} />
-                                {/* <MainChart
-                                    setTeam={setTeam}
+                                <MainChart
                                     colorBranch={colorBranch}
-                                    colorBranchPass={colorBranchPass}
-                                    targetYear={targetYear}
-                                    chooseMonth={chooseMonth}
-                                /> */}
+                                    dateBegin={dateBegin}
+                                    dateEnd={dateEnd}
+                                    channel={channel}
+                                    channels={channels}
+                                    dataByChannel={dataByChannel}
+                                    fetching={visitFetching}
+                                    setChannel={setChannel}
+                                    visits={visits}
+                                />
                             </Flex>
                             
-                            <SalesChartTest salesChannel={salesChannel} colorBranch={colorBranch}/>
-
-                            {/* <SalesChart
+                            <SalesChart
                                 colorBranch={colorBranch}
-                                colorBranchPass={colorBranchPass}
-                                colorOnMouse={colorOnMouse}
-                                strategy={6000 * 12}
-                                commission={5500 * 12}
-                                monthValue={monthValue}
-                                setMonthIndex={() => undefined}
-                            /> */}
+                                visits={visits}
+                            />
+                            <ActualChart
+                                colorBranch={colorBranch}
+                                dateBegin={dateBegin}
+                                dateEnd={dateEnd}
+                                branch={branch}
+                                channel={channel}
+                            />
                         </Flex>
                     </Flex>
                 )}

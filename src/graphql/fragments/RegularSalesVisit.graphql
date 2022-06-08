@@ -19,12 +19,21 @@ fragment RegularSalesVisit on SalesVisit {
     }
     issueReceives {
       id
-      customer
       detail
-      createdAt
+      issueValue
       forecastDate
+      brand
+      category
+      units
+      model
+      size
       status
       rate
+      closedDate
+      closedStatus
+      failReason
+      createdAt
+      updatedAt
     }
     quotations {
       id

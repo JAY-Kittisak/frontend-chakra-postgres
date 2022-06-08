@@ -107,7 +107,7 @@ const SalesVisitDetail: React.FC<Props> = () => {
                                 สาขา : &nbsp;
                             </Text>
                             <Text fontSize={["sm", "sm", "md", "lg"]}>
-                                {data.visitById.branch}
+                                {data.visitById.saleRole.branch}
                             </Text>
                         </Flex>
                         <Flex mt="1">
@@ -279,7 +279,6 @@ const SalesVisitDetail: React.FC<Props> = () => {
                     </Flex>
                     <IssueCreate
                         visitId={+params.id}
-                        customer={data.visitById.customer}
                         saleRoleId={data.visitById.saleRoleId}
                         checkAddId={checkAddId}
                         setAlertSuccess={setAlertSuccess}

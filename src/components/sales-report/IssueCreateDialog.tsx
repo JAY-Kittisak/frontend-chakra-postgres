@@ -35,8 +35,6 @@ const IssueCreateDialog: React.FC<Props> = ({ Open, setOpen, branch, visitId }) 
 
     const cancelRef = useRef();
 
-    console.log('IssueCreateDialog ID', visitId)
-
     return (
         <AlertDialog
             size="3xl"

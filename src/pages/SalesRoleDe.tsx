@@ -21,6 +21,8 @@ import { selectMonth, formatGetMonth, reducer, serviceLife, TypeMonth } from "..
 import Target from '../components/sales-report/Target';
 import TabsSaleRole from '../components/sales-report/TabsSaleRole';
 import IssueChart from '../components/sales-report/IssueChart';
+import { useDialog } from '../components/dialogs/useDialog'
+import ActualCreateDialog from '../components/sales-report/ActualCreateDialog';
 
 interface Props { }
 
@@ -49,6 +51,8 @@ const SalesRoleDe: React.FC<Props> = () => {
     const [monthlyIssue, setMonthlyIssue] = useState<RegularSalesIssueFragment[] | undefined>()
 
     const [issueMonth, setIssueMonth ] = useState<IssueMonth[]>()
+
+    const { isOpen, setIsOpen } = useDialog();
 
     const history = useHistory();
     const params = useParams<{ id: string }>();
@@ -177,13 +181,32 @@ const SalesRoleDe: React.FC<Props> = () => {
                     {me?.me?.roles.includes("superAdmin") && (
                         <Button
                             ml='5'
-                            colorScheme='orange'
+                            colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}
                             leftIcon={<EditIcon />}
                             onClick={() => history.push(`/user-id/${data?.salesRoleById.id}`)}
                         >
                             แก้ไข
                         </Button>
                     )}
+                    <Button
+                        ml="2"
+                        leftIcon={<EditIcon />}
+                        colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}
+                        variant='outline'
+                        onClick={() => setIsOpen(true)}
+                    >
+                        บันทึกยอดขายจาก Altas
+                    </Button>
+                    
+
+            {isOpen && (
+                <ActualCreateDialog
+                    Open={true}
+                    setOpen={() => setIsOpen(false)}
+                    branch={branch}
+                    salesRoleId={+params.id}
+                />
+            )}
                 </Flex>
 
                 <Flex>

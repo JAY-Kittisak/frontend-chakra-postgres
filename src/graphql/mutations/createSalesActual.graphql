@@ -1,0 +1,3 @@
+mutation CreateSalesActual($input: SalesActual_Input!){
+    createSalesActual(input: $input)
+}

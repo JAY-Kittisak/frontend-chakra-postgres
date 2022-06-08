@@ -12,7 +12,6 @@ import Spinner from '../Spinner';
 
 interface Props {
     visitId: number
-    customer: string
     saleRoleId: number
     checkAddId: number[] | undefined
     setAlertWarning: (action: AlertNt) => void | undefined
@@ -22,7 +21,6 @@ interface Props {
 const IssueCreate: React.FC<Props> = ({
     visitId,
     saleRoleId,
-    customer,
     checkAddId,
     setAlertWarning,
     setAlertSuccess
@@ -130,7 +128,6 @@ const IssueCreate: React.FC<Props> = ({
                     setOpen={() => setIsOpen(false)}
                     branch={'ลาดกระบัง'}
                     visitId={visitId}
-                    customer={customer}
                 />
             )}
         </Flex>

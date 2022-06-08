@@ -1,5 +1,13 @@
 import { FactoryTab, FactoryIndustrialEstate, FilterRoleJsr } from "../types";
 
+const today = new Date();
+const [isoYear, isoMonth, isoDate] = today.toISOString().split('-')
+
+export const countDayInMonth = new Date(+isoYear, +isoMonth, 0).getDate();
+export const firstDayOfMonth = `${isoYear}-${isoMonth}-01`
+export const lastDayOfMonth = `${isoYear}-${isoMonth}-${countDayInMonth}`
+export const toDayIso = `${isoYear}-${isoMonth}-${isoDate}`
+
 export const formatAmount = (amount: number) =>
     amount.toLocaleString("en", { minimumFractionDigits: 0 });
 export const formatDate = (date: number) => new Date(date).toLocaleDateString();
@@ -18,7 +26,6 @@ export const formatDateNew = (value: number | string) => {
 }
 
 export const serviceLife = (dateStart: string) => {
-    const today = new Date();
     const getDateStart = new Date(dateStart);
     const differenceInTime = today.getTime() - getDateStart.getTime();
     const sumDateAll = differenceInTime / (1000 * 3600 * 24);
@@ -37,7 +44,6 @@ export const serviceLife = (dateStart: string) => {
     
     return response
 }
-
 
 type CatProductV1 = "อะไหล่รถยนต์" | "อาหาร" | "อิเล็กทรอนิกส์" | "*โปรดเลือก";
 

@@ -7,16 +7,17 @@ import { useHistory } from "react-router-dom";
 
 import {
     CatUserRole,
-    AlertNt
+    AlertNt,
+    firstDayOfMonth,
+    lastDayOfMonth
 } from "../utils/helpers";
 import { useMeQuery, useSalesRolesQuery, RegularSalesRoleFragment } from "../generated/graphql";
-import Spinner from "../components/Spinner";
 import { useIsAuth } from "../utils/uselsAuth";
+import Spinner from "../components/Spinner";
 import AlertNotification from "../components/dialogs/AlertNotification";
-
-import "../styles/card-sales.css";
 import SalesTimestamp from "../components/sales-report/SalesTimestamp";
 import SwitchBranch from "../components/sales-report/SwitchBranch";
+import "../styles/card-sales.css";
 
 interface Props { }
 
@@ -29,6 +30,9 @@ const SalesReport: React.FC<Props> = () => {
 
     const [alertWarning, setAlertWarning] = useState<AlertNt>("hide");
     const [ dataSales, setDataSales ] = useState<RegularSalesRoleFragment[] | undefined>(undefined)
+
+    const [dateBegin, setDateBegin] = useState(firstDayOfMonth);
+    const [dateEnd, setDateEnd] = useState(lastDayOfMonth);
 
     const [{ data: me }] = useMeQuery();
 
@@ -166,9 +170,20 @@ const SalesReport: React.FC<Props> = () => {
                         <Flex justifyContent="space-between">
                             <Flex alignItems="center">
                                 <Text mr="5">วันที่ : </Text>
-                                <Input mr="5" w="200px" type="date" defaultValue="2022-05-01" />
+                                <Input 
+                                    mr="5" 
+                                    w="200px" 
+                                    type="date"
+                                    defaultValue={dateBegin}
+                                    onChange={(e) => setDateBegin(e.target.value)}
+                                />
                                 <Text mr="5">ถึง :</Text>
-                                <Input w="200px" type="date" defaultValue="2022-05-31" />
+                                <Input 
+                                    w="200px" 
+                                    type="date"
+                                    defaultValue={dateEnd}
+                                    onChange={(e) => setDateEnd(e.target.value)}
+                                />
                             </Flex>
                             <Flex>
                                 <Button
@@ -205,7 +220,12 @@ const SalesReport: React.FC<Props> = () => {
                                 </Button>
                             </Flex>
                         </Flex>
-                        <SalesTimestamp branch={branch} colorBranchPass={colorBranchPass} />
+                        <SalesTimestamp
+                            branch={branch}
+                            colorBranchPass={colorBranchPass} 
+                            dateBegin={dateBegin}
+                            dateEnd={dateEnd}
+                        />
                     </Flex>
                 )}
             </Flex>
