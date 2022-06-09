@@ -14,7 +14,9 @@ import {
     useSalesRolesQuery, 
     RegularSalesRoleFragment,
     useVisitsQuery,
-    RegularSalesVisitFragment
+    RegularSalesVisitFragment,
+    useTargetByRoleQuery,
+    RegularSalesTargetFragment
 } from "../generated/graphql";
 import Spinner from "../components/Spinner";
 import SalesTarget from "../components/sales-report/SalesTarget";
@@ -43,6 +45,7 @@ const SalesReportLeader: React.FC<Props> = () => {
     
     const [salesByChannel, setSalesByChannel] = useState<RegularSalesRoleFragment[] | undefined>(undefined)
     const [visits, setVisits] = useState<RegularSalesVisitFragment[] | undefined>(undefined)
+    const [targets, setTargets] = useState<RegularSalesTargetFragment[] | undefined>(undefined)
 
     const [dateBegin, setDateBegin] = useState(firstDayOfMonth);
     const [dateEnd, setDateEnd] = useState(lastDayOfMonth);
@@ -53,6 +56,7 @@ const SalesReportLeader: React.FC<Props> = () => {
         channel: string;
         sumIssue: number;
     }[]>()
+    const [ sumValueIssue, setSumValueIssue] = useState(0)
 
     const [{ data: me }] = useMeQuery();
 
@@ -64,6 +68,12 @@ const SalesReportLeader: React.FC<Props> = () => {
             dateEnd
         }
     })
+    
+    const [{ data: target }] = useTargetByRoleQuery({
+        variables: {
+            year: +dateBegin.split('-')[0]
+        },
+    });
 
     const history = useHistory();
 
@@ -103,21 +113,26 @@ const SalesReportLeader: React.FC<Props> = () => {
 
     useEffect(() => {
         if (!salesRole?.salesRoles) return
+        if (!target?.targetByRole) return
         if (!dataVisits?.visits) return
 
-        const filterBranch = dataVisits.visits.filter(val => val.saleRole.branch === branch)
+        const filterVisits = dataVisits.visits.filter(val => val.saleRole.branch === branch)
+        const filterTargets = target?.targetByRole.filter(val => val.sale.branch === branch)
         
         const roleFilterBranch = salesRole.salesRoles.filter((val) => val.branch === branch)
         const mapChannel = roleFilterBranch.map(item => item.channel)
 
         if (channel === 'All') {
-            setVisits(filterBranch)
+            setVisits(filterVisits)
+            setTargets(filterTargets)
             setSalesByChannel(roleFilterBranch)
         } else {
-            const filteredData = roleFilterBranch.filter(item => item.channel === channel);
-            const filteredVisit = filterBranch.filter(item => item.saleRole.channel === channel)
-
-            setVisits(filteredVisit)
+            const filteredData = roleFilterBranch.filter(item => item.channel === channel)
+            const filterVisitChan = filterVisits.filter(item => item.saleRole.channel === channel)
+            const filterTargetChan = filterTargets.filter(item => item.sale.channel === channel)
+            
+            setVisits(filterVisitChan)
+            setTargets(filterTargetChan)
             setSalesByChannel(filteredData)
         }
 
@@ -133,7 +148,7 @@ const SalesReportLeader: React.FC<Props> = () => {
         itemChannels.forEach(team => {
             if (team === 'All') return
 
-            const filterTeam = filterBranch.filter(val => val.saleRole.channel === team);
+            const filterTeam = filterVisits.filter(val => val.saleRole.channel === team);
             const issues = filterTeam.map(val => val.issueReceives)
 
             let sumIssue: number[] = []
@@ -151,7 +166,7 @@ const SalesReportLeader: React.FC<Props> = () => {
         setDataByChannel(issueChannel)
         setChannels(itemChannels)
 
-    } ,[ salesRole, dataVisits, branch, channel])
+    } ,[ salesRole, dataVisits, target, branch, channel])
 
     return (
         <Flex
@@ -276,7 +291,11 @@ const SalesReportLeader: React.FC<Props> = () => {
                                 <SalesTarget
                                     colorBranch={colorBranch}
                                     colorBranchPass={colorBranchPass}
+                                    targets={targets}
+                                    dateBegin={dateBegin}
+                                    sumValueIssue={sumValueIssue}
                                 />
+
                                 <MainChart
                                     colorBranch={colorBranch}
                                     dateBegin={dateBegin}
@@ -293,13 +312,17 @@ const SalesReportLeader: React.FC<Props> = () => {
                             <SalesChart
                                 colorBranch={colorBranch}
                                 visits={visits}
+                                targets={targets}
+                                setSumValueIssue={setSumValueIssue}
                             />
+                            
                             <ActualChart
                                 colorBranch={colorBranch}
                                 dateBegin={dateBegin}
                                 dateEnd={dateEnd}
                                 branch={branch}
                                 channel={channel}
+                                targets={targets}
                             />
                         </Flex>
                     </Flex>

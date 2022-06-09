@@ -50,8 +50,9 @@ const SalesTimestamp: React.FC<Props> = ({ branch, colorBranchPass, dateBegin, d
 
                 for (let i = 0; i < countDayInMonth; i++) {
                     const filterDate = dataForFilter.filter(value => {
-                        const created = new Date(+value.createdAt)
-                        return created.getDate() === i + 1
+                        const visitDate = new Date(value.visitDate)
+
+                        return visitDate.getDate() === i + 1
                     })
                     
                     if (filterDate.length > 0) {
@@ -87,11 +88,12 @@ const SalesTimestamp: React.FC<Props> = ({ branch, colorBranchPass, dateBegin, d
                 const dataForFilter = updatedRoleJsr[role] as RegularSalesVisitFragment[]
     
                 let thisMonth: ThisMonth[] = []
-    
+                
                 for (let i = 0; i < countDayInMonth; i++) {
                     const filterDate = dataForFilter.filter(value => {
-                        const created = new Date(+value.createdAt)
-                        return created.getDate() === i + 1
+                        const visitDate = new Date(value.visitDate)
+                        
+                        return visitDate.getDate() === i + 1
                     })
                     
                     if (filterDate.length > 0) {

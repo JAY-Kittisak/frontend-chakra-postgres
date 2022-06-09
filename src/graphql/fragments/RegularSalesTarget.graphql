@@ -1,0 +1,17 @@
+fragment RegularSalesTarget on SalesTarget {
+    id
+    year
+    commission
+    strategy
+    countVisit
+    countIssue
+    valueIssue
+    valueQt
+    salesRoleId
+    sale {
+      id
+      salesRole
+      channel
+      branch
+    }
+}

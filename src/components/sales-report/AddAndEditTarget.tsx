@@ -42,9 +42,6 @@ const AddAndEditTarget: React.FC<Props> = ({ Open, setOpen, branch, roleId }) =>
                     valueQt: 0,
                 }}
                 onSubmit={async (values, { setErrors }) => {
-                    if (!branch) {
-                        return alert('Error! branch')
-                    }
                     const response = await createTarget({
                         input: {
                             year: +values.year,
@@ -54,7 +51,6 @@ const AddAndEditTarget: React.FC<Props> = ({ Open, setOpen, branch, roleId }) =>
                             countIssue: values.countIssue,
                             valueIssue: values.valueIssue,
                             valueQt: values.valueQt,
-                            branch,
                             salesRoleId: +roleId
                         }
                     });

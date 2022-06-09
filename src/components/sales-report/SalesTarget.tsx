@@ -4,14 +4,36 @@ import { AreaChart, Area, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } fr
 import CountUp from 'react-countup';
 
 import "../../styles/_chart-sales-target.scss";
+import { RegularSalesTargetFragment } from "../../generated/graphql";
+import { reducer } from "../../utils/helpers";
 
 interface Props {
     colorBranch: string;
-    colorBranchPass: string;
+    colorBranchPass: string
+    targets: RegularSalesTargetFragment[] | undefined
+    dateBegin: string
+    sumValueIssue: number
 }
 
-const SalesTarget: React.FC<Props> = ({ colorBranch, colorBranchPass }) => {
+type CalTarget = {
+    year: string
+    valueInYear: number
+    currentMonth: number
+}
+
+const SalesTarget: React.FC<Props> = ({ 
+    colorBranch, 
+    colorBranchPass, 
+    targets, 
+    dateBegin,
+    sumValueIssue
+}) => {
     const [percentNum, setPercentNum] = useState(0)
+    const [ calTarget, setCalTarget ] = useState<CalTarget>({
+        year: '2022',
+        valueInYear: 0,
+        currentMonth: 0
+    })
     const dataTarget = [
         {
             name: "มกราคม",
@@ -44,8 +66,6 @@ const SalesTarget: React.FC<Props> = ({ colorBranch, colorBranchPass }) => {
     ];
 
     let remaining = 0
-    const percent = 90.99
-    const percentSplit = percent.toString().split(".")
     remaining = 100 - percentNum
     if (remaining < 0) {
         remaining = 0
@@ -58,10 +78,34 @@ const SalesTarget: React.FC<Props> = ({ colorBranch, colorBranchPass }) => {
     const COLORS = ['#d8d8d8', colorBranch];
 
     useEffect(() => {
-        if (percentSplit) {
-            setPercentNum(+percentSplit[0])
+        if (!targets) return
+
+        const [ year, month] = dateBegin.split('-')
+
+        const valueInYear = targets.map(value => value.valueIssue).reduce(reducer, 0)
+        const currentMonth = (valueInYear / 12) * +month
+
+        setCalTarget({
+            year,
+            valueInYear,
+            currentMonth
+        })
+
+    }, [targets,dateBegin])
+
+    useEffect(() => {
+        if (calTarget.currentMonth === 0) return setPercentNum(0)
+
+        const calPercent = (sumValueIssue * 100) / calTarget.currentMonth
+        
+        if (calPercent > 100) {
+            setPercentNum(100)
+        } else {
+            const percent = calPercent.toFixed(0)
+            setPercentNum(+percent)
         }
-    }, [percentSplit])
+
+    }, [sumValueIssue, calTarget])
 
     return (
         <>
@@ -77,10 +121,10 @@ const SalesTarget: React.FC<Props> = ({ colorBranch, colorBranchPass }) => {
                     <Flex justify="space-between">
                         <Flex flexDir="column">
                             <Text ml="6" fontWeight="bold" fontSize="xl">
-                                1.25 B
+                                {calTarget.valueInYear}
                             </Text>
                             <Text ml="6" fontSize="sm" color="gray">
-                                เป้า Issue ปี 2022
+                                เป้า Issue ปี {calTarget.year}
                             </Text>
                         </Flex>
                     </Flex>
@@ -137,7 +181,7 @@ const SalesTarget: React.FC<Props> = ({ colorBranch, colorBranchPass }) => {
                 <Flex justify="space-around" mb="70">
                     <Flex flexDir="column" align="center">
                         <Text fontWeight="bold" fontSize="xl">
-                            920.35 M
+                            {calTarget.currentMonth}
                         </Text>
                         <Text fontSize="sm" color="gray">
                             เป้า Issue ณ ปัจจุบัน
@@ -145,7 +189,7 @@ const SalesTarget: React.FC<Props> = ({ colorBranch, colorBranchPass }) => {
                     </Flex>
                     <Flex flexDir="column" align="center">
                         <Text fontWeight="bold" fontSize="xl">
-                            800.95 M
+                            {sumValueIssue}
                         </Text>
                         <Text fontSize="sm" color="gray">
                             มูลค่า Issue จริง ณ ปัจจุบัน

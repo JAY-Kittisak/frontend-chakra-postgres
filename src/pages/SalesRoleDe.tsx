@@ -45,12 +45,12 @@ const SalesRoleDe: React.FC<Props> = () => {
     const [issueProcess, setIssueProcess] = useState(initialIssue);
     const [quotationValue, setQuotationValue] = useState(0);
 
-    const [monthIndex, setMonthIndex] = useState(monthly+1);
+    const [monthIndex, setMonthIndex] = useState(monthly + 1);
 
     const [monthlyVisit, setMonthlyVisit] = useState<RegularSalesVisitFragment[] | undefined>()
     const [monthlyIssue, setMonthlyIssue] = useState<RegularSalesIssueFragment[] | undefined>()
 
-    const [issueMonth, setIssueMonth ] = useState<IssueMonth[]>()
+    const [issueMonth, setIssueMonth] = useState<IssueMonth[]>()
 
     const { isOpen, setIsOpen } = useDialog();
 
@@ -110,7 +110,7 @@ const SalesRoleDe: React.FC<Props> = () => {
 
         // ISSUE
         if (!issues?.issueByRoleId) return
-                
+
         const countIssue = issues.issueByRoleId.length
         const valueIssue = issues.issueByRoleId.reduce((value, e) => {
             const total = e.issueValue + value
@@ -123,7 +123,7 @@ const SalesRoleDe: React.FC<Props> = () => {
             return (formatGetMonth(+value.createdAt) + 1) === monthIndex
         })
 
-        let issueMonth : IssueMonth[] = []
+        let issueMonth: IssueMonth[] = []
 
         selectMonth.forEach(month => {
             if (month === "ทุกเดือน") return
@@ -132,10 +132,10 @@ const SalesRoleDe: React.FC<Props> = () => {
             const monthFilter = issues.issueByRoleId.filter((m) => selectMonth[formatGetMonth(+m.createdAt) + 1] === month)
             const monthMap = monthFilter.map(value => value.issueValue)
 
-            const monthReduce = monthMap.reduce(reducer,0)
+            const monthReduce = monthMap.reduce(reducer, 0)
             issueMonth.push({ month: month, target: targetIssue, sumIssue: monthReduce })
         })
-        
+
         setMonthlyIssue(filterIssue)
         setIssueProcess({ countIssue, valueIssue })
         setIssueMonth(issueMonth)
@@ -144,25 +144,25 @@ const SalesRoleDe: React.FC<Props> = () => {
 
     useEffect(() => {
         if (!visits?.visitByRoleId) return
-        
+
         const filterVisit = visits.visitByRoleId.filter(value => {
             if (monthIndex === 0) {
                 return value
             }
             return (formatGetMonth(+value.createdAt) + 1) === monthIndex
         })
-        
+
         setMonthlyVisit(filterVisit)
     }, [visits, monthIndex])
 
     useEffect(() => {
         if (!quotations?.quotationByRoleId) return
-        
+
         const valueQt = quotations.quotationByRoleId.reduce((value, e) => {
             const total = e.value + value
             return total
         }, 0)
-        
+
         setQuotationValue(valueQt)
     }, [quotations])
 
@@ -190,6 +190,7 @@ const SalesRoleDe: React.FC<Props> = () => {
                     )}
                     <Button
                         ml="2"
+                        disabled={data?.salesRoleById.userId !== me?.me?.id}
                         leftIcon={<EditIcon />}
                         colorScheme={branch === "ลาดกระบัง" ? "linkedin" : "teal"}
                         variant='outline'
@@ -197,16 +198,15 @@ const SalesRoleDe: React.FC<Props> = () => {
                     >
                         บันทึกยอดขายจาก Altas
                     </Button>
-                    
 
-            {isOpen && (
-                <ActualCreateDialog
-                    Open={true}
-                    setOpen={() => setIsOpen(false)}
-                    branch={branch}
-                    salesRoleId={+params.id}
-                />
-            )}
+                    {isOpen && (
+                        <ActualCreateDialog
+                            Open={true}
+                            setOpen={() => setIsOpen(false)}
+                            branch={branch}
+                            salesRoleId={+params.id}
+                        />
+                    )}
                 </Flex>
 
                 <Flex>

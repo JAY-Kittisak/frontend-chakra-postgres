@@ -73,7 +73,7 @@ const IssueCreate: React.FC<Props> = ({
                     </Text>
                 </Flex>
             ) : (
-                <Flex mt="5" h="100%" overflowX="auto" rounded="5px" boxShadow="md">
+                <Flex mt="5" overflowX="auto" rounded="5px" boxShadow="md">
                     <Table variant='striped' colorScheme='teal'>
                         <Thead>
                             <Tr>

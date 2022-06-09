@@ -64,7 +64,6 @@ const IssueChart: React.FC<Props> = ({
 
     const handleClick = useCallback(
         (_, index: number) => {
-            console.log(index,monthIndex)
             if (index+1 === monthIndex) {
                 return setMonthIndex(0)
             }

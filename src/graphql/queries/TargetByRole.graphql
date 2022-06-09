@@ -1,13 +1,5 @@
-query TargetByRole($salesRoleId: Int!) {
-  targetByRole(salesRoleId: $salesRoleId) {
-    id
-    year
-    commission
-    strategy
-    countVisit
-    countIssue
-    valueIssue
-    valueQt
-    branch
+query TargetByRole($salesRoleId: Int, $year: Int) {
+  targetByRole(salesRoleId: $salesRoleId,year: $year) {
+    ...RegularSalesTarget
   }
 }

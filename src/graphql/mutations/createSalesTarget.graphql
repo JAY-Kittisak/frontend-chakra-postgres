@@ -5,16 +5,7 @@ mutation CreateSalesTarget($input: SalesTarget_Input!){
             message
         }
         salesTargets{
-            id
-            year
-            commission
-            strategy
-            countVisit
-            countIssue
-            valueIssue
-            valueQt
-            branch
-            salesRoleId
+            ...RegularSalesTarget
         }
     }
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Box, Flex, Text } from "@chakra-ui/react";
 import {
     Bar,
+    Line,
     Cell,
     XAxis,
     YAxis,
@@ -10,17 +11,20 @@ import {
     ComposedChart,
 } from "recharts";
 
-import { RegularSalesVisitFragment } from "../../generated/graphql";
+import { RegularSalesVisitFragment, RegularSalesTargetFragment } from "../../generated/graphql";
 import { reducer } from '../../utils/helpers';
 
 interface Props {
     colorBranch: string
     visits: RegularSalesVisitFragment[] | undefined
+    targets: RegularSalesTargetFragment[] | undefined
+    setSumValueIssue: (value: number) => void
 }
 
 type DataSales = {
-    sales: string;
-    sumIssue: number;
+    sales: string
+    sumIssue: number
+    targetIssue: number
 }
 
 const sortDataSa = (a: DataSales,b: DataSales) => {
@@ -33,11 +37,21 @@ const sortDataSa = (a: DataSales,b: DataSales) => {
     }
 }
 
-const SalesChart: React.FC<Props> = ({ colorBranch, visits }) => {
-    const [dataSales, setDataSales] = useState<DataSales[]>()
+const SalesChart: React.FC<Props> = ({ 
+    colorBranch, 
+    visits, 
+    setSumValueIssue,
+    targets
+}) => {
+    const [dataSales, setDataSales] = useState<DataSales[]>([{
+        sales: 'all',
+        sumIssue: 0,
+        targetIssue: 0
+    }])
 
     useEffect(() => {
         if (!visits) return
+        if (!targets) return
         
         let result: DataSales[] = []
 
@@ -46,6 +60,11 @@ const SalesChart: React.FC<Props> = ({ colorBranch, visits }) => {
         const roles = Array.from(newSetRole)
 
         roles.forEach(role => {
+            const targetRole = targets.filter(target => target.sale.salesRole === role)
+            const sumTarget = targetRole.map(target => target.valueIssue).reduce(reducer, 0)
+            const targetInMonth = sumTarget / 12
+            const targetIssue = +targetInMonth.toFixed(0)
+
             const filterRole = visits.filter(item => item.saleRole.salesRole === role)
             const mapIssues = filterRole.map(item => item.issueReceives)
 
@@ -58,16 +77,16 @@ const SalesChart: React.FC<Props> = ({ colorBranch, visits }) => {
                 sumIssue.push(valueIssue.reduce(reducer, 0))
             })
 
-            result.push({ sales: role, sumIssue: sumIssue.reduce(reducer, 0)})
+            result.push({ sales: role, sumIssue: sumIssue.reduce(reducer, 0), targetIssue})
         })
         
         setDataSales(result.sort(sortDataSa))
 
-    }, [visits])
+        setSumValueIssue(result.map(val => val.sumIssue).reduce(reducer, 0))
 
+    }, [visits, setSumValueIssue, targets])
 
-    if (!dataSales) return (<div> No data </div>)
-    else return (
+    return (
         <Box
             mt="3"
             pt="5"
@@ -137,7 +156,8 @@ const SalesChart: React.FC<Props> = ({ colorBranch, visits }) => {
                     </Bar>
                     {/* <Line type="monotone" dataKey="Target_KPI" stroke="#bd1717" />
                         <Line type="monotone" dataKey="Target_กลยุทธ์" stroke="#d8d516" />
-                        <Line type="monotone" dataKey="safety_line" stroke="#3ae723" /> */}
+                        <Line type="monotone" dataKey="targetIssue" stroke="#3ae723" /> */}
+                        <Line type="monotone" dataKey="targetIssue" stroke="#bd1717" /> 
                 </ComposedChart>
             </ResponsiveContainer>
         </Box>

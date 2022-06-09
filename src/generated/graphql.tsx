@@ -949,7 +949,8 @@ export type QueryActualByDateArgs = {
 
 
 export type QueryTargetByRoleArgs = {
-  salesRoleId: Scalars['Int'];
+  year?: Maybe<Scalars['Int']>;
+  salesRoleId?: Maybe<Scalars['Int']>;
 };
 
 
@@ -1203,7 +1204,6 @@ export type SalesTarget = {
   countIssue: Scalars['Float'];
   valueIssue: Scalars['Float'];
   valueQt: Scalars['Float'];
-  branch: Scalars['String'];
   salesRoleId: Scalars['Float'];
   sale: SalesRole;
   createdAt: Scalars['String'];
@@ -1218,7 +1218,6 @@ export type SalesTarget_Input = {
   countIssue: Scalars['Float'];
   valueIssue: Scalars['Float'];
   valueQt: Scalars['Float'];
-  branch: Scalars['String'];
   salesRoleId: Scalars['Float'];
 };
 
@@ -1547,6 +1546,15 @@ export type RegularSalesRoleFragment = (
   ) }
 );
 
+export type RegularSalesTargetFragment = (
+  { __typename?: 'SalesTarget' }
+  & Pick<SalesTarget, 'id' | 'year' | 'commission' | 'strategy' | 'countVisit' | 'countIssue' | 'valueIssue' | 'valueQt' | 'salesRoleId'>
+  & { sale: (
+    { __typename?: 'SalesRole' }
+    & Pick<SalesRole, 'id' | 'salesRole' | 'channel' | 'branch'>
+  ) }
+);
+
 export type RegularSalesVisitFragment = (
   { __typename?: 'SalesVisit' }
   & Pick<SalesVisit, 'id' | 'saleRoleId' | 'saleName' | 'customer' | 'visitDate' | 'contactName' | 'position' | 'department' | 'jobPurpose' | 'customerType' | 'createdAt' | 'updatedAt'>
@@ -1859,7 +1867,7 @@ export type CreateSalesTargetMutation = (
       & Pick<FieldErrorSalesRole, 'field' | 'message'>
     )>>, salesTargets?: Maybe<Array<(
       { __typename?: 'SalesTarget' }
-      & Pick<SalesTarget, 'id' | 'year' | 'commission' | 'strategy' | 'countVisit' | 'countIssue' | 'valueIssue' | 'valueQt' | 'branch' | 'salesRoleId'>
+      & RegularSalesTargetFragment
     )>> }
   ) }
 );
@@ -2825,7 +2833,8 @@ export type StockItsQuery = (
 );
 
 export type TargetByRoleQueryVariables = Exact<{
-  salesRoleId: Scalars['Int'];
+  salesRoleId?: Maybe<Scalars['Int']>;
+  year?: Maybe<Scalars['Int']>;
 }>;
 
 
@@ -2833,7 +2842,7 @@ export type TargetByRoleQuery = (
   { __typename?: 'Query' }
   & { targetByRole?: Maybe<Array<(
     { __typename?: 'SalesTarget' }
-    & Pick<SalesTarget, 'id' | 'year' | 'commission' | 'strategy' | 'countVisit' | 'countIssue' | 'valueIssue' | 'valueQt' | 'branch'>
+    & RegularSalesTargetFragment
   )>> }
 );
 
@@ -2847,7 +2856,7 @@ export type TargetByRoleIdQuery = (
   { __typename?: 'Query' }
   & { targetByRoleId?: Maybe<(
     { __typename?: 'SalesTarget' }
-    & Pick<SalesTarget, 'id' | 'year' | 'commission' | 'strategy' | 'countVisit' | 'countIssue' | 'valueIssue' | 'valueQt' | 'branch'>
+    & RegularSalesTargetFragment
   )> }
 );
 
@@ -3267,6 +3276,25 @@ export const RegularSalesRoleFragmentDoc = gql`
   }
 }
     `;
+export const RegularSalesTargetFragmentDoc = gql`
+    fragment RegularSalesTarget on SalesTarget {
+  id
+  year
+  commission
+  strategy
+  countVisit
+  countIssue
+  valueIssue
+  valueQt
+  salesRoleId
+  sale {
+    id
+    salesRole
+    channel
+    branch
+  }
+}
+    `;
 export const RegularSalesVisitFragmentDoc = gql`
     fragment RegularSalesVisit on SalesVisit {
   id
@@ -3619,20 +3647,11 @@ export const CreateSalesTargetDocument = gql`
       message
     }
     salesTargets {
-      id
-      year
-      commission
-      strategy
-      countVisit
-      countIssue
-      valueIssue
-      valueQt
-      branch
-      salesRoleId
+      ...RegularSalesTarget
     }
   }
 }
-    `;
+    ${RegularSalesTargetFragmentDoc}`;
 
 export function useCreateSalesTargetMutation() {
   return Urql.useMutation<CreateSalesTargetMutation, CreateSalesTargetMutationVariables>(CreateSalesTargetDocument);
@@ -4536,20 +4555,12 @@ export function useStockItsQuery(options: Omit<Urql.UseQueryArgs<StockItsQueryVa
   return Urql.useQuery<StockItsQuery>({ query: StockItsDocument, ...options });
 };
 export const TargetByRoleDocument = gql`
-    query TargetByRole($salesRoleId: Int!) {
-  targetByRole(salesRoleId: $salesRoleId) {
-    id
-    year
-    commission
-    strategy
-    countVisit
-    countIssue
-    valueIssue
-    valueQt
-    branch
+    query TargetByRole($salesRoleId: Int, $year: Int) {
+  targetByRole(salesRoleId: $salesRoleId, year: $year) {
+    ...RegularSalesTarget
   }
 }
-    `;
+    ${RegularSalesTargetFragmentDoc}`;
 
 export function useTargetByRoleQuery(options: Omit<Urql.UseQueryArgs<TargetByRoleQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<TargetByRoleQuery>({ query: TargetByRoleDocument, ...options });
@@ -4557,18 +4568,10 @@ export function useTargetByRoleQuery(options: Omit<Urql.UseQueryArgs<TargetByRol
 export const TargetByRoleIdDocument = gql`
     query TargetByRoleId($salesRoleId: Int!, $year: Int!) {
   targetByRoleId(salesRoleId: $salesRoleId, year: $year) {
-    id
-    year
-    commission
-    strategy
-    countVisit
-    countIssue
-    valueIssue
-    valueQt
-    branch
+    ...RegularSalesTarget
   }
 }
-    `;
+    ${RegularSalesTargetFragmentDoc}`;
 
 export function useTargetByRoleIdQuery(options: Omit<Urql.UseQueryArgs<TargetByRoleIdQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<TargetByRoleIdQuery>({ query: TargetByRoleIdDocument, ...options });

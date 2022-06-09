@@ -2,6 +2,7 @@ import React, { useState, useEffect} from 'react'
 import { Box, Flex, Text } from "@chakra-ui/react";
 import {
     Bar,
+    Line,
     Cell,
     XAxis,
     YAxis,
@@ -10,7 +11,7 @@ import {
     ComposedChart,
 } from "recharts";
 
-import { useActualByDateQuery } from '../../generated/graphql'
+import { useActualByDateQuery, RegularSalesTargetFragment } from '../../generated/graphql'
 import { CatUserRole, reducer } from '../../utils/helpers'
 import Spinner from '../Spinner'
 
@@ -20,16 +21,19 @@ import Spinner from '../Spinner'
     dateEnd: string
     branch: CatUserRole
     channel: string
+    targets: RegularSalesTargetFragment[] | undefined
 }
 
 type DataSales = {
-    sales: string;
-    value: number;
+    sales: string
+    value: number
+    strategy: number
 }
 
 const initialDataTest: DataSales = {
     sales: "initial",
-    value: 0
+    value: 0,
+    strategy: 0
 }
 
 const sortDataSa = (a: DataSales,b: DataSales) => {
@@ -47,7 +51,8 @@ const ActualChart: React.FC<Props> = ({
     dateBegin,
     dateEnd,
     branch,
-    channel
+    channel,
+    targets
 }) => {
     const [dataSales, setDataSales] = useState<DataSales[]>([initialDataTest])
 
@@ -60,6 +65,7 @@ const ActualChart: React.FC<Props> = ({
 
     useEffect(() => {
         if (!data?.actualByDate) return
+        if (!targets) return
         
         let result: DataSales[] = []
 
@@ -71,10 +77,15 @@ const ActualChart: React.FC<Props> = ({
             const roles = Array.from(newSetRole)
     
             roles.forEach(role => { 
+                const targetRole = targets.filter(target => target.sale.salesRole === role)
+                const sumTarget = targetRole.map(target => target.strategy).reduce(reducer, 0)
+                const targetInMonth = sumTarget / 12
+                const strategy = +targetInMonth.toFixed(0)
+
                 const filterRole = filterBranch.filter(item => item.salesRole.salesRole === role)
                 const mapIssues = filterRole.map(item => item.actual)
     
-                result.push({ sales: role, value: mapIssues.reduce(reducer, 0)})
+                result.push({ sales: role, value: mapIssues.reduce(reducer, 0), strategy})
             })
         } else {
             const filteredChannel = filterBranch.filter(item => item.salesRole.channel === channel)
@@ -84,17 +95,22 @@ const ActualChart: React.FC<Props> = ({
             const roles = Array.from(newSetRole)
     
             roles.forEach(role => { 
+                const targetRole = targets.filter(target => target.sale.salesRole === role)
+                const sumTarget = targetRole.map(target => target.strategy).reduce(reducer, 0)
+                const targetInMonth = sumTarget / 12
+                const strategy = +targetInMonth.toFixed(0)
+
                 const filterRole = filteredChannel.filter(item => item.salesRole.salesRole === role)
                 const mapIssues = filterRole.map(item => item.actual)
     
-                result.push({ sales: role, value: mapIssues.reduce(reducer, 0)})
+                result.push({ sales: role, value: mapIssues.reduce(reducer, 0), strategy})
             })
         }
 
 
         setDataSales(result.sort(sortDataSa))
 
-    }, [data, branch, channel])
+    }, [data, branch, channel, targets])
 
     return (
         <Box
@@ -141,6 +157,7 @@ const ActualChart: React.FC<Props> = ({
                             />
                         ))}
                     </Bar>
+                    <Line type="monotone" dataKey="strategy" stroke="#bd1717" /> 
                 </ComposedChart>
             </ResponsiveContainer>
             )}
