@@ -15,6 +15,11 @@ interface Props {
     quotations: QuotationByRoleIdQuery | undefined
 }
 
+const newSetArr = (data: string[] | undefined) => {
+    const response = new Set(data)
+    return Array.from(response)
+}
+
 const TabsSaleRole: React.FC<Props> = ({ color, monthlyIssue, monthlyVisit, quotations }) => {
 
     const history = useHistory();
@@ -101,10 +106,10 @@ const TabsSaleRole: React.FC<Props> = ({ color, monthlyIssue, monthlyVisit, quot
                                         </Flex>
                                     </Td>
                                     <Td w="15%">
-                                        <Center>{val.saleName}</Center>
+                                        <Center>{val.saleRole.user.fullNameTH}</Center>
                                     </Td>
                                     <Td w="15%">
-                                        <Center>{val.customer}</Center>
+                                        <Center>{newSetArr(val.visitLoaders?.map(val => val.customer))}</Center>
                                     </Td>
                                     <Td w="30%">{val.detail}</Td>
                                     <Td w="5%" color="cyan.600">

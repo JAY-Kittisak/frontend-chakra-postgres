@@ -1073,7 +1073,6 @@ export type SalesEditIssue = {
   id: Scalars['Float'];
   issueId: Scalars['Float'];
   userEdit: Scalars['String'];
-  branch: Scalars['String'];
   rate: Scalars['String'];
   status: Scalars['String'];
   issueValue: Scalars['Float'];
@@ -1088,7 +1087,6 @@ export type SalesIssue = {
   __typename?: 'SalesIssue';
   id: Scalars['Float'];
   saleRoleId: Scalars['Float'];
-  saleName: Scalars['String'];
   customer: Scalars['String'];
   detail: Scalars['String'];
   issueValue: Scalars['Float'];
@@ -1136,11 +1134,9 @@ export type SalesQuotation = {
   __typename?: 'SalesQuotation';
   id: Scalars['Float'];
   saleRoleId: Scalars['Float'];
-  saleName: Scalars['String'];
   visitId: Scalars['Float'];
   quotationCode: Scalars['String'];
   value: Scalars['Float'];
-  branch: Scalars['String'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   saleRole: SalesRole;
@@ -1515,13 +1511,17 @@ export type RegularResellFragment = (
 
 export type RegularSalesIssueFragment = (
   { __typename?: 'SalesIssue' }
-  & Pick<SalesIssue, 'id' | 'saleRoleId' | 'saleName' | 'detail' | 'issueValue' | 'forecastDate' | 'brand' | 'category' | 'units' | 'model' | 'size' | 'status' | 'rate' | 'closedDate' | 'closedStatus' | 'failReason' | 'createdAt' | 'updatedAt'>
+  & Pick<SalesIssue, 'id' | 'saleRoleId' | 'detail' | 'issueValue' | 'forecastDate' | 'brand' | 'category' | 'units' | 'model' | 'size' | 'status' | 'rate' | 'closedDate' | 'closedStatus' | 'failReason' | 'createdAt' | 'updatedAt'>
   & { visitLoaders?: Maybe<Array<(
     { __typename?: 'SalesVisit' }
     & Pick<SalesVisit, 'id' | 'saleRoleId' | 'customer' | 'visitDate' | 'contactName' | 'position' | 'department' | 'jobPurpose' | 'customerType' | 'createdAt'>
   )>>, saleRole: (
     { __typename?: 'SalesRole' }
     & Pick<SalesRole, 'id' | 'salesRole' | 'channel' | 'branch'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'fullNameTH'>
+    ) }
   ), editIssues: Array<(
     { __typename?: 'SalesEditIssue' }
     & Pick<SalesEditIssue, 'id' | 'userEdit' | 'rate' | 'status' | 'issueValue' | 'closedDate' | 'closedStatus' | 'failReason' | 'createdAt'>
@@ -1530,10 +1530,14 @@ export type RegularSalesIssueFragment = (
 
 export type RegularSalesQuotationFragment = (
   { __typename?: 'SalesQuotation' }
-  & Pick<SalesQuotation, 'id' | 'quotationCode' | 'value' | 'createdAt'>
+  & Pick<SalesQuotation, 'id' | 'quotationCode' | 'value' | 'createdAt' | 'saleRoleId'>
   & { visit: (
     { __typename?: 'SalesVisit' }
-    & Pick<SalesVisit, 'id' | 'customer' | 'visitDate'>
+    & Pick<SalesVisit, 'id' | 'customer' | 'visitDate' | 'saleName'>
+    & { saleRole: (
+      { __typename?: 'SalesRole' }
+      & Pick<SalesRole, 'id' | 'salesRole' | 'channel' | 'branch'>
+    ) }
   ) }
 );
 
@@ -3198,7 +3202,6 @@ export const RegularSalesIssueFragmentDoc = gql`
     fragment RegularSalesIssue on SalesIssue {
   id
   saleRoleId
-  saleName
   detail
   issueValue
   forecastDate
@@ -3231,6 +3234,10 @@ export const RegularSalesIssueFragmentDoc = gql`
     salesRole
     channel
     branch
+    user {
+      id
+      fullNameTH
+    }
   }
   editIssues {
     id
@@ -3251,10 +3258,18 @@ export const RegularSalesQuotationFragmentDoc = gql`
   quotationCode
   value
   createdAt
+  saleRoleId
   visit {
     id
     customer
     visitDate
+    saleName
+    saleRole {
+      id
+      salesRole
+      channel
+      branch
+    }
   }
 }
     `;

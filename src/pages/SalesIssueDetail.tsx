@@ -77,7 +77,7 @@ const SalesIssueDetail: React.FC<Props> = () => {
                                     ชื่อ : &nbsp;
                                 </Text>
                                 <Text fontSize="lg">
-                                    {data.issueById.saleName} &nbsp;
+                                    {data.issueById.saleRole.user.fullNameTH} &nbsp;
                                 </Text>
                                 <Text
                                     fontSize="lg"

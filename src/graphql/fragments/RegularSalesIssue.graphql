@@ -1,7 +1,6 @@
 fragment RegularSalesIssue on SalesIssue {
   id
   saleRoleId
-  saleName
   detail
   issueValue
   forecastDate
@@ -34,6 +33,10 @@ fragment RegularSalesIssue on SalesIssue {
     salesRole
     channel
     branch
+    user {
+      id
+      fullNameTH
+    }
   }
   editIssues{
     id

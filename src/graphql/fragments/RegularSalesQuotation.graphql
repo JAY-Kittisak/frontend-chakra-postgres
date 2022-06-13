@@ -3,9 +3,17 @@ fragment RegularSalesQuotation on SalesQuotation {
     quotationCode
     value
     createdAt
+    saleRoleId
     visit {
       id
       customer
       visitDate
+      saleName
+      saleRole{
+        id
+        salesRole
+        channel
+        branch
+      }
     }
 }
