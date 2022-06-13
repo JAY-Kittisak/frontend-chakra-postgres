@@ -11,10 +11,13 @@ import Spinner from '../components/Spinner';
 import { useDialog } from "../components/dialogs/useDialog";
 import AddAndEditTarget from "../components/sales-report/AddAndEditTarget";
 import { serviceLife } from '../utils/helpers';
+import { useIsAuth } from '../utils/uselsAuth';
 
 interface Props { }
 
 const UserDetail: React.FC<Props> = () => {
+    useIsAuth();
+
     const { isOpen, setIsOpen } = useDialog();
 
     const params = useParams<{ id: string }>();

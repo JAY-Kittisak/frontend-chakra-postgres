@@ -1,4 +1,4 @@
-import { Button, Center, Flex, Text } from "@chakra-ui/react";
+import { Button, Center, Flex, Text, Heading } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import React from "react";
 import { useHistory } from "react-router-dom";
@@ -13,12 +13,13 @@ interface Props { }
 const Register: React.FC<Props> = () => {
     const history = useHistory();
     const [, register] = useRegisterMutation();
+
     return (
-        <>
-            <Flex direction="column" align="center">
-                <Text as="h2" fontWeight="semibold" fontSize="2xl" mb="2">
+        <Flex h="96vh" justifyContent="center" alignItems="center">
+            <Flex direction="column" align="center" borderRadius="xl" boxShadow="2xl" p="10" border="1px">
+                <Heading mb="2">
                     Register
-                </Text>
+                </Heading>
                 <Formik
                     initialValues={{
                         username: "",
@@ -85,6 +86,7 @@ const Register: React.FC<Props> = () => {
                             </Flex>
                             <Center>
                                 <Button
+                                    w="100%"
                                     mt={4}
                                     type="submit"
                                     isLoading={isSubmitting}
@@ -97,7 +99,7 @@ const Register: React.FC<Props> = () => {
                     )}
                 </Formik>
             </Flex>
-        </>
+        </Flex>
     );
 };
 

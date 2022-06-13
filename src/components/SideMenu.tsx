@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Search2Icon } from "@chakra-ui/icons";
 import { NavLink } from "react-router-dom";
 import { Text, Avatar, AvatarBadge, Flex } from "@chakra-ui/react";
 
@@ -97,7 +96,7 @@ const menuItemsFooter = [
 ];
 
 const SideMenu: React.FC<Props> = ({ onCollapse }) => {
-    const [inactive, setInactive] = useState(false);
+    const [inactive, setInactive] = useState(true);
 
     const [{ data, fetching }] = useMeQuery();
 
@@ -158,13 +157,6 @@ const SideMenu: React.FC<Props> = ({ onCollapse }) => {
                     {inactive ? <HamburgerIcon /> : <i className="bi bi-x-circle-fill"></i>}
                 </div> */}
                 </NavLink>
-            </div>
-
-            <div className="search-controller">
-                <button className="search-btn">
-                    <Search2Icon />
-                </button>
-                <input type="text" placeholder="search" />
             </div>
 
             <div className="divider"></div>

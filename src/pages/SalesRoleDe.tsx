@@ -208,36 +208,20 @@ const SalesRoleDe: React.FC<Props> = () => {
                         />
                     )}
                 </Flex>
-
-                <Flex>
-                    {/* <Select
-                        w="150px"
-                        mr="5"
-                        fontWeight="semibold"
-                        name="selectMonth"
-                        onChange={(e) => onChangeMonth(e)}
-                    >
-                        {selectMonth.map((val, i) => (
-                            <option key={i} value={val}>
-                                {val}
+                <Select
+                    w="150px"
+                    fontWeight="semibold"
+                    name="selectYear"
+                    onChange={(e) => onChangeYear(e)}
+                >
+                    {selectYear.map((year, i) => {
+                        return (
+                            <option key={i} value={year}>
+                                {year}
                             </option>
-                        ))}
-                    </Select> */}
-                    <Select
-                        w="150px"
-                        fontWeight="semibold"
-                        name="selectYear"
-                        onChange={(e) => onChangeYear(e)}
-                    >
-                        {selectYear.map((year, i) => {
-                            return (
-                                <option key={i} value={year}>
-                                    {year}
-                                </option>
-                            );
-                        })}
-                    </Select>
-                </Flex>
+                        );
+                    })}
+                </Select>
             </Flex>
 
             {fetching ? (

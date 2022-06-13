@@ -120,7 +120,6 @@ const SalesChart: React.FC<Props> = ({
                     <Bar dataKey="sumIssue" fill={colorBranch}>
                         {dataSales.map((_, index) => (
                             <Cell
-                                cursor="pointer"
                                 // fill={
                                 //     index === onMouseIndex
                                 //         ? colorOnMouse

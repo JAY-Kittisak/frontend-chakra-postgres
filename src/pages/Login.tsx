@@ -12,9 +12,9 @@ const Login: React.FC<{}> = () => {
     const history = useHistory()
     const [, login] = useLoginMutation()
     return (
-        <Flex h="700px" align="center" justify="center">
-            <Flex direction="column" align="center" borderRadius="xl" boxShadow="xl" p="10">
-                <Heading as="h3" size="xl" mb="7">Login</Heading>
+        <Flex h="96vh" alignItems="center" justifyContent="center">
+            <Flex direction="column" align="center" borderRadius="xl" boxShadow="2xl" p="10" border="1px">
+                <Heading mb="2">Login</Heading>
                 <Formik
                     initialValues={{ username: "", password: "" }}
                     onSubmit={async (values, { setErrors }) => {

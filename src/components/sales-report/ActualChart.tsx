@@ -151,10 +151,7 @@ const ActualChart: React.FC<Props> = ({
 
                     <Bar dataKey="value" fill={colorBranch}>
                         {dataSales.map((_, index) => (
-                            <Cell
-                                cursor="pointer"
-                                key={`cell-${index}`}
-                            />
+                            <Cell key={`cell-${index}`}/>
                         ))}
                     </Bar>
                     <Line type="monotone" dataKey="strategy" stroke="#bd1717" /> 

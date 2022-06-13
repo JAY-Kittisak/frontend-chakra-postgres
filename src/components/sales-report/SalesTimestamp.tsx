@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Flex } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import { CheckIcon } from '@chakra-ui/icons'
 
 import { Branch, initialRoleJsr, initialRoleCdc, countDayInMonth } from '../../utils/helpers';
 import { RoleThisMonth, RoleJsr, RoleCdc, ThisMonth } from '../../types'
 
 import { useVisitsQuery, RegularSalesVisitFragment } from '../../generated/graphql'
+import Spinner from '../Spinner';
 
 interface Props {
     branch: Branch
@@ -129,13 +130,21 @@ const SalesTimestamp: React.FC<Props> = ({ branch, colorBranchPass, dateBegin, d
     return (
         <Flex
             flexDir="column"
-            mr="5"
-            mt="3"
+            my="5"
         >
             {fetching ? (
-                <div>
-                    <p>Loading...</p>
-                </div>
+                <Flex h="225px" justify="center" align="center">
+                    <Spinner color="grey" height={50} width={50} />
+                    <Text
+                        as="i"
+                        fontWeight="semibold"
+                        fontSize={["md", "md", "xl", "3xl"]}
+                        my={2}
+                    >
+                        {" "}
+                        &nbsp; Loading...
+                    </Text>
+                </Flex>
             ) : (
                 <table className='table-timestamp'>
                     <thead>

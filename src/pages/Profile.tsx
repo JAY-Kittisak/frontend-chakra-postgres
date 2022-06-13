@@ -83,15 +83,13 @@ const Profile: React.FC<Props> = () => {
                                 </Text>
                                 <Text ml="5" fontSize="20px" fontWeight="bold">{data.me.email ? data.me.email : "โปรดบันทึกข้อมูล"}</Text>
                                 <Flex
-                                    direction={["column", "column", "row", "row"]}
-                                    justify="space-evenly"
-                                    mt="5"
+                                    direction={["column", "column", "column", "column", "column", "row"]}
+                                    mt="3"
                                 >
-                                    <Flex>
+                                    <Flex w="50%" direction={["column", "column", "column", "column", "column", "row"]}>
                                         <Text
                                             fontWeight="semibold"
                                             fontSize={["sm", "md", "xl"]}
-                                            p={3}
                                             color="gray"
                                         >
                                             แผนก
@@ -99,17 +97,15 @@ const Profile: React.FC<Props> = () => {
                                         <Text
                                             fontWeight="semibold"
                                             fontSize={["xl", "xl", "2xl"]}
-                                            as="u"
-                                            p={2}
+                                            ml={5}
                                         >
                                             {data?.me?.departments}
                                         </Text>
                                     </Flex>
-                                    <Flex>
+                                    <Flex direction={["column", "column", "column", "column", "column", "row"]}>
                                         <Text
                                             fontWeight="semibold"
                                             fontSize={["sm", "md", "xl"]}
-                                            p={3}
                                             color="gray"
                                         >
                                             สาขา
@@ -117,8 +113,7 @@ const Profile: React.FC<Props> = () => {
                                         <Text
                                             fontWeight="semibold"
                                             fontSize={["xl", "xl", "2xl"]}
-                                            as="u"
-                                            p={2}
+                                            ml={5}
                                         >
                                             {data?.me?.roles === "client-LKB"
                                                 ? "ลาดกระบัง"

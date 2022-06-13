@@ -87,7 +87,7 @@ const SalesReport: React.FC<Props> = () => {
             px="5"
             h="96vh"
         >
-            <Flex w="100%" flexDir="column" mr="2">
+            <Flex w="100%" flexDir="column" mr="3">
                 <SwitchBranch
                     title="Sales Report"
                     branch={branch}
@@ -167,7 +167,7 @@ const SalesReport: React.FC<Props> = () => {
                                     )}
                         </Flex>
 
-                        <Flex justifyContent="space-between">
+                        <Flex justifyContent="space-between" mt="1">
                             <Flex alignItems="center">
                                 <Text mr="5">วันที่ : </Text>
                                 <Input 
